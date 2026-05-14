@@ -27,6 +27,9 @@ import SiteLoader from "./components/SiteLoader";
 import ScrollToTop from "./components/ScrollToTop";
 
 import { I18nProvider, useI18n } from "./i18n/i18n";
+
+import { detectAndStoreVisitorCountry } from "./services/productService";
+
 import "./App.css";
 
 function AccountComingSoonPage({ titleKey }: { titleKey: string }) {
@@ -49,14 +52,31 @@ function AccountComingSoonPage({ titleKey }: { titleKey: string }) {
 
 function AppContent() {
   const location = useLocation();
+
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const timer = window.setTimeout(() => {
-      setLoading(false);
-    }, 3200);
+    let isMounted = true;
 
-    return () => window.clearTimeout(timer);
+    async function initializeApp() {
+      try {
+        await detectAndStoreVisitorCountry();
+      } catch (error) {
+        console.error("Erreur détection pays :", error);
+      } finally {
+        window.setTimeout(() => {
+          if (isMounted) {
+            setLoading(false);
+          }
+        }, 1200);
+      }
+    }
+
+    initializeApp();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   const hideFooterPages = [
@@ -71,6 +91,7 @@ function AppContent() {
   return (
     <>
       <SiteLoader isVisible={loading} />
+
       <ScrollToTop />
 
       {!loading && (
@@ -80,14 +101,28 @@ function AppContent() {
           <main className="site-content">
             <Routes>
               <Route path="/" element={<HomePage />} />
+
               <Route path="/products" element={<ProductsPage />} />
+
               <Route path="/our-story" element={<OurStoryPage />} />
+
               <Route path="/reservation" element={<ReservationPage />} />
+
               <Route path="/contact" element={<ContactPage />} />
+
               <Route path="/login" element={<LoginPage />} />
+
               <Route path="/register" element={<RegisterPage />} />
-              <Route path="/verify-email" element={<VerifyEmailPage />} />
-              <Route path="/session-expired" element={<SessionExpiredPage />} />
+
+              <Route
+                path="/verify-email"
+                element={<VerifyEmailPage />}
+              />
+
+              <Route
+                path="/session-expired"
+                element={<SessionExpiredPage />}
+              />
 
               <Route
                 path="/cart"
@@ -115,18 +150,34 @@ function AppContent() {
                   </ProtectedRoute>
                 }
               >
-                <Route index element={<AccountDashboardPage />} />
-                <Route path="orders" element={<AccountOrdersPage />} />
-                <Route path="reservations" element={<AccountReservationsPage />} />
+                <Route
+                  index
+                  element={<AccountDashboardPage />}
+                />
+
+                <Route
+                  path="orders"
+                  element={<AccountOrdersPage />}
+                />
+
+                <Route
+                  path="reservations"
+                  element={<AccountReservationsPage />}
+                />
 
                 <Route
                   path="price-requests"
                   element={
-                    <AccountComingSoonPage titleKey="account.nav.priceRequests" />
+                    <AccountComingSoonPage
+                      titleKey="account.nav.priceRequests"
+                    />
                   }
                 />
 
-                <Route path="settings" element={<AccountDashboardPage />} />
+                <Route
+                  path="settings"
+                  element={<AccountDashboardPage />}
+                />
               </Route>
             </Routes>
           </main>

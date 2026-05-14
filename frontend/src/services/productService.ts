@@ -2,6 +2,7 @@ import {
   apiFetch,
   buildAssetUrl,
   getVisitorCountryCode,
+  setVisitorCountryCode,
 } from "./apiClient";
 
 export type ProductStatus = "Available" | "Reserved" | "Sold" | "Hidden";
@@ -81,8 +82,49 @@ function onlyAvailableProducts(products: ProductViewDto[]): ProductViewDto[] {
   });
 }
 
+function normalizeCountry(country?: string | null): string {
+  const normalized = country?.trim().toUpperCase();
+
+  if (!normalized || normalized === "NULL" || normalized === "UNDEFINED") {
+    return "";
+  }
+
+  return normalized;
+}
+
 export function getVisitorCountry(): string {
-  return getVisitorCountryCode();
+  return normalizeCountry(getVisitorCountryCode());
+}
+
+export async function detectAndStoreVisitorCountry(): Promise<string> {
+  const savedCountry = normalizeCountry(getVisitorCountryCode());
+
+  if (savedCountry) {
+    return savedCountry;
+  }
+
+  try {
+    const res = await fetch("/api/visitor-country", {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+      },
+    });
+
+    if (!res.ok) {
+      throw new Error("Impossible de détecter le pays.");
+    }
+
+    const data: { country?: string } = await res.json();
+    const detectedCountry = normalizeCountry(data.country) || "FR";
+
+    setVisitorCountryCode(detectedCountry);
+
+    return detectedCountry;
+  } catch {
+    setVisitorCountryCode("FR");
+    return "FR";
+  }
 }
 
 export function isTunisiaVisitor(country = getVisitorCountry()): boolean {
@@ -120,10 +162,37 @@ export function getProductPriceLabel(product: ProductDto): string {
   return product.priceLabel || `${product.price.toFixed(2)} EUR`;
 }
 
-export async function getProducts(
-  country = getVisitorCountry()
-): Promise<ProductViewDto[]> {
-  const normalizedCountry = country.trim().toUpperCase();
+function normalizeProduct(product: ProductDto): ProductViewDto {
+  const fullImages = (product.images || [])
+    .map((img) => buildImageUrl(img))
+    .filter((img): img is string => Boolean(img));
+
+  const fullMainImageUrl =
+    buildImageUrl(product.mainImageUrl) || fullImages[0] || null;
+
+  const shouldHidePrice =
+    product.isPriceHidden ||
+    product.requiresPriceRequest ||
+    product.canShowPrice === false ||
+    product.price == null;
+
+  return {
+    ...product,
+    price: shouldHidePrice ? null : product.price,
+    canShowPrice: shouldHidePrice ? false : product.canShowPrice,
+    isPriceHidden: shouldHidePrice ? true : product.isPriceHidden,
+    requiresPriceRequest: shouldHidePrice
+      ? true
+      : product.requiresPriceRequest,
+    priceLabel: getProductPriceLabel(product),
+    fullMainImageUrl,
+    fullImages,
+  };
+}
+
+export async function getProducts(country?: string): Promise<ProductViewDto[]> {
+  const normalizedCountry =
+    normalizeCountry(country) || (await detectAndStoreVisitorCountry());
 
   const res = await apiFetch(
     `/products?country=${encodeURIComponent(normalizedCountry)}`
@@ -135,36 +204,15 @@ export async function getProducts(
 
   const products: ProductDto[] = await res.json();
 
-  return products.map((product) => {
-    const fullImages = (product.images || [])
-      .map((img) => buildImageUrl(img))
-      .filter((img): img is string => Boolean(img));
-
-    const fullMainImageUrl =
-      buildImageUrl(product.mainImageUrl) || fullImages[0] || null;
-
-    return {
-      ...product,
-      price:
-        product.isPriceHidden || product.requiresPriceRequest
-          ? null
-          : product.price,
-      canShowPrice:
-        product.isPriceHidden || product.requiresPriceRequest
-          ? false
-          : product.canShowPrice,
-      priceLabel: getProductPriceLabel(product),
-      fullMainImageUrl,
-      fullImages,
-    };
-  });
+  return products.map(normalizeProduct);
 }
 
 export async function getProductBySlug(
   slug: string,
-  country = getVisitorCountry()
+  country?: string
 ): Promise<ProductViewDto> {
-  const normalizedCountry = country.trim().toUpperCase();
+  const normalizedCountry =
+    normalizeCountry(country) || (await detectAndStoreVisitorCountry());
 
   const res = await apiFetch(
     `/products/${encodeURIComponent(slug)}?country=${encodeURIComponent(
@@ -178,27 +226,7 @@ export async function getProductBySlug(
 
   const product: ProductDto = await res.json();
 
-  const fullImages = (product.images || [])
-    .map((img) => buildImageUrl(typeof img === "string" ? img : ""))
-    .filter((img): img is string => Boolean(img));
-
-  const fullMainImageUrl =
-    buildImageUrl(product.mainImageUrl) || fullImages[0] || null;
-
-  return {
-    ...product,
-    price:
-      product.isPriceHidden || product.requiresPriceRequest
-        ? null
-        : product.price,
-    canShowPrice:
-      product.isPriceHidden || product.requiresPriceRequest
-        ? false
-        : product.canShowPrice,
-    priceLabel: getProductPriceLabel(product),
-    fullMainImageUrl,
-    fullImages,
-  };
+  return normalizeProduct(product);
 }
 
 export async function getLatestProducts(limit = 6): Promise<ProductViewDto[]> {
