@@ -167,10 +167,16 @@ export default function ProductsPage() {
       return;
     }
 
-    if (!product.canShowPrice || product.price == null) {
-      openPriceRequest(product);
-      return;
-    }
+if (
+  product.isPriceHidden ||
+  product.requiresPriceRequest ||
+  !product.canShowPrice ||
+  product.price == null ||
+  product.price <= 0
+) {
+  openPriceRequest(product);
+  return;
+}
 
     addToCart({
       id: product.id,

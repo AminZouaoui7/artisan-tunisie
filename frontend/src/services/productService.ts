@@ -1,4 +1,8 @@
-import { apiFetch, buildAssetUrl } from "./apiClient";
+import {
+  apiFetch,
+  buildAssetUrl,
+  getVisitorCountryCode,
+} from "./apiClient";
 
 export type ProductStatus = "Available" | "Reserved" | "Sold" | "Hidden";
 
@@ -78,19 +82,52 @@ function onlyAvailableProducts(products: ProductViewDto[]): ProductViewDto[] {
 }
 
 export function getVisitorCountry(): string {
-  const savedCountry = localStorage.getItem("artisan_madina_country");
+  return getVisitorCountryCode();
+}
 
-  if (savedCountry) {
-    return savedCountry;
+export function isTunisiaVisitor(country = getVisitorCountry()): boolean {
+  const normalized = country.trim().toLowerCase();
+
+  return (
+    normalized === "tn" ||
+    normalized === "tunisia" ||
+    normalized === "tunisie" ||
+    normalized === "تونس"
+  );
+}
+
+export function canProductBeAddedToCart(product: ProductDto): boolean {
+  return (
+    product.isAvailable !== false &&
+    product.status?.toLowerCase() === "available" &&
+    product.isPriceHidden !== true &&
+    product.requiresPriceRequest !== true &&
+    product.canShowPrice !== false &&
+    product.price != null &&
+    product.price > 0
+  );
+}
+
+export function getProductPriceLabel(product: ProductDto): string {
+  if (
+    product.isPriceHidden ||
+    product.requiresPriceRequest ||
+    product.price == null
+  ) {
+    return product.priceLabel || "Prix disponible sur demande";
   }
 
-  return "fr";
+  return product.priceLabel || `${product.price.toFixed(2)} EUR`;
 }
 
 export async function getProducts(
   country = getVisitorCountry()
 ): Promise<ProductViewDto[]> {
-  const res = await apiFetch(`/products?country=${country}`);
+  const normalizedCountry = country.trim().toUpperCase();
+
+  const res = await apiFetch(
+    `/products?country=${encodeURIComponent(normalizedCountry)}`
+  );
 
   if (!res.ok) {
     throw new Error("Erreur lors du chargement des produits");
@@ -108,10 +145,60 @@ export async function getProducts(
 
     return {
       ...product,
+      price:
+        product.isPriceHidden || product.requiresPriceRequest
+          ? null
+          : product.price,
+      canShowPrice:
+        product.isPriceHidden || product.requiresPriceRequest
+          ? false
+          : product.canShowPrice,
+      priceLabel: getProductPriceLabel(product),
       fullMainImageUrl,
       fullImages,
     };
   });
+}
+
+export async function getProductBySlug(
+  slug: string,
+  country = getVisitorCountry()
+): Promise<ProductViewDto> {
+  const normalizedCountry = country.trim().toUpperCase();
+
+  const res = await apiFetch(
+    `/products/${encodeURIComponent(slug)}?country=${encodeURIComponent(
+      normalizedCountry
+    )}`
+  );
+
+  if (!res.ok) {
+    throw new Error("Erreur lors du chargement du produit");
+  }
+
+  const product: ProductDto = await res.json();
+
+  const fullImages = (product.images || [])
+    .map((img) => buildImageUrl(typeof img === "string" ? img : ""))
+    .filter((img): img is string => Boolean(img));
+
+  const fullMainImageUrl =
+    buildImageUrl(product.mainImageUrl) || fullImages[0] || null;
+
+  return {
+    ...product,
+    price:
+      product.isPriceHidden || product.requiresPriceRequest
+        ? null
+        : product.price,
+    canShowPrice:
+      product.isPriceHidden || product.requiresPriceRequest
+        ? false
+        : product.canShowPrice,
+    priceLabel: getProductPriceLabel(product),
+    fullMainImageUrl,
+    fullImages,
+  };
 }
 
 export async function getLatestProducts(limit = 6): Promise<ProductViewDto[]> {

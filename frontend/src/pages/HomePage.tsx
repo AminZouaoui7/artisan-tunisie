@@ -1,4 +1,3 @@
-import { useCart } from "../context/useCart";
 import { Link, useNavigate } from "react-router-dom";
 import { Star, X, ChevronLeft, ChevronRight, Eye } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -17,7 +16,11 @@ import storyImage from "../assets/cbd0ea42-92dc-4cd6-a8e7-0b3133fe44f2.png";
 import "../styles/HomePage.css";
 
 import { useAuth } from "../context/AuthContext";
-import { getLatestProducts, type ProductViewDto } from "../services/productService";
+import { useCart } from "../context/useCart";
+import {
+  getLatestProducts,
+  type ProductViewDto,
+} from "../services/productService";
 import { createPriceRequest } from "../services/priceRequestService";
 import { useI18n } from "../i18n/i18n";
 import { formatEurPrice } from "../utils/price";
@@ -47,6 +50,17 @@ const boutiqueImages = [
   boutiqueImg6,
 ];
 
+function canBuyProduct(product: ProductViewDto | null): product is ProductViewDto {
+  return Boolean(
+    product &&
+      !product.isPriceHidden &&
+      !product.requiresPriceRequest &&
+      product.canShowPrice &&
+      product.price != null &&
+      product.price > 0
+  );
+}
+
 export default function HomePage() {
   const { t } = useI18n();
   const navigate = useNavigate();
@@ -60,13 +74,16 @@ export default function HomePage() {
 
   const [boutiqueIndex, setBoutiqueIndex] = useState(0);
 
-  const [selectedProduct, setSelectedProduct] = useState<ProductViewDto | null>(null);
+  const [selectedProduct, setSelectedProduct] =
+    useState<ProductViewDto | null>(null);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
   const [priceRequestOpen, setPriceRequestOpen] = useState(false);
   const [priceRequestLoading, setPriceRequestLoading] = useState(false);
-  const [priceRequestSuccessKey, setPriceRequestSuccessKey] = useState<string | null>(null);
-  const [priceRequestErrorKey, setPriceRequestErrorKey] = useState<string | null>(null);
+  const [priceRequestSuccessKey, setPriceRequestSuccessKey] =
+    useState<string | null>(null);
+  const [priceRequestErrorKey, setPriceRequestErrorKey] =
+    useState<string | null>(null);
 
   const [priceRequestForm, setPriceRequestForm] = useState({
     customerName: "",
@@ -157,11 +174,11 @@ export default function HomePage() {
 
       await createPriceRequest({
         productId: selectedProduct.id,
-        customerName: priceRequestForm.customerName,
-        email: priceRequestForm.email,
-        phone: priceRequestForm.phone,
+        customerName: priceRequestForm.customerName.trim(),
+        email: priceRequestForm.email.trim(),
+        phone: priceRequestForm.phone.trim(),
         countryCode: selectedProduct.countryCode || "TN",
-        message: priceRequestForm.message,
+        message: priceRequestForm.message.trim(),
       });
 
       setPriceRequestSuccessKey("home.priceRequestSuccess");
@@ -201,20 +218,22 @@ export default function HomePage() {
   const nextBoutiqueImage = () => {
     setBoutiqueIndex((prev) => (prev + 1) % boutiqueImages.length);
   };
-useEffect(() => {
-  if (shouldReduceMotion) return;
 
-  const interval = window.setInterval(() => {
-    setBoutiqueIndex((prev) => (prev + 1) % boutiqueImages.length);
-  }, 10000);
-
-  return () => window.clearInterval(interval);
-}, [shouldReduceMotion]);
   const prevBoutiqueImage = () => {
     setBoutiqueIndex((prev) =>
       prev === 0 ? boutiqueImages.length - 1 : prev - 1
     );
   };
+
+  useEffect(() => {
+    if (shouldReduceMotion) return;
+
+    const interval = window.setInterval(() => {
+      setBoutiqueIndex((prev) => (prev + 1) % boutiqueImages.length);
+    }, 10000);
+
+    return () => window.clearInterval(interval);
+  }, [shouldReduceMotion]);
 
   useEffect(() => {
     let isMounted = true;
@@ -256,80 +275,81 @@ useEffect(() => {
     ? undefined
     : { once: true, amount: 0.2 };
 
+  const selectedProductCanBuy = canBuyProduct(selectedProduct);
+
   return (
     <div className="home">
- <section className="home-boutique-hero">
-  <div className="home-boutique-hero-bg">
-    {boutiqueImages.map((img, index) => (
-      <motion.img
-        key={index}
-        src={img}
-        alt="Boutique Artisan Madina"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: index === boutiqueIndex ? 1 : 0 }}
-        transition={{ duration: 0.8, ease: "easeInOut" }}
-        style={{
-          position: "absolute",
-          inset: 0,
-          width: "100%",
-          height: "100%",
-          objectFit: "cover",
-          objectPosition: "center",
-        }}
-      />
-    ))}
-  </div>
+      <section className="home-boutique-hero">
+        <div className="home-boutique-hero-bg">
+          {boutiqueImages.map((img, index) => (
+            <motion.img
+              key={index}
+              src={img}
+              alt="Boutique Artisan Madina"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: index === boutiqueIndex ? 1 : 0 }}
+              transition={{ duration: 0.8, ease: "easeInOut" }}
+              style={{
+                position: "absolute",
+                inset: 0,
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                objectPosition: "center",
+              }}
+            />
+          ))}
+        </div>
 
-  <div className="home-boutique-hero-overlay" />
+        <div className="home-boutique-hero-overlay" />
 
-  <motion.div
-    className="home-boutique-hero-content"
-    variants={fadeUp}
-    initial={motionInitial}
-    whileInView={motionWhileInView}
-    viewport={motionViewport}
-    transition={scrollTransition}
-  >
-    <p className="home-boutique-hero-kicker">{t("home.boutiqueKicker")}</p>
+        <motion.div
+          className="home-boutique-hero-content"
+          variants={fadeUp}
+          initial={motionInitial}
+          whileInView={motionWhileInView}
+          viewport={motionViewport}
+          transition={scrollTransition}
+        >
+          <p className="home-boutique-hero-kicker">{t("home.boutiqueKicker")}</p>
+          <h1>{t("home.boutiqueTitle")}</h1>
+          <p>{t("home.boutiqueDescription")}</p>
+        </motion.div>
 
-    <h1>{t("home.boutiqueTitle")}</h1>
+        <button
+          type="button"
+          className="home-boutique-hero-btn home-boutique-hero-btn--left"
+          onClick={prevBoutiqueImage}
+          aria-label="Image précédente"
+        >
+          <ChevronLeft size={28} />
+        </button>
 
-    <p>{t("home.boutiqueDescription")}</p>
-  </motion.div>
+        <button
+          type="button"
+          className="home-boutique-hero-btn home-boutique-hero-btn--right"
+          onClick={nextBoutiqueImage}
+          aria-label="Image suivante"
+        >
+          <ChevronRight size={28} />
+        </button>
 
-  <button
-    type="button"
-    className="home-boutique-hero-btn home-boutique-hero-btn--left"
-    onClick={prevBoutiqueImage}
-    aria-label="Image précédente"
-  >
-    <ChevronLeft size={28} />
-  </button>
+        <div className="home-boutique-hero-dots">
+          {boutiqueImages.map((_, index) => (
+            <button
+              key={index}
+              type="button"
+              className={`home-boutique-hero-dot ${
+                boutiqueIndex === index ? "home-boutique-hero-dot--active" : ""
+              }`}
+              onClick={() => setBoutiqueIndex(index)}
+              aria-label={`Afficher l’image ${index + 1}`}
+            />
+          ))}
+        </div>
+      </section>
 
-  <button
-    type="button"
-    className="home-boutique-hero-btn home-boutique-hero-btn--right"
-    onClick={nextBoutiqueImage}
-    aria-label="Image suivante"
-  >
-    <ChevronRight size={28} />
-  </button>
-
-  <div className="home-boutique-hero-dots">
-    {boutiqueImages.map((_, index) => (
-      <button
-        key={index}
-        type="button"
-        className={`home-boutique-hero-dot ${
-          boutiqueIndex === index ? "home-boutique-hero-dot--active" : ""
-        }`}
-        onClick={() => setBoutiqueIndex(index)}
-        aria-label={`Afficher l’image ${index + 1}`}
-      />
-    ))}
-  </div>
-</section>
-    <div className="section-divider" />
+      <div className="section-divider" />
 
       <section className="page-section home-categories-section">
         <div className="home-categories-inner">
@@ -415,11 +435,17 @@ useEffect(() => {
           transition={scrollTransition}
         >
           <div>
-            <p className="page-kicker" style={{ textAlign: "left", marginBottom: 8 }}>
+            <p
+              className="page-kicker"
+              style={{ textAlign: "left", marginBottom: 8 }}
+            >
               {t("home.catalogKicker")}
             </p>
 
-            <h2 className="home-section-title" style={{ textAlign: "left", margin: 0 }}>
+            <h2
+              className="home-section-title"
+              style={{ textAlign: "left", margin: 0 }}
+            >
               {t("home.catalogTitle")}
             </h2>
           </div>
@@ -440,6 +466,7 @@ useEffect(() => {
             products.map((product, i) => {
               const mainImage = product.fullMainImageUrl;
               const isNewProduct = i < 2;
+              const productCanBuy = canBuyProduct(product);
 
               return (
                 <motion.article
@@ -477,19 +504,27 @@ useEffect(() => {
                       </span>
 
                       <span className="home-rug-size">
-                        {product.dimensions || t("products.miniFallbackDimensions")}
+                        {product.dimensions ||
+                          t("products.miniFallbackDimensions")}
                       </span>
                     </div>
 
                     <h3 className="home-rug-name">{product.name}</h3>
 
                     <p className="home-rug-material">
-                      {product.material || product.type || t("ourStory.values.handmadeTitle")}
+                      {product.material ||
+                        product.type ||
+                        t("ourStory.values.handmadeTitle")}
                     </p>
 
                     <div className="home-rug-rating">
                       {Array.from({ length: 5 }).map((_, index) => (
-                        <Star key={index} size={12} fill="#c8a060" stroke="#c8a060" />
+                        <Star
+                          key={index}
+                          size={12}
+                          fill="#c8a060"
+                          stroke="#c8a060"
+                        />
                       ))}
                       <span>{t("home.premiumLabel")}</span>
                     </div>
@@ -498,12 +533,12 @@ useEffect(() => {
                       <div className="home-rug-price-block">
                         <span
                           className={`home-rug-price ${
-                            product.isPriceHidden ? "home-rug-price--request" : ""
+                            !productCanBuy ? "home-rug-price--request" : ""
                           }`}
                         >
-                          {product.isPriceHidden
-                            ? t("home.priceOnRequest")
-                            : formatEurPrice(product.price)}
+                          {productCanBuy
+                            ? formatEurPrice(product.price)
+                            : t("home.priceOnRequest")}
                         </span>
                       </div>
 
@@ -513,7 +548,9 @@ useEffect(() => {
                         onClick={() => openProductModal(product)}
                       >
                         <Eye size={15} />
-                        {product.isPriceHidden ? t("home.requestPrice") : t("home.viewDetails")}
+                        {!productCanBuy
+                          ? t("home.requestPrice")
+                          : t("home.viewDetails")}
                       </button>
                     </div>
                   </div>
@@ -537,7 +574,11 @@ useEffect(() => {
             transition={scrollTransition}
           >
             <div className="home-story-image-card">
-              <img src={storyImage} alt={t("home.storyImageAlt")} className="home-story-image" />
+              <img
+                src={storyImage}
+                alt={t("home.storyImageAlt")}
+                className="home-story-image"
+              />
               <div className="home-story-image-badge">
                 <span>{t("home.since")}</span>
                 <strong>1982</strong>
@@ -572,12 +613,16 @@ useEffect(() => {
 
               <div className="home-stat">
                 <span className="home-stat-number">200+</span>
-                <span className="home-stat-label">{t("home.statArtisans")}</span>
+                <span className="home-stat-label">
+                  {t("home.statArtisans")}
+                </span>
               </div>
 
               <div className="home-stat">
                 <span className="home-stat-number">60+</span>
-                <span className="home-stat-label">{t("home.statCountries")}</span>
+                <span className="home-stat-label">
+                  {t("home.statCountries")}
+                </span>
               </div>
             </div>
 
@@ -665,8 +710,6 @@ useEffect(() => {
         </div>
       </section>
 
-
-
       <div className="section-divider" />
 
       <section className="page-section home-testimonials-section">
@@ -718,7 +761,10 @@ useEffect(() => {
 
       {selectedProduct && (
         <div className="home-product-modal" onClick={closeProductModal}>
-          <div className="home-product-modal-card" onClick={(e) => e.stopPropagation()}>
+          <div
+            className="home-product-modal-card"
+            onClick={(e) => e.stopPropagation()}
+          >
             <button
               className="home-product-modal-close"
               type="button"
@@ -731,9 +777,14 @@ useEffect(() => {
             <div className="home-product-modal-gallery">
               <div className="home-product-modal-main-img">
                 {selectedImages[selectedImageIndex] ? (
-                  <img src={selectedImages[selectedImageIndex]} alt={selectedProduct.name} />
+                  <img
+                    src={selectedImages[selectedImageIndex]}
+                    alt={selectedProduct.name}
+                  />
                 ) : (
-                  <div className="home-rug-img-placeholder">{t("home.imagePlaceholder")}</div>
+                  <div className="home-rug-img-placeholder">
+                    {t("home.imagePlaceholder")}
+                  </div>
                 )}
 
                 {selectedImages.length > 1 && (
@@ -761,14 +812,19 @@ useEffect(() => {
                 <div className="home-product-thumbs">
                   {selectedImages.map((img, index) => (
                     <button
-                      key={img}
+                      key={`${img}-${index}`}
                       className={`home-product-thumb${
-                        selectedImageIndex === index ? " home-product-thumb--active" : ""
+                        selectedImageIndex === index
+                          ? " home-product-thumb--active"
+                          : ""
                       }`}
                       type="button"
                       onClick={() => setSelectedImageIndex(index)}
                     >
-                      <img src={img} alt={`${selectedProduct.name} ${index + 1}`} />
+                      <img
+                        src={img}
+                        alt={`${selectedProduct.name} ${index + 1}`}
+                      />
                     </button>
                   ))}
                 </div>
@@ -787,12 +843,14 @@ useEffect(() => {
 
               <div
                 className={`home-product-modal-price ${
-                  selectedProduct.isPriceHidden ? "home-product-modal-price--request" : ""
+                  !selectedProductCanBuy
+                    ? "home-product-modal-price--request"
+                    : ""
                 }`}
               >
-                {selectedProduct.isPriceHidden
-                  ? t("home.priceOnRequest")
-                  : formatEurPrice(selectedProduct.price)}
+                {selectedProductCanBuy
+                  ? formatEurPrice(selectedProduct.price)
+                  : t("home.priceOnRequest")}
               </div>
 
               <div className="home-product-details-grid">
@@ -818,7 +876,11 @@ useEffect(() => {
                 <strong>{selectedProduct.dimensions || "-"}</strong>
 
                 <span>{t("home.fields.weight")}</span>
-                <strong>{selectedProduct.weightKg ? `${selectedProduct.weightKg} kg` : "-"}</strong>
+                <strong>
+                  {selectedProduct.weightKg
+                    ? `${selectedProduct.weightKg} kg`
+                    : "-"}
+                </strong>
 
                 <span>{t("home.fields.condition")}</span>
                 <strong>{selectedProduct.condition || "-"}</strong>
@@ -841,7 +903,7 @@ useEffect(() => {
               )}
 
               <div className="home-product-modal-actions">
-                {selectedProduct.isPriceHidden ? (
+                {!selectedProductCanBuy ? (
                   <button
                     type="button"
                     className="home-btn-primary"
@@ -851,7 +913,9 @@ useEffect(() => {
                     }}
                     disabled={loadingAuth}
                   >
-                    {loadingAuth ? t("home.catalogLoading") : t("home.requestPrice")}
+                    {loadingAuth
+                      ? t("home.catalogLoading")
+                      : t("home.requestPrice")}
                   </button>
                 ) : (
                   <div className="home-product-buy-actions">
@@ -867,11 +931,17 @@ useEffect(() => {
                           return;
                         }
 
+                        if (!canBuyProduct(selectedProduct)) {
+                          openPriceRequestForm();
+                          return;
+                        }
+
                         const result = addToCart({
                           id: selectedProduct.id,
                           name: selectedProduct.name,
                           slug: selectedProduct.slug,
                           price: selectedProduct.price,
+                          priceLabel: formatEurPrice(selectedProduct.price),
                           mainImageUrl: selectedProduct.fullMainImageUrl,
                           dimensions: selectedProduct.dimensions,
                           lengthCm: selectedProduct.lengthCm,
@@ -900,11 +970,17 @@ useEffect(() => {
                           return;
                         }
 
-                        addToCart({
+                        if (!canBuyProduct(selectedProduct)) {
+                          openPriceRequestForm();
+                          return;
+                        }
+
+                        const result = addToCart({
                           id: selectedProduct.id,
                           name: selectedProduct.name,
                           slug: selectedProduct.slug,
                           price: selectedProduct.price,
+                          priceLabel: formatEurPrice(selectedProduct.price),
                           mainImageUrl: selectedProduct.fullMainImageUrl,
                           dimensions: selectedProduct.dimensions,
                           lengthCm: selectedProduct.lengthCm,
@@ -912,8 +988,10 @@ useEffect(() => {
                           isPriceHidden: selectedProduct.isPriceHidden,
                         });
 
-                        closeProductModal();
-                        navigate("/checkout");
+                        if (result.ok) {
+                          closeProductModal();
+                          navigate("/checkout");
+                        }
                       }}
                     >
                       {t("home.checkout")}
@@ -927,7 +1005,10 @@ useEffect(() => {
       )}
 
       {priceRequestOpen && selectedProduct && (
-        <div className="home-price-request-modal" onClick={closePriceRequestForm}>
+        <div
+          className="home-price-request-modal"
+          onClick={closePriceRequestForm}
+        >
           <form
             className="home-price-request-card"
             onClick={(e) => e.stopPropagation()}
@@ -947,13 +1028,17 @@ useEffect(() => {
 
             <div className="home-price-product-mini">
               {selectedProduct.fullMainImageUrl && (
-                <img src={selectedProduct.fullMainImageUrl} alt={selectedProduct.name} />
+                <img
+                  src={selectedProduct.fullMainImageUrl}
+                  alt={selectedProduct.name}
+                />
               )}
 
               <div>
                 <strong>{selectedProduct.name}</strong>
                 <span>
-                  {selectedProduct.dimensions || t("products.miniFallbackDimensions")}
+                  {selectedProduct.dimensions ||
+                    t("products.miniFallbackDimensions")}
                 </span>
                 <span>{selectedProduct.region || t("common.tunisia")}</span>
               </div>
@@ -1012,11 +1097,15 @@ useEffect(() => {
             </div>
 
             {priceRequestErrorKey && (
-              <p className="home-price-request-error">{t(priceRequestErrorKey)}</p>
+              <p className="home-price-request-error">
+                {t(priceRequestErrorKey)}
+              </p>
             )}
 
             {priceRequestSuccessKey && (
-              <p className="home-price-request-success">{t(priceRequestSuccessKey)}</p>
+              <p className="home-price-request-success">
+                {t(priceRequestSuccessKey)}
+              </p>
             )}
 
             <button

@@ -45,6 +45,34 @@ export function buildAssetUrl(assetPath?: string | null): string | null {
   return `${API_ORIGIN}${normalizedPath}`;
 }
 
+export function getVisitorCountryCode(): string {
+  const savedCountry =
+    localStorage.getItem("artisan_madina_country") ||
+    localStorage.getItem("artisan_visitor_country");
+
+  const normalized = savedCountry?.trim().toUpperCase();
+
+  if (!normalized || normalized === "NULL" || normalized === "UNDEFINED") {
+    return "FR";
+  }
+
+  return normalized;
+}
+
+export function setVisitorCountryCode(countryCode: string) {
+  const normalized = countryCode.trim().toUpperCase();
+
+  if (!normalized) return;
+
+  localStorage.setItem("artisan_madina_country", normalized);
+  localStorage.setItem("artisan_visitor_country", normalized);
+  window.dispatchEvent(
+    new CustomEvent("artisan:country-changed", {
+      detail: { countryCode: normalized },
+    })
+  );
+}
+
 function isPublicEndpoint(endpoint: string): boolean {
   const normalized = normalizeApiEndpoint(endpoint);
 
@@ -75,9 +103,7 @@ export async function apiFetch(endpoint: string, options: RequestInit = {}) {
   const token = normalizeToken(localStorage.getItem(ACCESS_TOKEN_KEY));
   const headers = new Headers(options.headers || {});
 
-  const bearerTokenFromHeader = extractBearerToken(
-    headers.get("Authorization")
-  );
+  const bearerTokenFromHeader = extractBearerToken(headers.get("Authorization"));
 
   const hasAuthHeaderAlready = Boolean(bearerTokenFromHeader);
   const shouldAttachToken =
@@ -87,12 +113,16 @@ export async function apiFetch(endpoint: string, options: RequestInit = {}) {
     headers.set("Authorization", `Bearer ${token}`);
   }
 
+  const visitorCountry = getVisitorCountryCode();
+  headers.set("X-Country-Code", visitorCountry);
+
   const res = await fetch(buildApiUrl(endpoint), {
     ...options,
     headers,
   });
 
-  const sentAuth = Boolean(bearerTokenFromHeader) || Boolean(shouldAttachToken && token);
+  const sentAuth =
+    Boolean(bearerTokenFromHeader) || Boolean(shouldAttachToken && token);
 
   if (res.status === 401 && sentAuth) {
     clearAuthStorage();
