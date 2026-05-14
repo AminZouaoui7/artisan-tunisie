@@ -13,21 +13,18 @@ import logoMain from "../assets/color white.png";
 import { useI18n } from "../i18n/i18n";
 import { useAuth } from "../context/useAuth";
 import { useCart } from "../context/useCart";
-import { getVisitorCountry } from "../services/productService";
+import { getStoredUserLocation } from "../services/apiClient";
 
 export default function Navbar() {
   const { language, setLanguage, t } = useI18n();
   const { user, isAuthenticated, logout } = useAuth();
   const { cartCount } = useCart();
 
-  const visitorCountry = getVisitorCountry().trim().toLowerCase();
+  const [visitorLocation, setVisitorLocation] = useState(() =>
+    getStoredUserLocation()
+  );
 
-  const isTunisiaVisitor =
-    visitorCountry === "tn" ||
-    visitorCountry === "tunisia" ||
-    visitorCountry === "tunisie";
-
-  const canUseCart = isAuthenticated && !isTunisiaVisitor;
+  const canUseCart = isAuthenticated && !visitorLocation.isTunisia;
 
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -47,6 +44,21 @@ export default function Navbar() {
       document.body.style.overflow = "";
     };
   }, [menuOpen]);
+
+  useEffect(() => {
+    const handleLocationChanged = () => {
+      setVisitorLocation(getStoredUserLocation());
+    };
+
+    window.addEventListener("artisan:location-changed", handleLocationChanged);
+
+    return () => {
+      window.removeEventListener(
+        "artisan:location-changed",
+        handleLocationChanged
+      );
+    };
+  }, []);
 
   const links = [
     { to: "/", label: t("nav.home") },

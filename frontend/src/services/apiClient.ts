@@ -7,6 +7,17 @@ export const API_ORIGIN = API_URL.replace(/\/api$/i, "");
 
 const ACCESS_TOKEN_KEY = "artisan_access_token";
 const REFRESH_TOKEN_KEY = "artisan_refresh_token";
+const VISITOR_COUNTRY_CODE_KEY = "artisan_visitor_country_code";
+const VISITOR_IS_TUNISIA_KEY = "artisan_visitor_is_tunisia";
+const LEGACY_VISITOR_COUNTRY_KEYS = [
+  "artisan_madina_country",
+  "artisan_visitor_country",
+];
+
+export type UserLocationDto = {
+  countryCode: string;
+  isTunisia: boolean;
+};
 
 function normalizeToken(value: string | null): string | null {
   const trimmed = value?.trim() ?? "";
@@ -20,6 +31,22 @@ function extractBearerToken(value: string | null): string | null {
   const match = value.match(/^Bearer\s+(.+)$/i);
   if (!match) return null;
   return normalizeToken(match[1]);
+}
+
+function normalizeCountryCode(value: string | null | undefined): string {
+  const normalized = value?.trim().toUpperCase() ?? "";
+
+  if (!normalized || normalized === "NULL" || normalized === "UNDEFINED") {
+    return "";
+  }
+
+  return normalized;
+}
+
+function parseStoredBoolean(value: string | null): boolean | null {
+  if (value === "true") return true;
+  if (value === "false") return false;
+  return null;
 }
 
 function normalizeApiEndpoint(endpoint: string): string {
@@ -45,32 +72,132 @@ export function buildAssetUrl(assetPath?: string | null): string | null {
   return `${API_ORIGIN}${normalizedPath}`;
 }
 
-export function getVisitorCountryCode(): string {
-  const savedCountry =
-    localStorage.getItem("artisan_madina_country") ||
-    localStorage.getItem("artisan_visitor_country");
-
-  const normalized = savedCountry?.trim().toUpperCase();
-
-  if (!normalized || normalized === "NULL" || normalized === "UNDEFINED") {
-    return "FR";
+export function cleanupVisitorLocationStorage() {
+  const storedCountry = normalizeCountryCode(
+    localStorage.getItem(VISITOR_COUNTRY_CODE_KEY)
+  );
+  if (!storedCountry) {
+    localStorage.removeItem(VISITOR_COUNTRY_CODE_KEY);
   }
 
-  return normalized;
+  const storedIsTunisia = parseStoredBoolean(
+    localStorage.getItem(VISITOR_IS_TUNISIA_KEY)
+  );
+  if (storedIsTunisia === null) {
+    localStorage.removeItem(VISITOR_IS_TUNISIA_KEY);
+  }
+
+  for (const key of LEGACY_VISITOR_COUNTRY_KEYS) {
+    const normalizedLegacyValue = normalizeCountryCode(localStorage.getItem(key));
+    if (!normalizedLegacyValue) {
+      localStorage.removeItem(key);
+    }
+  }
 }
 
-export function setVisitorCountryCode(countryCode: string) {
-  const normalized = countryCode.trim().toUpperCase();
+function getLegacyVisitorCountryCode(): string {
+  for (const key of LEGACY_VISITOR_COUNTRY_KEYS) {
+    const normalized = normalizeCountryCode(localStorage.getItem(key));
+    if (normalized) {
+      return normalized;
+    }
+  }
 
-  if (!normalized) return;
+  return "";
+}
 
-  localStorage.setItem("artisan_madina_country", normalized);
-  localStorage.setItem("artisan_visitor_country", normalized);
+export function clearVisitorLocationStorage() {
+  localStorage.removeItem(VISITOR_COUNTRY_CODE_KEY);
+  localStorage.removeItem(VISITOR_IS_TUNISIA_KEY);
+  for (const key of LEGACY_VISITOR_COUNTRY_KEYS) {
+    localStorage.removeItem(key);
+  }
+}
+
+export function getVisitorCountryCode(): string {
+  cleanupVisitorLocationStorage();
+
+  const storedCountry = normalizeCountryCode(
+    localStorage.getItem(VISITOR_COUNTRY_CODE_KEY)
+  );
+  if (storedCountry) {
+    return storedCountry;
+  }
+
+  const legacyCountry = getLegacyVisitorCountryCode();
+  if (legacyCountry) {
+    localStorage.setItem(VISITOR_COUNTRY_CODE_KEY, legacyCountry);
+    return legacyCountry;
+  }
+
+  return "";
+}
+
+export function getVisitorIsTunisia(): boolean {
+  cleanupVisitorLocationStorage();
+  return parseStoredBoolean(localStorage.getItem(VISITOR_IS_TUNISIA_KEY)) === true;
+}
+
+export function getStoredUserLocation(): UserLocationDto {
+  return {
+    countryCode: getVisitorCountryCode(),
+    isTunisia: getVisitorIsTunisia(),
+  };
+}
+
+export function storeUserLocation(location: UserLocationDto) {
+  const normalizedCountryCode = normalizeCountryCode(location.countryCode);
+
+  if (!normalizedCountryCode) return;
+
+  cleanupVisitorLocationStorage();
+
+  localStorage.setItem(VISITOR_COUNTRY_CODE_KEY, normalizedCountryCode);
+  localStorage.setItem(
+    VISITOR_IS_TUNISIA_KEY,
+    location.isTunisia ? "true" : "false"
+  );
+
+  for (const key of LEGACY_VISITOR_COUNTRY_KEYS) {
+    localStorage.removeItem(key);
+  }
+
   window.dispatchEvent(
-    new CustomEvent("artisan:country-changed", {
-      detail: { countryCode: normalized },
+    new CustomEvent("artisan:location-changed", {
+      detail: {
+        countryCode: normalizedCountryCode,
+        isTunisia: location.isTunisia,
+      },
     })
   );
+}
+
+export async function fetchAndStoreUserLocation(): Promise<UserLocationDto> {
+  const response = await apiFetch("/user-location", {
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error("Impossible de charger la localisation utilisateur.");
+  }
+
+  const data = (await response.json()) as Partial<UserLocationDto>;
+  console.log("location api", data);
+
+  const location: UserLocationDto = {
+    countryCode: normalizeCountryCode(data.countryCode),
+    isTunisia: data.isTunisia === true,
+  };
+
+  if (!location.countryCode) {
+    throw new Error("Réponse de localisation invalide.");
+  }
+
+  storeUserLocation(location);
+  return location;
 }
 
 function isPublicEndpoint(endpoint: string): boolean {
@@ -80,6 +207,7 @@ function isPublicEndpoint(endpoint: string): boolean {
     normalized === "/auth/login" ||
     normalized === "/auth/register" ||
     normalized === "/auth/verify-email" ||
+    normalized === "/user-location" ||
     normalized === "/contact" ||
     normalized.startsWith("/products")
   );
@@ -114,7 +242,9 @@ export async function apiFetch(endpoint: string, options: RequestInit = {}) {
   }
 
   const visitorCountry = getVisitorCountryCode();
-  headers.set("X-Country-Code", visitorCountry);
+  if (visitorCountry) {
+    headers.set("X-Country-Code", visitorCountry);
+  }
 
   const res = await fetch(buildApiUrl(endpoint), {
     ...options,

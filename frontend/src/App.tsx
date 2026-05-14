@@ -28,7 +28,10 @@ import ScrollToTop from "./components/ScrollToTop";
 
 import { I18nProvider, useI18n } from "./i18n/i18n";
 
-import { detectAndStoreVisitorCountry } from "./services/productService";
+import {
+  cleanupVisitorLocationStorage,
+  fetchAndStoreUserLocation,
+} from "./services/apiClient";
 
 import "./App.css";
 
@@ -60,9 +63,10 @@ function AppContent() {
 
     async function initializeApp() {
       try {
-        await detectAndStoreVisitorCountry();
+        cleanupVisitorLocationStorage();
+        await fetchAndStoreUserLocation();
       } catch (error) {
-        console.error("Erreur détection pays :", error);
+        console.error("Erreur chargement localisation :", error);
       } finally {
         window.setTimeout(() => {
           if (isMounted) {

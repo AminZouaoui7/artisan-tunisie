@@ -17,7 +17,14 @@ import storyImage from "../assets/cbd0ea42-92dc-4cd6-a8e7-0b3133fe44f2.png";
 import "../styles/HomePage.css";
 
 import { useAuth } from "../context/AuthContext";
-import { getLatestProducts, type ProductViewDto } from "../services/productService";
+import { getStoredUserLocation } from "../services/apiClient";
+import {
+  canProductBeAddedToCart,
+  getLatestProducts,
+  shouldShowPriceOnRequest,
+  shouldShowProductPrice,
+  type ProductViewDto,
+} from "../services/productService";
 import { createPriceRequest } from "../services/priceRequestService";
 import { useI18n } from "../i18n/i18n";
 import { formatEurPrice } from "../utils/price";
@@ -53,6 +60,7 @@ export default function HomePage() {
   const { isAuthenticated, loadingAuth } = useAuth();
   const shouldReduceMotion = useReducedMotion();
   const { addToCart } = useCart();
+  const visitorLocation = getStoredUserLocation();
 
   const [products, setProducts] = useState<ProductViewDto[]>([]);
   const [loadingProducts, setLoadingProducts] = useState(true);
@@ -160,7 +168,7 @@ export default function HomePage() {
         customerName: priceRequestForm.customerName,
         email: priceRequestForm.email,
         phone: priceRequestForm.phone,
-        countryCode: selectedProduct.countryCode || "TN",
+        countryCode: selectedProduct.countryCode || visitorLocation.countryCode,
         message: priceRequestForm.message,
       });
 
@@ -440,6 +448,8 @@ useEffect(() => {
             products.map((product, i) => {
               const mainImage = product.fullMainImageUrl;
               const isNewProduct = i < 2;
+              const showVisiblePrice = shouldShowProductPrice(product);
+              const showPriceOnRequest = shouldShowPriceOnRequest(product);
 
               return (
                 <motion.article
@@ -498,12 +508,14 @@ useEffect(() => {
                       <div className="home-rug-price-block">
                         <span
                           className={`home-rug-price ${
-                            product.isPriceHidden ? "home-rug-price--request" : ""
+                            showPriceOnRequest ? "home-rug-price--request" : ""
                           }`}
                         >
-                          {product.isPriceHidden
+                          {showVisiblePrice && product.price != null
+                            ? formatEurPrice(product.price)
+                            : showPriceOnRequest
                             ? t("home.priceOnRequest")
-                            : formatEurPrice(product.price)}
+                            : "-"}
                         </span>
                       </div>
 
@@ -513,7 +525,9 @@ useEffect(() => {
                         onClick={() => openProductModal(product)}
                       >
                         <Eye size={15} />
-                        {product.isPriceHidden ? t("home.requestPrice") : t("home.viewDetails")}
+                        {showPriceOnRequest
+                          ? t("home.requestPrice")
+                          : t("home.viewDetails")}
                       </button>
                     </div>
                   </div>
@@ -787,12 +801,17 @@ useEffect(() => {
 
               <div
                 className={`home-product-modal-price ${
-                  selectedProduct.isPriceHidden ? "home-product-modal-price--request" : ""
+                  shouldShowPriceOnRequest(selectedProduct)
+                    ? "home-product-modal-price--request"
+                    : ""
                 }`}
               >
-                {selectedProduct.isPriceHidden
+                {shouldShowProductPrice(selectedProduct) &&
+                selectedProduct.price != null
+                  ? formatEurPrice(selectedProduct.price)
+                  : shouldShowPriceOnRequest(selectedProduct)
                   ? t("home.priceOnRequest")
-                  : formatEurPrice(selectedProduct.price)}
+                  : "-"}
               </div>
 
               <div className="home-product-details-grid">
@@ -841,7 +860,7 @@ useEffect(() => {
               )}
 
               <div className="home-product-modal-actions">
-                {selectedProduct.isPriceHidden ? (
+                {!canProductBeAddedToCart(selectedProduct) ? (
                   <button
                     type="button"
                     className="home-btn-primary"
@@ -876,7 +895,9 @@ useEffect(() => {
                           dimensions: selectedProduct.dimensions,
                           lengthCm: selectedProduct.lengthCm,
                           widthCm: selectedProduct.widthCm,
+                          canShowPrice: selectedProduct.canShowPrice,
                           isPriceHidden: selectedProduct.isPriceHidden,
+                          requiresPriceRequest: selectedProduct.requiresPriceRequest,
                         });
 
                         if (result.ok) {
@@ -909,7 +930,9 @@ useEffect(() => {
                           dimensions: selectedProduct.dimensions,
                           lengthCm: selectedProduct.lengthCm,
                           widthCm: selectedProduct.widthCm,
+                          canShowPrice: selectedProduct.canShowPrice,
                           isPriceHidden: selectedProduct.isPriceHidden,
+                          requiresPriceRequest: selectedProduct.requiresPriceRequest,
                         });
 
                         closeProductModal();

@@ -20,7 +20,14 @@ import {
 
 import { useAuth } from "../context/useAuth";
 import { useCart } from "../context/useCart";
-import { getProducts, type ProductViewDto } from "../services/productService";
+import { getStoredUserLocation } from "../services/apiClient";
+import {
+  canProductBeAddedToCart,
+  getProducts,
+  shouldShowPriceOnRequest,
+  shouldShowProductPrice,
+  type ProductViewDto,
+} from "../services/productService";
 import { createPriceRequest } from "../services/priceRequestService";
 import "../styles/ProductsPage.css";
 import { useI18n } from "../i18n/i18n";
@@ -33,6 +40,7 @@ export default function ProductsPage() {
   const navigate = useNavigate();
   const { isAuthenticated, loadingAuth, user } = useAuth();
   const { addToCart } = useCart();
+  const visitorLocation = getStoredUserLocation();
 
   const [products, setProducts] = useState<ProductViewDto[]>([]);
   const [loading, setLoading] = useState(true);
@@ -167,30 +175,26 @@ export default function ProductsPage() {
       return;
     }
 
-if (
-  product.isPriceHidden ||
-  product.requiresPriceRequest ||
-  !product.canShowPrice ||
-  product.price == null ||
-  product.price <= 0
-) {
-  openPriceRequest(product);
-  return;
-}
+    if (!canProductBeAddedToCart(product)) {
+      openPriceRequest(product);
+      return;
+    }
 
-   addToCart({
-  id: product.id,
-  name: product.name,
-  slug: product.slug,
-  price: product.price,
-  priceLabel: formatEurPrice(product.price),
-  mainImageUrl:
-    getProductImages(product)[0] || product.fullMainImageUrl || "",
-  dimensions: product.dimensions,
-  lengthCm: product.lengthCm,
-  widthCm: product.widthCm,
-  isPriceHidden: product.isPriceHidden,
-});
+    addToCart({
+      id: product.id,
+      name: product.name,
+      slug: product.slug,
+      price: product.price,
+      priceLabel: formatEurPrice(product.price),
+      mainImageUrl:
+        getProductImages(product)[0] || product.fullMainImageUrl || "",
+      dimensions: product.dimensions,
+      lengthCm: product.lengthCm,
+      widthCm: product.widthCm,
+      canShowPrice: product.canShowPrice,
+      isPriceHidden: product.isPriceHidden,
+      requiresPriceRequest: product.requiresPriceRequest,
+    });
 
     setAddedProductId(product.id);
     window.setTimeout(() => setAddedProductId(null), 1600);
@@ -216,7 +220,7 @@ if (
         customerName: priceRequestForm.customerName.trim(),
         email: priceRequestForm.email.trim(),
         phone: priceRequestForm.phone.trim(),
-        countryCode: selectedProduct.countryCode || "TN",
+        countryCode: selectedProduct.countryCode || visitorLocation.countryCode,
         message: priceRequestForm.message.trim(),
       });
 
@@ -457,10 +461,8 @@ if (
         <div className="products-grid">
           {filteredProducts.map((product) => {
             const isAdded = addedProductId === product.id;
-            const hasVisiblePrice =
-              product.canShowPrice &&
-              product.price !== null &&
-              product.price !== undefined;
+            const hasVisiblePrice = shouldShowProductPrice(product);
+            const showPriceOnRequest = shouldShowPriceOnRequest(product);
 
             const productImages = getProductImages(product);
             const coverImage = productImages[0];
@@ -537,14 +539,16 @@ if (
 
                   <div
                     className={`product-buy-zone ${
-                      !hasVisiblePrice ? "product-buy-zone--request" : ""
+                      showPriceOnRequest ? "product-buy-zone--request" : ""
                     }`}
                   >
                     <div className="product-price-box">
                       <p className="product-price-label">
                         {hasVisiblePrice
                           ? t("products.price")
-                          : t("products.priceOnRequest")}
+                          : showPriceOnRequest
+                          ? t("products.priceOnRequest")
+                          : t("products.price")}
                       </p>
 
                       <strong
@@ -556,7 +560,9 @@ if (
                       >
                         {hasVisiblePrice
                           ? formatEurPrice(product.price)
-                          : t("products.requestPrice")}
+                          : showPriceOnRequest
+                          ? t("products.priceOnRequest")
+                          : "-"}
                       </strong>
                     </div>
 
@@ -694,14 +700,17 @@ if (
 
               <strong
                 className={
-                  detailProduct.canShowPrice
+                  shouldShowProductPrice(detailProduct)
                     ? "products-detail-price"
                     : "products-detail-price products-detail-price--request"
                 }
               >
-                {detailProduct.canShowPrice && detailProduct.price != null
+                {shouldShowProductPrice(detailProduct) &&
+                detailProduct.price != null
                   ? formatEurPrice(detailProduct.price)
-                  : t("products.priceAvailableOnRequest")}
+                  : shouldShowPriceOnRequest(detailProduct)
+                  ? t("products.priceOnRequest")
+                  : "-"}
               </strong>
 
               <div className="products-detail-grid">
@@ -786,7 +795,7 @@ if (
               )}
 
               <div className="products-detail-actions">
-                {detailProduct.canShowPrice && detailProduct.price != null ? (
+                {canProductBeAddedToCart(detailProduct) ? (
                   <button
                     type="button"
                     className="product-cart-btn"

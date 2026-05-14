@@ -17,7 +17,9 @@ export type CartProduct = {
   dimensions?: string | null;
   lengthCm?: number | null;
   widthCm?: number | null;
+  canShowPrice?: boolean;
   isPriceHidden?: boolean;
+  requiresPriceRequest?: boolean;
 };
 
 type CartContextType = {
@@ -55,7 +57,13 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }, [items]);
 
   const addToCart = (product: CartProduct) => {
-    if (product.isPriceHidden || product.price == null || product.price <= 0) {
+    if (
+      product.canShowPrice !== true ||
+      product.isPriceHidden === true ||
+      product.requiresPriceRequest === true ||
+      product.price == null ||
+      product.price <= 0
+    ) {
       return {
         ok: false,
         message: "Ce produit nécessite une demande de prix.",
@@ -74,7 +82,6 @@ export function CartProvider({ children }: { children: ReactNode }) {
       {
         ...product,
         price: product.price,
-        isPriceHidden: false,
       },
     ]);
 
