@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 
 import { getMyOrders, type CustomerOrder } from "../services/orderService";
+import { buildAssetUrl } from "../services/apiClient";
 import { formatEurPrice } from "../utils/price";
 import { useI18n } from "../i18n/i18n";
 import "../styles/AccountOrdersPage.css";
@@ -41,9 +42,8 @@ function getItemImageUrl(item: any) {
     item.imageUrl;
 
   if (!url) return "";
-  if (url.startsWith("http")) return url;
 
-  return `http://localhost:5163${url.startsWith("/") ? url : `/${url}`}`;
+  return buildAssetUrl(url) || "";
 }
 
 function getOrderStep(order: CustomerOrder) {

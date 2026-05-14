@@ -1,4 +1,4 @@
-import { apiFetch } from "./apiClient";
+import { apiFetch, buildAssetUrl } from "./apiClient";
 
 export type ProductStatus = "Available" | "Reserved" | "Sold" | "Hidden";
 
@@ -52,16 +52,8 @@ export type ProductViewDto = ProductDto & {
   fullImages: string[];
 };
 
-const API_BASE_URL = "http://localhost:5163";
-
 function buildImageUrl(imageUrl?: string | null): string | null {
-  if (!imageUrl) return null;
-
-  if (imageUrl.startsWith("http://") || imageUrl.startsWith("https://")) {
-    return imageUrl;
-  }
-
-  return `${API_BASE_URL}${imageUrl}`;
+  return buildAssetUrl(imageUrl);
 }
 
 function sortByNewest(products: ProductViewDto[]): ProductViewDto[] {

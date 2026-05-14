@@ -14,6 +14,7 @@ import {
   getMyDemoBookings,
   type CustomerDemoBooking,
 } from "../services/demoBookingService";
+import { buildAssetUrl } from "../services/apiClient";
 import { useI18n } from "../i18n/i18n";
 
 import "../styles/AccountPage.css";
@@ -246,11 +247,7 @@ export default function AccountReservationsPage() {
                       <div className="account-reservation-product-img">
                         {product.productImage ? (
                           <img
-                            src={
-                              product.productImage.startsWith("http")
-                                ? product.productImage
-                                : `http://localhost:5163${product.productImage}`
-                            }
+                            src={buildAssetUrl(product.productImage) || ""}
                             alt={product.productName}
                           />
                         ) : (

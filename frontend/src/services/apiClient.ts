@@ -1,5 +1,9 @@
-const API_BASE_URL = "http://localhost:5163";
-const API_URL = `${API_BASE_URL}/api`;
+const DEFAULT_API_URL = "https://artisanmedinabackend.onrender.com/api";
+
+export const API_URL =
+  import.meta.env.VITE_API_URL?.trim().replace(/\/+$/, "") || DEFAULT_API_URL;
+
+export const API_ORIGIN = API_URL.replace(/\/api$/i, "");
 
 const ACCESS_TOKEN_KEY = "artisan_access_token";
 const REFRESH_TOKEN_KEY = "artisan_refresh_token";
@@ -18,13 +22,38 @@ function extractBearerToken(value: string | null): string | null {
   return normalizeToken(match[1]);
 }
 
+function normalizeApiEndpoint(endpoint: string): string {
+  const trimmed = endpoint.trim();
+  const withLeadingSlash = trimmed.startsWith("/") ? trimmed : `/${trimmed}`;
+
+  return withLeadingSlash.replace(/^\/api(?=\/|$)/i, "");
+}
+
+export function buildApiUrl(endpoint: string): string {
+  return `${API_URL}${normalizeApiEndpoint(endpoint)}`;
+}
+
+export function buildAssetUrl(assetPath?: string | null): string | null {
+  if (!assetPath) return null;
+
+  if (assetPath.startsWith("http://") || assetPath.startsWith("https://")) {
+    return assetPath;
+  }
+
+  const normalizedPath = assetPath.startsWith("/") ? assetPath : `/${assetPath}`;
+
+  return `${API_ORIGIN}${normalizedPath}`;
+}
+
 function isPublicEndpoint(endpoint: string): boolean {
+  const normalized = normalizeApiEndpoint(endpoint);
+
   return (
-    endpoint === "/auth/login" ||
-    endpoint === "/auth/register" ||
-    endpoint === "/auth/verify-email" ||
-    endpoint === "/contact" ||
-    endpoint.startsWith("/products")
+    normalized === "/auth/login" ||
+    normalized === "/auth/register" ||
+    normalized === "/auth/verify-email" ||
+    normalized === "/contact" ||
+    normalized.startsWith("/products")
   );
 }
 
@@ -58,7 +87,7 @@ export async function apiFetch(endpoint: string, options: RequestInit = {}) {
     headers.set("Authorization", `Bearer ${token}`);
   }
 
-  const res = await fetch(`${API_URL}${endpoint}`, {
+  const res = await fetch(buildApiUrl(endpoint), {
     ...options,
     headers,
   });

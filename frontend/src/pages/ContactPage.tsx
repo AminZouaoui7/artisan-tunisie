@@ -8,6 +8,7 @@ import {
   XCircle,
 } from "lucide-react";
 import { useI18n } from "../i18n/i18n";
+import { apiFetch } from "../services/apiClient";
 import "../styles/ContactPage.css";
 
 export default function ContactPage() {
@@ -46,7 +47,7 @@ export default function ContactPage() {
     const payload = getFormPayload(form);
 
     try {
-      const response = await fetch("http://localhost:5163/api/contact", {
+      const response = await apiFetch("/contact", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
