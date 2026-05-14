@@ -1,8 +1,5 @@
 import { apiFetch } from "./apiClient";
 
-const API_BASE_URL = "http://localhost:5163";
-const API_URL = `${API_BASE_URL}/api`;
-
 export type CreateDemoBookingPayload = {
   fullName: string;
   email: string;

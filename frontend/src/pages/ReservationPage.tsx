@@ -1,8 +1,7 @@
-  import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   CalendarDays,
-  Check,
   ChevronLeft,
   ChevronRight,
   Clock,
@@ -28,12 +27,11 @@ export default function ReservationPage() {
   const navigate = useNavigate();
   const { user, token, isAuthenticated, loadingAuth } = useAuth();
 
-  const [products, setProducts] = useState<ProductViewDto[]>([]);
+  const [, setProducts] = useState<ProductViewDto[]>([]);
   const [selectedProductIds, setSelectedProductIds] = useState<number[]>([]);
   const [showProductChoice, setShowProductChoice] = useState(false);
   const [carouselIndex, setCarouselIndex] = useState(0);
 
-  const [loadingProducts, setLoadingProducts] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [successKey, setSuccessKey] = useState<string | null>(null);
   const [errorKey, setErrorKey] = useState<string | null>(null);
@@ -69,7 +67,6 @@ export default function ReservationPage() {
       } catch {
         setErrorKey("reservation.loadError");
       } finally {
-        setLoadingProducts(false);
       }
     }
 
@@ -84,12 +81,6 @@ export default function ReservationPage() {
     return () => window.clearInterval(timer);
   }, []);
 
-  const selectedProducts = useMemo(() => {
-    return products.filter((product) =>
-      selectedProductIds.includes(product.id)
-    );
-  }, [products, selectedProductIds]);
-
   function goNext() {
     setCarouselIndex((current) => (current + 1) % demoImages.length);
   }
@@ -97,14 +88,6 @@ export default function ReservationPage() {
   function goPrev() {
     setCarouselIndex((current) =>
       current === 0 ? demoImages.length - 1 : current - 1
-    );
-  }
-
-  function toggleProduct(productId: number) {
-    setSelectedProductIds((current) =>
-      current.includes(productId)
-        ? current.filter((id) => id !== productId)
-        : [...current, productId]
     );
   }
 

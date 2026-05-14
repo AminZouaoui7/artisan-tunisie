@@ -1,8 +1,5 @@
 import { apiFetch } from "./apiClient";
 
-const API_BASE_URL = "http://localhost:5163";
-const API_URL = `${API_BASE_URL}/api`;
-
 export type CreatePriceRequestPayload = {
   productId: number;
   customerName: string;

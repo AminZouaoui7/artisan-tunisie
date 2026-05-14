@@ -1,7 +1,5 @@
 import { apiFetch } from "./apiClient";
 
-const API_URL = import.meta.env.VITE_API_URL ?? "http://localhost:5163";
-
 export type RegisterDto = {
   firstName: string;
   lastName: string;

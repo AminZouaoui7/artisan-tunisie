@@ -1,54 +1,13 @@
 import { Link } from "react-router-dom";
 import lhajjImage from "../assets/lhajj.jpg";
-import bourguibaImage from "../assets/photoavecbourguiba.png";
 import "../styles/OurStoryPage.css";
 import ourstory1 from "../assets/ourstory1.jpg";
 import ourstory2 from "../assets/ourstory2.jpg";
 import { useI18n } from "../i18n/i18n";
 const IMG_FOUNDER = lhajjImage;
-const IMG_BOURGUIBA = bourguibaImage;
 
 export default function OurStoryPage() {
   const { t } = useI18n();
-
-  const TIMELINE = [
-    {
-      side: "left" as const,
-      year: t("ourStory.page.generations.g1962.label"),
-      title: t("ourStory.page.generations.g1962.title"),
-      body: t("ourStory.page.generations.g1962.text"),
-    },
-    {
-      side: "right" as const,
-      year: t("ourStory.page.generations.g1980.label"),
-      title: t("ourStory.page.generations.g1980.title"),
-      body: t("ourStory.page.generations.g1980.text"),
-    },
-    {
-      side: "left" as const,
-      year: t("ourStory.page.generations.today.year"),
-      title: t("ourStory.page.generations.today.title"),
-      body: t("ourStory.page.generations.today.text"),
-    },
-  ];
-
-  const PROMISE_ITEMS = [
-    {
-      icon: "✦",
-      title: t("ourStory.values.selectedTitle"),
-      body: t("ourStory.values.selectedDesc"),
-    },
-    {
-      icon: "🪡",
-      title: t("ourStory.values.handmadeTitle"),
-      body: t("ourStory.values.handmadeDesc"),
-    },
-    {
-      icon: "💎",
-      title: t("ourStory.values.authenticityTitle"),
-      body: t("ourStory.values.authenticityDesc"),
-    },
-  ];
   return (
     <div className="story-page">
       <section className="story-hero">

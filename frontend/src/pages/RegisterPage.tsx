@@ -5,7 +5,7 @@ import { useI18n } from "../i18n/i18n";
 import "../styles/RegisterPage.css";
 
 export default function RegisterPage() {
-  const { t } = useI18n();
+  useI18n();
   const navigate = useNavigate();
 
   const [form, setForm] = useState({

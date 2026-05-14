@@ -216,8 +216,6 @@ useEffect(() => {
     );
   };
 
-  const boutiqueCurrent = boutiqueImages[boutiqueIndex];
-
   useEffect(() => {
     let isMounted = true;
 

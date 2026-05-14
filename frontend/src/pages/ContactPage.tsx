@@ -11,7 +11,7 @@ import { useI18n } from "../i18n/i18n";
 import "../styles/ContactPage.css";
 
 export default function ContactPage() {
-  const { t, language } = useI18n();
+  const { t } = useI18n();
   const whatsappNumber = "21656250910";
   const email = "aminmimou963@gmail.com";
 

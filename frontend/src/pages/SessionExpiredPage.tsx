@@ -1,4 +1,4 @@
-import { ShieldAlert, ArrowRight, House, Sparkles } from "lucide-react";
+import { ShieldAlert, House } from "lucide-react";
 import { Link } from "react-router-dom";
 
 import logo from "../assets/color white.png";
