@@ -1,0 +1,344 @@
+.account-order-modal {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 999999 !important;
+  width: 100% !important;
+  height: 100dvh !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 24px !important;
+  overflow: hidden !important;
+}
+
+.account-order-modal-backdrop {
+  position: fixed !important;
+  inset: 0 !important;
+  background: rgba(22, 12, 7, 0.72) !important;
+  backdrop-filter: blur(18px) !important;
+}
+
+.account-order-detail-card {
+  position: relative !important;
+  z-index: 2 !important;
+  width: min(860px, calc(100% - 48px)) !important;
+  max-height: calc(100dvh - 48px) !important;
+  overflow-y: auto !important;
+  padding: 32px !important;
+  border-radius: 34px !important;
+  background:
+    radial-gradient(circle at 12% 0%, rgba(199, 113, 59, 0.12), transparent 34%),
+    linear-gradient(145deg, #fffaf0 0%, #f3e5cd 100%) !important;
+  border: 1px solid rgba(92, 51, 23, 0.18) !important;
+  box-shadow: 0 45px 120px rgba(0, 0, 0, 0.45) !important;
+  animation: orderPopupIn 0.25s ease both;
+}
+
+.account-order-detail-card h3 {
+  margin: 0 0 24px !important;
+  color: #3b2526 !important;
+  font-family: Georgia, "Times New Roman", serif !important;
+  font-size: clamp(34px, 4vw, 48px) !important;
+}
+
+.account-order-modal-close {
+  position: sticky !important;
+  top: 0 !important;
+  margin-left: auto !important;
+  margin-bottom: 12px !important;
+  width: 44px !important;
+  height: 44px !important;
+  border-radius: 999px !important;
+  border: 1px solid rgba(92, 51, 23, 0.16) !important;
+  background: rgba(254, 252, 231, 0.96) !important;
+  color: #3b2526 !important;
+  display: grid !important;
+  place-items: center !important;
+  cursor: pointer !important;
+  z-index: 5 !important;
+}
+
+.account-order-modal-close:hover {
+  background: #a94d43 !important;
+  color: #fff !important;
+}
+
+.account-order-detail-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, 1fr) !important;
+  gap: 14px !important;
+  margin: 24px 0 !important;
+}
+
+.account-order-detail-grid div {
+  padding: 18px 20px !important;
+  border-radius: 22px !important;
+  background: rgba(255, 253, 246, 0.72) !important;
+  border: 1px solid rgba(92, 51, 23, 0.13) !important;
+}
+
+.account-order-steps {
+  display: grid !important;
+  gap: 12px !important;
+  margin: 26px 0 !important;
+}
+
+.account-order-step {
+  display: grid !important;
+  grid-template-columns: 48px 1fr !important;
+  gap: 15px !important;
+  align-items: center !important;
+  padding: 16px !important;
+  border-radius: 24px !important;
+  background: rgba(255, 253, 246, 0.62) !important;
+  border: 1px solid rgba(92, 51, 23, 0.12) !important;
+}
+
+.account-order-step-icon {
+  width: 48px !important;
+  height: 48px !important;
+  border-radius: 17px !important;
+  display: grid !important;
+  place-items: center !important;
+}
+
+.account-order-step.is-active .account-order-step-icon {
+  color: #fff !important;
+  background: linear-gradient(135deg, #c8713b, #a94d43) !important;
+}
+
+.account-order-step.is-disabled {
+  opacity: 0.42 !important;
+  filter: grayscale(1) !important;
+}
+
+.account-order-products,
+.account-order-delivery {
+  margin-top: 24px !important;
+  padding-top: 22px !important;
+  border-top: 1px solid rgba(92, 51, 23, 0.13) !important;
+}
+
+@media (max-width: 760px) {
+  .account-order-modal {
+    align-items: flex-end !important;
+    padding: 10px !important;
+  }
+
+  .account-order-detail-card {
+    width: 100% !important;
+    max-height: 92dvh !important;
+    border-radius: 28px 28px 0 0 !important;
+    padding: 24px !important;
+  }
+
+  .account-order-detail-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+/* =========================
+   ORDER MODAL — CENTER CLEAN FIX
+========================= */
+
+.account-order-modal {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 999999 !important;
+  width: 100% !important;
+  height: 100dvh !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  padding: 96px 24px 32px !important;
+  overflow: hidden !important;
+}
+
+.account-order-modal-backdrop {
+  position: fixed !important;
+  inset: 0 !important;
+  background: rgba(28, 18, 12, 0.68) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+}
+
+.account-order-detail-card {
+  position: relative !important;
+  z-index: 2 !important;
+
+  width: min(720px, calc(100% - 48px)) !important;
+  max-height: calc(100dvh - 130px) !important;
+  overflow-y: auto !important;
+
+  padding: 28px !important;
+  border-radius: 28px !important;
+
+  background: linear-gradient(180deg, #fffaf0 0%, #f3e5cd 100%) !important;
+  border: 1px solid rgba(92, 51, 23, 0.18) !important;
+  box-shadow: 0 35px 90px rgba(0, 0, 0, 0.42) !important;
+}
+
+.account-order-detail-card h3 {
+  margin: 0 0 22px !important;
+  font-family: Georgia, "Times New Roman", serif !important;
+  font-size: 38px !important;
+  line-height: 1 !important;
+  color: #3b2526 !important;
+}
+
+.account-order-modal-close {
+  position: absolute !important;
+  top: 14px !important;
+  right: 14px !important;
+
+  width: 38px !important;
+  height: 38px !important;
+  border-radius: 999px !important;
+
+  border: 1px solid rgba(92, 51, 23, 0.16) !important;
+  background: #fffaf0 !important;
+  color: #3b2526 !important;
+
+  display: grid !important;
+  place-items: center !important;
+  cursor: pointer !important;
+  z-index: 10 !important;
+}
+
+.account-order-detail-grid {
+  grid-template-columns: repeat(2, 1fr) !important;
+  gap: 12px !important;
+  margin: 20px 0 !important;
+}
+
+.account-order-detail-grid div {
+  padding: 14px 16px !important;
+  border-radius: 18px !important;
+}
+
+.account-order-step {
+  padding: 13px 14px !important;
+  border-radius: 18px !important;
+  grid-template-columns: 42px 1fr !important;
+}
+
+.account-order-step-icon {
+  width: 42px !important;
+  height: 42px !important;
+  border-radius: 14px !important;
+}
+
+.account-order-step h4 {
+  font-size: 22px !important;
+}
+
+.account-order-step p {
+  font-size: 12px !important;
+}
+
+@media (max-width: 760px) {
+  .account-order-modal {
+    padding: 86px 10px 0 !important;
+    align-items: flex-end !important;
+  }
+
+  .account-order-detail-card {
+    width: 100% !important;
+    max-height: calc(100dvh - 86px) !important;
+    border-radius: 26px 26px 0 0 !important;
+    padding: 22px !important;
+  }
+
+  .account-order-detail-card h3 {
+    font-size: 31px !important;
+    padding-right: 44px !important;
+  }
+
+  .account-order-detail-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+.account-order-products-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+
+.account-order-products-head h4 {
+  margin: 0 !important;
+}
+
+.account-order-products-head span {
+  padding: 7px 12px;
+  border-radius: 999px;
+  color: #a04c3f;
+  background: rgba(255, 238, 214, 0.62);
+  border: 1px solid rgba(160, 76, 63, 0.2);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.account-order-products-list {
+  display: grid;
+  gap: 10px;
+}
+
+.account-order-product {
+  display: flex !important;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 14px 16px !important;
+  border-radius: 18px;
+  background: rgba(255, 253, 246, 0.68);
+  border: 1px solid rgba(118, 89, 65, 0.13);
+}
+
+.account-order-product-info {
+  display: grid;
+  gap: 4px;
+}
+
+.account-order-product-name {
+  color: #3b2526 !important;
+  font-size: 14px;
+  font-weight: 900;
+}
+
+.account-order-product-info small {
+  color: #74685e;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.account-order-product {
+  display: grid !important;
+  grid-template-columns: 76px 1fr auto !important;
+  align-items: center !important;
+  gap: 14px !important;
+  padding: 12px !important;
+}
+
+.account-order-product-img {
+  width: 76px;
+  height: 76px;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #fffaf0;
+  border: 1px solid rgba(92, 51, 23, 0.12);
+  display: grid;
+  place-items: center;
+  color: #a04c3f;
+}
+
+.account-order-product-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}

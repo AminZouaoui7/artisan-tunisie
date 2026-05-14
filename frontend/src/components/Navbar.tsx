@@ -1,0 +1,350 @@
+import { NavLink, Link } from "react-router-dom";
+import { useState, useEffect, Fragment } from "react";
+import {
+  UserRound,
+  LogOut,
+  ShoppingBag,
+  Settings,
+  CalendarDays,
+} from "lucide-react";
+
+import "../styles/Navbar.css";
+import logoMain from "../assets/color white.png";
+import { useI18n } from "../i18n/i18n";
+import { useAuth } from "../context/useAuth";
+import { useCart } from "../context/useCart";
+import { getVisitorCountry } from "../services/productService";
+
+export default function Navbar() {
+  const { language, setLanguage, t } = useI18n();
+  const { user, isAuthenticated, logout } = useAuth();
+  const { cartCount } = useCart();
+
+  const visitorCountry = getVisitorCountry().trim().toLowerCase();
+
+  const isTunisiaVisitor =
+    visitorCountry === "tn" ||
+    visitorCountry === "tunisia" ||
+    visitorCountry === "tunisie";
+
+  const canUseCart = isAuthenticated && !isTunisiaVisitor;
+
+  const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [accountOpen, setAccountOpen] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 18);
+    window.addEventListener("scroll", onScroll, { passive: true });
+
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
+    document.body.style.overflow = menuOpen ? "hidden" : "";
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [menuOpen]);
+
+  const links = [
+    { to: "/", label: t("nav.home") },
+    { to: "/our-story", label: t("nav.ourStory") },
+    { to: "/products", label: t("nav.products") },
+    { to: "/reservation", label: t("nav.reservation") },
+    { to: "/contact", label: t("nav.contact") },
+  ];
+
+  const handleLogout = () => {
+    logout();
+    setAccountOpen(false);
+    setMenuOpen(false);
+  };
+
+  return (
+    <>
+      <header className={`nb ${scrolled ? "nb--scrolled" : ""}`}>
+        <div className="nb__inner">
+          <NavLink
+            to="/"
+            className="nb__logo"
+            onClick={() => setMenuOpen(false)}
+          >
+            <img
+              className="nb__logo-image"
+              src={logoMain}
+              alt="L’ARTISAN DE LA MÉDINA"
+            />
+
+            <span className="nb__logo-text">
+              L’ARTISAN DE LA MÉDINA
+            </span>
+          </NavLink>
+
+          <nav className="nb__nav" aria-label={t("common.mainNavigation")}>
+            <div className="nb__pill">
+              {links.map(({ to, label }) => (
+                <NavLink
+                  key={to}
+                  to={to}
+                  end={to === "/"}
+                  className={({ isActive }) =>
+                    `nb__link${isActive ? " nb__link--active" : ""}`
+                  }
+                >
+                  <span className="nb__link-text">{label}</span>
+                </NavLink>
+              ))}
+            </div>
+          </nav>
+
+          <div className="nb__right">
+            {canUseCart && (
+              <Link
+                to="/cart"
+                className="nb__cart"
+                aria-label={t("nav.cartAria")}
+                onClick={() => setMenuOpen(false)}
+              >
+                <ShoppingBag size={17} />
+
+                {cartCount > 0 && (
+                  <span className="nb__cart-count">{cartCount}</span>
+                )}
+              </Link>
+            )}
+
+            <div
+              className="nb__lang"
+              role="group"
+              aria-label={t("common.languageSwitch")}
+            >
+              {(["FR", "EN"] as const).map((l, i) => (
+                <Fragment key={l}>
+                  {i === 1 && (
+                    <span className="nb__lang-sep" aria-hidden="true" />
+                  )}
+
+                  <button
+                    className={`nb__lang-btn${
+                      language === l ? " nb__lang-btn--active" : ""
+                    }`}
+                    onClick={() => setLanguage(l)}
+                    aria-pressed={language === l}
+                  >
+                    {l}
+                  </button>
+                </Fragment>
+              ))}
+            </div>
+
+            {!isAuthenticated ? (
+              <div className="nb__auth">
+                <Link to="/login" className="nb__auth-login">
+                  {t("nav.login")}
+                </Link>
+
+                <Link to="/register" className="nb__auth-register">
+                  {t("nav.register")}
+                </Link>
+              </div>
+            ) : (
+              <div className="nb__account">
+                <button
+                  className="nb__account-btn"
+                  onClick={() => setAccountOpen((v) => !v)}
+                  aria-label={t("account.common.accountMenuLabel")}
+                >
+                  <UserRound size={18} />
+                  <span>{user?.firstName?.[0] ?? "C"}</span>
+                </button>
+
+                {accountOpen && (
+                  <div className="nb__account-menu">
+                    <div className="nb__account-head">
+                      <strong>
+                        {user?.firstName} {user?.lastName}
+                      </strong>
+                      <small>{user?.email}</small>
+                    </div>
+
+                    <Link
+                      to="/account"
+                      className="nb__account-item"
+                      onClick={() => setAccountOpen(false)}
+                    >
+                      <Settings size={16} />
+                      {t("account.nav.dashboard")}
+                    </Link>
+
+                    <Link
+                      to="/account/reservations"
+                      className="nb__account-item"
+                      onClick={() => setAccountOpen(false)}
+                    >
+                      <CalendarDays size={16} />
+                      {t("account.reservations.title")}
+                    </Link>
+
+                    <Link
+                      to="/account/orders"
+                      className="nb__account-item"
+                      onClick={() => setAccountOpen(false)}
+                    >
+                      <ShoppingBag size={16} />
+                      {t("account.ordersTitle")}
+                    </Link>
+
+                    <button
+                      className="nb__account-item nb__account-logout"
+                      onClick={handleLogout}
+                    >
+                      <LogOut size={16} />
+                      {t("account.nav.logout")}
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
+
+            <button
+              className={`nb__burger${menuOpen ? " nb__burger--open" : ""}`}
+              onClick={() => setMenuOpen((v) => !v)}
+              aria-label={menuOpen ? t("common.closeMenu") : t("common.openMenu")}
+              aria-expanded={menuOpen}
+            >
+              <span />
+              <span />
+              <span />
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <div
+        className={`nb__drawer${menuOpen ? " nb__drawer--open" : ""}`}
+        aria-hidden={!menuOpen}
+      >
+        <nav className="nb__drawer-nav">
+          {links.map(({ to, label }, i) => (
+            <NavLink
+              key={to}
+              to={to}
+              end={to === "/"}
+              className={({ isActive }) =>
+                `nb__drawer-link${isActive ? " nb__drawer-link--active" : ""}`
+              }
+              style={{ "--i": i } as React.CSSProperties}
+              onClick={() => setMenuOpen(false)}
+            >
+              <span className="nb__drawer-num">0{i + 1}</span>
+              {label}
+            </NavLink>
+          ))}
+
+          {canUseCart && (
+            <NavLink
+              to="/cart"
+              className="nb__drawer-link"
+              onClick={() => setMenuOpen(false)}
+            >
+              <span className="nb__drawer-num">06</span>
+              {t("nav.cart")} {cartCount > 0 ? `(${cartCount})` : ""}
+            </NavLink>
+          )}
+
+          {!isAuthenticated ? (
+            <>
+              <NavLink
+                to="/login"
+                className="nb__drawer-link"
+                onClick={() => setMenuOpen(false)}
+              >
+                <span className="nb__drawer-num">06</span>
+                {t("auth.common.loginNav")}
+              </NavLink>
+
+              <NavLink
+                to="/register"
+                className="nb__drawer-link"
+                onClick={() => setMenuOpen(false)}
+              >
+                <span className="nb__drawer-num">07</span>
+                {t("auth.common.registerNav")}
+              </NavLink>
+            </>
+          ) : (
+            <>
+              <NavLink
+                to="/account"
+                className="nb__drawer-link"
+                onClick={() => setMenuOpen(false)}
+              >
+                <span className="nb__drawer-num">
+                  {canUseCart ? "07" : "06"}
+                </span>
+                {t("account.nav.dashboard")}
+              </NavLink>
+
+              <NavLink
+                to="/account/reservations"
+                className="nb__drawer-link"
+                onClick={() => setMenuOpen(false)}
+              >
+                <span className="nb__drawer-num">
+                  {canUseCart ? "08" : "07"}
+                </span>
+                {t("account.reservations.title")}
+              </NavLink>
+
+              <NavLink
+                to="/account/orders"
+                className="nb__drawer-link"
+                onClick={() => setMenuOpen(false)}
+              >
+                <span className="nb__drawer-num">
+                  {canUseCart ? "09" : "08"}
+                </span>
+                {t("account.ordersTitle")}
+              </NavLink>
+
+              <button className="nb__drawer-logout" onClick={handleLogout}>
+                {t("account.nav.logout")}
+              </button>
+            </>
+          )}
+        </nav>
+
+        <div className="nb__drawer-foot">
+          <div className="nb__lang nb__lang--drawer">
+            {(["FR", "EN"] as const).map((l, i) => (
+              <Fragment key={l}>
+                {i === 1 && <span className="nb__lang-sep" />}
+
+                <button
+                  className={`nb__lang-btn${
+                    language === l ? " nb__lang-btn--active" : ""
+                  }`}
+                  onClick={() => setLanguage(l)}
+                >
+                  {l}
+                </button>
+              </Fragment>
+            ))}
+          </div>
+
+          <p className="nb__drawer-tagline">{t("nav.drawerTagline")}</p>
+        </div>
+      </div>
+
+      {menuOpen && (
+        <div
+          className="nb__backdrop"
+          onClick={() => setMenuOpen(false)}
+          aria-hidden="true"
+        />
+      )}
+    </>
+  );
+}
