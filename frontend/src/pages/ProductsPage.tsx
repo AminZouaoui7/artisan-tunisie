@@ -178,18 +178,19 @@ if (
   return;
 }
 
-    addToCart({
-      id: product.id,
-      name: product.name,
-      slug: product.slug,
-      price: product.price,
-      priceLabel: formatEurPrice(product.price),
-      mainImageUrl:
-        getProductImages(product)[0] || product.fullMainImageUrl || "",
-      dimensions: product.dimensions,
-      lengthCm: product.lengthCm,
-      widthCm: product.widthCm,
-    });
+   addToCart({
+  id: product.id,
+  name: product.name,
+  slug: product.slug,
+  price: product.price,
+  priceLabel: formatEurPrice(product.price),
+  mainImageUrl:
+    getProductImages(product)[0] || product.fullMainImageUrl || "",
+  dimensions: product.dimensions,
+  lengthCm: product.lengthCm,
+  widthCm: product.widthCm,
+  isPriceHidden: product.isPriceHidden,
+});
 
     setAddedProductId(product.id);
     window.setTimeout(() => setAddedProductId(null), 1600);
