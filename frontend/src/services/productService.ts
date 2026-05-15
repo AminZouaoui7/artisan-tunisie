@@ -106,14 +106,7 @@ function normalizeCountry(country?: string | null): string {
 }
 
 async function ensureVisitorCountryCode(): Promise<string> {
-  const savedCountry = normalizeCountry(getVisitorCountryCode());
-
-  if (savedCountry) {
-    return savedCountry;
-  }
-
-  const location = await fetchAndStoreUserLocation();
-  return normalizeCountry(location.countryCode);
+  return "FR";
 }
 
 export function shouldShowProductPrice(
