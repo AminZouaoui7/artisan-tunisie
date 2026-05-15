@@ -13,18 +13,19 @@ import logoMain from "../assets/color white.png";
 import { useI18n } from "../i18n/i18n";
 import { useAuth } from "../context/useAuth";
 import { useCart } from "../context/useCart";
-//import { getStoredUserLocation } from "../services/apiClient";
+import { getStoredUserLocation } from "../services/apiClient";
 
 export default function Navbar() {
   const { language, setLanguage, t } = useI18n();
   const { user, isAuthenticated, logout } = useAuth();
   const { cartCount } = useCart();
 
-//  const [visitorLocation, setVisitorLocation] = useState(() =>
- //   getStoredUserLocation()
- // );
+  const [visitorLocation, setVisitorLocation] = useState(() =>
+    getStoredUserLocation()
+  );
 
-const canUseCart = isAuthenticated;
+  const canUseCart = isAuthenticated && !visitorLocation.isTunisia;
+
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [accountOpen, setAccountOpen] = useState(false);
@@ -46,7 +47,7 @@ const canUseCart = isAuthenticated;
 
   useEffect(() => {
     const handleLocationChanged = () => {
-     // setVisitorLocation(getStoredUserLocation());
+      setVisitorLocation(getStoredUserLocation());
     };
 
     window.addEventListener("artisan:location-changed", handleLocationChanged);

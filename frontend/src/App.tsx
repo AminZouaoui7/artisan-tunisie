@@ -1,3 +1,5 @@
+
+
 import { useEffect, useState } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 
@@ -28,6 +30,11 @@ import ScrollToTop from "./components/ScrollToTop";
 
 import { I18nProvider, useI18n } from "./i18n/i18n";
 
+import {
+  cleanupVisitorLocationStorage,
+  fetchAndStoreUserLocation,
+} from "./services/apiClient";
+
 import "./App.css";
 
 function AccountComingSoonPage({ titleKey }: { titleKey: string }) {
@@ -56,16 +63,22 @@ function AppContent() {
   useEffect(() => {
     let isMounted = true;
 
-    localStorage.setItem("visitor_country_code", "FR");
-    localStorage.setItem("visitor_country", "FR");
-    localStorage.setItem("countryCode", "FR");
-    localStorage.setItem("artisan_visitor_country", "FR");
-
-    window.setTimeout(() => {
-      if (isMounted) {
-        setLoading(false);
+    async function initializeApp() {
+      try {
+        cleanupVisitorLocationStorage();
+        await fetchAndStoreUserLocation();
+      } catch (error) {
+        console.error("Erreur chargement localisation :", error);
+      } finally {
+        window.setTimeout(() => {
+          if (isMounted) {
+            setLoading(false);
+          }
+        }, 1200);
       }
-    }, 1200);
+    }
+
+    initializeApp();
 
     return () => {
       isMounted = false;
@@ -107,7 +120,10 @@ function AppContent() {
 
               <Route path="/register" element={<RegisterPage />} />
 
-              <Route path="/verify-email" element={<VerifyEmailPage />} />
+              <Route
+                path="/verify-email"
+                element={<VerifyEmailPage />}
+              />
 
               <Route
                 path="/session-expired"
@@ -140,9 +156,15 @@ function AppContent() {
                   </ProtectedRoute>
                 }
               >
-                <Route index element={<AccountDashboardPage />} />
+                <Route
+                  index
+                  element={<AccountDashboardPage />}
+                />
 
-                <Route path="orders" element={<AccountOrdersPage />} />
+                <Route
+                  path="orders"
+                  element={<AccountOrdersPage />}
+                />
 
                 <Route
                   path="reservations"
@@ -158,7 +180,10 @@ function AppContent() {
                   }
                 />
 
-                <Route path="settings" element={<AccountDashboardPage />} />
+                <Route
+                  path="settings"
+                  element={<AccountDashboardPage />}
+                />
               </Route>
             </Routes>
           </main>
