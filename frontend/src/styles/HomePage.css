@@ -4308,3 +4308,193 @@ display: flex;
     margin-bottom: 26px !important;
   }
 }
+
+/* ========================= 
+   FINAL HOME MOBILE FIX 
+========================= */ 
+
+@media (max-width: 768px) { 
+  .home { 
+    overflow-x: hidden !important; 
+  } 
+
+  .home-boutique-hero { 
+    min-height: calc(100svh - var(--mobile-navbar-height)) !important; 
+    height: calc(100svh - var(--mobile-navbar-height)) !important; 
+    max-height: 620px !important; 
+    padding: 0 !important; 
+    margin: 0 !important; 
+    display: flex !important; 
+    align-items: center !important; 
+    justify-content: center !important; 
+  } 
+
+  .home-boutique-hero-bg, 
+  .home-boutique-hero-bg img { 
+    position: absolute !important; 
+    inset: 0 !important; 
+    width: 100% !important; 
+    height: 100% !important; 
+  } 
+
+  .home-boutique-hero-bg img { 
+    object-fit: cover !important; 
+    object-position: center !important; 
+    filter: saturate(1.05) contrast(1.08) brightness(0.62) !important; 
+    transform: none !important; 
+  } 
+
+  .home-boutique-hero-overlay { 
+    background: 
+      linear-gradient(180deg, rgba(0, 0, 0, 0.34), rgba(0, 0, 0, 0.58)), 
+      radial-gradient(circle at center, rgba(0, 0, 0, 0.12), rgba(0, 0, 0, 0.48)) !important; 
+  } 
+
+  .home-boutique-hero-content { 
+    position: relative !important; 
+    z-index: 5 !important; 
+    width: min(100%, calc(100% - 30px)) !important; 
+    min-height: auto !important; 
+    padding: 0 12px !important; 
+    margin: 0 auto !important; 
+    transform: none !important; 
+    display: flex !important; 
+    flex-direction: column !important; 
+    align-items: center !important; 
+    justify-content: center !important; 
+    text-align: center !important; 
+  } 
+
+  .home-boutique-hero-kicker { 
+    display: block !important; 
+    margin: 0 0 12px !important; 
+    color: #d7b076 !important; 
+    font-size: 10px !important; 
+    line-height: 1.4 !important; 
+    letter-spacing: 0.26em !important; 
+    text-shadow: 0 4px 18px rgba(0, 0, 0, 0.65) !important; 
+  } 
+
+  .home-boutique-hero-content h1 { 
+    display: block !important; 
+    margin: 0 auto 14px !important; 
+    max-width: 95% !important; 
+    color: #fff8e8 !important; 
+    font-size: clamp(32px, 10vw, 46px) !important; 
+    line-height: 0.98 !important; 
+    letter-spacing: -0.04em !important; 
+    text-shadow: 0 12px 36px rgba(0, 0, 0, 0.7) !important; 
+  } 
+
+  .home-boutique-hero-content p:not(.home-boutique-hero-kicker) { 
+    display: block !important; 
+    max-width: 330px !important; 
+    margin: 0 auto !important; 
+    color: rgba(255, 248, 232, 0.95) !important; 
+    font-size: 14px !important; 
+    line-height: 1.55 !important; 
+    text-shadow: 0 8px 26px rgba(0, 0, 0, 0.68) !important; 
+  } 
+
+  .home-boutique-hero-btn { 
+    width: 40px !important; 
+    height: 40px !important; 
+    top: 50% !important; 
+    bottom: auto !important; 
+    transform: translateY(-50%) !important; 
+    z-index: 8 !important; 
+  } 
+
+  .home-boutique-hero-btn--left { 
+    left: 10px !important; 
+  } 
+
+  .home-boutique-hero-btn--right { 
+    right: 10px !important; 
+  } 
+
+  .home-boutique-hero-dots { 
+    bottom: 16px !important; 
+    z-index: 8 !important; 
+  } 
+
+  .home-categories-section, 
+  .home-catalog-section, 
+  .home-story, 
+  .home-testimonials-section, 
+  .home-boutique-gallery-section, 
+  .home-boutique-carousel-section { 
+    padding-top: 42px !important; 
+    padding-bottom: 42px !important; 
+    margin-top: 0 !important; 
+    margin-bottom: 0 !important; 
+    min-height: auto !important; 
+  } 
+
+  .home-categories-header, 
+  .home-catalog-header, 
+  .home-section-header, 
+  .home-map-header, 
+  .home-boutique-carousel-header, 
+  .home-boutique-gallery-header { 
+    margin-bottom: 22px !important; 
+  } 
+
+  .home-categories-inner, 
+  .home-catalog-header, 
+  .home-catalog-track, 
+  .home-story-inner, 
+  .home-map-header, 
+  .home-boutique-map { 
+    width: min(100%, calc(100% - 24px)) !important; 
+  } 
+
+  .home-categories-grid, 
+  .home-catalog-track, 
+  .home-testimonials-grid { 
+    grid-template-columns: 1fr !important; 
+    gap: 18px !important; 
+  } 
+
+  .home-cat-card { 
+    min-height: auto !important; 
+    padding: 24px 20px !important; 
+  } 
+
+  .home-rug-img { 
+    height: 240px !important; 
+  } 
+
+  .home-rug-info { 
+    padding: 18px 16px 20px !important; 
+  } 
+
+  .section-divider { 
+    display: none !important; 
+    height: 0 !important; 
+    margin: 0 !important; 
+  } 
+} 
+
+@media (max-width: 430px) { 
+  .home-boutique-hero { 
+    min-height: calc(92svh - var(--mobile-navbar-height)) !important; 
+    height: calc(92svh - var(--mobile-navbar-height)) !important; 
+  } 
+
+  .home-boutique-hero-content h1 { 
+    font-size: clamp(30px, 10vw, 42px) !important; 
+  } 
+
+  .home-boutique-hero-content p:not(.home-boutique-hero-kicker) { 
+    font-size: 13.5px !important; 
+  } 
+
+  .home-categories-section, 
+  .home-catalog-section, 
+  .home-story, 
+  .home-testimonials-section { 
+    padding-top: 36px !important; 
+    padding-bottom: 36px !important; 
+  } 
+} 

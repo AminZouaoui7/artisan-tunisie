@@ -770,3 +770,58 @@
     gap: 8px;
   }
 }
+
+/* ========================= 
+   FINAL NAVBAR FIX 
+========================= */ 
+
+:root { 
+  --nb-h: 74px; 
+  --mobile-navbar-height: 72px; 
+} 
+
+.nb { 
+  position: fixed !important; 
+  top: 0 !important; 
+  left: 0 !important; 
+  right: 0 !important; 
+  width: 100% !important; 
+  height: var(--nb-h) !important; 
+  z-index: 99999 !important; 
+  background: rgba(254, 252, 231, 0.94) !important; 
+  backdrop-filter: blur(22px) saturate(1.5) !important; 
+  -webkit-backdrop-filter: blur(22px) saturate(1.5) !important; 
+  box-shadow: 0 8px 28px rgba(43, 22, 8, 0.09) !important; 
+} 
+
+.nb__inner { 
+  height: var(--nb-h) !important; 
+  min-height: var(--nb-h) !important; 
+} 
+
+.nb__drawer { 
+  z-index: 99998 !important; 
+} 
+
+.nb__backdrop { 
+  z-index: 99997 !important; 
+} 
+
+body { 
+  padding-top: var(--nb-h) !important; 
+} 
+
+@media (max-width: 768px) { 
+  .nb { 
+    height: var(--mobile-navbar-height) !important; 
+  } 
+
+  .nb__inner { 
+    height: var(--mobile-navbar-height) !important; 
+    min-height: var(--mobile-navbar-height) !important; 
+  } 
+
+  body { 
+    padding-top: var(--mobile-navbar-height) !important; 
+  } 
+} 
