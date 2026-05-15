@@ -10,8 +10,9 @@ html {
 html,
 body,
 #root {
+  width: 100%;
   min-height: 100%;
-  height: 100%;
+  overflow-x: hidden;
 }
 
 body {
@@ -60,6 +61,14 @@ html {
   scroll-behavior: smooth;
 }
 
+img,
+svg,
+iframe,
+video,
+canvas {
+  max-width: 100%;
+}
+
 /* =========================
    ARTISAN MEDINA — GLOBAL PALETTE
 ========================= */
@@ -81,6 +90,21 @@ html {
   --border-soft: color-mix(in srgb, var(--color-dark) 14%, transparent);
   --shadow-soft: 0 24px 70px rgba(59, 38, 41, 0.14);
   --ease-premium: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto !important;
+  }
+
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
 .site-shell {

@@ -1,4 +1,4 @@
-import { NavLink, Link } from "react-router-dom";
+import { NavLink, Link, useLocation } from "react-router-dom";
 import { useState, useEffect, Fragment } from "react";
 import {
   UserRound,
@@ -16,6 +16,7 @@ import { useCart } from "../context/useCart";
 import { getStoredUserLocation } from "../services/apiClient";
 
 export default function Navbar() {
+  const location = useLocation();
   const { language, setLanguage, t } = useI18n();
   const { user, isAuthenticated, logout } = useAuth();
   const { cartCount } = useCart();
@@ -38,12 +39,19 @@ export default function Navbar() {
   }, []);
 
   useEffect(() => {
+    document.documentElement.style.overflow = menuOpen ? "hidden" : "";
     document.body.style.overflow = menuOpen ? "hidden" : "";
 
     return () => {
+      document.documentElement.style.overflow = "";
       document.body.style.overflow = "";
     };
   }, [menuOpen]);
+
+  useEffect(() => {
+    setMenuOpen(false);
+    setAccountOpen(false);
+  }, [location.pathname]);
 
   useEffect(() => {
     const handleLocationChanged = () => {

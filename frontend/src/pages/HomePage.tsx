@@ -30,9 +30,9 @@ import { createPriceRequest } from "../services/priceRequestService";
 import { useI18n } from "../i18n/i18n";
 import { formatEurPrice } from "../utils/price";
 
-const fadeUp = { hidden: { opacity: 0, y: 45 }, visible: { opacity: 1, y: 0 } };
-const fadeLeft = { hidden: { opacity: 0, x: -60 }, visible: { opacity: 1, x: 0 } };
-const fadeRight = { hidden: { opacity: 0, x: 60 }, visible: { opacity: 1, x: 0 } };
+const fadeUp = { hidden: { opacity: 0, y: 32 }, visible: { opacity: 1, y: 0 } };
+const fadeLeft = { hidden: { opacity: 0, x: -36 }, visible: { opacity: 1, x: 0 } };
+const fadeRight = { hidden: { opacity: 0, x: 36 }, visible: { opacity: 1, x: 0 } };
 
 const staggerContainer = {
   hidden: {},
@@ -60,6 +60,7 @@ export default function HomePage() {
   const navigate = useNavigate();
   const { isAuthenticated, loadingAuth } = useAuth();
   const shouldReduceMotion = useReducedMotion();
+  const [isCompactViewport, setIsCompactViewport] = useState(false);
   const { addToCart } = useCart();
   const visitorLocation = getStoredUserLocation();
 
@@ -221,15 +222,27 @@ export default function HomePage() {
   const nextBoutiqueImage = () => {
     setBoutiqueIndex((prev) => (prev + 1) % boutiqueImages.length);
   };
-useEffect(() => {
-  if (shouldReduceMotion) return;
 
-  const interval = window.setInterval(() => {
-    setBoutiqueIndex((prev) => (prev + 1) % boutiqueImages.length);
-  }, 10000);
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(max-width: 820px)");
+    const updateViewport = () => setIsCompactViewport(mediaQuery.matches);
 
-  return () => window.clearInterval(interval);
-}, [shouldReduceMotion]);
+    updateViewport();
+    mediaQuery.addEventListener("change", updateViewport);
+
+    return () => mediaQuery.removeEventListener("change", updateViewport);
+  }, []);
+
+  useEffect(() => {
+    if (shouldReduceMotion) return;
+
+    const interval = window.setInterval(() => {
+      setBoutiqueIndex((prev) => (prev + 1) % boutiqueImages.length);
+    }, isCompactViewport ? 12000 : 10000);
+
+    return () => window.clearInterval(interval);
+  }, [shouldReduceMotion, isCompactViewport]);
+
   const prevBoutiqueImage = () => {
     setBoutiqueIndex((prev) =>
       prev === 0 ? boutiqueImages.length - 1 : prev - 1
@@ -270,11 +283,15 @@ useEffect(() => {
     };
   }, []);
 
-  const motionInitial = shouldReduceMotion ? false : "hidden";
-  const motionWhileInView = shouldReduceMotion ? undefined : "visible";
-  const motionViewport = shouldReduceMotion
+  const disableScrollAnimations = shouldReduceMotion || isCompactViewport;
+  const motionInitial = disableScrollAnimations ? false : "hidden";
+  const motionWhileInView = disableScrollAnimations ? undefined : "visible";
+  const motionViewport = disableScrollAnimations
     ? undefined
-    : { once: true, amount: 0.2 };
+    : { once: true, amount: 0.16 };
+  const motionTransition = disableScrollAnimations
+    ? { duration: 0 }
+    : scrollTransition;
 
   return (
     <div className="home">
@@ -285,9 +302,12 @@ useEffect(() => {
         key={index}
         src={img}
         alt="Boutique Artisan Madina"
-        initial={{ opacity: 0 }}
+        initial={false}
         animate={{ opacity: index === boutiqueIndex ? 1 : 0 }}
-        transition={{ duration: 0.8, ease: "easeInOut" }}
+        transition={{
+          duration: disableScrollAnimations ? 0.2 : 0.7,
+          ease: "easeInOut",
+        }}
         style={{
           position: "absolute",
           inset: 0,
@@ -308,7 +328,7 @@ useEffect(() => {
     initial={motionInitial}
     whileInView={motionWhileInView}
     viewport={motionViewport}
-    transition={scrollTransition}
+    transition={motionTransition}
   >
     <p className="home-boutique-hero-kicker">{t("home.boutiqueKicker")}</p>
 
@@ -359,7 +379,7 @@ useEffect(() => {
             initial={motionInitial}
             whileInView={motionWhileInView}
             viewport={motionViewport}
-            transition={scrollTransition}
+            transition={motionTransition}
           >
             <p className="page-kicker">{t("home.categoriesKicker")}</p>
             <h2>
@@ -381,7 +401,7 @@ useEffect(() => {
                 key={cat.name}
                 className={`home-cat-card home-cat-card--${i}`}
                 variants={fadeUp}
-                transition={scrollTransition}
+                transition={motionTransition}
               >
                 <div className="home-cat-card-motif" aria-hidden="true">
                   <svg viewBox="0 0 100 100">
@@ -432,7 +452,7 @@ useEffect(() => {
           initial={motionInitial}
           whileInView={motionWhileInView}
           viewport={motionViewport}
-          transition={scrollTransition}
+          transition={motionTransition}
         >
           <div>
             <p className="page-kicker" style={{ textAlign: "left", marginBottom: 8 }}>
@@ -471,7 +491,11 @@ useEffect(() => {
                   initial={motionInitial}
                   whileInView={motionWhileInView}
                   viewport={motionViewport}
-                  transition={{ ...scrollTransition, delay: i * 0.08 }}
+                  transition={
+                    disableScrollAnimations
+                      ? { duration: 0 }
+                      : { ...scrollTransition, delay: i * 0.06 }
+                  }
                 >
                   {isNewProduct && (
                     <div className="home-rug-new-badge">{t("home.newBadge")}</div>
@@ -560,7 +584,7 @@ useEffect(() => {
             initial={motionInitial}
             whileInView={motionWhileInView}
             viewport={motionViewport}
-            transition={scrollTransition}
+            transition={motionTransition}
           >
             <div className="home-story-image-card">
               <img src={storyImage} alt={t("home.storyImageAlt")} className="home-story-image" />
@@ -577,7 +601,7 @@ useEffect(() => {
             initial={motionInitial}
             whileInView={motionWhileInView}
             viewport={motionViewport}
-            transition={scrollTransition}
+            transition={motionTransition}
           >
             <p className="page-kicker">{t("home.houseKicker")}</p>
 
@@ -646,7 +670,7 @@ useEffect(() => {
             initial={motionInitial}
             whileInView={motionWhileInView}
             viewport={motionViewport}
-            transition={scrollTransition}
+            transition={motionTransition}
           >
             <p className="home-kicker">
               <span className="home-kicker-line" />
@@ -680,7 +704,7 @@ useEffect(() => {
             initial={motionInitial}
             whileInView={motionWhileInView}
             viewport={motionViewport}
-            transition={scrollTransition}
+            transition={motionTransition}
           >
             <div className="home-rug-3d-scene">
               <div className="home-rug-glow" />
@@ -702,7 +726,7 @@ useEffect(() => {
           initial={motionInitial}
           whileInView={motionWhileInView}
           viewport={motionViewport}
-          transition={scrollTransition}
+          transition={motionTransition}
         >
           <p className="page-kicker">{t("home.addressKicker")}</p>
           <h2 className="home-section-title">{t("home.visitShopTitle")}</h2>
@@ -714,7 +738,7 @@ useEffect(() => {
           initial={motionInitial}
           whileInView={motionWhileInView}
           viewport={motionViewport}
-          transition={scrollTransition}
+          transition={motionTransition}
         >
           <div className="home-boutique-map-text">
             <p className="page-kicker">{t("home.shopKicker")}</p>

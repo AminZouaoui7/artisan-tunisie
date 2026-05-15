@@ -591,3 +591,152 @@
   align-items: center;
   justify-content: center;
 }
+
+/* =========================
+   FINAL RESPONSIVE OVERRIDES
+========================= */
+
+.nb {
+  z-index: 7000;
+}
+
+.nb__inner {
+  min-width: 0;
+}
+
+.nb__logo {
+  min-width: 0;
+}
+
+.nb__logo-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.nb__drawer {
+  z-index: 6999;
+}
+
+.nb__backdrop {
+  z-index: 6998;
+  background: rgba(28, 18, 12, 0.34);
+  backdrop-filter: blur(6px);
+}
+
+@media (max-width: 980px) {
+  .nb {
+    height: var(--nb-h);
+  }
+
+  .nb__nav,
+  .nb__auth,
+  .nb__account,
+  .nb__lang:not(.nb__lang--drawer) {
+    display: none;
+  }
+
+  .nb__burger {
+    display: inline-flex;
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+    border-radius: 14px;
+    background: rgba(255, 252, 241, 0.86);
+  }
+
+  .nb__inner {
+    max-width: none;
+    padding: 0 14px 0 16px;
+    gap: 12px;
+  }
+
+  .nb__logo {
+    margin-left: 0;
+    gap: 10px;
+    flex: 1;
+  }
+
+  .nb__logo-image {
+    width: 38px;
+    height: 38px;
+  }
+
+  .nb__logo-text {
+    max-width: min(44vw, 220px);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    white-space: nowrap;
+  }
+
+  .nb__right {
+    margin-left: auto;
+    gap: 10px;
+  }
+
+  .nb__cart {
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    background: rgba(255, 252, 241, 0.78);
+  }
+
+  .nb__drawer {
+    width: min(360px, 88vw);
+    padding: calc(var(--nb-h) + 18px) 20px 22px;
+    background: linear-gradient(180deg, #fffaf0 0%, #f4e6d4 100%);
+    box-shadow: -18px 0 48px rgba(43, 22, 8, 0.14);
+  }
+
+  .nb__drawer-nav {
+    gap: 0;
+  }
+
+  .nb__drawer-link {
+    padding: 15px 2px;
+    font-size: 14px;
+    letter-spacing: 0.06em;
+  }
+
+  .nb__drawer-foot {
+    gap: 16px;
+    padding-top: 16px;
+  }
+
+  .nb__drawer-tagline {
+    font-size: 13px;
+    line-height: 1.5;
+  }
+}
+
+@media (max-width: 430px) {
+  .nb__inner {
+    padding: 0 12px;
+  }
+
+  .nb__logo-image {
+    width: 34px;
+    height: 34px;
+  }
+
+  .nb__logo-text {
+    max-width: 150px;
+    font-size: 10px;
+    letter-spacing: 0.09em;
+  }
+
+  .nb__cart,
+  .nb__burger {
+    width: 38px;
+    height: 38px;
+  }
+}
+
+@media (max-width: 375px) {
+  .nb__logo-text {
+    display: none;
+  }
+
+  .nb__right {
+    gap: 8px;
+  }
+}
