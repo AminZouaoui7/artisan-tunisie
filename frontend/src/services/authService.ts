@@ -24,6 +24,10 @@ export type LoginDto = {
   password: string;
 };
 
+export type GoogleAuthDto = {
+  accessToken: string;
+};
+
 export type CustomerProfile = {
   id: number;
   firstName: string;
@@ -50,23 +54,18 @@ async function request<T>(
   url: string,
   options?: RequestInit
 ): Promise<T> {
-  const response = await apiFetch(
-    url.replace("/api", ""),
-    {
-      headers: {
-        "Content-Type": "application/json",
-        ...(options?.headers || {}),
-      },
-      ...options,
-    }
-  );
+  const response = await apiFetch(url.replace("/api", ""), {
+    headers: {
+      "Content-Type": "application/json",
+      ...(options?.headers || {}),
+    },
+    ...options,
+  });
 
   if (!response.ok) {
     const data = await response.json().catch(() => null);
 
-    throw new Error(
-      data?.message || "Une erreur est survenue."
-    );
+    throw new Error(data?.message || "Une erreur est survenue.");
   }
 
   return response.json();
@@ -91,6 +90,12 @@ export const authService = {
       body: JSON.stringify(data),
     }),
 
+  googleAuth: (accessToken: string) =>
+    request<AuthResponse>("/api/auth/google", {
+      method: "POST",
+      body: JSON.stringify({ accessToken }),
+    }),
+
   me: (token: string) =>
     request<CustomerProfile>("/api/auth/me", {
       method: "GET",
@@ -107,9 +112,7 @@ export const authService = {
       },
     }),
 
-  requestChangePasswordCode: (
-    token: string
-  ) =>
+  requestChangePasswordCode: (token: string) =>
     request<{ message: string }>(
       "/api/auth/change-password/request-code",
       {

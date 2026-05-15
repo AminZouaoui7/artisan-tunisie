@@ -19,6 +19,7 @@ type AuthContextType = {
   loadingAuth: boolean;
   isAuthenticated: boolean;
   login: (data: LoginDto) => Promise<void>;
+  loginWithGoogle: (accessToken: string) => Promise<void>;
   logout: () => void;
   refreshUser: () => Promise<void>;
 };
@@ -43,6 +44,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     setToken(null);
     setUser(null);
+  };
+
+  const saveSession = async (accessToken: string, refreshToken?: string) => {
+    localStorage.setItem(TOKEN_KEY, accessToken);
+
+    if (refreshToken) {
+      localStorage.setItem(REFRESH_TOKEN_KEY, refreshToken);
+    }
+
+    setToken(accessToken);
+
+    const currentUser = await authService.me(accessToken);
+    setUser(currentUser);
   };
 
   const logout = () => {
@@ -80,20 +94,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const login = async (data: LoginDto) => {
     const result = await authService.login(data);
 
-    localStorage.setItem(TOKEN_KEY, result.token);
+    await saveSession(result.token, result.refreshToken);
+  };
 
-    if (result.refreshToken) {
-      localStorage.setItem(
-        REFRESH_TOKEN_KEY,
-        result.refreshToken
-      );
-    }
+  const loginWithGoogle = async (accessToken: string) => {
+    const result = await authService.googleAuth(accessToken);
 
-    setToken(result.token);
-
-    const currentUser = await authService.me(result.token);
-
-    setUser(currentUser);
+    await saveSession(result.token, result.refreshToken);
   };
 
   useEffect(() => {
@@ -107,6 +114,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       loadingAuth,
       isAuthenticated: !!token && !!user,
       login,
+      loginWithGoogle,
       logout,
       refreshUser,
     }),
@@ -119,13 +127,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     </AuthContext.Provider>
   );
 }
+
 export function useAuth() {
   const context = useContext(AuthContext);
 
   if (!context) {
-    throw new Error(
-      "useAuth doit être utilisé dans AuthProvider"
-    );
+    throw new Error("useAuth doit être utilisé dans AuthProvider");
   }
 
   return context;

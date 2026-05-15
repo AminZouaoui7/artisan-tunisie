@@ -626,3 +626,44 @@
     max-width: 460px !important;
   }
 }
+.login-google-btn {
+  width: 100%;
+  min-height: 52px;
+  border-radius: 999px;
+  border: 1px solid rgba(61, 33, 21, 0.16);
+  background: rgba(255, 252, 246, 0.92);
+  color: #2f1a12;
+  font-weight: 800;
+  font-size: 0.92rem;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  box-shadow: 0 16px 35px rgba(60, 35, 18, 0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+}
+
+.login-google-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 20px 42px rgba(60, 35, 18, 0.12);
+}
+
+.login-google-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.login-google-icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  background: #ffffff;
+  border: 1px solid rgba(61, 33, 21, 0.12);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  color: #b75e54;
+}

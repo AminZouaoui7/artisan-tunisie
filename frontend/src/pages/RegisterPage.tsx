@@ -1,12 +1,22 @@
-import { useState, type ChangeEvent, type FormEvent } from "react";
+import {
+  useState,
+  type ChangeEvent,
+  type FormEvent,
+} from "react";
+
 import { Link, useNavigate } from "react-router-dom";
+import { useGoogleLogin } from "@react-oauth/google";
+
 import { authService } from "../services/authService";
+import { useAuth } from "../context/useAuth";
 import { useI18n } from "../i18n/i18n";
 import "../styles/RegisterPage.css";
 
 export default function RegisterPage() {
   useI18n();
+
   const navigate = useNavigate();
+  const { loginWithGoogle } = useAuth();
 
   const [form, setForm] = useState({
     firstName: "",
@@ -19,6 +29,7 @@ export default function RegisterPage() {
 
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [googleLoading, setGoogleLoading] = useState(false);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setForm((prev) => ({
@@ -27,11 +38,42 @@ export default function RegisterPage() {
     }));
   };
 
-  const handleGoogleRegister = () => {
-    setError(
-      "La connexion Google n’est pas encore activée côté backend. On l’ajoutera après l’inscription classique."
-    );
+  const handleGoogleSuccess = async (accessToken: string) => {
+    setError("");
+
+    try {
+      setGoogleLoading(true);
+
+      await loginWithGoogle(accessToken);
+
+      navigate("/", { replace: true });
+    } catch (err) {
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Inscription Google impossible."
+      );
+    } finally {
+      setGoogleLoading(false);
+    }
   };
+
+  const googleRegister = useGoogleLogin({
+    flow: "implicit",
+    scope: "openid email profile",
+    onSuccess: async (tokenResponse) => {
+      if (!tokenResponse.access_token) {
+        setError("Token Google introuvable.");
+        return;
+      }
+
+      await handleGoogleSuccess(tokenResponse.access_token);
+    },
+    onError: () => {
+      setError("Connexion Google annulée ou impossible.");
+      setGoogleLoading(false);
+    },
+  });
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -96,13 +138,12 @@ export default function RegisterPage() {
 
         <div className="register-visual-content">
           <h1>
-            Rejoignez notre<br />
+            Rejoignez notre
+            <br />
             <em>univers artisanal</em>
           </h1>
 
           <div className="register-visual-rule" />
-
-        
         </div>
       </div>
 
@@ -115,7 +156,8 @@ export default function RegisterPage() {
           </div>
 
           <h2 className="register-card-title">
-            Créer<br />
+            Créer
+            <br />
             <em>un compte.</em>
           </h2>
 
@@ -128,9 +170,20 @@ export default function RegisterPage() {
           <button
             type="button"
             className="register-google-btn"
-            onClick={handleGoogleRegister}
+            disabled={googleLoading || loading}
+            onClick={() => googleRegister()}
           >
-            Continuer avec Google
+            {googleLoading && (
+              <span className="register-btn-spinner" />
+            )}
+
+            {!googleLoading && (
+              <span className="register-google-icon">G</span>
+            )}
+
+            {googleLoading
+              ? "Connexion avec Google..."
+              : "Continuer avec Google"}
           </button>
 
           <div className="register-divider">
@@ -212,13 +265,15 @@ export default function RegisterPage() {
                 onChange={handleChange}
                 autoComplete="new-password"
               />
-              <label htmlFor="confirmPassword">Confirmer le mot de passe</label>
+              <label htmlFor="confirmPassword">
+                Confirmer le mot de passe
+              </label>
             </div>
 
             <button
               type="submit"
               className="register-btn"
-              disabled={loading}
+              disabled={loading || googleLoading}
             >
               {loading && <span className="register-btn-spinner" />}
               {loading ? "Création..." : "Créer mon compte"}

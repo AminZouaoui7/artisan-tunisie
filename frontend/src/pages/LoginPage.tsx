@@ -10,22 +10,30 @@ import {
   useNavigate,
 } from "react-router-dom";
 
+import { useGoogleLogin } from "@react-oauth/google";
+
 import { useI18n } from "../i18n/i18n";
 import "../styles/LoginPage.css";
 import { useAuth } from "../context/useAuth";
+
 export default function LoginPage() {
   const { t } = useI18n();
-  const navigate  = useNavigate();
-  const location  = useLocation();
-  const { login } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
 
-  // Redirection vers la homepage après connexion
+  const { login, loginWithGoogle } = useAuth();
+
   const redirectTo =
     (location.state as { from?: string })?.from || "/";
 
-  const [form, setForm]       = useState({ email: "", password: "" });
+  const [form, setForm] = useState({
+    email: "",
+    password: "",
+  });
+
   const [loading, setLoading] = useState(false);
-  const [error, setError]     = useState("");
+  const [googleLoading, setGoogleLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setForm((prev) => ({
@@ -33,6 +41,43 @@ export default function LoginPage() {
       [e.target.name]: e.target.value,
     }));
   };
+
+  const handleGoogleSuccess = async (accessToken: string) => {
+    setError("");
+
+    try {
+      setGoogleLoading(true);
+
+      await loginWithGoogle(accessToken);
+
+      navigate(redirectTo, { replace: true });
+    } catch (err) {
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Connexion Google impossible."
+      );
+    } finally {
+      setGoogleLoading(false);
+    }
+  };
+
+  const googleLogin = useGoogleLogin({
+    flow: "implicit",
+    scope: "openid email profile",
+    onSuccess: async (tokenResponse) => {
+      if (!tokenResponse.access_token) {
+        setError("Token Google introuvable.");
+        return;
+      }
+
+      await handleGoogleSuccess(tokenResponse.access_token);
+    },
+    onError: () => {
+      setError("Connexion Google annulée ou impossible.");
+      setGoogleLoading(false);
+    },
+  });
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -48,7 +93,6 @@ export default function LoginPage() {
       });
 
       navigate(redirectTo, { replace: true });
-
     } catch (err) {
       setError(
         err instanceof Error
@@ -62,10 +106,7 @@ export default function LoginPage() {
 
   return (
     <section className="login-page">
-
-      {/* ── Left visual ───────────────────────────────────── */}
       <div className="login-visual">
-
         <div className="login-visual-corner" />
 
         <div className="login-visual-badge">
@@ -81,19 +122,13 @@ export default function LoginPage() {
           </h1>
 
           <div className="login-visual-rule" />
-
-          
         </div>
-
       </div>
 
-      {/* ── Right form card ───────────────────────────────── */}
       <div className="login-card">
-
         <div className="login-strip" />
 
         <div className="login-card-inner">
-
           <div className="login-card-kicker">
             <span>{t("auth.common.kicker")}</span>
           </div>
@@ -114,11 +149,33 @@ export default function LoginPage() {
             </div>
           )}
 
+          <button
+            type="button"
+            className="login-google-btn"
+            disabled={googleLoading || loading}
+            onClick={() => googleLogin()}
+          >
+            {googleLoading && (
+              <span className="login-btn-spinner" />
+            )}
+
+            {!googleLoading && (
+              <span className="login-google-icon">G</span>
+            )}
+
+            {googleLoading
+              ? "Connexion avec Google..."
+              : "Continuer avec Google"}
+          </button>
+
+          <div className="login-divider">
+            <span>{t("auth.common.or")}</span>
+          </div>
+
           <form
             onSubmit={handleSubmit}
             className="login-form"
           >
-
             <div className="login-field">
               <input
                 type="email"
@@ -156,7 +213,7 @@ export default function LoginPage() {
             <button
               type="submit"
               className="login-btn"
-              disabled={loading}
+              disabled={loading || googleLoading}
             >
               {loading && (
                 <span className="login-btn-spinner" />
@@ -166,12 +223,7 @@ export default function LoginPage() {
                 ? t("auth.login.loading")
                 : t("auth.login.submit")}
             </button>
-
           </form>
-
-          <div className="login-divider">
-            <span>{t("auth.common.or")}</span>
-          </div>
 
           <p className="login-footer">
             {t("auth.login.noAccount")}{" "}
@@ -179,10 +231,8 @@ export default function LoginPage() {
               {t("auth.login.createAccount")}
             </Link>
           </p>
-
         </div>
       </div>
-
     </section>
   );
 }
