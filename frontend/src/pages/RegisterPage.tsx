@@ -39,24 +39,32 @@ export default function RegisterPage() {
   };
 
   const handleGoogleSuccess = async (accessToken: string) => {
-    setError("");
+  setError("");
 
-    try {
-      setGoogleLoading(true);
+  try {
+    setGoogleLoading(true);
 
-      await loginWithGoogle(accessToken);
+    await loginWithGoogle(accessToken);
 
+    window.dispatchEvent(new CustomEvent("artisan:auth-changed"));
+
+    navigate("/", { replace: true });
+  } catch (err) {
+    if (err instanceof Error && err.message === "SESSION_EXPIRED") {
+      setError("");
       navigate("/", { replace: true });
-    } catch (err) {
-      setError(
-        err instanceof Error
-          ? err.message
-          : "Inscription Google impossible."
-      );
-    } finally {
-      setGoogleLoading(false);
+      return;
     }
-  };
+
+    setError(
+      err instanceof Error
+        ? err.message
+        : "Inscription Google impossible."
+    );
+  } finally {
+    setGoogleLoading(false);
+  }
+};
 
   const googleRegister = useGoogleLogin({
     flow: "implicit",
