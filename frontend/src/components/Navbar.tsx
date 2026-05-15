@@ -24,8 +24,7 @@ export default function Navbar() {
     getStoredUserLocation()
   );
 
-  const canUseCart = isAuthenticated && !visitorLocation.isTunisia;
-
+const canUseCart = isAuthenticated;
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [accountOpen, setAccountOpen] = useState(false);
