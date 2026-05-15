@@ -3742,3 +3742,105 @@ display: flex;
     animation: none !important;
   }
 }
+
+@media (max-width: 768px) {
+  .home-page,
+  .home-main,
+  .home {
+    overflow-x: hidden !important;
+  }
+
+  .home section,
+  .page-section {
+    min-height: auto !important;
+  }
+
+  .hero,
+  .home-hero,
+  .hero-section,
+  .home-boutique-hero {
+    min-height: 72svh !important;
+    height: 72svh !important;
+    max-height: 82svh !important;
+    margin-bottom: 0 !important;
+  }
+
+  .home-boutique-hero {
+    padding-top: var(--nb-h) !important;
+    align-items: flex-end !important;
+  }
+
+  .hero img,
+  .hero-slide img,
+  .home-hero img,
+  .home-boutique-hero-bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover !important;
+    padding: 0 !important;
+  }
+
+  .home-boutique-hero-content {
+    padding: 0 6px 104px !important;
+  }
+
+  .home-boutique-hero-btn {
+    bottom: 70px !important;
+  }
+
+  .home-boutique-hero-dots {
+    bottom: 16px !important;
+  }
+
+  .home-catalog-section,
+  .home-categories-section,
+  .home-story,
+  .home-testimonials-section {
+    padding-top: 56px !important;
+    padding-bottom: 56px !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+  }
+
+  .home-catalog-header,
+  .home-categories-header,
+  .home-map-header,
+  .home-section-header {
+    margin-bottom: 26px !important;
+  }
+
+  .home-categories-grid,
+  .featured-products-grid,
+  .products-grid,
+  .home-catalog-track {
+    grid-template-columns: 1fr !important;
+    gap: 22px !important;
+  }
+
+  .home-rug-card,
+  .home-cat-card {
+    width: 100% !important;
+  }
+}
+
+@media (max-width: 430px) {
+  .hero,
+  .home-hero,
+  .hero-section,
+  .home-boutique-hero {
+    min-height: 70svh !important;
+    height: 70svh !important;
+  }
+
+  .home-boutique-hero-content {
+    padding-bottom: 94px !important;
+  }
+
+  .home-catalog-section,
+  .home-categories-section,
+  .home-story,
+  .home-testimonials-section {
+    padding-top: 48px !important;
+    padding-bottom: 48px !important;
+  }
+}

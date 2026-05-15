@@ -12,6 +12,7 @@ import {
   type CustomerProfile,
   type LoginDto,
 } from "../services/authService";
+import { clearSession as clearStoredSession } from "../services/apiClient";
 
 type AuthContextType = {
   user: CustomerProfile | null;
@@ -39,8 +40,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loadingAuth, setLoadingAuth] = useState(true);
 
   const clearSession = () => {
-    localStorage.removeItem(TOKEN_KEY);
-    localStorage.removeItem(REFRESH_TOKEN_KEY);
+    clearStoredSession();
+    localStorage.removeItem("artisan_user");
 
     setToken(null);
     setUser(null);
@@ -56,6 +57,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setToken(accessToken);
 
     const currentUser = await authService.me(accessToken);
+    localStorage.setItem("artisan_user", JSON.stringify(currentUser));
     setUser(currentUser);
   };
 
@@ -75,6 +77,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const savedToken = localStorage.getItem(TOKEN_KEY);
 
     if (!savedToken) {
+      setUser(null);
+      setToken(null);
       setLoadingAuth(false);
       return;
     }
@@ -82,6 +86,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       const currentUser = await authService.me(savedToken);
 
+      localStorage.setItem("artisan_user", JSON.stringify(currentUser));
       setUser(currentUser);
       setToken(savedToken);
     } catch {
@@ -98,28 +103,43 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const loginWithGoogle = async (accessToken: string) => {
-  const result = await authService.googleAuth(accessToken);
+    const result = await authService.googleAuth(accessToken);
 
-  localStorage.setItem(TOKEN_KEY, result.token);
+    localStorage.setItem(TOKEN_KEY, result.token);
 
-  if (result.refreshToken) {
-    localStorage.setItem(REFRESH_TOKEN_KEY, result.refreshToken);
-  }
+    if (result.refreshToken) {
+      localStorage.setItem(REFRESH_TOKEN_KEY, result.refreshToken);
+    }
 
-  setToken(result.token);
+    setToken(result.token);
 
-  if (result.customer) {
-    setUser(result.customer);
-    localStorage.setItem("artisan_user", JSON.stringify(result.customer));
-    return;
-  }
+    if (result.customer) {
+      setUser(result.customer);
+      localStorage.setItem("artisan_user", JSON.stringify(result.customer));
+      return;
+    }
 
-  const currentUser = await authService.me(result.token);
-  setUser(currentUser);
-};
+    const currentUser = await authService.me(result.token);
+    localStorage.setItem("artisan_user", JSON.stringify(currentUser));
+    setUser(currentUser);
+  };
 
   useEffect(() => {
     refreshUser();
+  }, []);
+
+  useEffect(() => {
+    const handleAuthCleared = () => {
+      setToken(null);
+      setUser(null);
+      setLoadingAuth(false);
+    };
+
+    window.addEventListener("artisan:auth-cleared", handleAuthCleared);
+
+    return () => {
+      window.removeEventListener("artisan:auth-cleared", handleAuthCleared);
+    };
   }, []);
 
   const value = useMemo<AuthContextType>(

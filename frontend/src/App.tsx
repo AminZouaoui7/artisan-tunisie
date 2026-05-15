@@ -1,7 +1,7 @@
 
 
 import { useEffect, useState } from "react";
-import { Routes, Route, useLocation } from "react-router-dom";
+import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
 
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
@@ -57,8 +57,41 @@ function AccountComingSoonPage({ titleKey }: { titleKey: string }) {
 
 function AppContent() {
   const location = useLocation();
+  const navigate = useNavigate();
 
   const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const protectedPrefixes = ["/account"];
+    const protectedRoutes = ["/cart", "/checkout"];
+
+    const handleSessionExpired = (event: Event) => {
+      const customEvent = event as CustomEvent<{
+        pathname?: string;
+        requestMethod?: string;
+      }>;
+
+      const pathname = customEvent.detail?.pathname || window.location.pathname;
+      const requestMethod = customEvent.detail?.requestMethod || "GET";
+      const isProtectedPage =
+        protectedRoutes.includes(pathname) ||
+        protectedPrefixes.some((prefix) => pathname.startsWith(prefix));
+      const isProtectedAction = requestMethod !== "GET";
+
+      if (isProtectedPage || isProtectedAction) {
+        navigate("/session-expired", { replace: true });
+      }
+    };
+
+    window.addEventListener("artisan:session-expired", handleSessionExpired);
+
+    return () => {
+      window.removeEventListener(
+        "artisan:session-expired",
+        handleSessionExpired
+      );
+    };
+  }, [navigate]);
 
   useEffect(() => {
     let isMounted = true;

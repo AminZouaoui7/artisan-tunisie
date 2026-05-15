@@ -19,6 +19,12 @@ export type UserLocationDto = {
   isTunisia: boolean;
 };
 
+type SessionExpiredDetail = {
+  endpoint: string;
+  pathname: string;
+  requestMethod: string;
+};
+
 function normalizeToken(value: string | null): string | null {
   const trimmed = value?.trim() ?? "";
   if (!trimmed) return null;
@@ -216,6 +222,8 @@ function isPublicEndpoint(endpoint: string): boolean {
     normalized === "/auth/verify-email" ||
     normalized === "/auth/google" ||
     normalized === "/auth/google-login" ||
+    normalized === "/auth/refresh" ||
+    normalized === "/visitor-country" ||
     normalized === "/user-location" ||
     normalized === "/contact" ||
     normalized.startsWith("/products")
@@ -230,7 +238,7 @@ function isAuthPage(): boolean {
   );
 }
 
-function clearAuthStorage() {
+export function clearSession() {
   localStorage.removeItem(ACCESS_TOKEN_KEY);
   localStorage.removeItem(REFRESH_TOKEN_KEY);
   localStorage.removeItem("artisan_user");
@@ -240,14 +248,10 @@ function clearAuthStorage() {
   window.dispatchEvent(new CustomEvent("artisan:auth-cleared"));
 }
 
-function redirectToSessionExpired() {
-  if (window.location.pathname === "/session-expired") return;
-  window.location.assign("/session-expired");
-}
-
 export async function apiFetch(endpoint: string, options: RequestInit = {}) {
   const token = normalizeToken(localStorage.getItem(ACCESS_TOKEN_KEY));
   const headers = new Headers(options.headers || {});
+  const requestMethod = (options.method || "GET").toUpperCase();
 
   const bearerTokenFromHeader = extractBearerToken(headers.get("Authorization"));
 
@@ -276,10 +280,20 @@ export async function apiFetch(endpoint: string, options: RequestInit = {}) {
     Boolean(bearerTokenFromHeader) || Boolean(shouldAttachToken && token);
 
   if (res.status === 401 && sentAuth) {
-    clearAuthStorage();
+    clearSession();
 
     if (!isAuthPage()) {
-      redirectToSessionExpired();
+      const detail: SessionExpiredDetail = {
+        endpoint: normalizeApiEndpoint(endpoint),
+        pathname: window.location.pathname,
+        requestMethod,
+      };
+
+      window.dispatchEvent(
+        new CustomEvent<SessionExpiredDetail>("artisan:session-expired", {
+          detail,
+        })
+      );
     }
 
     throw new Error("SESSION_EXPIRED");
