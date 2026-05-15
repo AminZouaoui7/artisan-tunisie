@@ -13,7 +13,7 @@ import logoMain from "../assets/color white.png";
 import { useI18n } from "../i18n/i18n";
 import { useAuth } from "../context/useAuth";
 import { useCart } from "../context/useCart";
-import { getStoredUserLocation } from "../services/apiClient";
+//import { getStoredUserLocation } from "../services/apiClient";
 
 export default function Navbar() {
   const { language, setLanguage, t } = useI18n();
