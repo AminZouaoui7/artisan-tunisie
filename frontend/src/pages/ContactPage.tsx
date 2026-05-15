@@ -4,10 +4,10 @@ import {
   MapPin,
   Phone,
   MessageCircle,
-  CheckCircle2,
   XCircle,
 } from "lucide-react";
 import { useI18n } from "../i18n/i18n";
+import ActionSuccess from "../components/ActionSuccess";
 import { apiFetch } from "../services/apiClient";
 import "../styles/ContactPage.css";
 
@@ -15,13 +15,14 @@ export default function ContactPage() {
   const { t } = useI18n();
   const whatsappNumber = "21656250910";
   const email = "aminmimou963@gmail.com";
+  const [isEmailSuccess, setIsEmailSuccess] = useState(false);
 
   const [toast, setToast] = useState<{
-    type: "success" | "error";
+    type: "error";
     message: string;
   } | null>(null);
 
-  const showToast = (type: "success" | "error", message: string) => {
+  const showToast = (type: "error", message: string) => {
     setToast({ type, message });
 
     window.setTimeout(() => {
@@ -47,6 +48,7 @@ export default function ContactPage() {
     const payload = getFormPayload(form);
 
     try {
+      setIsEmailSuccess(false);
       const response = await apiFetch("/contact", {
         method: "POST",
         headers: {
@@ -59,7 +61,7 @@ export default function ContactPage() {
         throw new Error(t("contact.emailSendError"));
       }
 
-      showToast("success", t("contact.emailSent"));
+      setIsEmailSuccess(true);
       form.reset();
     } catch (error) {
       console.error(error);
@@ -91,7 +93,6 @@ export default function ContactPage() {
     )}`;
 
     window.open(whatsappUrl, "_blank");
-    showToast("success", t("contact.whatsAppOpened"));
     form.reset();
   };
 
@@ -129,62 +130,76 @@ export default function ContactPage() {
           </div>
 
           <div className="contact-card">
-            <form className="contact-form" onSubmit={handleEmailSubmit}>
-              <div className="contact-form-header">
-                <p className="page-kicker">{t("contact.formKicker")}</p>
-                <h2>{t("contact.formTitle")}</h2>
-              </div>
+            {isEmailSuccess ? (
+              <ActionSuccess
+                title="Message envoye"
+                message="Merci pour votre message. Nous reviendrons vers vous dans les meilleurs delais."
+                primaryActionLabel="Retour a l'accueil"
+                primaryActionTo="/"
+                variant="contact"
+              />
+            ) : (
+              <form className="contact-form" onSubmit={handleEmailSubmit}>
+                <div className="contact-form-header">
+                  <p className="page-kicker">{t("contact.formKicker")}</p>
+                  <h2>{t("contact.formTitle")}</h2>
+                </div>
 
-              <div className="contact-field">
-                <label>{t("contact.fullName")}</label>
-                <input
-                  type="text"
-                  name="name"
-                  placeholder={t("contact.namePlaceholder")}
-                  required
-                />
-              </div>
+                <div className="contact-field">
+                  <label>{t("contact.fullName")}</label>
+                  <input
+                    type="text"
+                    name="name"
+                    placeholder={t("contact.namePlaceholder")}
+                    required
+                  />
+                </div>
 
-              <div className="contact-field">
-                <label>{t("contact.email")}</label>
-                <input
-                  type="email"
-                  name="email"
-                  placeholder={t("contact.emailPlaceholder")}
-                  required
-                />
-              </div>
+                <div className="contact-field">
+                  <label>{t("contact.email")}</label>
+                  <input
+                    type="email"
+                    name="email"
+                    placeholder={t("contact.emailPlaceholder")}
+                    required
+                  />
+                </div>
 
-              <div className="contact-field">
-                <label>{t("contact.phone")}</label>
-                <input type="tel" name="phone" placeholder={t("contact.phonePlaceholder")} />
-              </div>
+                <div className="contact-field">
+                  <label>{t("contact.phone")}</label>
+                  <input
+                    type="tel"
+                    name="phone"
+                    placeholder={t("contact.phonePlaceholder")}
+                  />
+                </div>
 
-              <div className="contact-field">
-                <label>{t("contact.message")}</label>
-                <textarea
-                  name="message"
-                  placeholder={t("contact.messagePlaceholder")}
-                  required
-                />
-              </div>
+                <div className="contact-field">
+                  <label>{t("contact.message")}</label>
+                  <textarea
+                    name="message"
+                    placeholder={t("contact.messagePlaceholder")}
+                    required
+                  />
+                </div>
 
-              <div className="contact-submit-actions">
-                <button type="submit" className="contact-submit-btn">
-                  <Mail size={18} />
-                  {t("contact.sendByEmail")}
-                </button>
+                <div className="contact-submit-actions">
+                  <button type="submit" className="contact-submit-btn">
+                    <Mail size={18} />
+                    {t("contact.sendByEmail")}
+                  </button>
 
-                <button
-                  type="button"
-                  className="contact-whatsapp-submit"
-                  onClick={handleWhatsAppSubmit}
-                >
-                  <MessageCircle size={18} />
-                  {t("contact.sendByWhatsApp")}
-                </button>
-              </div>
-            </form>
+                  <button
+                    type="button"
+                    className="contact-whatsapp-submit"
+                    onClick={handleWhatsAppSubmit}
+                  >
+                    <MessageCircle size={18} />
+                    {t("contact.sendByWhatsApp")}
+                  </button>
+                </div>
+              </form>
+            )}
           </div>
         </div>
       </section>
@@ -217,15 +232,11 @@ export default function ContactPage() {
       {toast && (
         <div className={`contact-toast contact-toast-${toast.type}`}>
           <div className="contact-toast-icon">
-            {toast.type === "success" ? (
-              <CheckCircle2 size={22} />
-            ) : (
-              <XCircle size={22} />
-            )}
+            <XCircle size={22} />
           </div>
 
           <div>
-            <strong>{toast.type === "success" ? t("contact.toastSuccess") : t("contact.toastError")}</strong>
+            <strong>{t("contact.toastError")}</strong>
             <p>{toast.message}</p>
           </div>
         </div>

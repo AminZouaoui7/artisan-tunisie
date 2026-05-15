@@ -1,5 +1,4 @@
 import { useMemo, useState, type FormEvent } from "react";
-import { useNavigate } from "react-router-dom";
 import rawCountries from "world-countries";
 import {
   CheckCircle2,
@@ -10,6 +9,7 @@ import {
   Truck,
 } from "lucide-react";
 
+import ActionSuccess from "../components/ActionSuccess";
 import { useCart } from "../context/useCart";
 import { useAuth } from "../context/AuthContext";
 import { apiFetch } from "../services/apiClient";
@@ -41,12 +41,15 @@ function flagUrl(code: string) {
 
 export default function CheckoutPage() {
   const { t } = useI18n();
-  const navigate = useNavigate();
   const { items, cartTotal, clearCart } = useCart();
   const { user } = useAuth();
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [orderSuccess, setOrderSuccess] = useState<{
+    orderId?: string;
+    message?: string;
+  } | null>(null);
 
   const [countryOpen, setCountryOpen] = useState(false);
   const [phoneOpen, setPhoneOpen] = useState(false);
@@ -229,12 +232,9 @@ export default function CheckoutPage() {
       }
 
       clearCart();
-
-      navigate("/account/orders", {
-        state: {
-          successMessage: data.message,
-          orderId: data.id,
-        },
+      setOrderSuccess({
+        orderId: data?.id ? String(data.id) : undefined,
+        message: data?.message,
       });
     } catch (err) {
       setError(err instanceof Error ? err.message : t("common.unknownError"));
@@ -242,6 +242,38 @@ export default function CheckoutPage() {
       setLoading(false);
     }
   };
+
+  if (orderSuccess) {
+    return (
+      <main className="checkout-page">
+        <section className="checkout-hero">
+          <div>
+            <p className="checkout-kicker">{t("checkout.kicker")}</p>
+            <h1>
+              {t("checkout.title")} <em>{t("checkout.titleEmphasis")}</em>
+            </h1>
+          </div>
+        </section>
+
+        <ActionSuccess
+          title="Commande recue avec succes"
+          message="Merci pour votre commande. Notre equipe va la verifier et vous recevrez un email de confirmation tres prochainement."
+          details={
+            orderSuccess.orderId ? (
+              <span>Reference de commande : {orderSuccess.orderId}</span>
+            ) : orderSuccess.message ? (
+              <span>{orderSuccess.message}</span>
+            ) : undefined
+          }
+          primaryActionLabel="Voir mes commandes"
+          primaryActionTo="/account/orders"
+          secondaryActionLabel="Continuer mes achats"
+          secondaryActionTo="/products"
+          variant="order"
+        />
+      </main>
+    );
+  }
 
   return (
     <main className="checkout-page">

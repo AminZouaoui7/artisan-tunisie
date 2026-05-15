@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 
 import { useAuth } from "../context/useAuth";
+import ActionSuccess from "../components/ActionSuccess";
 import { useCart } from "../context/useCart";
 import { getStoredUserLocation } from "../services/apiClient";
 import {
@@ -65,9 +66,9 @@ export default function ProductsPage() {
   );
 
   const [priceRequestLoading, setPriceRequestLoading] = useState(false);
-  const [priceRequestSuccessKey, setPriceRequestSuccessKey] =
-    useState<string | null>(null);
   const [priceRequestErrorKey, setPriceRequestErrorKey] =
+    useState<string | null>(null);
+  const [priceRequestSuccessProductName, setPriceRequestSuccessProductName] =
     useState<string | null>(null);
 
   const [priceRequestForm, setPriceRequestForm] = useState({
@@ -147,7 +148,7 @@ export default function ProductsPage() {
 
     setSelectedProduct(product);
     closeDetailProduct();
-    setPriceRequestSuccessKey(null);
+    setPriceRequestSuccessProductName(null);
     setPriceRequestErrorKey(null);
 
     setPriceRequestForm({
@@ -163,7 +164,7 @@ export default function ProductsPage() {
 
   function closePriceRequest() {
     setSelectedProduct(null);
-    setPriceRequestSuccessKey(null);
+    setPriceRequestSuccessProductName(null);
     setPriceRequestErrorKey(null);
   }
 
@@ -213,7 +214,7 @@ export default function ProductsPage() {
     try {
       setPriceRequestLoading(true);
       setPriceRequestErrorKey(null);
-      setPriceRequestSuccessKey(null);
+      setPriceRequestSuccessProductName(null);
 
       await createPriceRequest({
         productId: selectedProduct.id,
@@ -224,7 +225,7 @@ export default function ProductsPage() {
         message: priceRequestForm.message.trim(),
       });
 
-      setPriceRequestSuccessKey("products.priceRequestSuccess");
+      setPriceRequestSuccessProductName(selectedProduct.name);
       setPriceRequestForm({
         customerName: "",
         email: "",
@@ -922,21 +923,28 @@ export default function ProductsPage() {
               <p className="products-price-error">{t(priceRequestErrorKey)}</p>
             )}
 
-            {priceRequestSuccessKey && (
-              <p className="products-price-success">
-                {t(priceRequestSuccessKey)}
-              </p>
+            {priceRequestSuccessProductName ? (
+              <ActionSuccess
+                title="Demande de prix envoyee"
+                message="Votre demande a bien ete recue. Nous allons vous repondre avec les informations de prix et de disponibilite."
+                details={<span>Piece concernee : {priceRequestSuccessProductName}</span>}
+                primaryActionLabel="Voir mes demandes"
+                primaryActionTo="/account/price-requests"
+                secondaryActionLabel="Continuer a explorer"
+                secondaryActionTo="/products"
+                variant="priceRequest"
+              />
+            ) : (
+              <button
+                type="submit"
+                className="product-cart-btn products-price-submit"
+                disabled={priceRequestLoading}
+              >
+                {priceRequestLoading
+                  ? t("products.sending")
+                  : t("products.sendRequest")}
+              </button>
             )}
-
-            <button
-              type="submit"
-              className="product-cart-btn products-price-submit"
-              disabled={priceRequestLoading}
-            >
-              {priceRequestLoading
-                ? t("products.sending")
-                : t("products.sendRequest")}
-            </button>
           </form>
         </div>
       )}

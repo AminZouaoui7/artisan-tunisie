@@ -17,6 +17,7 @@ import storyImage from "../assets/cbd0ea42-92dc-4cd6-a8e7-0b3133fe44f2.png";
 import "../styles/HomePage.css";
 
 import { useAuth } from "../context/AuthContext";
+import ActionSuccess from "../components/ActionSuccess";
 import { getStoredUserLocation } from "../services/apiClient";
 import {
   canProductBeAddedToCart,
@@ -73,8 +74,9 @@ export default function HomePage() {
 
   const [priceRequestOpen, setPriceRequestOpen] = useState(false);
   const [priceRequestLoading, setPriceRequestLoading] = useState(false);
-  const [priceRequestSuccessKey, setPriceRequestSuccessKey] = useState<string | null>(null);
   const [priceRequestErrorKey, setPriceRequestErrorKey] = useState<string | null>(null);
+  const [priceRequestSuccessProductName, setPriceRequestSuccessProductName] =
+    useState<string | null>(null);
 
   const [priceRequestForm, setPriceRequestForm] = useState({
     customerName: "",
@@ -105,7 +107,7 @@ export default function HomePage() {
     setSelectedProduct(product);
     setSelectedImageIndex(0);
     setPriceRequestOpen(false);
-    setPriceRequestSuccessKey(null);
+    setPriceRequestSuccessProductName(null);
     setPriceRequestErrorKey(null);
   };
 
@@ -113,7 +115,7 @@ export default function HomePage() {
     setSelectedProduct(null);
     setSelectedImageIndex(0);
     setPriceRequestOpen(false);
-    setPriceRequestSuccessKey(null);
+    setPriceRequestSuccessProductName(null);
     setPriceRequestErrorKey(null);
   };
 
@@ -135,14 +137,14 @@ export default function HomePage() {
       }),
     });
 
-    setPriceRequestSuccessKey(null);
+    setPriceRequestSuccessProductName(null);
     setPriceRequestErrorKey(null);
     setPriceRequestOpen(true);
   };
 
   const closePriceRequestForm = () => {
     setPriceRequestOpen(false);
-    setPriceRequestSuccessKey(null);
+    setPriceRequestSuccessProductName(null);
     setPriceRequestErrorKey(null);
   };
 
@@ -161,7 +163,7 @@ export default function HomePage() {
     try {
       setPriceRequestLoading(true);
       setPriceRequestErrorKey(null);
-      setPriceRequestSuccessKey(null);
+      setPriceRequestSuccessProductName(null);
 
       await createPriceRequest({
         productId: selectedProduct.id,
@@ -172,7 +174,7 @@ export default function HomePage() {
         message: priceRequestForm.message,
       });
 
-      setPriceRequestSuccessKey("home.priceRequestSuccess");
+      setPriceRequestSuccessProductName(selectedProduct.name);
 
       setPriceRequestForm({
         customerName: "",
@@ -1038,17 +1040,26 @@ useEffect(() => {
               <p className="home-price-request-error">{t(priceRequestErrorKey)}</p>
             )}
 
-            {priceRequestSuccessKey && (
-              <p className="home-price-request-success">{t(priceRequestSuccessKey)}</p>
+            {priceRequestSuccessProductName ? (
+              <ActionSuccess
+                title="Demande de prix envoyee"
+                message="Votre demande a bien ete recue. Nous allons vous repondre avec les informations de prix et de disponibilite."
+                details={<span>Piece concernee : {priceRequestSuccessProductName}</span>}
+                primaryActionLabel="Voir mes demandes"
+                primaryActionTo="/account/price-requests"
+                secondaryActionLabel="Continuer a explorer"
+                secondaryActionTo="/products"
+                variant="priceRequest"
+              />
+            ) : (
+              <button
+                type="submit"
+                className="home-btn-primary home-price-submit"
+                disabled={priceRequestLoading}
+              >
+                {priceRequestLoading ? t("home.sending") : t("home.send")}
+              </button>
             )}
-
-            <button
-              type="submit"
-              className="home-btn-primary home-price-submit"
-              disabled={priceRequestLoading}
-            >
-              {priceRequestLoading ? t("home.sending") : t("home.send")}
-            </button>
           </form>
         </div>
       )}

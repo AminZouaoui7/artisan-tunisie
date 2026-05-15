@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 
 import { useAuth } from "../context/AuthContext";
+import ActionSuccess from "../components/ActionSuccess";
 import { getProducts, type ProductViewDto } from "../services/productService";
 import { createDemoBooking } from "../services/demoBookingService";
 import PhoneInput from "../components/PhoneInput";
@@ -35,7 +36,8 @@ export default function ReservationPage() {
   const [carouselIndex, setCarouselIndex] = useState(0);
 
   const [submitting, setSubmitting] = useState(false);
-  const [successKey, setSuccessKey] = useState<string | null>(null);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [successDetails, setSuccessDetails] = useState<string>("");
   const [errorKey, setErrorKey] = useState<string | null>(null);
   const [errorRaw, setErrorRaw] = useState("");
 
@@ -118,7 +120,7 @@ export default function ReservationPage() {
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
-    setSuccessKey(null);
+    setIsSuccess(false);
     setErrorKey(null);
     setErrorRaw("");
 
@@ -147,7 +149,8 @@ export default function ReservationPage() {
         token ?? undefined
       );
 
-      setSuccessKey("reservation.submitSuccess");
+      setSuccessDetails(`${form.demoDate} a ${form.demoTime}`);
+      setIsSuccess(true);
 
       setForm({
         fullName: user ? `${user.firstName} ${user.lastName}`.trim() : "",
@@ -171,6 +174,23 @@ export default function ReservationPage() {
     } finally {
       setSubmitting(false);
     }
+  }
+
+  if (isSuccess) {
+    return (
+      <section className="page-section reservation-page">
+        <ActionSuccess
+          title="Reservation envoyee"
+          message="Votre demande de visite showroom a bien ete transmise. Notre equipe vous confirmera le creneau par email."
+          details={successDetails ? <span>{successDetails}</span> : undefined}
+          primaryActionLabel="Retour a l'accueil"
+          primaryActionTo="/"
+          secondaryActionLabel="Decouvrir les pieces"
+          secondaryActionTo="/products"
+          variant="reservation"
+        />
+      </section>
+    );
   }
 
   return (
@@ -329,10 +349,6 @@ export default function ReservationPage() {
               placeholder={t("reservation.messagePlaceholder")}
             />
           </label>
-
-          {successKey && (
-            <p className="reservation-alert success">{t(successKey)}</p>
-          )}
 
           {(errorRaw || errorKey) && (
             <p className="reservation-alert error">
