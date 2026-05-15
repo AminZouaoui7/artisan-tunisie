@@ -98,10 +98,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const loginWithGoogle = async (accessToken: string) => {
-    const result = await authService.googleAuth(accessToken);
+  const result = await authService.googleAuth(accessToken);
 
-    await saveSession(result.token, result.refreshToken);
-  };
+  localStorage.setItem(TOKEN_KEY, result.token);
+
+  if (result.refreshToken) {
+    localStorage.setItem(REFRESH_TOKEN_KEY, result.refreshToken);
+  }
+
+  setToken(result.token);
+
+  if (result.customer) {
+    setUser(result.customer);
+    localStorage.setItem("artisan_user", JSON.stringify(result.customer));
+    return;
+  }
+
+  const currentUser = await authService.me(result.token);
+  setUser(currentUser);
+};
 
   useEffect(() => {
     refreshUser();
