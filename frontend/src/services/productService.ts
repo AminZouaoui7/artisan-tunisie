@@ -1,10 +1,7 @@
 import {
   apiFetch,
   buildAssetUrl,
-  fetchAndStoreUserLocation,
-  getVisitorCountryCode,
 } from "./apiClient";
-
 export type ProductStatus = "Available" | "Reserved" | "Sold" | "Hidden";
 
 export type ProductDto = {
