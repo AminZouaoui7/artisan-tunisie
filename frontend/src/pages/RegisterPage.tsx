@@ -12,15 +12,6 @@ import { useAuth } from "../context/useAuth";
 import { useI18n } from "../i18n/i18n";
 import "../styles/RegisterPage.css";
 
-type RegisterResponse = {
-  email?: string;
-  accessToken?: string;
-  token?: string;
-  refreshToken?: string;
-  customer?: unknown;
-  user?: unknown;
-};
-
 export default function RegisterPage() {
   useI18n();
 
@@ -85,73 +76,73 @@ export default function RegisterPage() {
   });
 
   const handleSubmit = async (e: FormEvent) => {
-  e.preventDefault();
-  setError("");
+    e.preventDefault();
+    setError("");
 
-  if (!form.firstName.trim() || !form.lastName.trim()) {
-    setError("Veuillez saisir votre prénom et votre nom.");
-    return;
-  }
-
-  if (!form.email.trim()) {
-    setError("Veuillez saisir votre adresse email.");
-    return;
-  }
-
-  if (form.password.length < 8) {
-    setError("Le mot de passe doit contenir au moins 8 caractères.");
-    return;
-  }
-
-  if (form.password !== form.confirmPassword) {
-    setError("Les mots de passe ne correspondent pas.");
-    return;
-  }
-
-  try {
-    setLoading(true);
-
-    const email = form.email.trim().toLowerCase();
-
-    await authService.register({
-      firstName: form.firstName.trim(),
-      lastName: form.lastName.trim(),
-      email,
-      phone: form.phone.trim() || undefined,
-      password: form.password,
-    });
-
-    const loginResult = await authService.login({
-      email,
-      password: form.password,
-    });
-
-   localStorage.setItem(
-  "artisan_access_token",
-loginResult.token);
-
-    if (loginResult.refreshToken) {
-      localStorage.setItem("artisan_refresh_token", loginResult.refreshToken);
+    if (!form.firstName.trim() || !form.lastName.trim()) {
+      setError("Veuillez saisir votre prénom et votre nom.");
+      return;
     }
 
-const userData = loginResult.customer;
-    if (userData) {
-      localStorage.setItem("artisan_user", JSON.stringify(userData));
+    if (!form.email.trim()) {
+      setError("Veuillez saisir votre adresse email.");
+      return;
     }
 
-    window.dispatchEvent(new CustomEvent("artisan:auth-changed"));
+    if (form.password.length < 8) {
+      setError("Le mot de passe doit contenir au moins 8 caractères.");
+      return;
+    }
 
-    navigate("/", { replace: true });
-  } catch (err) {
-    setError(
-      err instanceof Error
-        ? err.message
-        : "Une erreur est survenue pendant la création du compte."
-    );
-  } finally {
-    setLoading(false);
-  }
-};
+    if (form.password !== form.confirmPassword) {
+      setError("Les mots de passe ne correspondent pas.");
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      const email = form.email.trim().toLowerCase();
+
+      await authService.register({
+        firstName: form.firstName.trim(),
+        lastName: form.lastName.trim(),
+        email,
+        phone: form.phone.trim() || undefined,
+        password: form.password,
+      });
+
+      const loginResult = await authService.login({
+        email,
+        password: form.password,
+      });
+
+      localStorage.setItem("artisan_access_token", loginResult.token);
+
+      if (loginResult.refreshToken) {
+        localStorage.setItem("artisan_refresh_token", loginResult.refreshToken);
+      }
+
+      if (loginResult.customer) {
+        localStorage.setItem(
+          "artisan_user",
+          JSON.stringify(loginResult.customer)
+        );
+      }
+
+      window.dispatchEvent(new CustomEvent("artisan:auth-changed"));
+
+      navigate("/", { replace: true });
+    } catch (err) {
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Une erreur est survenue pendant la création du compte."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <section className="register-page">
