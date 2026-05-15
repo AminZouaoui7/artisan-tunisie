@@ -12,6 +12,51 @@
   animation: action-success-fade-in 420ms ease-out;
 }
 
+.success-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background: rgba(32, 24, 19, 0.68);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.success-modal-card {
+  position: relative;
+  width: min(560px, 100%);
+  max-height: calc(100vh - 48px);
+  overflow: auto;
+}
+
+.success-modal-card .action-success {
+  padding: 0;
+  border-radius: 32px;
+  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.35);
+}
+
+.success-modal-card .action-success__card {
+  padding: 42px;
+}
+
+.success-modal-close {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  z-index: 2;
+  width: 38px;
+  height: 38px;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.8);
+  color: #241610;
+  cursor: pointer;
+  font-size: 24px;
+  line-height: 1;
+}
+
 .action-success__card {
   position: relative;
   z-index: 1;
@@ -186,5 +231,10 @@
 
   .action-success__button {
     width: 100%;
+  }
+
+  .success-modal-card .action-success__card {
+    padding: 34px 24px;
+    border-radius: 26px;
   }
 }

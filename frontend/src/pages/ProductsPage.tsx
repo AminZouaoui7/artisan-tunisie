@@ -55,6 +55,8 @@ export default function ProductsPage() {
 
   const [selectedProduct, setSelectedProduct] =
     useState<ProductViewDto | null>(null);
+  const [showPriceRequestModal, setShowPriceRequestModal] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   const [detailProduct, setDetailProduct] =
     useState<ProductViewDto | null>(null);
@@ -147,6 +149,8 @@ export default function ProductsPage() {
     }
 
     setSelectedProduct(product);
+    setShowPriceRequestModal(true);
+    setShowSuccessModal(false);
     closeDetailProduct();
     setPriceRequestSuccessProductName(null);
     setPriceRequestErrorKey(null);
@@ -163,9 +167,17 @@ export default function ProductsPage() {
   }
 
   function closePriceRequest() {
+    setShowPriceRequestModal(false);
+    setShowSuccessModal(false);
     setSelectedProduct(null);
     setPriceRequestSuccessProductName(null);
     setPriceRequestErrorKey(null);
+  }
+
+  function closeSuccessModal() {
+    setShowSuccessModal(false);
+    setPriceRequestSuccessProductName(null);
+    setSelectedProduct(null);
   }
 
   function handleAddToCart(product: ProductViewDto) {
@@ -226,6 +238,8 @@ export default function ProductsPage() {
       });
 
       setPriceRequestSuccessProductName(selectedProduct.name);
+      setShowPriceRequestModal(false);
+      setShowSuccessModal(true);
       setPriceRequestForm({
         customerName: "",
         email: "",
@@ -828,7 +842,7 @@ export default function ProductsPage() {
         </div>
       )}
 
-      {selectedProduct && (
+      {showPriceRequestModal && selectedProduct && (
         <div className="products-price-modal" onClick={closePriceRequest}>
           <form
             className="products-price-card"
@@ -923,29 +937,47 @@ export default function ProductsPage() {
               <p className="products-price-error">{t(priceRequestErrorKey)}</p>
             )}
 
-            {priceRequestSuccessProductName ? (
-              <ActionSuccess
-                title="Demande de prix envoyee"
-                message="Votre demande a bien ete recue. Nous allons vous repondre avec les informations de prix et de disponibilite."
-                details={<span>Piece concernee : {priceRequestSuccessProductName}</span>}
-                primaryActionLabel="Voir mes demandes"
-                primaryActionTo="/account/price-requests"
-                secondaryActionLabel="Continuer a explorer"
-                secondaryActionTo="/products"
-                variant="priceRequest"
-              />
-            ) : (
-              <button
-                type="submit"
-                className="product-cart-btn products-price-submit"
-                disabled={priceRequestLoading}
-              >
-                {priceRequestLoading
-                  ? t("products.sending")
-                  : t("products.sendRequest")}
-              </button>
-            )}
+            <button
+              type="submit"
+              className="product-cart-btn products-price-submit"
+              disabled={priceRequestLoading}
+            >
+              {priceRequestLoading
+                ? t("products.sending")
+                : t("products.sendRequest")}
+            </button>
           </form>
+        </div>
+      )}
+
+      {showSuccessModal && priceRequestSuccessProductName && (
+        <div className="success-modal-overlay" onClick={closeSuccessModal}>
+          <div
+            className="success-modal-card"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              type="button"
+              className="success-modal-close"
+              onClick={closeSuccessModal}
+              aria-label={t("products.close")}
+            >
+              ×
+            </button>
+
+            <ActionSuccess
+              title="Demande de prix envoyee"
+              message="Votre demande a bien ete recue. Notre equipe vous repondra rapidement avec les informations de prix et de disponibilite."
+              details={
+                <span>Piece concernee : {priceRequestSuccessProductName}</span>
+              }
+              primaryActionLabel="Voir mes demandes"
+              primaryActionTo="/account/price-requests"
+              secondaryActionLabel="Continuer a explorer"
+              secondaryActionTo="/products"
+              variant="priceRequest"
+            />
+          </div>
         </div>
       )}
     </section>

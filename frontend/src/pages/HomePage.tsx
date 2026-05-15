@@ -73,6 +73,7 @@ export default function HomePage() {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
   const [priceRequestOpen, setPriceRequestOpen] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [priceRequestLoading, setPriceRequestLoading] = useState(false);
   const [priceRequestErrorKey, setPriceRequestErrorKey] = useState<string | null>(null);
   const [priceRequestSuccessProductName, setPriceRequestSuccessProductName] =
@@ -107,6 +108,7 @@ export default function HomePage() {
     setSelectedProduct(product);
     setSelectedImageIndex(0);
     setPriceRequestOpen(false);
+    setShowSuccessModal(false);
     setPriceRequestSuccessProductName(null);
     setPriceRequestErrorKey(null);
   };
@@ -115,6 +117,7 @@ export default function HomePage() {
     setSelectedProduct(null);
     setSelectedImageIndex(0);
     setPriceRequestOpen(false);
+    setShowSuccessModal(false);
     setPriceRequestSuccessProductName(null);
     setPriceRequestErrorKey(null);
   };
@@ -139,13 +142,18 @@ export default function HomePage() {
 
     setPriceRequestSuccessProductName(null);
     setPriceRequestErrorKey(null);
+    setShowSuccessModal(false);
     setPriceRequestOpen(true);
   };
 
   const closePriceRequestForm = () => {
     setPriceRequestOpen(false);
-    setPriceRequestSuccessProductName(null);
     setPriceRequestErrorKey(null);
+  };
+
+  const closeSuccessModal = () => {
+    setShowSuccessModal(false);
+    setPriceRequestSuccessProductName(null);
   };
 
   const submitPriceRequest = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -175,6 +183,8 @@ export default function HomePage() {
       });
 
       setPriceRequestSuccessProductName(selectedProduct.name);
+      setPriceRequestOpen(false);
+      setShowSuccessModal(true);
 
       setPriceRequestForm({
         customerName: "",
@@ -1040,27 +1050,45 @@ useEffect(() => {
               <p className="home-price-request-error">{t(priceRequestErrorKey)}</p>
             )}
 
-            {priceRequestSuccessProductName ? (
-              <ActionSuccess
-                title="Demande de prix envoyee"
-                message="Votre demande a bien ete recue. Nous allons vous repondre avec les informations de prix et de disponibilite."
-                details={<span>Piece concernee : {priceRequestSuccessProductName}</span>}
-                primaryActionLabel="Voir mes demandes"
-                primaryActionTo="/account/price-requests"
-                secondaryActionLabel="Continuer a explorer"
-                secondaryActionTo="/products"
-                variant="priceRequest"
-              />
-            ) : (
-              <button
-                type="submit"
-                className="home-btn-primary home-price-submit"
-                disabled={priceRequestLoading}
-              >
-                {priceRequestLoading ? t("home.sending") : t("home.send")}
-              </button>
-            )}
+            <button
+              type="submit"
+              className="home-btn-primary home-price-submit"
+              disabled={priceRequestLoading}
+            >
+              {priceRequestLoading ? t("home.sending") : t("home.send")}
+            </button>
           </form>
+        </div>
+      )}
+
+      {showSuccessModal && priceRequestSuccessProductName && (
+        <div className="success-modal-overlay" onClick={closeSuccessModal}>
+          <div
+            className="success-modal-card"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              type="button"
+              className="success-modal-close"
+              onClick={closeSuccessModal}
+              aria-label={t("common.close")}
+            >
+              ×
+            </button>
+
+            <ActionSuccess
+              title="Demande de prix envoyee"
+              message="Votre demande a bien ete recue. Notre equipe vous repondra rapidement avec les informations de prix et de disponibilite."
+              details={
+                <span>Piece concernee : {priceRequestSuccessProductName}</span>
+              }
+              primaryActionLabel="Voir mes demandes"
+              primaryActionTo="/account/price-requests"
+              secondaryActionLabel="Continuer a explorer"
+              secondaryActionTo="/products"
+              variant="priceRequest"
+            />
+          </div>
         </div>
       )}
     </div>
