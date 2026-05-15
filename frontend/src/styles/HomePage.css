@@ -3844,3 +3844,263 @@ display: flex;
     padding-bottom: 48px !important;
   }
 }
+
+/* =========================
+   COLLECTIONS FINAL PASS
+========================= */
+
+.home-categories-section {
+  position: relative;
+  padding: 110px 6vw 96px !important;
+  margin: 0 !important;
+  background:
+    radial-gradient(circle at top left, rgba(216, 120, 47, 0.08), transparent 28%),
+    linear-gradient(180deg, #f6ecd8 0%, #efe2c8 100%) !important;
+  overflow: hidden !important;
+}
+
+.home-categories-inner {
+  position: relative;
+  z-index: 1;
+  width: min(1380px, 100%) !important;
+  max-width: 1380px !important;
+  margin: 0 auto !important;
+}
+
+.home-categories-header {
+  max-width: 760px;
+  margin: 0 0 56px !important;
+}
+
+.home-categories-header .page-kicker {
+  margin-bottom: 14px;
+}
+
+.home-categories-header h2 {
+  margin: 0 !important;
+  color: var(--color-dark);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(2.6rem, 4vw, 4.1rem);
+  line-height: 0.98 !important;
+  letter-spacing: -0.04em;
+}
+
+.home-categories-header h2 em {
+  color: var(--color-terracotta);
+  font-style: italic;
+}
+
+.home-categories-grid {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 28px !important;
+  align-items: stretch !important;
+}
+
+.home-cat-card,
+.home-cat-card--0,
+.home-cat-card--1,
+.home-cat-card--2 {
+  position: relative !important;
+  min-height: 300px !important;
+  padding: 34px !important;
+  border-radius: 30px !important;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.82), rgba(255, 248, 228, 0.72)) !important;
+  border: 1px solid rgba(92, 62, 32, 0.12) !important;
+  box-shadow:
+    0 24px 60px rgba(45, 28, 11, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.7) !important;
+  transition:
+    transform 0.35s ease,
+    box-shadow 0.35s ease,
+    border-color 0.35s ease !important;
+}
+
+.home-cat-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background:
+    radial-gradient(circle at top right, rgba(190, 116, 72, 0.1), transparent 30%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.24), transparent 45%);
+  pointer-events: none;
+}
+
+.home-cat-card:hover {
+  transform: translateY(-8px);
+  border-color: rgba(126, 70, 35, 0.22) !important;
+  box-shadow:
+    0 34px 80px rgba(45, 28, 11, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.85) !important;
+}
+
+.home-cat-card-motif {
+  right: -10px;
+  top: -8px;
+  width: 132px;
+  height: 132px;
+  opacity: 0.56;
+}
+
+.home-cat-tag {
+  position: relative;
+  z-index: 1;
+  padding: 6px 14px;
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  background: rgba(255, 248, 236, 0.82);
+}
+
+.home-cat-name {
+  position: relative;
+  z-index: 1;
+  margin: 4px 0 2px;
+  font-size: clamp(1.8rem, 2vw, 2.3rem);
+  line-height: 1.05;
+}
+
+.home-cat-desc {
+  position: relative;
+  z-index: 1;
+  max-width: 30ch;
+  font-size: 15px;
+  line-height: 1.8;
+}
+
+.home-cat-cta {
+  position: relative;
+  z-index: 1;
+  margin-top: auto !important;
+  padding-top: 10px;
+}
+
+/* =========================
+   MOBILE COMPACT FINAL PASS
+========================= */
+
+@media (max-width: 768px) {
+  .home-page,
+  .home-main,
+  .home {
+    overflow-x: hidden !important;
+  }
+
+  .home section,
+  .page-section {
+    min-height: auto !important;
+    height: auto !important;
+  }
+
+  .home-boutique-hero,
+  .home-hero,
+  .hero,
+  .hero-section {
+    min-height: 72vh !important;
+    height: 72vh !important;
+    max-height: 82vh !important;
+    margin-bottom: 0 !important;
+  }
+
+  .home-boutique-hero-content {
+    padding: 0 8px 94px !important;
+  }
+
+  .home-boutique-hero-btn {
+    bottom: 64px !important;
+  }
+
+  .home-boutique-hero-dots {
+    bottom: 14px !important;
+  }
+
+  .home-categories-section,
+  .featured-products-section,
+  .home-catalog-section,
+  .home-story,
+  .home-story-section,
+  .home-showroom-section,
+  .home-boutique-map,
+  .home-cta-section,
+  .home-testimonials-section {
+    padding-top: 56px !important;
+    padding-bottom: 56px !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+  }
+
+  .home-categories-inner,
+  .home-catalog-header,
+  .home-catalog-track,
+  .home-story-inner,
+  .home-map-header {
+    width: min(100%, calc(100% - 24px)) !important;
+  }
+
+  .home-categories-header {
+    max-width: none;
+    margin-bottom: 32px !important;
+  }
+
+  .section-header,
+  .home-section-header,
+  .home-categories-header,
+  .home-catalog-header,
+  .home-map-header {
+    margin-bottom: 26px !important;
+  }
+
+  .home-categories-grid,
+  .featured-products-grid,
+  .products-grid,
+  .home-catalog-track {
+    grid-template-columns: 1fr !important;
+    gap: 22px !important;
+  }
+
+  .home-cat-card,
+  .home-cat-card--0,
+  .home-cat-card--1,
+  .home-cat-card--2 {
+    min-height: auto !important;
+    padding: 28px 24px !important;
+    border-radius: 26px !important;
+  }
+
+  .home-cat-name {
+    font-size: clamp(1.55rem, 7vw, 2rem);
+  }
+
+  .home-cat-desc {
+    max-width: none;
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
+  .home-rug-card {
+    min-height: auto !important;
+  }
+}
+
+@media (max-width: 390px) {
+  .home-boutique-hero,
+  .home-hero,
+  .hero,
+  .hero-section {
+    min-height: 70vh !important;
+    height: 70vh !important;
+  }
+
+  .home-boutique-hero-content {
+    padding-bottom: 86px !important;
+  }
+
+  .home-categories-section,
+  .home-catalog-section,
+  .home-story,
+  .home-testimonials-section {
+    padding-top: 48px !important;
+    padding-bottom: 48px !important;
+  }
+}
