@@ -3647,3 +3647,10 @@
     animation: none;
   }
 }
+@media (max-width: 768px) {
+  .home-boutique-hero {
+    background: red !important;
+    height: 300px !important;
+    min-height: 300px !important;
+  }
+}
