@@ -20,9 +20,9 @@ export default function Navbar() {
   const { user, isAuthenticated, logout } = useAuth();
   const { cartCount } = useCart();
 
-  const [visitorLocation, setVisitorLocation] = useState(() =>
-    getStoredUserLocation()
-  );
+//  const [visitorLocation, setVisitorLocation] = useState(() =>
+ //   getStoredUserLocation()
+ // );
 
 const canUseCart = isAuthenticated;
   const [scrolled, setScrolled] = useState(false);
@@ -46,7 +46,7 @@ const canUseCart = isAuthenticated;
 
   useEffect(() => {
     const handleLocationChanged = () => {
-      setVisitorLocation(getStoredUserLocation());
+     // setVisitorLocation(getStoredUserLocation());
     };
 
     window.addEventListener("artisan:location-changed", handleLocationChanged);
