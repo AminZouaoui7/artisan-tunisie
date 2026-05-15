@@ -76,6 +76,7 @@ export function cleanupVisitorLocationStorage() {
   const storedCountry = normalizeCountryCode(
     localStorage.getItem(VISITOR_COUNTRY_CODE_KEY)
   );
+
   if (!storedCountry) {
     localStorage.removeItem(VISITOR_COUNTRY_CODE_KEY);
   }
@@ -83,12 +84,14 @@ export function cleanupVisitorLocationStorage() {
   const storedIsTunisia = parseStoredBoolean(
     localStorage.getItem(VISITOR_IS_TUNISIA_KEY)
   );
+
   if (storedIsTunisia === null) {
     localStorage.removeItem(VISITOR_IS_TUNISIA_KEY);
   }
 
   for (const key of LEGACY_VISITOR_COUNTRY_KEYS) {
     const normalizedLegacyValue = normalizeCountryCode(localStorage.getItem(key));
+
     if (!normalizedLegacyValue) {
       localStorage.removeItem(key);
     }
@@ -98,6 +101,7 @@ export function cleanupVisitorLocationStorage() {
 function getLegacyVisitorCountryCode(): string {
   for (const key of LEGACY_VISITOR_COUNTRY_KEYS) {
     const normalized = normalizeCountryCode(localStorage.getItem(key));
+
     if (normalized) {
       return normalized;
     }
@@ -109,6 +113,7 @@ function getLegacyVisitorCountryCode(): string {
 export function clearVisitorLocationStorage() {
   localStorage.removeItem(VISITOR_COUNTRY_CODE_KEY);
   localStorage.removeItem(VISITOR_IS_TUNISIA_KEY);
+
   for (const key of LEGACY_VISITOR_COUNTRY_KEYS) {
     localStorage.removeItem(key);
   }
@@ -120,11 +125,13 @@ export function getVisitorCountryCode(): string {
   const storedCountry = normalizeCountryCode(
     localStorage.getItem(VISITOR_COUNTRY_CODE_KEY)
   );
+
   if (storedCountry) {
     return storedCountry;
   }
 
   const legacyCountry = getLegacyVisitorCountryCode();
+
   if (legacyCountry) {
     localStorage.setItem(VISITOR_COUNTRY_CODE_KEY, legacyCountry);
     return legacyCountry;
@@ -135,6 +142,7 @@ export function getVisitorCountryCode(): string {
 
 export function getVisitorIsTunisia(): boolean {
   cleanupVisitorLocationStorage();
+
   return parseStoredBoolean(localStorage.getItem(VISITOR_IS_TUNISIA_KEY)) === true;
 }
 
@@ -185,7 +193,6 @@ export async function fetchAndStoreUserLocation(): Promise<UserLocationDto> {
   }
 
   const data = (await response.json()) as Partial<UserLocationDto>;
-  console.log("location api", data);
 
   const location: UserLocationDto = {
     countryCode: normalizeCountryCode(data.countryCode),
@@ -207,9 +214,19 @@ function isPublicEndpoint(endpoint: string): boolean {
     normalized === "/auth/login" ||
     normalized === "/auth/register" ||
     normalized === "/auth/verify-email" ||
+    normalized === "/auth/google" ||
+    normalized === "/auth/google-login" ||
     normalized === "/user-location" ||
     normalized === "/contact" ||
     normalized.startsWith("/products")
+  );
+}
+
+function isAuthPage(): boolean {
+  return (
+    window.location.pathname === "/login" ||
+    window.location.pathname === "/register" ||
+    window.location.pathname === "/verify-email"
   );
 }
 
@@ -219,6 +236,7 @@ function clearAuthStorage() {
   localStorage.removeItem("artisan_user");
   localStorage.removeItem("artisan_customer");
   localStorage.removeItem("artisan_customer_profile");
+
   window.dispatchEvent(new CustomEvent("artisan:auth-cleared"));
 }
 
@@ -234,14 +252,17 @@ export async function apiFetch(endpoint: string, options: RequestInit = {}) {
   const bearerTokenFromHeader = extractBearerToken(headers.get("Authorization"));
 
   const hasAuthHeaderAlready = Boolean(bearerTokenFromHeader);
+  const publicEndpoint = isPublicEndpoint(endpoint);
+
   const shouldAttachToken =
-    Boolean(token) && !hasAuthHeaderAlready && !isPublicEndpoint(endpoint);
+    Boolean(token) && !hasAuthHeaderAlready && !publicEndpoint;
 
   if (shouldAttachToken && token) {
     headers.set("Authorization", `Bearer ${token}`);
   }
 
   const visitorCountry = getVisitorCountryCode();
+
   if (visitorCountry) {
     headers.set("X-Country-Code", visitorCountry);
   }
@@ -256,7 +277,11 @@ export async function apiFetch(endpoint: string, options: RequestInit = {}) {
 
   if (res.status === 401 && sentAuth) {
     clearAuthStorage();
-    redirectToSessionExpired();
+
+    if (!isAuthPage()) {
+      redirectToSessionExpired();
+    }
+
     throw new Error("SESSION_EXPIRED");
   }
 
