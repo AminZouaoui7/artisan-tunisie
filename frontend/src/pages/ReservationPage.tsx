@@ -11,8 +11,10 @@ import {
 import { useAuth } from "../context/AuthContext";
 import { getProducts, type ProductViewDto } from "../services/productService";
 import { createDemoBooking } from "../services/demoBookingService";
+import PhoneInput from "../components/PhoneInput";
 import "../styles/ReservationPage.css";
 import { useI18n } from "../i18n/i18n";
+import "../styles/PhoneInput.css";
 
 import demo1 from "../assets/IMG_2574.jpeg";
 import demo2 from "../assets/IMG_2576.jpeg";
@@ -66,7 +68,6 @@ export default function ReservationPage() {
         setProducts(data.filter((p) => p.stock > 0));
       } catch {
         setErrorKey("reservation.loadError");
-      } finally {
       }
     }
 
@@ -107,6 +108,13 @@ export default function ReservationPage() {
     }));
   }
 
+  function updatePhone(value: string) {
+    setForm((current) => ({
+      ...current,
+      phone: value,
+    }));
+  }
+
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
@@ -142,9 +150,7 @@ export default function ReservationPage() {
       setSuccessKey("reservation.submitSuccess");
 
       setForm({
-        fullName: user
-          ? `${user.firstName} ${user.lastName}`.trim()
-          : "",
+        fullName: user ? `${user.firstName} ${user.lastName}`.trim() : "",
         email: user?.email || "",
         phone: user?.phone || "",
         demoDate: "",
@@ -169,8 +175,6 @@ export default function ReservationPage() {
 
   return (
     <section className="page-section reservation-page">
-      
-
       <div className="reservation-layout">
         <div className="reservation-demo-carousel-card">
           <div className="reservation-carousel-heading">
@@ -251,10 +255,9 @@ export default function ReservationPage() {
 
             <label>
               {t("reservation.phone")}
-              <input
-                name="phone"
+              <PhoneInput
                 value={form.phone}
-                onChange={updateField}
+                onChange={updatePhone}
                 placeholder={t("common.phonePlaceholder")}
               />
             </label>
@@ -315,8 +318,6 @@ export default function ReservationPage() {
               </select>
             </label>
           </div>
-
-          
 
           <label className="reservation-message">
             {t("reservation.message")}
