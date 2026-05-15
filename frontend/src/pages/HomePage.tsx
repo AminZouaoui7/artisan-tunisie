@@ -30,9 +30,9 @@ import { createPriceRequest } from "../services/priceRequestService";
 import { useI18n } from "../i18n/i18n";
 import { formatEurPrice } from "../utils/price";
 
-const fadeUp = { hidden: { opacity: 0, y: 32 }, visible: { opacity: 1, y: 0 } };
-const fadeLeft = { hidden: { opacity: 0, x: -36 }, visible: { opacity: 1, x: 0 } };
-const fadeRight = { hidden: { opacity: 0, x: 36 }, visible: { opacity: 1, x: 0 } };
+const fadeUp = { hidden: { opacity: 0, y: 24 }, visible: { opacity: 1, y: 0 } };
+const fadeLeft = { hidden: { opacity: 0, x: -24 }, visible: { opacity: 1, x: 0 } };
+const fadeRight = { hidden: { opacity: 0, x: 24 }, visible: { opacity: 1, x: 0 } };
 
 const staggerContainer = {
   hidden: {},

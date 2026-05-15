@@ -3,6 +3,7 @@
 /* ── TOKENS ── */
 :root {
   --nb-h: 68px;
+  --mobile-navbar-height: 86px;
   --nb-cream: #fefce7;
   --nb-dark: #2b1608;
   --nb-clay: #7a3f16;
@@ -705,6 +706,35 @@
   .nb__drawer-tagline {
     font-size: 13px;
     line-height: 1.5;
+  }
+}
+
+@media (max-width: 768px) {
+  .nb,
+  .navbar,
+  .site-navbar,
+  .main-navbar {
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 99999;
+    width: 100%;
+    height: var(--mobile-navbar-height);
+  }
+
+  body {
+    padding-top: var(--mobile-navbar-height);
+  }
+
+  .nb__inner {
+    min-height: var(--mobile-navbar-height);
+    padding: 0 14px;
+  }
+
+  .nb__drawer {
+    top: 0;
+    padding-top: calc(var(--mobile-navbar-height) + 18px);
   }
 }
 
