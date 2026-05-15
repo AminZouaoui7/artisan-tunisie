@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Star, X, ChevronLeft, ChevronRight, Eye } from "lucide-react";
 import { useEffect, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
-
+import PhoneInput from "../components/PhoneInput";
 import boutiqueImg1 from "../assets/ChatGPT Image May 5, 2026, 02_21_18 PM.png";
 import boutiqueImg2 from "../assets/ChatGPT Image May 5, 2026, 02_21_30 PM.png";
 import boutiqueImg3 from "../assets/ChatGPT Image May 5, 2026, 02_21_36 PM.png";
@@ -1021,17 +1021,16 @@ useEffect(() => {
                 required
               />
 
-              <input
-                type="tel"
-                placeholder={t("home.phone")}
-                value={priceRequestForm.phone}
-                onChange={(e) =>
-                  setPriceRequestForm((prev) => ({
-                    ...prev,
-                    phone: e.target.value,
-                  }))
-                }
-              />
+              <PhoneInput
+  value={priceRequestForm.phone}
+  onChange={(value) =>
+    setPriceRequestForm((prev) => ({
+      ...prev,
+      phone: value,
+    }))
+  }
+  placeholder="Téléphone"
+/>
 
               <textarea
                 placeholder={t("home.yourMessage")}

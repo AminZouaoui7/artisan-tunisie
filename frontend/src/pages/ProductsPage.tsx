@@ -5,6 +5,7 @@ import {
   useState,
   type FormEvent,
 } from "react";
+import PhoneInput from "../components/PhoneInput";
 import { useNavigate } from "react-router-dom";
 import {
   X,
@@ -908,17 +909,17 @@ export default function ProductsPage() {
                 required
               />
 
-              <input
-                type="tel"
-                placeholder={t("products.phone")}
-                value={priceRequestForm.phone}
-                onChange={(e) =>
-                  setPriceRequestForm((prev) => ({
-                    ...prev,
-                    phone: e.target.value,
-                  }))
-                }
-              />
+              <PhoneInput
+  className="price-request-phone"
+  value={priceRequestForm.phone}
+  onChange={(value) =>
+    setPriceRequestForm((prev) => ({
+      ...prev,
+      phone: value,
+    }))
+  }
+  placeholder="Téléphone"
+/>
 
               <textarea
                 placeholder={t("products.yourMessage")}
