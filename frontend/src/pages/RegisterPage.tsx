@@ -85,69 +85,73 @@ export default function RegisterPage() {
   });
 
   const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-    setError("");
+  e.preventDefault();
+  setError("");
 
-    if (!form.firstName.trim() || !form.lastName.trim()) {
-      setError("Veuillez saisir votre prénom et votre nom.");
-      return;
+  if (!form.firstName.trim() || !form.lastName.trim()) {
+    setError("Veuillez saisir votre prénom et votre nom.");
+    return;
+  }
+
+  if (!form.email.trim()) {
+    setError("Veuillez saisir votre adresse email.");
+    return;
+  }
+
+  if (form.password.length < 8) {
+    setError("Le mot de passe doit contenir au moins 8 caractères.");
+    return;
+  }
+
+  if (form.password !== form.confirmPassword) {
+    setError("Les mots de passe ne correspondent pas.");
+    return;
+  }
+
+  try {
+    setLoading(true);
+
+    const email = form.email.trim().toLowerCase();
+
+    await authService.register({
+      firstName: form.firstName.trim(),
+      lastName: form.lastName.trim(),
+      email,
+      phone: form.phone.trim() || undefined,
+      password: form.password,
+    });
+
+    const loginResult = await authService.login({
+      email,
+      password: form.password,
+    });
+
+   localStorage.setItem(
+  "artisan_access_token",
+loginResult.token);
+
+    if (loginResult.refreshToken) {
+      localStorage.setItem("artisan_refresh_token", loginResult.refreshToken);
     }
 
-    if (!form.email.trim()) {
-      setError("Veuillez saisir votre adresse email.");
-      return;
+const userData = loginResult.customer;
+    if (userData) {
+      localStorage.setItem("artisan_user", JSON.stringify(userData));
     }
 
-    if (form.password.length < 8) {
-      setError("Le mot de passe doit contenir au moins 8 caractères.");
-      return;
-    }
+    window.dispatchEvent(new CustomEvent("artisan:auth-changed"));
 
-    if (form.password !== form.confirmPassword) {
-      setError("Les mots de passe ne correspondent pas.");
-      return;
-    }
-
-    try {
-      setLoading(true);
-
-      const result = (await authService.register({
-        firstName: form.firstName.trim(),
-        lastName: form.lastName.trim(),
-        email: form.email.trim().toLowerCase(),
-        phone: form.phone.trim() || undefined,
-        password: form.password,
-      })) as RegisterResponse;
-
-      const accessToken = result.accessToken || result.token;
-
-      if (accessToken) {
-        localStorage.setItem("artisan_access_token", accessToken);
-      }
-
-      if (result.refreshToken) {
-        localStorage.setItem("artisan_refresh_token", result.refreshToken);
-      }
-
-      const userData = result.customer || result.user;
-
-      if (userData) {
-        localStorage.setItem("artisan_user", JSON.stringify(userData));
-      }
-
-      window.dispatchEvent(new CustomEvent("artisan:auth-changed"));
-
-      navigate("/", { replace: true });
-    } catch (err) {
-      setError(
-        err instanceof Error
-          ? err.message
-          : "Une erreur est survenue pendant la création du compte."
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
+    navigate("/", { replace: true });
+  } catch (err) {
+    setError(
+      err instanceof Error
+        ? err.message
+        : "Une erreur est survenue pendant la création du compte."
+    );
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <section className="register-page">
