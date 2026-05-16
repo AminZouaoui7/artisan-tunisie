@@ -30,6 +30,7 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [accountOpen, setAccountOpen] = useState(false);
+  const [logoutConfirmOpen, setLogoutConfirmOpen] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 18);
@@ -76,10 +77,20 @@ export default function Navbar() {
     { to: "/contact", label: t("nav.contact") },
   ];
 
-  const handleLogout = () => {
+  const askLogout = () => {
+    setAccountOpen(false);
+    setLogoutConfirmOpen(true);
+  };
+
+  const confirmLogout = () => {
     logout();
     setAccountOpen(false);
     setMenuOpen(false);
+    setLogoutConfirmOpen(false);
+  };
+
+  const cancelLogout = () => {
+    setLogoutConfirmOpen(false);
   };
 
   return (
@@ -97,9 +108,7 @@ export default function Navbar() {
               alt="L’ARTISAN DE LA MÉDINA"
             />
 
-            <span className="nb__logo-text">
-              L’ARTISAN DE LA MÉDINA
-            </span>
+            <span className="nb__logo-text">L’ARTISAN DE LA MÉDINA</span>
           </NavLink>
 
           <nav className="nb__nav" aria-label={t("common.mainNavigation")}>
@@ -147,6 +156,7 @@ export default function Navbar() {
                   )}
 
                   <button
+                    type="button"
                     className={`nb__lang-btn${
                       language === l ? " nb__lang-btn--active" : ""
                     }`}
@@ -172,6 +182,7 @@ export default function Navbar() {
             ) : (
               <div className="nb__account">
                 <button
+                  type="button"
                   className="nb__account-btn"
                   onClick={() => setAccountOpen((v) => !v)}
                   aria-label={t("account.common.accountMenuLabel")}
@@ -217,8 +228,9 @@ export default function Navbar() {
                     </Link>
 
                     <button
+                      type="button"
                       className="nb__account-item nb__account-logout"
-                      onClick={handleLogout}
+                      onClick={askLogout}
                     >
                       <LogOut size={16} />
                       {t("account.nav.logout")}
@@ -229,6 +241,7 @@ export default function Navbar() {
             )}
 
             <button
+              type="button"
               className={`nb__burger${menuOpen ? " nb__burger--open" : ""}`}
               onClick={() => setMenuOpen((v) => !v)}
               aria-label={menuOpen ? t("common.closeMenu") : t("common.openMenu")}
@@ -329,7 +342,11 @@ export default function Navbar() {
                 {t("account.ordersTitle")}
               </NavLink>
 
-              <button className="nb__drawer-logout" onClick={handleLogout}>
+              <button
+                type="button"
+                className="nb__drawer-logout"
+                onClick={askLogout}
+              >
                 {t("account.nav.logout")}
               </button>
             </>
@@ -343,6 +360,7 @@ export default function Navbar() {
                 {i === 1 && <span className="nb__lang-sep" />}
 
                 <button
+                  type="button"
                   className={`nb__lang-btn${
                     language === l ? " nb__lang-btn--active" : ""
                   }`}
@@ -364,6 +382,38 @@ export default function Navbar() {
           onClick={() => setMenuOpen(false)}
           aria-hidden="true"
         />
+      )}
+
+      {logoutConfirmOpen && (
+        <div className="nb__logout-modal-backdrop" role="presentation">
+          <div
+            className="nb__logout-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="logout-confirm-title"
+          >
+            <h3 id="logout-confirm-title">Déconnexion</h3>
+            <p>Voulez-vous vraiment vous déconnecter ?</p>
+
+            <div className="nb__logout-actions">
+              <button
+                type="button"
+                className="nb__logout-cancel"
+                onClick={cancelLogout}
+              >
+                Annuler
+              </button>
+
+              <button
+                type="button"
+                className="nb__logout-confirm"
+                onClick={confirmLogout}
+              >
+                Oui, me déconnecter
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </>
   );

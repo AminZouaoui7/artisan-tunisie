@@ -777,3 +777,116 @@
     gap: 8px;
   }
 }
+/* MOBILE DRAWER FIX - DARK TEXT + RED LOGOUT */
+
+@media (max-width: 768px) {
+  .nb__drawer-link {
+    color: #241307 !important;
+    font-weight: 500 !important;
+    opacity: 1 !important;
+    text-shadow: none !important;
+  }
+
+  .nb__drawer-link:hover,
+  .nb__drawer-link--active {
+    color: #000000 !important;
+  }
+
+  .nb__drawer-num {
+    color: #a65a22 !important;
+    font-weight: 600 !important;
+  }
+
+  .nb__drawer-logout {
+    margin-top: 18px !important;
+    background: #b42318 !important;
+    color: #fffaf1 !important;
+    border: 1px solid #b42318 !important;
+    box-shadow: 0 14px 32px rgba(180, 35, 24, 0.22) !important;
+    font-weight: 600 !important;
+  }
+
+  .nb__drawer-logout:hover {
+    background: #8f1d14 !important;
+    border-color: #8f1d14 !important;
+  }
+}
+
+/* LOGOUT CONFIRM MODAL */
+
+.nb__logout-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 100000;
+  background: rgba(31, 19, 12, 0.42);
+  backdrop-filter: blur(7px);
+  -webkit-backdrop-filter: blur(7px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 22px;
+}
+
+.nb__logout-modal {
+  width: min(360px, 92vw);
+  background: #fffaf0;
+  border: 1px solid rgba(43, 22, 8, 0.12);
+  border-radius: 24px;
+  padding: 24px;
+  box-shadow: 0 28px 80px rgba(31, 19, 12, 0.24);
+  animation: nbLogoutPop 0.22s ease both;
+  text-align: center;
+}
+
+.nb__logout-modal h3 {
+  margin: 0 0 8px;
+  font-family: "Cinzel", serif;
+  font-size: 17px;
+  letter-spacing: 0.08em;
+  color: #241307;
+}
+
+.nb__logout-modal p {
+  margin: 0 0 22px;
+  font-family: "Cormorant Garamond", serif;
+  font-size: 18px;
+  color: rgba(36, 19, 7, 0.72);
+}
+
+.nb__logout-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.nb__logout-actions button {
+  flex: 1;
+  border: 0;
+  border-radius: 999px;
+  padding: 12px 14px;
+  font-family: "Cinzel", serif;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+}
+
+.nb__logout-cancel {
+  background: rgba(43, 22, 8, 0.08);
+  color: #241307;
+}
+
+.nb__logout-confirm {
+  background: #b42318;
+  color: #fffaf1;
+  box-shadow: 0 12px 28px rgba(180, 35, 24, 0.22);
+}
+
+@keyframes nbLogoutPop {
+  from {
+    opacity: 0;
+    transform: scale(0.94) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
