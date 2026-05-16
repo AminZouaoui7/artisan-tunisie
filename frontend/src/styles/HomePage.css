@@ -1956,13 +1956,24 @@
 }
 
 @media (max-width: 768px) { 
+  html, 
+  body { 
+    overflow-x: hidden !important; 
+  } 
+
   .home { 
     overflow-x: hidden !important; 
     background: #f3ead4 !important; 
   } 
 
-  .home-boutique-hero, 
-  .home-boutique-premium-frame { 
+  .home > section, 
+  .home section { 
+    min-height: 0 !important; 
+    height: auto !important; 
+    max-height: none !important; 
+  } 
+
+  .home-boutique-hero { 
     height: 390px !important; 
     min-height: 390px !important; 
     max-height: 390px !important; 
@@ -1970,50 +1981,86 @@
     padding: 0 !important; 
   } 
 
-  .home-boutique-hero-bg, 
-  .home-boutique-hero-bg img, 
-  .home-boutique-premium-frame img { 
-    width: 100% !important; 
-    height: 100% !important; 
-  } 
-
-  .home-boutique-hero-bg img, 
-  .home-boutique-premium-frame img { 
-    object-fit: cover !important; 
-    object-position: center !important; 
-  } 
-
-  .home-boutique-hero-content { 
-    display: flex !important; 
-    opacity: 1 !important; 
-    visibility: visible !important; 
-    z-index: 20 !important; 
-    position: relative !important; 
-  } 
-
-  .home-boutique-hero-content h1, 
-  .home-boutique-hero-content p, 
-  .home-boutique-hero-kicker { 
-    display: block !important; 
-    opacity: 1 !important; 
-    visibility: visible !important; 
-  } 
-
   .home-boutique-carousel-section { 
     margin: 0 !important; 
     padding: 0 !important; 
     min-height: 0 !important; 
+    height: auto !important; 
+  } 
+
+  .home-boutique-premium-frame { 
+    height: 390px !important; 
+    min-height: 390px !important; 
+    max-height: 390px !important; 
+  } 
+
+  .home-boutique-hero-bg, 
+  .home-boutique-hero-bg img, 
+  .home-boutique-premium-frame img { 
+    height: 100% !important; 
+    width: 100% !important; 
+    object-fit: cover !important; 
+  } 
+
+  .home-boutique-hero-content { 
+    z-index: 20 !important; 
+    opacity: 1 !important; 
+    visibility: visible !important; 
   } 
 
   .home-categories-section, 
   .home-catalog-section, 
   .home-story, 
   .home-testimonials-section, 
-  .home-boutique-gallery-section { 
-    margin-top: 0 !important; 
-    padding-top: 36px !important; 
-    padding-bottom: 36px !important; 
+  .home-boutique-gallery-section, 
+  .home-boutique-map-section { 
+    margin: 0 !important; 
+    padding-top: 34px !important; 
+    padding-bottom: 34px !important; 
     min-height: 0 !important; 
+    height: auto !important; 
+  } 
+
+  .home-hero, 
+  .home-hero-inner, 
+  .home-hero-3d { 
+    min-height: 0 !important; 
+    height: auto !important; 
+    max-height: none !important; 
+  } 
+
+  .home-hero-inner { 
+    padding-top: 34px !important; 
+    padding-bottom: 34px !important; 
+  } 
+
+  .home-catalog-track, 
+  .home-categories-grid, 
+  .home-testimonials-grid { 
+    display: grid !important; 
+    grid-template-columns: 1fr !important; 
+    gap: 18px !important; 
+  } 
+
+  .home-catalog-header, 
+  .home-catalog-track, 
+  .home-story-inner, 
+  .home-boutique-map, 
+  .home-map-header { 
+    width: min(100%, calc(100% - 24px)) !important; 
+  } 
+
+  .home-rug-card { 
+    width: 100% !important; 
+    min-width: 0 !important; 
+  } 
+
+  .home-rug-img { 
+    height: 260px !important; 
+  } 
+
+  .home-boutique-map { 
+    margin: 0 auto 34px !important; 
   } 
 
   .section-divider { 
@@ -2956,7 +3003,7 @@
   background: var(--color-cream);
 }
 
-@media (max-width: 900px) {
+@media (max-width: 900px) and (min-width: 769px) {
   .home-boutique-carousel-section {
     margin: 80px 0 90px !important;
   }
@@ -2988,17 +3035,6 @@
   }
 }
 
-@media (max-width: 560px) {
-  .home-boutique-premium-frame {
-    height: 58vh;
-    min-height: 430px;
-  }
-
-  .home-boutique-premium-btn {
-    width: 46px;
-    height: 46px;
-  }
-}
 /* =========================
    BOUTIQUE HERO
 ========================= */
