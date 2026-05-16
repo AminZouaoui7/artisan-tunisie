@@ -3202,7 +3202,6 @@
 /* =========================
    FINAL MOBILE OVERRIDES
 ========================= */
-
 @media (max-width: 768px) {
   .home {
     overflow-x: hidden !important;
@@ -3217,68 +3216,69 @@
   .home-categories-section,
   .home-catalog-section,
   .home-testimonials-section {
+    width: 100% !important;
+    margin: 0 !important;
     padding-top: 32px !important;
     padding-bottom: 32px !important;
-    margin: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
   }
 
-  .home-categories-inner,
-  .home-catalog-header,
-  .home-story-inner,
-  .home-map-header,
-  .home-boutique-map {
-    width: min(100%, calc(100% - 32px)) !important;
+  .home-categories-inner {
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 auto !important;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+    box-sizing: border-box !important;
+  }
+
+  .home-categories-header,
+  .home-categories-section .home-section-header {
+    width: 100% !important;
+    max-width: 360px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    margin-bottom: 18px !important;
+    text-align: center !important;
+  }
+
+  .home-categories-section .page-kicker,
+  .home-categories-section .home-section-title,
+  .home-categories-section .home-section-sub {
+    text-align: center !important;
     margin-left: auto !important;
     margin-right: auto !important;
   }
 
-  .home-catalog-header,
-  .home-map-header,
-  .home-categories-header {
-    margin-bottom: 18px !important;
-  }
-
-  .home-catalog-header {
-    width: min(100%, calc(100% - 32px)) !important;
-    align-items: flex-start !important;
-    gap: 14px !important;
-  }
-
   .home-categories-grid {
+    width: 100% !important;
+    max-width: 340px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    display: grid !important;
     grid-template-columns: 1fr !important;
+    justify-content: center !important;
     justify-items: center !important;
     gap: 18px !important;
   }
 
   .home-cat-card {
-  width: 100% !important;
-  max-width: 340px !important;
+    width: 100% !important;
+    max-width: 340px !important;
+    margin: 0 auto !important;
+    box-sizing: border-box !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    padding: 28px 22px !important;
+  }
 
-  margin-left: auto !important;
-  margin-right: auto !important;
-
-  display: flex !important;
-  flex-direction: column !important;
-  align-items: center !important;
-  justify-content: center !important;
-
-  text-align: center !important;
-
-  padding: 28px 22px !important;
-}
-.home-categories-section .home-section-header {
-  text-align: center !important;
-}
-
-.home-categories-section .home-section-title {
-  text-align: center !important;
-}
-
-.home-categories-section .home-section-sub {
-  text-align: center !important;
-  margin-left: auto !important;
-  margin-right: auto !important;
-}
+  .home-cat-card * {
+    text-align: center !important;
+  }
 
   .home-cat-tag,
   .home-cat-name,
@@ -3286,11 +3286,20 @@
   .home-cat-cta {
     margin-left: auto !important;
     margin-right: auto !important;
-    text-align: center !important;
   }
 
   .home-cat-desc {
-    max-width: 300px !important;
+    max-width: 280px !important;
+  }
+
+  .home-catalog-header,
+  .home-map-header {
+    width: min(100%, calc(100% - 32px)) !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    margin-bottom: 18px !important;
+    align-items: flex-start !important;
+    gap: 14px !important;
   }
 
   .home-catalog-track {
@@ -3313,8 +3322,6 @@
 
   .home-catalog-track::-webkit-scrollbar {
     display: none !important;
-    width: 0 !important;
-    height: 0 !important;
   }
 
   .home-rug-card {
@@ -3372,13 +3379,6 @@
   .home-boutique-map-text h3,
   .home-boutique-map-text p {
     text-align: center !important;
-  }
-
-  .home-map-header .page-kicker,
-  .home-map-header .home-section-title,
-  .home-boutique-map-text .page-kicker,
-  .home-boutique-map-text h3,
-  .home-boutique-map-text p {
     margin-left: auto !important;
     margin-right: auto !important;
   }
@@ -3389,7 +3389,6 @@
     margin: 0 auto !important;
     padding: 24px 18px !important;
     border-radius: 22px !important;
-    align-items: center !important;
   }
 
   .home-boutique-map-text h3 {
@@ -3466,8 +3465,6 @@
 
   .home-product-thumbs::-webkit-scrollbar {
     display: none !important;
-    width: 0 !important;
-    height: 0 !important;
   }
 
   .home-product-thumb {
@@ -3549,6 +3546,19 @@
   .home-testimonials-section {
     padding-top: 28px !important;
     padding-bottom: 28px !important;
+  }
+
+  .home-categories-inner {
+    padding-left: 14px !important;
+    padding-right: 14px !important;
+  }
+
+  .home-categories-grid {
+    max-width: 330px !important;
+  }
+
+  .home-cat-card {
+    max-width: 330px !important;
   }
 
   .home-catalog-track {
