@@ -3669,9 +3669,11 @@
     height: 520px !important;
   }
 
-  .home-boutique-hero-content {
-    position: relative !important;
-    top: auto !important;
-    transform: none !important;
-  }
+.home-boutique-hero-content {
+  position: absolute !important;
+  left: 50% !important;
+  top: 52% !important;
+  transform: translate(-50%, -50%) !important;
+  width: calc(100% - 40px) !important;
+}
 }
