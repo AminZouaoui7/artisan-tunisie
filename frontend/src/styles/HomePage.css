@@ -1955,6 +1955,75 @@
   }
 }
 
+@media (max-width: 768px) { 
+  .home { 
+    overflow-x: hidden !important; 
+    background: #f3ead4 !important; 
+  } 
+
+  .home-boutique-hero, 
+  .home-boutique-premium-frame { 
+    height: 390px !important; 
+    min-height: 390px !important; 
+    max-height: 390px !important; 
+    margin: 0 !important; 
+    padding: 0 !important; 
+  } 
+
+  .home-boutique-hero-bg, 
+  .home-boutique-hero-bg img, 
+  .home-boutique-premium-frame img { 
+    width: 100% !important; 
+    height: 100% !important; 
+  } 
+
+  .home-boutique-hero-bg img, 
+  .home-boutique-premium-frame img { 
+    object-fit: cover !important; 
+    object-position: center !important; 
+  } 
+
+  .home-boutique-hero-content { 
+    display: flex !important; 
+    opacity: 1 !important; 
+    visibility: visible !important; 
+    z-index: 20 !important; 
+    position: relative !important; 
+  } 
+
+  .home-boutique-hero-content h1, 
+  .home-boutique-hero-content p, 
+  .home-boutique-hero-kicker { 
+    display: block !important; 
+    opacity: 1 !important; 
+    visibility: visible !important; 
+  } 
+
+  .home-boutique-carousel-section { 
+    margin: 0 !important; 
+    padding: 0 !important; 
+    min-height: 0 !important; 
+  } 
+
+  .home-categories-section, 
+  .home-catalog-section, 
+  .home-story, 
+  .home-testimonials-section, 
+  .home-boutique-gallery-section { 
+    margin-top: 0 !important; 
+    padding-top: 36px !important; 
+    padding-bottom: 36px !important; 
+    min-height: 0 !important; 
+  } 
+
+  .section-divider { 
+    display: none !important; 
+    height: 0 !important; 
+    margin: 0 !important; 
+    padding: 0 !important; 
+  } 
+} 
+
 /* =========================
    SITE LOADER - RUG REVEAL
 ========================= */
