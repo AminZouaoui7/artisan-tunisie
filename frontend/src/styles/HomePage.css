@@ -3502,3 +3502,161 @@
     animation: none !important;
   }
 }
+
+/* =========================
+   MOBILE HOME FINAL ALIGN FIX
+========================= */
+
+@media (max-width: 768px) {
+  .home-boutique-hero {
+    height: 560px !important;
+    min-height: 560px !important;
+    max-height: none !important;
+  }
+
+  .home-boutique-hero-content {
+    max-width: 390px !important;
+    padding: 0 22px !important;
+  }
+
+  .home-boutique-hero-content h1 {
+    font-size: clamp(42px, 12vw, 58px) !important;
+    line-height: 0.95 !important;
+  }
+
+  .home-boutique-hero-content p:not(.home-boutique-hero-kicker) {
+    max-width: 340px !important;
+    font-size: 15px !important;
+    line-height: 1.6 !important;
+  }
+
+  .home-categories-section,
+  .home-catalog-section,
+  .home-story,
+  .home-testimonials-section {
+    text-align: center !important;
+  }
+
+  .home-categories-inner,
+  .home-catalog-header,
+  .home-catalog-track,
+  .home-story-inner,
+  .home-map-header,
+  .home-boutique-map {
+    width: min(100%, calc(100% - 28px)) !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+
+  .home-catalog-header {
+    align-items: center !important;
+    text-align: center !important;
+  }
+
+  .home-catalog-header > div,
+  .home-catalog-header .page-kicker,
+  .home-catalog-header .home-section-title {
+    text-align: center !important;
+    width: 100% !important;
+  }
+
+  .home-catalog-see-all {
+    margin: 0 auto !important;
+    justify-content: center !important;
+  }
+
+  .home-categories-grid,
+  .home-catalog-track,
+  .home-testimonials-grid {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    justify-items: center !important;
+    gap: 22px !important;
+  }
+
+  .home-cat-card,
+  .home-rug-card {
+    width: 100% !important;
+    max-width: 390px !important;
+    margin: 0 auto !important;
+  }
+
+  .home-cat-card {
+    text-align: center !important;
+    align-items: center !important;
+  }
+
+  .home-cat-desc {
+    max-width: 310px !important;
+  }
+
+  .home-rug-info,
+  .home-rug-meta,
+  .home-rug-footer,
+  .home-rug-rating {
+    text-align: center !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  .home-rug-meta {
+    flex-direction: column !important;
+    gap: 5px !important;
+  }
+
+  .home-map-header {
+    text-align: center !important;
+    margin-bottom: 24px !important;
+  }
+
+  .home-map-header .page-kicker,
+  .home-map-header .home-section-title {
+    text-align: center !important;
+  }
+
+  .home-boutique-map {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    justify-items: center !important;
+    padding: 14px !important;
+  }
+
+  .home-boutique-map-text {
+    width: 100% !important;
+    text-align: center !important;
+    padding: 30px 20px !important;
+  }
+
+  .home-boutique-map-text .page-kicker,
+  .home-boutique-map-text h3,
+  .home-boutique-map-text p {
+    text-align: center !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+
+  .home-boutique-map-text .home-btn-primary {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+
+  .home-map-frame {
+    width: 100% !important;
+  }
+}
+
+@media (max-width: 430px) {
+  .home-boutique-hero {
+    height: 520px !important;
+    min-height: 520px !important;
+  }
+
+  .home-boutique-hero-content h1 {
+    font-size: clamp(38px, 12vw, 50px) !important;
+  }
+
+  .home-cat-card,
+  .home-rug-card {
+    max-width: 360px !important;
+  }
+}
