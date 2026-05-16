@@ -3633,47 +3633,47 @@
   }
 }
 
-@media only screen and (max-width: 768px) {
-  .home-boutique-hero,
-  .home-boutique-premium-carousel,
-  .home-boutique-premium-frame {
-    height: 520px !important;
-    min-height: 520px !important;
-    max-height: 520px !important;
-  }
 
-  .home-boutique-hero-bg,
-  .home-boutique-hero-bg img,
-  .home-boutique-premium-frame img {
-    height: 520px !important;
-    min-height: 520px !important;
-    max-height: 520px !important;
-  }
-
- 
-}
 /* =========================
-   HERO MOBILE SAME AS OUR STORY
+   FINAL FIX HERO HOME MOBILE
 ========================= */
 
 @media only screen and (max-width: 768px) {
-
-  .home-boutique-hero {
+  .home-boutique-carousel-section {
+    display: block !important;
     height: 520px !important;
     min-height: 520px !important;
     max-height: 520px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+  }
+
+  .home-boutique-hero {
+    display: flex !important;
+    position: relative !important;
+    height: 520px !important;
+    min-height: 520px !important;
+    max-height: 520px !important;
+    overflow: hidden !important;
   }
 
   .home-boutique-hero-bg,
   .home-boutique-hero-bg img {
+    display: block !important;
     height: 520px !important;
+    min-height: 520px !important;
+    width: 100% !important;
   }
 
-.home-boutique-hero-content {
-  position: absolute !important;
-  left: 50% !important;
-  top: 52% !important;
-  transform: translate(-50%, -50%) !important;
-  width: calc(100% - 40px) !important;
+  .home-boutique-hero-content {
+    position: relative !important;
+    z-index: 20 !important;
+    width: min(100%, 390px) !important;
+    max-width: 390px !important;
+    margin: 0 auto !important;
+    padding: 0 10px !important;
+    transform: none !important;
+  }
 }
-}
+
