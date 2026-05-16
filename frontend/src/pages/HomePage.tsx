@@ -60,7 +60,10 @@ export default function HomePage() {
   const navigate = useNavigate();
   const { isAuthenticated, loadingAuth } = useAuth();
   const shouldReduceMotion = useReducedMotion();
-  const [isCompactViewport, setIsCompactViewport] = useState(false);
+  const [isCompactViewport, setIsCompactViewport] = useState(() => {
+    if (typeof window === "undefined") return false;
+    return window.matchMedia("(max-width: 820px)").matches;
+  });
   const { addToCart } = useCart();
   const visitorLocation = getStoredUserLocation();
 
@@ -286,6 +289,7 @@ export default function HomePage() {
   const disableScrollAnimations = shouldReduceMotion || isCompactViewport;
   const motionInitial = disableScrollAnimations ? false : "hidden";
   const motionWhileInView = disableScrollAnimations ? undefined : "visible";
+  const motionAnimate = disableScrollAnimations ? "visible" : undefined;
   const motionViewport = disableScrollAnimations
     ? undefined
     : { once: true, amount: 0.16 };
@@ -326,6 +330,7 @@ export default function HomePage() {
     className="home-boutique-hero-content"
     variants={fadeUp}
     initial={motionInitial}
+    animate={motionAnimate}
     whileInView={motionWhileInView}
     viewport={motionViewport}
     transition={motionTransition}
@@ -377,6 +382,7 @@ export default function HomePage() {
             className="home-categories-header"
             variants={fadeUp}
             initial={motionInitial}
+            animate={motionAnimate}
             whileInView={motionWhileInView}
             viewport={motionViewport}
             transition={motionTransition}
@@ -392,6 +398,7 @@ export default function HomePage() {
             className="home-categories-grid"
             variants={staggerContainer}
             initial={motionInitial}
+            animate={motionAnimate}
             whileInView={motionWhileInView}
             viewport={motionViewport}
           >
@@ -401,6 +408,7 @@ export default function HomePage() {
                 key={cat.name}
                 className={`home-cat-card home-cat-card--${i}`}
                 variants={fadeUp}
+                animate={motionAnimate}
                 transition={motionTransition}
               >
                 <div className="home-cat-card-motif" aria-hidden="true">
@@ -450,6 +458,7 @@ export default function HomePage() {
           className="home-catalog-header"
           variants={fadeUp}
           initial={motionInitial}
+          animate={motionAnimate}
           whileInView={motionWhileInView}
           viewport={motionViewport}
           transition={motionTransition}
@@ -489,6 +498,7 @@ export default function HomePage() {
                   className="home-rug-card"
                   variants={fadeUp}
                   initial={motionInitial}
+                  animate={motionAnimate}
                   whileInView={motionWhileInView}
                   viewport={motionViewport}
                   transition={
@@ -582,6 +592,7 @@ export default function HomePage() {
             className="home-story-visual"
             variants={fadeLeft}
             initial={motionInitial}
+            animate={motionAnimate}
             whileInView={motionWhileInView}
             viewport={motionViewport}
             transition={motionTransition}
@@ -599,6 +610,7 @@ export default function HomePage() {
             className="home-story-text"
             variants={fadeRight}
             initial={motionInitial}
+            animate={motionAnimate}
             whileInView={motionWhileInView}
             viewport={motionViewport}
             transition={motionTransition}
@@ -668,6 +680,7 @@ export default function HomePage() {
             className="home-hero-content"
             variants={fadeLeft}
             initial={motionInitial}
+            animate={motionAnimate}
             whileInView={motionWhileInView}
             viewport={motionViewport}
             transition={motionTransition}
@@ -702,6 +715,7 @@ export default function HomePage() {
             aria-hidden="true"
             variants={fadeRight}
             initial={motionInitial}
+            animate={motionAnimate}
             whileInView={motionWhileInView}
             viewport={motionViewport}
             transition={motionTransition}
@@ -724,6 +738,7 @@ export default function HomePage() {
           className="home-map-header"
           variants={fadeUp}
           initial={motionInitial}
+          animate={motionAnimate}
           whileInView={motionWhileInView}
           viewport={motionViewport}
           transition={motionTransition}
@@ -736,6 +751,7 @@ export default function HomePage() {
           className="home-boutique-map"
           variants={fadeUp}
           initial={motionInitial}
+          animate={motionAnimate}
           whileInView={motionWhileInView}
           viewport={motionViewport}
           transition={motionTransition}
