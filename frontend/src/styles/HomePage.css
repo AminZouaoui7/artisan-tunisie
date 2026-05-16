@@ -1995,13 +1995,11 @@
     max-height: none !important; 
   } 
 
-  .home-boutique-hero { 
-    height: 390px !important; 
-    min-height: 390px !important; 
-    max-height: 390px !important; 
-    margin: 0 !important; 
-    padding: 0 !important; 
-  } 
+   .home-boutique-hero {
+    height: 520px !important;
+    min-height: 520px !important;
+    max-height: 520px !important;
+  }
 
   .home-boutique-carousel-section { 
     margin: 0 !important; 
@@ -2010,10 +2008,10 @@
     height: auto !important; 
   } 
 
-  .home-boutique-premium-frame { 
-    height: 390px !important; 
-    min-height: 390px !important; 
-    max-height: 390px !important; 
+    .home-boutique-premium-frame {
+    height: 520px !important;
+    min-height: 520px !important;
+    max-height: 520px !important;
   } 
 
   .home-boutique-hero-bg, 
@@ -3253,15 +3251,32 @@
   }
 
   .home-cat-card {
-    width: 100% !important;
-    max-width: 360px !important;
-    margin: 0 auto !important;
-    text-align: center !important;
-    align-items: center !important;
-    justify-content: center !important;
-    padding: 26px 22px !important;
-    min-height: auto !important;
-  }
+  width: 100% !important;
+  max-width: 340px !important;
+
+  margin-left: auto !important;
+  margin-right: auto !important;
+
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  text-align: center !important;
+
+  padding: 28px 22px !important;
+}
+.home-cat-card * {
+  text-align: center !important;
+}
+
+.home-cat-tag,
+.home-cat-name,
+.home-cat-desc,
+.home-cat-cta {
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
 
   .home-cat-tag,
   .home-cat-name,
