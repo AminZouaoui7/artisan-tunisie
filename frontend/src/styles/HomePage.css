@@ -3673,3 +3673,45 @@
 /* =========================
    FINAL FIX PREMIUM HOME MOBILE
 ========================= */
+@media (max-width: 768px) {
+  .home .home-boutique-hero-btn {
+    width: 38px !important;
+    height: 38px !important;
+    top: 52% !important;
+    background: rgba(255, 248, 232, 0.78) !important;
+  }
+
+  .home .home-boutique-hero-btn svg {
+    width: 16px !important;
+    height: 16px !important;
+  }
+
+  .home .home-boutique-hero-btn--left {
+    left: 10px !important;
+  }
+
+  .home .home-boutique-hero-btn--right {
+    right: 10px !important;
+  }
+
+  .home .home-boutique-hero-dots {
+    display: flex !important;
+    bottom: 22px !important;
+    gap: 6px !important;
+    padding: 0 !important;
+    background: transparent !important;
+    backdrop-filter: none !important;
+  }
+
+  .home .home-boutique-hero-dot {
+    width: 22px !important;
+    height: 3px !important;
+    border-radius: 999px !important;
+    background: rgba(255, 248, 232, 0.42) !important;
+  }
+
+  .home .home-boutique-hero-dot--active {
+    width: 34px !important;
+    background: #fff8e8 !important;
+  }
+}
