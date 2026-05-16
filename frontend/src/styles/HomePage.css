@@ -1960,7 +1960,29 @@
   body { 
     overflow-x: hidden !important; 
   } 
+    /* HERO MOBILE - flèches plus petites */
+  .home-boutique-hero-btn {
+    width: 46px !important;
+    height: 46px !important;
+  }
 
+  .home-boutique-hero-btn svg {
+    width: 18px !important;
+    height: 18px !important;
+  }
+
+  .home-boutique-hero-btn--left {
+    left: 14px !important;
+  }
+
+  .home-boutique-hero-btn--right {
+    right: 14px !important;
+  }
+
+  /* supprimer les dots mobile */
+  .home-boutique-hero-dots {
+    display: none !important;
+  }
   .home { 
     overflow-x: hidden !important; 
     background: #f3ead4 !important; 
