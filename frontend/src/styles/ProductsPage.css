@@ -1364,50 +1364,175 @@
   width: 100%;
 }
 /* =========================
-   FIX PRODUCT MODAL MOBILE
+   FINAL MOBILE FIX - PRODUCTS POPUPS
 ========================= */
 
 @media (max-width: 768px) {
-  .home-product-modal {
+
+  /* OVERLAY */
+  .products-detail-modal,
+  .products-price-modal {
     position: fixed !important;
     inset: 0 !important;
-    z-index: 100000 !important;
-    padding: 92px 12px 18px !important;
+
+    z-index: 99999 !important;
+
+    padding:
+      calc(env(safe-area-inset-top, 0px) + 84px)
+      12px
+      calc(env(safe-area-inset-bottom, 0px) + 20px) !important;
+
     align-items: flex-start !important;
     justify-content: center !important;
+
     overflow-y: auto !important;
-    background: rgba(20, 12, 8, 0.78) !important;
+
+    background: rgba(18, 10, 6, 0.82) !important;
+
+    backdrop-filter: blur(18px) !important;
+    -webkit-backdrop-filter: blur(18px) !important;
   }
 
-  .home-product-modal-card {
+  /* CARD */
+  .products-detail-card,
+  .products-price-card {
     width: 100% !important;
     max-width: 390px !important;
+
     max-height: none !important;
     overflow: visible !important;
-    display: block !important;
-    padding: 16px !important;
-    border-radius: 28px !important;
+
     margin: 0 auto 24px !important;
+
+    padding: 16px !important;
+
+    border-radius: 28px !important;
+
+    display: block !important;
   }
 
-  .home-product-modal-close {
+  /* CLOSE BUTTON */
+  .products-detail-close,
+  .products-price-close {
     position: fixed !important;
-    top: 104px !important;
-    right: 22px !important;
-    z-index: 100002 !important;
+
+    top: calc(env(safe-area-inset-top, 0px) + 96px) !important;
+    right: 18px !important;
+
+    z-index: 100001 !important;
+
+    width: 42px !important;
+    height: 42px !important;
+
+    border-radius: 999px !important;
+
+    background: rgba(255,255,255,0.92) !important;
+
+    box-shadow: 0 12px 30px rgba(0,0,0,0.22) !important;
   }
 
-  .home-product-modal-main-img {
-    height: 250px !important;
+  /* IMAGE */
+  .products-detail-image {
+    min-height: 240px !important;
+    height: 240px !important;
+
     border-radius: 20px !important;
   }
 
-  .home-product-modal-info {
-    padding: 16px 8px 4px !important;
+  .products-detail-image img {
+    object-fit: contain !important;
+    padding: 14px !important;
   }
 
-  .home-product-details-grid {
-    max-height: 280px !important;
+  /* GALLERY */
+  .products-detail-gallery {
+    gap: 10px !important;
+  }
+
+  .products-detail-thumbs {
+    gap: 8px !important;
+    padding-bottom: 4px !important;
+
+    overflow-x: auto !important;
+    scrollbar-width: none !important;
+  }
+
+  .products-detail-thumbs::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  .products-detail-thumb {
+    flex: 0 0 58px !important;
+    width: 58px !important;
+    height: 58px !important;
+
+    border-radius: 12px !important;
+  }
+
+  /* TEXT */
+  .products-detail-info h2,
+  .products-price-card h2 {
+    font-size: 24px !important;
+    line-height: 1.08 !important;
+
+    margin-bottom: 12px !important;
+  }
+
+  .products-detail-desc {
+    font-size: 13px !important;
+    line-height: 1.65 !important;
+  }
+
+  /* GRID */
+  .products-detail-grid {
+    grid-template-columns: 1fr !important;
+
+    max-height: 260px !important;
     overflow-y: auto !important;
+
+    gap: 8px !important;
+
+    padding: 14px !important;
+
+    border-radius: 18px !important;
+  }
+
+  .products-detail-grid span {
+    font-size: 10px !important;
+  }
+
+  .products-detail-grid strong {
+    font-size: 12px !important;
+  }
+
+  /* ACTIONS */
+  .products-detail-actions,
+  .products-price-submit,
+  .product-actions-row {
+    width: 100% !important;
+  }
+
+  .products-detail-actions .product-cart-btn,
+  .products-detail-actions .product-detail-btn,
+  .products-price-submit button,
+  .products-price-submit,
+  .product-cart-btn,
+  .product-detail-btn {
+    width: 100% !important;
+  }
+
+  /* FORM */
+  .products-price-fields {
+    gap: 10px !important;
+  }
+
+  .products-price-fields input,
+  .products-price-fields textarea {
+    font-size: 14px !important;
+    border-radius: 14px !important;
+  }
+
+  .products-price-fields textarea {
+    min-height: 100px !important;
   }
 }
