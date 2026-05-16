@@ -140,8 +140,10 @@ const CSS = `
 }
 
 .am-loader--hidden {
-  animation: am-fade-out .55s ease forwards;
-  pointer-events: none;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  display: none !important;
 }
 
 .am-bg {
@@ -393,21 +395,24 @@ const CSS = `
   }
 
   .am-loader--hidden {
-    opacity: 0;
-    visibility: hidden;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    display: none !important;
   }
 }
 `;
 
 export default function SiteLoader({ isVisible }: SiteLoaderProps) {
+  if (!isVisible) {
+    return null;
+  }
+
   return (
     <>
       <style dangerouslySetInnerHTML={{ __html: CSS }} />
 
-      <div
-        className={`am-loader${isVisible ? "" : " am-loader--hidden"}`}
-        aria-hidden={!isVisible}
-      >
+      <div className="am-loader" aria-hidden="false">
         <div className="am-bg" aria-hidden="true" />
 
         {TILES.map((tile, index) => (

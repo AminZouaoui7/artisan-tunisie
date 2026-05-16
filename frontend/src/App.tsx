@@ -59,7 +59,7 @@ function AppContent() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const protectedPrefixes = ["/account"];
@@ -95,6 +95,7 @@ function AppContent() {
 
   useEffect(() => {
     let isMounted = true;
+    let hideLoaderTimer: number | undefined;
 
     async function initializeApp() {
       try {
@@ -103,9 +104,9 @@ function AppContent() {
       } catch (error) {
         console.error("Erreur chargement localisation :", error);
       } finally {
-        window.setTimeout(() => {
+        hideLoaderTimer = window.setTimeout(() => {
           if (isMounted) {
-            setLoading(false);
+            setIsLoading(false);
           }
         }, 1200);
       }
@@ -115,8 +116,19 @@ function AppContent() {
 
     return () => {
       isMounted = false;
+      if (hideLoaderTimer) {
+        window.clearTimeout(hideLoaderTimer);
+      }
     };
   }, []);
+
+  useEffect(() => {
+    document.body.style.overflow = isLoading ? "hidden" : "";
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isLoading]);
 
   const hideFooterPages = [
     "/login",
@@ -129,11 +141,11 @@ function AppContent() {
 
   return (
     <>
-      <SiteLoader isVisible={loading} />
+      {isLoading && <SiteLoader isVisible={isLoading} />}
 
       <ScrollToTop />
 
-      {!loading && (
+      {!isLoading && (
         <div className="site-shell">
           <Navbar />
 
