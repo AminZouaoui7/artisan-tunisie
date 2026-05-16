@@ -3638,3 +3638,17 @@
     animation: none !important;
   }
 }
+/* FORCE HOME HERO MOBILE SAME HEIGHT AS OUR STORY */
+@media (max-width: 768px) {
+  .home-boutique-hero {
+    height: 620px !important;
+    min-height: 620px !important;
+    max-height: 620px !important;
+  }
+
+  .home-boutique-hero-bg,
+  .home-boutique-hero-bg img {
+    height: 620px !important;
+    min-height: 620px !important;
+  }
+}
