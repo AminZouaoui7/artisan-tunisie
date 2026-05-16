@@ -3266,14 +3266,16 @@
 
   padding: 28px 22px !important;
 }
-.home-cat-card * {
+.home-categories-section .home-section-header {
   text-align: center !important;
 }
 
-.home-cat-tag,
-.home-cat-name,
-.home-cat-desc,
-.home-cat-cta {
+.home-categories-section .home-section-title {
+  text-align: center !important;
+}
+
+.home-categories-section .home-section-sub {
+  text-align: center !important;
   margin-left: auto !important;
   margin-right: auto !important;
 }
