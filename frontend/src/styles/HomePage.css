@@ -3201,18 +3201,9 @@
 
 /* =========================
    FINAL MOBILE OVERRIDES
-/* =========================
-   HERO MOBILE SIZE LIKE OUR STORY
 ========================= */
 
 @media (max-width: 768px) {
-
-  .home-boutique-hero,
-  .home-boutique-premium-frame {
-    height: 100vh !important;
-    min-height: 100vh !important;
-    max-height: 100vh !important;
-  }
 
   .home-boutique-hero-content {
     width: min(100%, 390px) !important;
@@ -3638,17 +3629,26 @@
     animation: none !important;
   }
 }
-/* FORCE HOME HERO MOBILE SAME HEIGHT AS OUR STORY */
-@media (max-width: 768px) {
-  .home-boutique-hero {
-    height: 620px !important;
-    min-height: 620px !important;
-    max-height: 620px !important;
+
+@media only screen and (max-width: 768px) {
+  .home-boutique-hero,
+  .home-boutique-premium-carousel,
+  .home-boutique-premium-frame {
+    height: 520px !important;
+    min-height: 520px !important;
+    max-height: 520px !important;
   }
 
   .home-boutique-hero-bg,
-  .home-boutique-hero-bg img {
-    height: 620px !important;
-    min-height: 620px !important;
+  .home-boutique-hero-bg img,
+  .home-boutique-premium-frame img {
+    height: 520px !important;
+    min-height: 520px !important;
+    max-height: 520px !important;
+  }
+
+  .home-boutique-hero-content {
+    top: 50% !important;
+    transform: translateY(-50%) !important;
   }
 }
