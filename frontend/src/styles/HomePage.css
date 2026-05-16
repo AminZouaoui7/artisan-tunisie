@@ -3201,34 +3201,23 @@
 
 /* =========================
    FINAL MOBILE OVERRIDES
+/* =========================
+   HERO MOBILE SIZE LIKE OUR STORY
 ========================= */
+
 @media (max-width: 768px) {
-  .home {
-    overflow-x: hidden !important;
-  }
 
-  .home-boutique-hero {
-    height: 520px !important;
-    min-height: 520px !important;
-    max-height: 520px !important;
-    padding: 0 18px !important;
-  }
-
-  .home-boutique-hero-bg img {
-    background-position: center !important;
-    filter: brightness(0.5) contrast(1.08) saturate(1.08) !important;
-    transform: none !important;
+  .home-boutique-hero,
+  .home-boutique-premium-frame {
+    height: 100vh !important;
+    min-height: 100vh !important;
+    max-height: 100vh !important;
   }
 
   .home-boutique-hero-content {
     width: min(100%, 390px) !important;
     max-width: 390px !important;
-  }
-
-  .home-boutique-hero-kicker {
-    font-size: 11px !important;
-    letter-spacing: 0.32em !important;
-    margin-bottom: 18px !important;
+    padding: 0 10px !important;
   }
 
   .home-boutique-hero-content h1 {
@@ -3242,6 +3231,7 @@
     font-size: 16px !important;
     line-height: 1.65 !important;
   }
+
 
   .home section,
   .page-section {
