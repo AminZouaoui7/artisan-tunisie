@@ -21,10 +21,14 @@
 /* =========================
    HERO SAME STYLE HOME
 ========================= */
+/* =========================
+   HERO SAME STYLE HOME
+========================= */
 
 .story-hero {
   position: relative;
-  min-height: 100vh;
+  width: 100%;
+  min-height: calc(100vh - var(--nb-h, 74px));
   overflow: hidden;
 
   display: flex;
@@ -44,9 +48,9 @@
   background-image: url("../assets/photoavecbourguiba.png");
   background-size: cover;
   background-position: center;
-  transform: scale(1.04);
 
-  filter: saturate(1.04) contrast(1.08) brightness(0.62);
+  filter: saturate(1.08) contrast(1.08) brightness(0.62);
+  transform: scale(1.02);
 }
 
 .story-hero::after {
@@ -57,81 +61,102 @@
   pointer-events: none;
 
   background:
-    radial-gradient(
-      circle at center,
-      rgba(0, 0, 0, 0.06),
-      rgba(0, 0, 0, 0.42)
-    ),
-    linear-gradient(
-      180deg,
-      rgba(8, 4, 2, 0.16),
-      rgba(8, 4, 2, 0.38)
-    );
+    linear-gradient(180deg, rgba(8, 4, 2, 0.12), rgba(8, 4, 2, 0.48)),
+    radial-gradient(circle at center, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0.5));
 }
 
 .story-hero-inner {
   position: relative;
   z-index: 4;
-  width: min(1120px, 100%);
+  width: min(1100px, calc(100% - 40px));
   margin: 0 auto;
   text-align: center;
   color: #fff8e8;
 }
 
 .story-hero-kicker {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 18px;
-
-  margin: 0 0 26px;
-
+  margin: 0 0 24px;
   color: #d7b076;
-  font-size: 15px;
-  font-weight: 800;
+  font-size: 14px;
+  font-weight: 900;
   letter-spacing: 0.42em;
   text-transform: uppercase;
-
-  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.45);
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
 }
 
 .story-hero-kicker-line {
-  width: 72px;
-  height: 1px;
-  background: rgba(215, 176, 118, 0.48);
+  display: none;
 }
 
 .story-hero-title {
-  margin: 0 auto 34px;
-  max-width: 1120px;
-
+  max-width: 1100px;
+  margin: 0 auto 28px;
   color: #f8f1e7;
   font-family: "Cormorant Garamond", Georgia, serif;
-  font-size: clamp(72px, 8vw, 128px);
+  font-size: clamp(68px, 7.5vw, 124px);
   font-weight: 500;
   line-height: 0.92;
   letter-spacing: -0.05em;
-
   text-shadow:
-    0 12px 40px rgba(0, 0, 0, 0.45),
-    0 2px 12px rgba(0, 0, 0, 0.28);
+    0 12px 40px rgba(0, 0, 0, 0.5),
+    0 2px 12px rgba(0, 0, 0, 0.35);
 }
 
 .story-hero-title em {
-  color: #d7b076;
+  color: #f8f1e7;
   font-style: italic;
 }
 
 .story-hero-sub {
   max-width: 760px;
   margin: 0 auto;
-
-  color: rgba(255, 248, 232, 0.92);
-  font-size: clamp(18px, 1.5vw, 28px);
-  font-weight: 400;
+  color: rgba(255, 248, 232, 0.94);
+  font-size: clamp(18px, 1.5vw, 26px);
   line-height: 1.6;
+  text-shadow: 0 8px 28px rgba(0, 0, 0, 0.46);
+}
 
-  text-shadow: 0 8px 28px rgba(0, 0, 0, 0.42);
+.story-ornament,
+.story-scroll-hint {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .story-hero {
+    height: 520px !important;
+    min-height: 520px !important;
+    max-height: 520px !important;
+    padding: 0 18px !important;
+  }
+
+  .story-hero::before {
+    background-position: center !important;
+    filter: brightness(0.5) contrast(1.08) saturate(1.08) !important;
+    transform: none !important;
+  }
+
+  .story-hero-inner {
+    width: min(100%, 390px) !important;
+    max-width: 390px !important;
+  }
+
+  .story-hero-kicker {
+    font-size: 11px !important;
+    letter-spacing: 0.32em !important;
+    margin-bottom: 18px !important;
+  }
+
+  .story-hero-title {
+    font-size: clamp(50px, 14vw, 66px) !important;
+    line-height: 0.9 !important;
+    margin-bottom: 22px !important;
+  }
+
+  .story-hero-sub {
+    max-width: 340px !important;
+    font-size: 16px !important;
+    line-height: 1.65 !important;
+  }
 }
 
 .story-ornament {
