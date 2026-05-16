@@ -3065,11 +3065,14 @@
 .home-boutique-hero {
   position: relative;
   width: 100%;
+  height: calc(100vh - var(--nb-h, 74px));
   min-height: calc(100vh - var(--nb-h, 74px));
   overflow: hidden;
+
   display: flex;
   align-items: center;
   justify-content: center;
+
   background: #120b07;
 }
 
@@ -3647,8 +3650,28 @@
     max-height: 520px !important;
   }
 
+ 
+}
+/* =========================
+   HERO MOBILE SAME AS OUR STORY
+========================= */
+
+@media only screen and (max-width: 768px) {
+
+  .home-boutique-hero {
+    height: 520px !important;
+    min-height: 520px !important;
+    max-height: 520px !important;
+  }
+
+  .home-boutique-hero-bg,
+  .home-boutique-hero-bg img {
+    height: 520px !important;
+  }
+
   .home-boutique-hero-content {
-    top: 50% !important;
-    transform: translateY(-50%) !important;
+    position: relative !important;
+    top: auto !important;
+    transform: none !important;
   }
 }
