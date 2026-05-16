@@ -3637,13 +3637,16 @@
 /* =========================
    FINAL FIX HERO HOME MOBILE
 ========================= */
+/* =========================
+   FINAL FIX HERO HOME MOBILE - SAME HEIGHT AS OUR STORY
+========================= */
 
 @media only screen and (max-width: 768px) {
   .home-boutique-carousel-section {
     display: block !important;
-    height: 520px !important;
-    min-height: 520px !important;
-    max-height: 520px !important;
+    height: 680px !important;
+    min-height: 680px !important;
+    max-height: 680px !important;
     margin: 0 !important;
     padding: 0 !important;
     overflow: hidden !important;
@@ -3652,18 +3655,18 @@
   .home-boutique-hero {
     display: flex !important;
     position: relative !important;
-    height: 520px !important;
-    min-height: 520px !important;
-    max-height: 520px !important;
+    height: 680px !important;
+    min-height: 680px !important;
+    max-height: 680px !important;
     overflow: hidden !important;
   }
 
   .home-boutique-hero-bg,
   .home-boutique-hero-bg img {
-    display: block !important;
-    height: 520px !important;
-    min-height: 520px !important;
+    height: 680px !important;
+    min-height: 680px !important;
     width: 100% !important;
+    object-fit: cover !important;
   }
 
   .home-boutique-hero-content {
@@ -3676,4 +3679,3 @@
     transform: none !important;
   }
 }
-
