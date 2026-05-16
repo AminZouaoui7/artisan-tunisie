@@ -115,14 +115,28 @@ const CSS = `
 .am-loader {
   position: fixed;
   inset: 0;
-  z-index: 9999;
+  z-index: 99999;
+
+  width: 100%;
+  height: 100vh;
+  height: 100svh;
+  height: 100dvh;
+
+  min-height: 100vh;
+  min-height: 100svh;
+  min-height: 100dvh;
+
   display: grid;
   place-items: center;
+
   overflow: hidden;
   opacity: 1;
   visibility: visible;
   pointer-events: all;
+
+  background: #ead8bc;
   transform: translateZ(0);
+  contain: layout paint size;
 }
 
 .am-loader--hidden {
@@ -132,7 +146,9 @@ const CSS = `
 
 .am-bg {
   position: absolute;
-  inset: 0;
+  inset: -3px;
+  width: calc(100% + 6px);
+  height: calc(100% + 6px);
   background:
     radial-gradient(circle at 18% 12%, rgba(225,195,140,.55), transparent 38%),
     radial-gradient(circle at 82% 88%, rgba(210,175,115,.42), transparent 42%),
@@ -164,11 +180,17 @@ const CSS = `
 .am-center {
   position: relative;
   z-index: 2;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 0 18px;
+  box-sizing: border-box;
   animation: am-card-in .75s cubic-bezier(.16,1,.3,1) both;
 }
 
 .am-card {
   position: relative;
+  width: min(100%, 470px);
   min-width: 340px;
   padding: 48px 68px 46px;
   border-radius: 26px;
@@ -183,6 +205,7 @@ const CSS = `
   flex-direction: column;
   align-items: center;
   gap: 20px;
+  box-sizing: border-box;
 }
 
 .am-card::before {
@@ -281,25 +304,46 @@ const CSS = `
 }
 
 @media (max-width: 640px) {
+  .am-loader {
+    width: 100%;
+    height: 100vh;
+    height: 100svh;
+    height: 100dvh;
+    min-height: 100vh;
+    min-height: 100svh;
+    min-height: 100dvh;
+  }
+
+  .am-center {
+    width: 100%;
+    padding: 0 16px;
+  }
+
   .am-card {
     min-width: 0;
-    width: calc(100vw - 44px);
-    padding: 38px 24px 36px;
+    width: min(340px, 100%);
+    padding: 36px 22px 34px;
     border-radius: 24px;
+    gap: 18px;
   }
 
   .am-logo {
-    width: 150px;
-    height: 150px;
+    width: 148px;
+    height: 148px;
   }
 
   .am-name {
-    font-size: 11px;
-    letter-spacing: .2em;
+    font-size: 10.5px;
+    letter-spacing: .18em;
+    white-space: normal;
+    text-align: center;
+    line-height: 1.5;
   }
 
   .am-sub {
     font-size: 16px;
+    white-space: normal;
+    text-align: center;
   }
 
   .am-tile {
@@ -307,7 +351,32 @@ const CSS = `
   }
 
   .am-divider {
-    width: 190px;
+    width: min(190px, 100%);
+  }
+
+  .am-progress {
+    bottom: max(22px, env(safe-area-inset-bottom));
+  }
+}
+
+@media (max-width: 390px) {
+  .am-card {
+    width: min(318px, 100%);
+    padding: 32px 18px 30px;
+  }
+
+  .am-logo {
+    width: 132px;
+    height: 132px;
+  }
+
+  .am-name {
+    font-size: 10px;
+    letter-spacing: .15em;
+  }
+
+  .am-sub {
+    font-size: 15px;
   }
 }
 
