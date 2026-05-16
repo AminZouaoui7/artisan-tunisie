@@ -3503,128 +3503,121 @@
   }
 }
 
-/* =========================
-   MOBILE HOME FINAL ALIGN FIX
-========================= */
-
 @media (max-width: 768px) {
   .home-boutique-hero {
-    height: 560px !important;
-    min-height: 560px !important;
+    height: 620px !important;
+    min-height: 620px !important;
     max-height: none !important;
   }
 
   .home-boutique-hero-content {
+    width: min(100%, 390px) !important;
     max-width: 390px !important;
-    padding: 0 22px !important;
+    margin: 0 auto !important;
+    padding: 0 24px !important;
   }
 
   .home-boutique-hero-content h1 {
-    font-size: clamp(42px, 12vw, 58px) !important;
-    line-height: 0.95 !important;
+    font-size: clamp(46px, 13vw, 62px) !important;
+    line-height: 0.92 !important;
   }
 
   .home-boutique-hero-content p:not(.home-boutique-hero-kicker) {
     max-width: 340px !important;
-    font-size: 15px !important;
-    line-height: 1.6 !important;
-  }
-
-  .home-categories-section,
-  .home-catalog-section,
-  .home-story,
-  .home-testimonials-section {
-    text-align: center !important;
+    font-size: 15.5px !important;
+    line-height: 1.55 !important;
   }
 
   .home-categories-inner,
+  .home-categories-grid,
   .home-catalog-header,
   .home-catalog-track,
-  .home-story-inner,
   .home-map-header,
   .home-boutique-map {
-    width: min(100%, calc(100% - 28px)) !important;
+    width: min(100%, calc(100% - 36px)) !important;
     margin-left: auto !important;
     margin-right: auto !important;
   }
 
+  .home-categories-header,
+  .home-map-header,
   .home-catalog-header {
-    align-items: center !important;
     text-align: center !important;
-  }
-
-  .home-catalog-header > div,
-  .home-catalog-header .page-kicker,
-  .home-catalog-header .home-section-title {
-    text-align: center !important;
-    width: 100% !important;
-  }
-
-  .home-catalog-see-all {
-    margin: 0 auto !important;
     justify-content: center !important;
+    align-items: center !important;
   }
 
   .home-categories-grid,
-  .home-catalog-track,
-  .home-testimonials-grid {
+  .home-catalog-track {
     display: grid !important;
     grid-template-columns: 1fr !important;
     justify-items: center !important;
-    gap: 22px !important;
+    gap: 24px !important;
+    padding: 0 !important;
   }
 
   .home-cat-card,
   .home-rug-card {
     width: 100% !important;
-    max-width: 390px !important;
-    margin: 0 auto !important;
+    max-width: 360px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
   }
 
   .home-cat-card {
     text-align: center !important;
     align-items: center !important;
+    justify-content: center !important;
+    min-height: 250px !important;
+    padding: 30px 22px !important;
+  }
+
+  .home-cat-tag,
+  .home-cat-cta {
+    margin-left: auto !important;
+    margin-right: auto !important;
   }
 
   .home-cat-desc {
-    max-width: 310px !important;
+    max-width: 300px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
   }
 
-  .home-rug-info,
-  .home-rug-meta,
-  .home-rug-footer,
-  .home-rug-rating {
-    text-align: center !important;
-    align-items: center !important;
-    justify-content: center !important;
-  }
-
-  .home-rug-meta {
-    flex-direction: column !important;
-    gap: 5px !important;
+  .home-testimonials-section {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
   }
 
   .home-map-header {
-    text-align: center !important;
-    margin-bottom: 24px !important;
+    width: min(100%, calc(100% - 36px)) !important;
+    margin: 0 auto 24px !important;
   }
 
   .home-map-header .page-kicker,
   .home-map-header .home-section-title {
     text-align: center !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
   }
 
   .home-boutique-map {
     display: grid !important;
     grid-template-columns: 1fr !important;
     justify-items: center !important;
-    padding: 14px !important;
+    gap: 14px !important;
+    padding: 12px !important;
+    border-radius: 30px !important;
+    margin: 0 auto 42px !important;
   }
 
   .home-boutique-map-text {
     width: 100% !important;
+    max-width: 360px !important;
+    margin: 0 auto !important;
     text-align: center !important;
-    padding: 30px 20px !important;
+    padding: 34px 20px !important;
+    border-radius: 24px !important;
   }
 
   .home-boutique-map-text .page-kicker,
@@ -3635,28 +3628,118 @@
     margin-right: auto !important;
   }
 
+  .home-boutique-map-text h3 {
+    max-width: 310px !important;
+    font-size: 39px !important;
+    line-height: 0.98 !important;
+  }
+
+  .home-boutique-map-text p {
+    max-width: 310px !important;
+    font-size: 15px !important;
+    line-height: 1.7 !important;
+  }
+
   .home-boutique-map-text .home-btn-primary {
     width: 100% !important;
+    max-width: 300px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
     justify-content: center !important;
   }
 
   .home-map-frame {
     width: 100% !important;
+    max-width: 360px !important;
+    min-height: 300px !important;
+    margin: 0 auto !important;
+    border-radius: 24px !important;
+  }
+
+  .home-map-frame iframe {
+    min-height: 300px !important;
+  }
+
+  .home-product-modal {
+    padding: 12px !important;
+    align-items: center !important;
+  }
+
+  .home-product-modal-card {
+    width: min(100%, 360px) !important;
+    max-height: 84vh !important;
+    padding: 12px !important;
+    border-radius: 22px !important;
+    gap: 12px !important;
+  }
+
+  .home-product-modal-main-img {
+    height: 220px !important;
+    border-radius: 18px !important;
+  }
+
+  .home-product-modal-info {
+    padding: 4px 2px 0 !important;
+  }
+
+  .home-product-modal-info h2 {
+    font-size: 24px !important;
+    margin: 4px 0 8px !important;
+  }
+
+  .home-product-modal-desc {
+    font-size: 13px !important;
+    line-height: 1.55 !important;
+    margin-bottom: 10px !important;
+  }
+
+  .home-product-details-grid {
+    padding: 12px !important;
+    gap: 7px !important;
+    border-radius: 16px !important;
+  }
+
+  .home-product-details-grid span {
+    font-size: 10px !important;
+  }
+
+  .home-product-details-grid strong {
+    font-size: 12px !important;
+  }
+
+  .home-product-thumb {
+    flex: 0 0 54px !important;
+    height: 54px !important;
+    border-radius: 12px !important;
+  }
+
+  .home-product-modal-close {
+    width: 34px !important;
+    height: 34px !important;
+    top: 10px !important;
+    right: 10px !important;
   }
 }
 
 @media (max-width: 430px) {
   .home-boutique-hero {
-    height: 520px !important;
-    min-height: 520px !important;
-  }
-
-  .home-boutique-hero-content h1 {
-    font-size: clamp(38px, 12vw, 50px) !important;
+    height: 590px !important;
+    min-height: 590px !important;
   }
 
   .home-cat-card,
-  .home-rug-card {
-    max-width: 360px !important;
+  .home-rug-card,
+  .home-boutique-map-text,
+  .home-map-frame {
+    max-width: 340px !important;
+  }
+
+  .home-product-modal-card {
+    width: min(100%, 340px) !important;
+    max-height: 82vh !important;
+  }
+
+  .home-product-modal-main-img {
+    height: 200px !important;
   }
 }
