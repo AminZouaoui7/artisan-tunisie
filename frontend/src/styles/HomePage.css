@@ -2008,12 +2008,11 @@
     height: auto !important; 
   } 
 
-    .home-boutique-premium-frame {
-    height: 520px !important;
-    min-height: 520px !important;
-    max-height: 520px !important;
-  } 
-
+   .home-boutique-premium-frame {
+    height: 680px !important;
+    min-height: 680px !important;
+    max-height: 680px !important;
+  }
   .home-boutique-hero-bg, 
   .home-boutique-hero-bg img, 
   .home-boutique-premium-frame img { 
@@ -2892,13 +2891,7 @@
    BOUTIQUE FULL SCREEN PREMIUM CAROUSEL
 ========================= */
 
-.home-boutique-carousel-section {
-  width: 100%;
-  margin: 120px 0 130px !important;
-  padding: 0 !important;
-  overflow: hidden;
-  background: transparent !important;
-}
+
 
 .home-boutique-carousel-header {
   width: min(900px, calc(100% - 40px));
@@ -3024,10 +3017,7 @@
 }
 
 @media (max-width: 900px) and (min-width: 769px) {
-  .home-boutique-carousel-section {
-    margin: 80px 0 90px !important;
-  }
-
+ 
   .home-boutique-carousel-header {
     margin-bottom: 44px !important;
   }
@@ -3207,7 +3197,11 @@
 ========================= */
 
 @media (max-width: 768px) {
-
+.home-boutique-premium-frame {
+    height: 680px !important;
+    min-height: 680px !important;
+    max-height: 680px !important;
+}
   .home-boutique-hero-content {
     width: min(100%, 390px) !important;
     max-width: 390px !important;
@@ -3633,16 +3627,12 @@
   }
 }
 
-
 /* =========================
    FINAL FIX HERO HOME MOBILE
 ========================= */
-/* =========================
-   FINAL FIX HERO HOME MOBILE - SAME HEIGHT AS OUR STORY
-========================= */
 
 @media only screen and (max-width: 768px) {
-  .home-boutique-carousel-section {
+  .home .home-boutique-carousel-section {
     display: block !important;
     height: 680px !important;
     min-height: 680px !important;
@@ -3652,7 +3642,7 @@
     overflow: hidden !important;
   }
 
-  .home-boutique-hero {
+  .home .home-boutique-hero {
     display: flex !important;
     position: relative !important;
     height: 680px !important;
@@ -3661,15 +3651,16 @@
     overflow: hidden !important;
   }
 
-  .home-boutique-hero-bg,
-  .home-boutique-hero-bg img {
+  .home .home-boutique-hero-bg,
+  .home .home-boutique-hero-bg img {
     height: 680px !important;
     min-height: 680px !important;
+    max-height: 680px !important;
     width: 100% !important;
     object-fit: cover !important;
   }
 
-  .home-boutique-hero-content {
+  .home .home-boutique-hero-content {
     position: relative !important;
     z-index: 20 !important;
     width: min(100%, 390px) !important;
