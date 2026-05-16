@@ -626,7 +626,22 @@ export default function HomePage() {
             <p className="home-story-body">{t("home.storyParagraph1")}</p>
             <p className="home-story-body">{t("home.storyParagraph2")}</p>
 
-            
+            <div className="home-story-stats">
+              <div className="home-stat">
+                <span className="home-stat-number">40+</span>
+                <span className="home-stat-label">{t("home.statYears")}</span>
+              </div>
+
+              <div className="home-stat">
+                <span className="home-stat-number">200+</span>
+                <span className="home-stat-label">{t("home.statArtisans")}</span>
+              </div>
+
+              <div className="home-stat">
+                <span className="home-stat-number">60+</span>
+                <span className="home-stat-label">{t("home.statCountries")}</span>
+              </div>
+            </div>
 
             <Link to="/our-story" className="home-btn-primary">
               {t("home.discoverOurStory")}

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   CalendarDays,
@@ -30,6 +30,8 @@ export default function ReservationPage() {
   const navigate = useNavigate();
   const { user, token, isAuthenticated, loadingAuth } = useAuth();
 
+  const formRef = useRef<HTMLFormElement | null>(null);
+
   const [, setProducts] = useState<ProductViewDto[]>([]);
   const [selectedProductIds, setSelectedProductIds] = useState<number[]>([]);
   const [showProductChoice, setShowProductChoice] = useState(false);
@@ -51,6 +53,13 @@ export default function ReservationPage() {
     durationMinutes: 30,
     message: "",
   });
+
+  const scrollToForm = () => {
+    formRef.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  };
 
   useEffect(() => {
     if (!user) return;
@@ -195,6 +204,14 @@ export default function ReservationPage() {
 
   return (
     <section className="page-section reservation-page">
+      <button
+        type="button"
+        className="reservation-mobile-sticky-cta"
+        onClick={scrollToForm}
+      >
+        Réserver ma visite
+      </button>
+
       <div className="reservation-layout">
         <div className="reservation-demo-carousel-card">
           <div className="reservation-carousel-heading">
@@ -245,7 +262,11 @@ export default function ReservationPage() {
           </div>
         </div>
 
-        <form className="reservation-form-card" onSubmit={handleSubmit}>
+        <form
+          ref={formRef}
+          className="reservation-form-card"
+          onSubmit={handleSubmit}
+        >
           <p className="page-kicker">{t("reservation.formKicker")}</p>
           <h2>{t("reservation.formTitle")}</h2>
 
