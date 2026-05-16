@@ -12,6 +12,12 @@
   overflow-x: hidden;
 }
 
+@media (max-width: 768px) {
+  .site-content {
+    padding-top: var(--mobile-navbar-height, 86px);
+  }
+}
+
 /* =========================
    NAVBAR
 ========================= */

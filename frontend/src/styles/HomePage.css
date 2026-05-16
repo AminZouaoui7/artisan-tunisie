@@ -3180,13 +3180,12 @@
 }
 
 /* =========================
-   MOBILE PREMIUM FIX
+   FINAL MOBILE OVERRIDES
 ========================= */
 
 @media (max-width: 768px) {
   .home {
     overflow-x: hidden !important;
-    background: #f3ead4 !important;
   }
 
   .home section,
@@ -3195,183 +3194,97 @@
     height: auto !important;
   }
 
-  .home-boutique-hero {
-    height: 430px !important;
-    min-height: 430px !important;
-    max-height: 430px !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    align-items: center !important;
-    justify-content: center !important;
-  }
-
-  .home-boutique-hero-bg,
-  .home-boutique-hero-bg img {
-    position: absolute !important;
-    inset: 0 !important;
-    width: 100% !important;
-    height: 100% !important;
-  }
-
-  .home-boutique-hero-bg img {
-    object-fit: cover !important;
-    object-position: center !important;
-    filter: brightness(0.5) contrast(1.08) saturate(1.08) !important;
-    transform: none !important;
-  }
-
-  .home-boutique-hero-overlay {
-    background:
-      linear-gradient(180deg, rgba(0, 0, 0, 0.28), rgba(0, 0, 0, 0.62)),
-      radial-gradient(circle at center, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0.42)) !important;
-  }
-
-  .home-boutique-hero-content {
-    position: relative !important;
-    z-index: 5 !important;
-    width: min(100%, calc(100% - 34px)) !important;
-    max-width: 360px !important;
-    margin: 0 auto !important;
-    padding: 0 12px !important;
-    transform: none !important;
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    justify-content: center !important;
-    text-align: center !important;
-    color: #fff8e8 !important;
-  }
-
-  .home-boutique-hero-kicker {
-    display: block !important;
-    margin: 0 0 10px !important;
-    color: #d7b076 !important;
-    font-size: 9.5px !important;
-    line-height: 1.35 !important;
-    letter-spacing: 0.24em !important;
-    text-transform: uppercase !important;
-    text-shadow: 0 4px 18px rgba(0, 0, 0, 0.7) !important;
-  }
-
-  .home-boutique-hero-content h1 {
-    display: block !important;
-    max-width: 100% !important;
-    margin: 0 0 12px !important;
-    color: #fff8e8 !important;
-    font-size: clamp(31px, 9.5vw, 40px) !important;
-    line-height: 0.98 !important;
-    letter-spacing: -0.04em !important;
-    text-shadow: 0 12px 34px rgba(0, 0, 0, 0.72) !important;
-    opacity: 1 !important;
-    visibility: visible !important;
-  }
-
-  .home-boutique-hero-content p:not(.home-boutique-hero-kicker) {
-    display: block !important;
-    max-width: 300px !important;
-    margin: 0 auto !important;
-    color: rgba(255, 248, 232, 0.95) !important;
-    font-size: 13.5px !important;
-    line-height: 1.5 !important;
-    text-shadow: 0 8px 24px rgba(0, 0, 0, 0.68) !important;
-    opacity: 1 !important;
-    visibility: visible !important;
-  }
-
-  .home-boutique-hero-btn {
-    width: 42px !important;
-    height: 42px !important;
-    top: 50% !important;
-    bottom: auto !important;
-    transform: translateY(-50%) !important;
-    z-index: 8 !important;
-  }
-
-  .home-boutique-hero-btn--left {
-    left: 10px !important;
-  }
-
-  .home-boutique-hero-btn--right {
-    right: 10px !important;
-  }
-
-  .home-boutique-hero-dots {
-    bottom: 14px !important;
-    z-index: 8 !important;
-    padding: 8px 11px !important;
-    gap: 8px !important;
-  }
-
-  .home-boutique-hero-dot {
-    width: 8px !important;
-    height: 8px !important;
-  }
-
-  .home-boutique-hero-dot--active {
-    width: 34px !important;
-  }
-
   .home-categories-section,
   .home-catalog-section,
-  .home-story,
-  .home-testimonials-section,
-  .home-boutique-gallery-section,
-  .home-boutique-carousel-section {
-    padding-top: 38px !important;
-    padding-bottom: 38px !important;
-    margin-top: 0 !important;
-    margin-bottom: 0 !important;
-    min-height: auto !important;
+  .home-testimonials-section {
+    padding-top: 32px !important;
+    padding-bottom: 32px !important;
+    margin: 0 !important;
   }
 
   .home-categories-inner,
   .home-catalog-header,
-  .home-catalog-track,
   .home-story-inner,
   .home-map-header,
-  .home-boutique-map,
-  .home-boutique-gallery-section {
-    width: min(100%, calc(100% - 24px)) !important;
+  .home-boutique-map {
+    width: min(100%, calc(100% - 32px)) !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
   }
 
-  .home-categories-header,
   .home-catalog-header,
-  .home-section-header,
   .home-map-header,
-  .home-boutique-carousel-header,
-  .home-boutique-gallery-header {
-    margin-bottom: 22px !important;
-    text-align: center !important;
+  .home-categories-header {
+    margin-bottom: 18px !important;
   }
 
-  .home-categories-grid,
-  .home-catalog-track,
-  .home-testimonials-grid {
+  .home-catalog-header {
+    width: min(100%, calc(100% - 32px)) !important;
+    align-items: flex-start !important;
+    gap: 14px !important;
+  }
+
+  .home-categories-grid {
     grid-template-columns: 1fr !important;
+    justify-items: center !important;
     gap: 18px !important;
   }
 
-  .home-cat-card,
-  .home-cat-card--0,
-  .home-cat-card--1,
-  .home-cat-card--2 {
+  .home-cat-card {
+    width: 100% !important;
+    max-width: 360px !important;
+    margin: 0 auto !important;
+    text-align: center !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 26px 22px !important;
     min-height: auto !important;
-    padding: 24px 20px !important;
-    border-radius: 26px !important;
+  }
+
+  .home-cat-tag,
+  .home-cat-name,
+  .home-cat-desc,
+  .home-cat-cta {
+    margin-left: auto !important;
+    margin-right: auto !important;
+    text-align: center !important;
+  }
+
+  .home-cat-desc {
+    max-width: 300px !important;
   }
 
   .home-catalog-track {
-    width: min(100%, calc(100% - 24px)) !important;
-    margin: 0 auto !important;
-    display: grid !important;
-    grid-template-columns: 1fr !important;
-    overflow: visible !important;
-    padding: 0 !important;
+    display: flex !important;
+    grid-template-columns: none !important;
+    justify-items: normal !important;
+    align-items: stretch !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    scroll-snap-type: x mandatory !important;
+    -webkit-overflow-scrolling: touch !important;
+    gap: 16px !important;
+    padding: 4px 16px 18px !important;
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+  }
+
+  .home-catalog-track::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
   }
 
   .home-rug-card {
-    width: 100% !important;
+    flex: 0 0 82% !important;
+    width: auto !important;
     min-width: 0 !important;
+    max-width: 340px !important;
+    margin: 0 !important;
+    scroll-snap-align: center !important;
     border-radius: 28px !important;
   }
 
@@ -3388,46 +3301,200 @@
     padding: 20px 18px 22px !important;
   }
 
-  .home-story-inner {
-    gap: 32px !important;
+  .home-rug-meta,
+  .home-rug-footer,
+  .home-rug-rating {
+    align-items: center !important;
   }
 
-  .home-story-text,
-  .home-story-text .page-kicker,
-  .home-story-text .home-section-title,
-  .home-story-body {
+  .home-rug-meta {
+    flex-direction: column !important;
+    gap: 7px !important;
     text-align: center !important;
   }
 
-  .home-story-image-card {
-    height: auto !important;
-    padding: 10px !important;
-    border-radius: 24px !important;
-  }
-
-  .home-story-image {
-    aspect-ratio: 4 / 3 !important;
-    object-fit: contain !important;
-    border-radius: 18px !important;
-  }
-
   .home-boutique-map {
+    display: grid !important;
     grid-template-columns: 1fr !important;
+    justify-items: center !important;
     gap: 14px !important;
+    width: min(100%, calc(100% - 32px)) !important;
+    max-width: 390px !important;
+    margin: 0 auto 28px !important;
     padding: 12px !important;
-    margin: 18px auto 36px !important;
-    border-radius: 24px !important;
+    border-radius: 28px !important;
+  }
+
+  .home-map-header,
+  .home-map-header .page-kicker,
+  .home-map-header .home-section-title,
+  .home-boutique-map-text,
+  .home-boutique-map-text .page-kicker,
+  .home-boutique-map-text h3,
+  .home-boutique-map-text p {
+    text-align: center !important;
+  }
+
+  .home-map-header .page-kicker,
+  .home-map-header .home-section-title,
+  .home-boutique-map-text .page-kicker,
+  .home-boutique-map-text h3,
+  .home-boutique-map-text p {
+    margin-left: auto !important;
+    margin-right: auto !important;
   }
 
   .home-boutique-map-text {
-    padding: 26px 18px !important;
+    width: 100% !important;
+    max-width: 360px !important;
+    margin: 0 auto !important;
+    padding: 24px 18px !important;
+    border-radius: 22px !important;
+    align-items: center !important;
+  }
+
+  .home-boutique-map-text h3 {
+    max-width: 320px !important;
+    margin-bottom: 12px !important;
+    font-size: clamp(30px, 8vw, 38px) !important;
+    line-height: 1.02 !important;
+  }
+
+  .home-boutique-map-text p {
+    max-width: 320px !important;
+    margin-bottom: 16px !important;
+  }
+
+  .home-boutique-map-text .home-btn-primary {
+    width: 100% !important;
+    max-width: 300px !important;
+    margin: 0 auto !important;
+    justify-content: center !important;
+  }
+
+  .home-map-frame {
+    width: 100% !important;
+    max-width: 390px !important;
+    margin: 0 auto !important;
+    border-radius: 22px !important;
+  }
+
+  .home-map-frame iframe {
+    min-height: 280px !important;
+    border-radius: 22px !important;
+  }
+
+  .home-product-modal {
+    align-items: center !important;
+    padding: 12px !important;
+    background: rgba(16, 10, 7, 0.82) !important;
+    backdrop-filter: blur(18px) !important;
+    -webkit-backdrop-filter: blur(18px) !important;
+  }
+
+  .home-product-modal-card {
+    position: relative !important;
+    width: min(100%, 380px) !important;
+    max-height: 86vh !important;
+    overflow: auto !important;
+    padding: 14px !important;
+    border-radius: 26px !important;
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+  }
+
+  .home-product-modal-gallery {
+    display: grid !important;
+    gap: 10px !important;
+  }
+
+  .home-product-modal-main-img {
+    height: 240px !important;
     border-radius: 20px !important;
   }
 
-  .home-map-frame,
-  .home-map-frame iframe {
-    min-height: 280px !important;
-    border-radius: 20px !important;
+  .home-product-modal-main-img img {
+    object-fit: contain !important;
+  }
+
+  .home-product-thumbs {
+    gap: 8px !important;
+    margin-top: 0 !important;
+    padding-bottom: 2px !important;
+    overflow-x: auto !important;
+    scrollbar-width: none !important;
+  }
+
+  .home-product-thumbs::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+  }
+
+  .home-product-thumb {
+    flex: 0 0 58px !important;
+    height: 58px !important;
+    border-radius: 12px !important;
+  }
+
+  .home-product-modal-info {
+    padding: 2px 4px 4px !important;
+  }
+
+  .home-product-modal-info h2 {
+    margin: 6px 0 10px !important;
+    font-size: 24px !important;
+    line-height: 1.1 !important;
+  }
+
+  .home-product-modal-desc {
+    margin: 0 0 14px !important;
+    font-size: 13px !important;
+    line-height: 1.65 !important;
+  }
+
+  .home-product-modal-price {
+    margin-bottom: 14px !important;
+  }
+
+  .home-product-details-grid {
+    grid-template-columns: 1fr !important;
+    gap: 7px !important;
+    padding: 14px !important;
+    border-radius: 18px !important;
+  }
+
+  .home-product-details-grid span {
+    font-size: 10px !important;
+  }
+
+  .home-product-details-grid strong {
+    font-size: 12px !important;
+  }
+
+  .home-product-care {
+    margin-top: 14px !important;
+  }
+
+  .home-product-modal-actions,
+  .home-product-buy-actions {
+    gap: 10px !important;
+  }
+
+  .home-product-modal-actions .home-btn-primary,
+  .home-product-buy-actions .home-btn-primary,
+  .home-product-buy-actions .home-btn-secondary {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+
+  .home-product-modal-close {
+    position: sticky !important;
+    top: 0 !important;
+    right: 0 !important;
+    margin-left: auto !important;
+    width: 38px !important;
+    height: 38px !important;
   }
 
   .section-divider {
@@ -3438,41 +3505,35 @@
 }
 
 @media (max-width: 430px) {
-  .home-boutique-hero {
-    height: 390px !important;
-    min-height: 390px !important;
-    max-height: 390px !important;
-  }
-
-  .home-boutique-hero-content h1 {
-    font-size: clamp(29px, 9.5vw, 36px) !important;
-  }
-
-  .home-boutique-hero-content p:not(.home-boutique-hero-kicker) {
-    font-size: 13px !important;
-  }
-
   .home-categories-section,
   .home-catalog-section,
-  .home-story,
   .home-testimonials-section {
-    padding-top: 34px !important;
-    padding-bottom: 34px !important;
+    padding-top: 28px !important;
+    padding-bottom: 28px !important;
   }
 
-  .home-catalog-see-all,
-  .home-btn-primary,
-  .home-btn-secondary {
-    width: 100% !important;
+  .home-catalog-track {
+    padding: 4px 16px 18px !important;
+  }
+
+  .home-rug-card {
+    flex-basis: 86% !important;
   }
 
   .home-rug-img {
-    height: 235px !important;
+    height: 240px !important;
   }
 
-  .home-rug-meta {
-    flex-direction: column !important;
-    align-items: flex-start !important;
+  .home-map-frame iframe {
+    min-height: 260px !important;
+  }
+
+  .home-product-modal-card {
+    width: min(100%, 360px) !important;
+  }
+
+  .home-product-modal-main-img {
+    height: 220px !important;
   }
 }
 
@@ -3502,530 +3563,3 @@
     animation: none !important;
   }
 }
-
-@media (max-width: 768px) {
-  .home-boutique-hero {
-    height: 620px !important;
-    min-height: 620px !important;
-    max-height: none !important;
-  }
-
-  .home-boutique-hero-content {
-    width: min(100%, 390px) !important;
-    max-width: 390px !important;
-    margin: 0 auto !important;
-    padding: 0 24px !important;
-  }
-
-  .home-boutique-hero-content h1 {
-    font-size: clamp(46px, 13vw, 62px) !important;
-    line-height: 0.92 !important;
-  }
-
-  .home-boutique-hero-content p:not(.home-boutique-hero-kicker) {
-    max-width: 340px !important;
-    font-size: 15.5px !important;
-    line-height: 1.55 !important;
-  }
-
-  .home-categories-inner,
-  .home-categories-grid,
-  .home-catalog-header,
-  .home-catalog-track,
-  .home-map-header,
-  .home-boutique-map {
-    width: min(100%, calc(100% - 36px)) !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
-  }
-
-  .home-categories-header,
-  .home-map-header,
-  .home-catalog-header {
-    text-align: center !important;
-    justify-content: center !important;
-    align-items: center !important;
-  }
-
-  .home-categories-grid,
-  .home-catalog-track {
-    display: grid !important;
-    grid-template-columns: 1fr !important;
-    justify-items: center !important;
-    gap: 24px !important;
-    padding: 0 !important;
-  }
-
-  .home-cat-card,
-  .home-rug-card {
-    width: 100% !important;
-    max-width: 360px !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
-  }
-
-  .home-cat-card {
-    text-align: center !important;
-    align-items: center !important;
-    justify-content: center !important;
-    min-height: 250px !important;
-    padding: 30px 22px !important;
-  }
-
-  .home-cat-tag,
-  .home-cat-cta {
-    margin-left: auto !important;
-    margin-right: auto !important;
-  }
-
-  .home-cat-desc {
-    max-width: 300px !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
-  }
-
-  .home-testimonials-section {
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-  }
-
-  .home-map-header {
-    width: min(100%, calc(100% - 36px)) !important;
-    margin: 0 auto 24px !important;
-  }
-
-  .home-map-header .page-kicker,
-  .home-map-header .home-section-title {
-    text-align: center !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
-  }
-
-  .home-boutique-map {
-    display: grid !important;
-    grid-template-columns: 1fr !important;
-    justify-items: center !important;
-    gap: 14px !important;
-    padding: 12px !important;
-    border-radius: 30px !important;
-    margin: 0 auto 42px !important;
-  }
-
-  .home-boutique-map-text {
-    width: 100% !important;
-    max-width: 360px !important;
-    margin: 0 auto !important;
-    text-align: center !important;
-    padding: 34px 20px !important;
-    border-radius: 24px !important;
-  }
-
-  .home-boutique-map-text .page-kicker,
-  .home-boutique-map-text h3,
-  .home-boutique-map-text p {
-    text-align: center !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
-  }
-
-  .home-boutique-map-text h3 {
-    max-width: 310px !important;
-    font-size: 39px !important;
-    line-height: 0.98 !important;
-  }
-
-  .home-boutique-map-text p {
-    max-width: 310px !important;
-    font-size: 15px !important;
-    line-height: 1.7 !important;
-  }
-
-  .home-boutique-map-text .home-btn-primary {
-    width: 100% !important;
-    max-width: 300px !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
-    justify-content: center !important;
-  }
-
-  .home-map-frame {
-    width: 100% !important;
-    max-width: 360px !important;
-    min-height: 300px !important;
-    margin: 0 auto !important;
-    border-radius: 24px !important;
-  }
-
-  .home-map-frame iframe {
-    min-height: 300px !important;
-  }
-
-  .home-product-modal {
-    padding: 12px !important;
-    align-items: center !important;
-  }
-
-  .home-product-modal-card {
-    width: min(100%, 360px) !important;
-    max-height: 84vh !important;
-    padding: 12px !important;
-    border-radius: 22px !important;
-    gap: 12px !important;
-  }
-
-  .home-product-modal-main-img {
-    height: 220px !important;
-    border-radius: 18px !important;
-  }
-
-  .home-product-modal-info {
-    padding: 4px 2px 0 !important;
-  }
-
-  .home-product-modal-info h2 {
-    font-size: 24px !important;
-    margin: 4px 0 8px !important;
-  }
-
-  .home-product-modal-desc {
-    font-size: 13px !important;
-    line-height: 1.55 !important;
-    margin-bottom: 10px !important;
-  }
-
-  .home-product-details-grid {
-    padding: 12px !important;
-    gap: 7px !important;
-    border-radius: 16px !important;
-  }
-
-  .home-product-details-grid span {
-    font-size: 10px !important;
-  }
-
-  .home-product-details-grid strong {
-    font-size: 12px !important;
-  }
-
-  .home-product-thumb {
-    flex: 0 0 54px !important;
-    height: 54px !important;
-    border-radius: 12px !important;
-  }
-
-  .home-product-modal-close {
-    width: 34px !important;
-    height: 34px !important;
-    top: 10px !important;
-    right: 10px !important;
-  }
-}
-
-@media (max-width: 430px) {
-  .home-boutique-hero {
-    height: 590px !important;
-    min-height: 590px !important;
-  }
-
-  .home-cat-card,
-  .home-rug-card,
-  .home-boutique-map-text,
-  .home-map-frame {
-    max-width: 340px !important;
-  }
-
-  .home-product-modal-card {
-    width: min(100%, 340px) !important;
-    max-height: 82vh !important;
-  }
-
-  .home-product-modal-main-img {
-    height: 200px !important;
-  }
-}
-
-@media (max-width: 768px) { 
-  .home { 
-    overflow-x: hidden !important; 
-    background: linear-gradient(180deg, #f8f1df 0%, #ead8bc 100%) !important; 
-  } 
-
-  .home-boutique-hero { 
-    height: calc(100svh - 86px) !important; 
-    min-height: 640px !important; 
-    max-height: none !important; 
-    display: flex !important; 
-    align-items: center !important; 
-    justify-content: center !important; 
-  } 
-
-  .home-boutique-hero-bg, 
-  .home-boutique-hero-bg img { 
-    height: 100% !important; 
-    width: 100% !important; 
-  } 
-
-  .home-boutique-hero-bg img { 
-    object-fit: cover !important; 
-    object-position: center !important; 
-    filter: brightness(0.48) contrast(1.08) saturate(1.08) !important; 
-  } 
-
-  .home-boutique-hero-content { 
-    width: min(100%, 410px) !important; 
-    max-width: 410px !important; 
-    padding: 0 28px !important; 
-    margin: 0 auto !important; 
-    text-align: center !important; 
-  } 
-
-  .home-boutique-hero-kicker { 
-    font-size: 11px !important; 
-    letter-spacing: 0.32em !important; 
-    margin-bottom: 18px !important; 
-  } 
-
-  .home-boutique-hero-content h1 { 
-    font-size: clamp(54px, 15vw, 78px) !important; 
-    line-height: 0.9 !important; 
-    letter-spacing: -0.055em !important; 
-    margin-bottom: 22px !important; 
-  } 
-
-  .home-boutique-hero-content p:not(.home-boutique-hero-kicker) { 
-    max-width: 350px !important; 
-    font-size: 16px !important; 
-    line-height: 1.65 !important; 
-    margin: 0 auto !important; 
-  } 
-
-  .home-boutique-hero-btn { 
-    width: 46px !important; 
-    height: 46px !important; 
-  } 
-
-  .home-boutique-hero-btn--left { 
-    left: 14px !important; 
-  } 
-
-  .home-boutique-hero-btn--right { 
-    right: 14px !important; 
-  } 
-
-  .home-boutique-hero-dots { 
-    bottom: 26px !important; 
-  } 
-
-  .home-categories-section, 
-  .home-catalog-section, 
-  .home-story, 
-  .home-testimonials-section { 
-    padding-top: 58px !important; 
-    padding-bottom: 58px !important; 
-    margin: 0 !important; 
-  } 
-
-  .home-categories-inner, 
-  .home-catalog-header, 
-  .home-catalog-track, 
-  .home-story-inner, 
-  .home-map-header, 
-  .home-boutique-map { 
-    width: min(100%, calc(100% - 32px)) !important; 
-    max-width: 430px !important; 
-    margin-left: auto !important; 
-    margin-right: auto !important; 
-  } 
-
-  .home-categories-header, 
-  .home-catalog-header, 
-  .home-section-header, 
-  .home-map-header { 
-    text-align: center !important; 
-    align-items: center !important; 
-    justify-content: center !important; 
-    margin-left: auto !important; 
-    margin-right: auto !important; 
-  } 
-
-  .home-categories-header h2, 
-  .home-catalog-header h2, 
-  .home-section-title, 
-  .home-map-header .home-section-title { 
-    text-align: center !important; 
-    font-size: clamp(36px, 10vw, 48px) !important; 
-    line-height: 1 !important; 
-    margin-left: auto !important; 
-    margin-right: auto !important; 
-  } 
-
-  .page-kicker, 
-  .home-map-header .page-kicker, 
-  .home-catalog-header .page-kicker { 
-    text-align: center !important; 
-    margin-left: auto !important; 
-    margin-right: auto !important; 
-  } 
-
-  .home-categories-grid, 
-  .home-catalog-track { 
-    display: grid !important; 
-    grid-template-columns: 1fr !important; 
-    justify-items: center !important; 
-    gap: 26px !important; 
-    padding: 0 !important; 
-    overflow: visible !important; 
-  } 
-
-  .home-cat-card, 
-  .home-rug-card { 
-    width: 100% !important; 
-    max-width: 390px !important; 
-    margin: 0 auto !important; 
-    justify-self: center !important; 
-  } 
-
-  .home-cat-card { 
-    min-height: 280px !important; 
-    padding: 36px 24px !important; 
-    border-radius: 34px !important; 
-    text-align: center !important; 
-    align-items: center !important; 
-    justify-content: center !important; 
-    background: linear-gradient(145deg, rgba(255, 250, 235, 0.95), rgba(232, 213, 174, 0.72)) !important; 
-    box-shadow: 0 24px 60px rgba(65, 35, 10, 0.12) !important; 
-  } 
-
-  .home-cat-tag, 
-  .home-cat-name, 
-  .home-cat-desc, 
-  .home-cat-cta { 
-    margin-left: auto !important; 
-    margin-right: auto !important; 
-    text-align: center !important; 
-  } 
-
-  .home-cat-name { 
-    font-size: 34px !important; 
-    line-height: 1.05 !important; 
-  } 
-
-  .home-cat-desc { 
-    max-width: 310px !important; 
-    font-size: 16px !important; 
-    line-height: 1.75 !important; 
-  } 
-
-  .home-rug-card { 
-    border-radius: 34px !important; 
-    overflow: hidden !important; 
-    box-shadow: 0 28px 70px rgba(65, 35, 10, 0.14) !important; 
-  } 
-
-  .home-rug-img { 
-    height: 320px !important; 
-  } 
-
-  .home-rug-info, 
-  .home-rug-meta, 
-  .home-rug-footer, 
-  .home-rug-rating { 
-    text-align: center !important; 
-    align-items: center !important; 
-    justify-content: center !important; 
-  } 
-
-  .home-rug-meta { 
-    flex-direction: column !important; 
-    gap: 7px !important; 
-  } 
-
-  .home-boutique-map { 
-    display: grid !important; 
-    grid-template-columns: 1fr !important; 
-    justify-items: center !important; 
-    gap: 16px !important; 
-    padding: 14px !important; 
-    border-radius: 34px !important; 
-    margin-top: 0 !important; 
-    margin-bottom: 54px !important; 
-  } 
-
-  .home-boutique-map-text, 
-  .home-map-frame { 
-    width: 100% !important; 
-    max-width: 390px !important; 
-    margin-left: auto !important; 
-    margin-right: auto !important; 
-  } 
-
-  .home-boutique-map-text { 
-    text-align: center !important; 
-    padding: 42px 24px !important; 
-    border-radius: 28px !important; 
-  } 
-
-  .home-boutique-map-text .page-kicker, 
-  .home-boutique-map-text h3, 
-  .home-boutique-map-text p { 
-    text-align: center !important; 
-    margin-left: auto !important; 
-    margin-right: auto !important; 
-  } 
-
-  .home-boutique-map-text h3 { 
-    font-size: 42px !important; 
-    line-height: 0.95 !important; 
-    max-width: 330px !important; 
-  } 
-
-  .home-boutique-map-text p { 
-    max-width: 330px !important; 
-    font-size: 16px !important; 
-    line-height: 1.75 !important; 
-  } 
-
-  .home-boutique-map-text .home-btn-primary { 
-    width: 100% !important; 
-    max-width: 310px !important; 
-    margin: 0 auto !important; 
-    justify-content: center !important; 
-  } 
-
-  .home-map-frame, 
-  .home-map-frame iframe { 
-    min-height: 340px !important; 
-    border-radius: 28px !important; 
-  } 
-
-  .section-divider { 
-    display: none !important; 
-  } 
-} 
-
-@media (max-width: 430px) { 
-  .home-boutique-hero { 
-    height: calc(100svh - 86px) !important; 
-    min-height: 610px !important; 
-  } 
-
-  .home-boutique-hero-content h1 { 
-    font-size: clamp(50px, 14vw, 66px) !important; 
-  } 
-
-  .home-categories-inner, 
-  .home-catalog-header, 
-  .home-catalog-track, 
-  .home-story-inner, 
-  .home-map-header, 
-  .home-boutique-map { 
-    max-width: 390px !important; 
-  } 
-
-  .home-cat-card, 
-  .home-rug-card, 
-  .home-boutique-map-text, 
-  .home-map-frame { 
-    max-width: 360px !important; 
-  } 
-} 
