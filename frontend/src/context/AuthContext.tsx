@@ -1,4 +1,5 @@
 import {
+  useCallback,
   createContext,
   useContext,
   useEffect,
@@ -6,6 +7,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
+import { useNavigate } from "react-router-dom";
 
 import {
   authService,
@@ -30,7 +32,42 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 const TOKEN_KEY = "artisan_access_token";
 const REFRESH_TOKEN_KEY = "artisan_refresh_token";
 
+function decodeJwtPayload(token: string): { exp?: number } | null {
+  try {
+    const [, payload] = token.split(".");
+
+    if (!payload) {
+      return null;
+    }
+
+    const normalized = payload.replace(/-/g, "+").replace(/_/g, "/");
+    const padded = normalized.padEnd(
+      normalized.length + ((4 - (normalized.length % 4)) % 4),
+      "="
+    );
+
+    return JSON.parse(window.atob(padded)) as { exp?: number };
+  } catch {
+    return null;
+  }
+}
+
+function isTokenExpired(token: string | null): boolean {
+  if (!token) {
+    return false;
+  }
+
+  const payload = decodeJwtPayload(token);
+
+  if (!payload || typeof payload.exp !== "number") {
+    return true;
+  }
+
+  return payload.exp * 1000 <= Date.now();
+}
+
 export function AuthProvider({ children }: { children: ReactNode }) {
+  const navigate = useNavigate();
   const [user, setUser] = useState<CustomerProfile | null>(null);
 
   const [token, setToken] = useState<string | null>(() =>
@@ -39,13 +76,26 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const [loadingAuth, setLoadingAuth] = useState(true);
 
-  const clearSession = () => {
+  const clearSession = useCallback(() => {
     clearStoredSession();
     localStorage.removeItem("artisan_user");
 
     setToken(null);
     setUser(null);
-  };
+  }, []);
+
+  const handleSessionExpired = useCallback(() => {
+    clearStoredSession();
+    localStorage.removeItem("artisan_user");
+
+    setToken(null);
+    setUser(null);
+    setLoadingAuth(false);
+
+    if (window.location.pathname !== "/session-expired") {
+      navigate("/session-expired", { replace: true });
+    }
+  }, [navigate]);
 
   const saveSession = async (accessToken: string, refreshToken?: string) => {
     localStorage.setItem(TOKEN_KEY, accessToken);
@@ -80,6 +130,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setUser(null);
       setToken(null);
       setLoadingAuth(false);
+      return;
+    }
+
+    if (isTokenExpired(savedToken)) {
+      handleSessionExpired();
       return;
     }
 
@@ -125,8 +180,46 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   useEffect(() => {
+    const savedToken = localStorage.getItem(TOKEN_KEY);
+
+    if (savedToken && isTokenExpired(savedToken)) {
+      handleSessionExpired();
+      return;
+    }
+
     refreshUser();
-  }, []);
+  }, [handleSessionExpired]);
+
+  useEffect(() => {
+    const blockExpiredSessionAction = (event: Event) => {
+      const currentToken = localStorage.getItem(TOKEN_KEY);
+
+      if (!currentToken || !isTokenExpired(currentToken)) {
+        return;
+      }
+
+      event.preventDefault();
+      event.stopPropagation();
+
+      if ("stopImmediatePropagation" in event) {
+        event.stopImmediatePropagation();
+      }
+
+      handleSessionExpired();
+    };
+
+    const guardedEvents = ["click", "keydown", "submit", "touchstart"];
+
+    guardedEvents.forEach((eventName) => {
+      document.addEventListener(eventName, blockExpiredSessionAction, true);
+    });
+
+    return () => {
+      guardedEvents.forEach((eventName) => {
+        document.removeEventListener(eventName, blockExpiredSessionAction, true);
+      });
+    };
+  }, [handleSessionExpired]);
 
   useEffect(() => {
     const handleAuthCleared = () => {

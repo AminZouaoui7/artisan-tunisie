@@ -25,6 +25,20 @@ type SessionExpiredDetail = {
   requestMethod: string;
 };
 
+function redirectToSessionExpired(detail: SessionExpiredDetail) {
+  clearSession();
+
+  window.dispatchEvent(
+    new CustomEvent<SessionExpiredDetail>("artisan:session-expired", {
+      detail,
+    })
+  );
+
+  if (window.location.pathname !== "/session-expired") {
+    window.location.replace("/session-expired");
+  }
+}
+
 function normalizeToken(value: string | null): string | null {
   const trimmed = value?.trim() ?? "";
   if (!trimmed) return null;
@@ -280,20 +294,16 @@ export async function apiFetch(endpoint: string, options: RequestInit = {}) {
     Boolean(bearerTokenFromHeader) || Boolean(shouldAttachToken && token);
 
   if (res.status === 401 && sentAuth) {
-    clearSession();
+    const detail: SessionExpiredDetail = {
+      endpoint: normalizeApiEndpoint(endpoint),
+      pathname: window.location.pathname,
+      requestMethod,
+    };
 
     if (!isAuthPage()) {
-      const detail: SessionExpiredDetail = {
-        endpoint: normalizeApiEndpoint(endpoint),
-        pathname: window.location.pathname,
-        requestMethod,
-      };
-
-      window.dispatchEvent(
-        new CustomEvent<SessionExpiredDetail>("artisan:session-expired", {
-          detail,
-        })
-      );
+      redirectToSessionExpired(detail);
+    } else {
+      clearSession();
     }
 
     throw new Error("SESSION_EXPIRED");
