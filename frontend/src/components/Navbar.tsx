@@ -72,7 +72,7 @@ export default function Navbar() {
   const links = [
     { to: "/", label: t("nav.home") },
     { to: "/our-story", label: t("nav.ourStory") },
-    { to: "/boutique", label: "Notre Boutique" },
+    { to: "/boutique", label: "Notre boutique" },
     { to: "/products", label: t("nav.products") },
     { to: "/reservation", label: t("nav.reservation") },
     { to: "/contact", label: t("nav.contact") },
@@ -245,7 +245,9 @@ export default function Navbar() {
               type="button"
               className={`nb__burger${menuOpen ? " nb__burger--open" : ""}`}
               onClick={() => setMenuOpen((v) => !v)}
-              aria-label={menuOpen ? t("common.closeMenu") : t("common.openMenu")}
+              aria-label={
+                menuOpen ? t("common.closeMenu") : t("common.openMenu")
+              }
               aria-expanded={menuOpen}
             >
               <span />
