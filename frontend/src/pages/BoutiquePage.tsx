@@ -35,22 +35,86 @@ import rooftop1 from "../assets/image00103.png";
 import rooftop2 from "../assets/image00108.png";
 
 const boutiqueImages = [
-  { image: boutiqueImg1, title: "L’entrée de la boutique", text: "Une première immersion dans notre univers, entre élégance, matières nobles et esprit médina." },
-  { image: boutiqueImg2, title: "Le premier salon", text: "Un espace chaleureux où les tapis prennent vie dans une ambiance raffinée." },
-  { image: boutiqueImg3, title: "Le coin tapis", text: "Chaque pièce est exposée avec soin pour révéler ses couleurs, ses motifs et son caractère." },
-  { image: boutiqueImg4, title: "L’espace sélection", text: "Des créations choisies pour leur authenticité, leur histoire et leur finition." },
-  { image: boutiqueImg5, title: "Les détails artisanaux", text: "Des textures, des motifs et des finitions qui racontent le geste de l’artisan." },
-  { image: boutiqueImg6, title: "Le salon d’inspiration", text: "Un espace pensé pour imaginer votre intérieur avec nos pièces uniques." },
-  { image: boutiqueImg7, title: "Les couleurs de la médina", text: "Une atmosphère inspirée des terres chaudes, des fibres naturelles et du savoir-faire." },
-  { image: boutiqueImg8, title: "Le mur des pièces rares", text: "Des tapis et objets d’exception mis en scène comme dans une galerie." },
-  { image: boutiqueImg9, title: "L’espace découverte", text: "Un lieu pour prendre le temps, observer les matières et choisir avec émotion." },
-  { image: boutiqueImg10, title: "La galerie intérieure", text: "Une présentation élégante qui met en valeur chaque coin de notre boutique." },
-  { image: boutiqueImg11, title: "L’ambiance maison", text: "Une boutique pensée comme un intérieur vivant, chaleureux et inspirant." },
-  { image: boutiqueImg12, title: "Le coin conseil", text: "Un espace calme pour échanger, comparer les pièces et trouver le bon tapis." },
-  { image: boutiqueImg13, title: "Les pièces signature", text: "Des créations fortes, uniques, sélectionnées pour leur âme et leur présence." },
-  { image: boutiqueImg14, title: "Le parcours boutique", text: "Chaque passage révèle une matière, une couleur et une nouvelle histoire." },
-  { image: boutiqueImg15, title: "Le dernier salon", text: "Une ambiance intime qui invite à ralentir et apprécier le travail fait main." },
-  { image: boutiqueImg16, title: "L’expérience Artisan Medina", text: "Une immersion complète dans l’univers de l’artisanat et de la décoration." },
+  {
+    image: boutiqueImg1,
+    title: "L’entrée de la boutique",
+    text: "Une première immersion dans notre univers, entre élégance, matières nobles et esprit médina.",
+  },
+  {
+    image: boutiqueImg2,
+    title: "Le premier salon",
+    text: "Un espace chaleureux où les tapis prennent vie dans une ambiance raffinée.",
+  },
+  {
+    image: boutiqueImg3,
+    title: "Le coin tapis",
+    text: "Chaque pièce est exposée avec soin pour révéler ses couleurs, ses motifs et son caractère.",
+  },
+  {
+    image: boutiqueImg4,
+    title: "L’espace sélection",
+    text: "Des créations choisies pour leur authenticité, leur histoire et leur finition.",
+  },
+  {
+    image: boutiqueImg5,
+    title: "Les détails artisanaux",
+    text: "Des textures, des motifs et des finitions qui racontent le geste de l’artisan.",
+  },
+  {
+    image: boutiqueImg6,
+    title: "Le salon d’inspiration",
+    text: "Un espace pensé pour imaginer votre intérieur avec nos pièces uniques.",
+  },
+  {
+    image: boutiqueImg7,
+    title: "Les couleurs de la médina",
+    text: "Une atmosphère inspirée des terres chaudes, des fibres naturelles et du savoir-faire.",
+  },
+  {
+    image: boutiqueImg8,
+    title: "Le mur des pièces rares",
+    text: "Des tapis et objets d’exception mis en scène comme dans une galerie.",
+  },
+  {
+    image: boutiqueImg9,
+    title: "L’espace découverte",
+    text: "Un lieu pour prendre le temps, observer les matières et choisir avec émotion.",
+  },
+  {
+    image: boutiqueImg10,
+    title: "La galerie intérieure",
+    text: "Une présentation élégante qui met en valeur chaque coin de notre boutique.",
+  },
+  {
+    image: boutiqueImg11,
+    title: "L’ambiance maison",
+    text: "Une boutique pensée comme un intérieur vivant, chaleureux et inspirant.",
+  },
+  {
+    image: boutiqueImg12,
+    title: "Le coin conseil",
+    text: "Un espace calme pour échanger, comparer les pièces et trouver le bon tapis.",
+  },
+  {
+    image: boutiqueImg13,
+    title: "Les pièces signature",
+    text: "Des créations fortes, uniques, sélectionnées pour leur âme et leur présence.",
+  },
+  {
+    image: boutiqueImg14,
+    title: "Le parcours boutique",
+    text: "Chaque passage révèle une matière, une couleur et une nouvelle histoire.",
+  },
+  {
+    image: boutiqueImg15,
+    title: "Le dernier salon",
+    text: "Une ambiance intime qui invite à ralentir et apprécier le travail fait main.",
+  },
+  {
+    image: boutiqueImg16,
+    title: "L’expérience Artisan Medina",
+    text: "Une immersion complète dans l’univers de l’artisanat et de la décoration.",
+  },
 ];
 
 const featuredImages = boutiqueImages.slice(0, 8);
@@ -71,35 +135,49 @@ const rooftopImages = [
 export default function BoutiquePage() {
   return (
     <main className="boutique-page">
-      <section className="boutique-hero">
-        <div className="boutique-hero__bg">
-          <img src={boutiqueImg1} alt="Notre boutique Artisan Medina" />
-        </div>
-
-        <div className="boutique-hero__overlay" />
-
-        <div className="boutique-hero__content">
+      <section className="boutique-editorial">
+        <div className="boutique-editorial__text">
           <span className="boutique-kicker">
             <Sparkles size={16} />
             Notre boutique
           </span>
 
-          <h1>Un lieu vivant dédié à l’artisanat.</h1>
+          <h1>Une maison d’inspiration au cœur de l’artisanat.</h1>
 
           <p>
-            Entrez dans notre boutique et découvrez chaque coin comme une scène :
-            tapis uniques, matières naturelles, lumière douce et âme artisanale.
+            Notre boutique n’est pas seulement un lieu d’exposition. C’est un
+            espace vivant, chaleureux et élégant, pensé pour révéler la beauté
+            des tapis, des matières naturelles et du savoir-faire tunisien.
           </p>
 
-          <div className="boutique-hero__actions">
+          <div className="boutique-editorial__actions">
             <a href="#boutique-scroll" className="boutique-btn">
-              Explorer la boutique
+              Explorer les espaces
               <ArrowRight size={18} />
             </a>
 
-            <a href="/reservation" className="boutique-btn boutique-btn--glass">
+            <a href="/reservation" className="boutique-btn boutique-btn--soft">
               Réserver une visite
             </a>
+          </div>
+        </div>
+
+        <div className="boutique-editorial__collage">
+          <div className="boutique-collage boutique-collage--large">
+            <img src={boutiqueImg1} alt="Entrée de la boutique" />
+          </div>
+
+          <div className="boutique-collage boutique-collage--top">
+            <img src={boutiqueImg3} alt="Coin tapis" />
+          </div>
+
+          <div className="boutique-collage boutique-collage--bottom">
+            <img src={boutiqueImg8} alt="Mur des pièces rares" />
+          </div>
+
+          <div className="boutique-editorial__badge">
+            <strong>16</strong>
+            <span>coins à découvrir</span>
           </div>
         </div>
       </section>
@@ -108,12 +186,12 @@ export default function BoutiquePage() {
         <div className="boutique-intro__card">
           <span className="boutique-kicker">L’expérience Artisan Medina</span>
 
-          <h2>Plus qu’une boutique, une maison d’inspiration.</h2>
+          <h2>Chaque espace raconte une histoire.</h2>
 
           <p>
-            Chaque espace a été pensé pour révéler la beauté des pièces :
-            couleurs profondes, textures naturelles, savoir-faire tunisien et
-            atmosphère chaleureuse.
+            Couleurs profondes, fibres naturelles, pièces uniques et ambiance
+            méditerranéenne : la boutique a été pensée comme un parcours
+            sensoriel, où chaque détail donne envie de prendre le temps.
           </p>
         </div>
 

@@ -13,115 +13,221 @@
     );
 }
 
-/* HERO */
-
-.boutique-hero {
+.boutique-editorial {
   position: relative;
-  height: calc(100vh - 84px);
+  width: min(1320px, calc(100% - 72px));
+  margin: 72px auto 92px;
   min-height: 720px;
+  display: grid;
+  grid-template-columns: 0.88fr 1.12fr;
+  gap: 64px;
+  align-items: center;
+}
+
+.boutique-editorial::before {
+  content: "";
+  position: absolute;
+  inset: -72px -80px -40px;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 18% 18%, rgba(196, 113, 57, 0.12), transparent 34%),
+    radial-gradient(circle at 74% 54%, rgba(201, 203, 163, 0.24), transparent 38%);
+}
+
+.boutique-editorial__text {
+  position: relative;
+  z-index: 2;
+  max-width: 590px;
+}
+
+.boutique-editorial__text h1 {
+  margin: 0 0 28px;
+  color: var(--color-dark);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(54px, 6vw, 92px);
+  font-weight: 600;
+  line-height: 0.94;
+  letter-spacing: -4px;
+}
+
+.boutique-editorial__text p {
+  max-width: 540px;
+  margin: 0 0 36px;
+  color: var(--text-muted);
+  font-size: 18px;
+  line-height: 1.85;
+  font-weight: 600;
+}
+
+.boutique-editorial__actions {
   display: flex;
   align-items: center;
-  justify-content: center;
-  overflow: hidden;
+  gap: 16px;
+  flex-wrap: wrap;
 }
 
-.boutique-hero__bg,
-.boutique-hero__bg img {
+.boutique-btn--soft {
+  background: rgba(255, 250, 235, 0.72);
+  color: var(--color-clay);
+  border: 1px solid rgba(92, 51, 23, 0.18);
+  box-shadow: 0 16px 36px rgba(65, 35, 10, 0.08);
+}
+
+.boutique-editorial__collage {
+  position: relative;
+  z-index: 2;
+  height: 680px;
+}
+
+.boutique-collage {
   position: absolute;
-  inset: 0;
+  overflow: hidden;
+  border-radius: 36px;
+  background: #1f1612;
+  border: 1px solid rgba(92, 51, 23, 0.14);
+  box-shadow: 0 34px 90px rgba(59, 38, 41, 0.18);
+}
+
+.boutique-collage img {
   width: 100%;
   height: 100%;
-}
-
-.boutique-hero__bg img {
+  display: block;
   object-fit: cover;
-  object-position: center;
-  filter: saturate(1.08) contrast(1.08) brightness(0.62);
-  transform: scale(1.05);
-  animation: boutiqueHeroZoom 14s ease-in-out infinite alternate;
+  filter: saturate(1.06) contrast(1.04) brightness(0.96);
+  transition: transform 0.7s ease, filter 0.7s ease;
 }
 
-.boutique-hero__overlay {
+.boutique-collage:hover img {
+  transform: scale(1.055);
+  filter: saturate(1.12) contrast(1.06) brightness(1);
+}
+
+.boutique-collage--large {
+  left: 8%;
+  top: 0;
+  width: 58%;
+  height: 620px;
+}
+
+.boutique-collage--top {
+  right: 0;
+  top: 56px;
+  width: 38%;
+  height: 300px;
+}
+
+.boutique-collage--bottom {
+  right: 8%;
+  bottom: 0;
+  width: 46%;
+  height: 270px;
+}
+
+.boutique-editorial__badge {
   position: absolute;
-  inset: 0;
-  z-index: 2;
-  background:
-    linear-gradient(180deg, rgba(8, 4, 2, 0.08), rgba(8, 4, 2, 0.62)),
-    radial-gradient(circle at center, rgba(0, 0, 0, 0.04), rgba(0, 0, 0, 0.58));
-}
-
-.boutique-hero__content {
-  position: relative;
-  z-index: 3;
-  width: min(1080px, calc(100% - 42px));
-  text-align: center;
-  color: #fff8e8;
-  animation: boutiqueFadeUp 0.9s ease both;
-}
-
-.boutique-kicker {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  margin-bottom: 20px;
-  color: var(--color-clay);
-  font-size: 12px;
-  font-weight: 950;
-  letter-spacing: 5px;
-  text-transform: uppercase;
-}
-
-.boutique-hero .boutique-kicker {
-  color: #d7b076;
-}
-
-.boutique-hero h1 {
-  max-width: 980px;
-  margin: 0 auto 26px;
-  color: #fff8e8;
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: clamp(56px, 7vw, 112px);
-  font-weight: 500;
-  line-height: 0.92;
-  letter-spacing: -0.055em;
-}
-
-.boutique-hero p {
-  max-width: 760px;
-  margin: 0 auto 34px;
-  color: rgba(255, 248, 232, 0.92);
-  font-size: clamp(17px, 1.5vw, 24px);
-  line-height: 1.65;
-}
-
-.boutique-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  min-height: 58px;
-  padding: 0 32px;
-  border-radius: 18px;
-  text-decoration: none;
-  border: 0;
+  left: 0;
+  bottom: 58px;
+  z-index: 5;
+  width: 150px;
+  height: 150px;
+  border-radius: 999px;
   background: linear-gradient(135deg, var(--color-bordeaux), var(--color-terracotta));
   color: var(--color-cream);
-  font-size: 15px;
-  font-weight: 800;
-  box-shadow: 0 20px 42px rgba(42, 18, 4, 0.26);
-  transition: all 0.28s var(--ease-premium);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 24px 60px rgba(90, 46, 54, 0.26);
 }
 
-.boutique-btn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 28px 58px rgba(42, 18, 4, 0.34);
+.boutique-editorial__badge strong {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 50px;
+  line-height: 0.95;
 }
 
-.boutique-btn--dark {
-  background: linear-gradient(135deg, var(--color-dark), var(--color-clay));
+.boutique-editorial__badge span {
+  max-width: 90px;
+  margin-top: 8px;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  text-align: center;
 }
 
+@media (max-width: 1050px) {
+  .boutique-editorial {
+    grid-template-columns: 1fr;
+    min-height: auto;
+    gap: 44px;
+  }
+
+  .boutique-editorial__text {
+    max-width: 780px;
+  }
+
+  .boutique-editorial__collage {
+    height: 600px;
+  }
+}
+
+@media (max-width: 768px) {
+  .boutique-editorial {
+    width: min(100%, calc(100% - 28px));
+    margin: 42px auto 54px;
+    gap: 34px;
+  }
+
+  .boutique-editorial__text {
+    text-align: center;
+    margin: 0 auto;
+  }
+
+  .boutique-editorial__text h1 {
+    font-size: clamp(42px, 12vw, 58px);
+    letter-spacing: -2px;
+  }
+
+  .boutique-editorial__text p {
+    font-size: 15px;
+  }
+
+  .boutique-editorial__actions {
+    justify-content: center;
+  }
+
+  .boutique-editorial__collage {
+    height: auto;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .boutique-collage {
+    position: relative;
+    left: auto;
+    right: auto;
+    top: auto;
+    bottom: auto;
+    width: 100%;
+    height: 300px;
+    border-radius: 28px;
+  }
+
+  .boutique-editorial__badge {
+    right: 18px;
+    left: auto;
+    bottom: 18px;
+    width: 112px;
+    height: 112px;
+  }
+
+  .boutique-editorial__badge strong {
+    font-size: 36px;
+  }
+}
 /* INTRO */
 
 .boutique-intro {
