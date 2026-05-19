@@ -1,15 +1,14 @@
-// src/pages/BoutiquePage.tsx
-
 import {
   ArrowRight,
-  Clock,
   Gem,
   MapPin,
+  Palette,
   Sparkles,
   Store,
   Sun,
   HandHeart,
   Eye,
+  Shapes,
 } from "lucide-react";
 
 import "../styles/BoutiquePage.css";
@@ -34,310 +33,257 @@ import boutiqueImg16 from "../assets/ChatGPT Image May 5, 2026, 02_23_38 PM.png"
 import rooftop1 from "../assets/image00103.png";
 import rooftop2 from "../assets/image00108.png";
 
-const boutiqueImages = [
+const univers = [
   {
-    image: boutiqueImg1,
-    title: "L’entrée de la boutique",
-    text: "Une première immersion dans notre univers, entre élégance, matières nobles et esprit médina.",
-  },
-  {
+    icon: Store,
     image: boutiqueImg2,
-    title: "Le premier salon",
-    text: "Un espace chaleureux où les tapis prennent vie dans une ambiance raffinée.",
+    title: "Tapis & textiles",
+    text: "Nos pièces principales, sélectionnées pour leurs matières, leurs couleurs et leur caractère.",
   },
   {
+    icon: Palette,
     image: boutiqueImg3,
-    title: "Le coin tapis",
-    text: "Chaque pièce est exposée avec soin pour révéler ses couleurs, ses motifs et son caractère.",
+    title: "Céramique artisanale",
+    text: "Assiettes, vases et objets décoratifs façonnés dans l’esprit tunisien.",
   },
   {
+    icon: Gem,
     image: boutiqueImg4,
-    title: "L’espace sélection",
-    text: "Des créations choisies pour leur authenticité, leur histoire et leur finition.",
+    title: "Bijoux & accessoires",
+    text: "Des détails précieux pour découvrir une autre facette de l’artisanat.",
   },
   {
-    image: boutiqueImg5,
-    title: "Les détails artisanaux",
-    text: "Des textures, des motifs et des finitions qui racontent le geste de l’artisan.",
-  },
-  {
-    image: boutiqueImg6,
-    title: "Le salon d’inspiration",
-    text: "Un espace pensé pour imaginer votre intérieur avec nos pièces uniques.",
-  },
-  {
-    image: boutiqueImg7,
-    title: "Les couleurs de la médina",
-    text: "Une atmosphère inspirée des terres chaudes, des fibres naturelles et du savoir-faire.",
-  },
-  {
-    image: boutiqueImg8,
-    title: "Le mur des pièces rares",
-    text: "Des tapis et objets d’exception mis en scène comme dans une galerie.",
-  },
-  {
-    image: boutiqueImg9,
-    title: "L’espace découverte",
-    text: "Un lieu pour prendre le temps, observer les matières et choisir avec émotion.",
-  },
-  {
-    image: boutiqueImg10,
-    title: "La galerie intérieure",
-    text: "Une présentation élégante qui met en valeur chaque coin de notre boutique.",
-  },
-  {
-    image: boutiqueImg11,
-    title: "L’ambiance maison",
-    text: "Une boutique pensée comme un intérieur vivant, chaleureux et inspirant.",
-  },
-  {
-    image: boutiqueImg12,
-    title: "Le coin conseil",
-    text: "Un espace calme pour échanger, comparer les pièces et trouver le bon tapis.",
-  },
-  {
-    image: boutiqueImg13,
-    title: "Les pièces signature",
-    text: "Des créations fortes, uniques, sélectionnées pour leur âme et leur présence.",
-  },
-  {
-    image: boutiqueImg14,
-    title: "Le parcours boutique",
-    text: "Chaque passage révèle une matière, une couleur et une nouvelle histoire.",
-  },
-  {
-    image: boutiqueImg15,
-    title: "Le dernier salon",
-    text: "Une ambiance intime qui invite à ralentir et apprécier le travail fait main.",
-  },
-  {
-    image: boutiqueImg16,
-    title: "L’expérience Artisan Medina",
-    text: "Une immersion complète dans l’univers de l’artisanat et de la décoration.",
+    icon: Shapes,
+    image: boutiqueImg1,
+    title: "Décoration & pièces rares",
+    text: "Tableaux, objets muraux et créations uniques à voir uniquement sur place.",
   },
 ];
 
-const featuredImages = boutiqueImages.slice(0, 8);
+const spaces = [
+  { image: boutiqueImg1, title: "L’entrée galerie" },
+  { image: boutiqueImg2, title: "Le salon principal" },
+  { image: boutiqueImg3, title: "Le coin céramique" },
+  { image: boutiqueImg4, title: "Les pièces colorées" },
+  { image: boutiqueImg5, title: "Les objets déco" },
+  { image: boutiqueImg8, title: "Les pièces murales" },
+  { image: boutiqueImg12, title: "L’espace conseil" },
+  { image: boutiqueImg16, title: "L’expérience boutique" },
+];
 
-const rooftopImages = [
+const visitReasons = [
   {
-    image: rooftop1,
-    title: "Le rooftop de la boutique",
-    text: "Un espace lumineux et apaisant pour prolonger l’expérience Artisan Medina.",
+    icon: Eye,
+    title: "Voir les matières en vrai",
+    text: "Couleurs, textures et détails se découvrent mieux sur place.",
   },
   {
-    image: rooftop2,
-    title: "Une pause au-dessus de la médina",
-    text: "Un lieu ouvert, chaleureux et inspirant, entre ciel, lumière et matières naturelles.",
+    icon: HandHeart,
+    title: "Recevoir un conseil personnalisé",
+    text: "Nous vous aidons à choisir selon votre intérieur et votre style.",
+  },
+  {
+    icon: Sparkles,
+    title: "Découvrir l’inédit",
+    text: "Certaines pièces de la boutique ne sont pas disponibles en ligne.",
   },
 ];
 
 export default function BoutiquePage() {
   return (
     <main className="boutique-page">
-      <section className="boutique-editorial">
-        <div className="boutique-editorial__text">
+      <section className="boutique-showroom">
+        <div className="boutique-showroom__text">
           <span className="boutique-kicker">
-            <Sparkles size={16} />
+            <Sparkles size={15} />
             Notre boutique
           </span>
 
-          <h1>Une maison d’inspiration au cœur de l’artisanat.</h1>
+          <h1>Découvrez notre boutique au cœur de l’artisanat tunisien.</h1>
 
           <p>
-            Notre boutique n’est pas seulement un lieu d’exposition. C’est un
-            espace vivant, chaleureux et élégant, pensé pour révéler la beauté
-            des tapis, des matières naturelles et du savoir-faire tunisien.
+            En ligne, nous mettons surtout en avant nos tapis. En boutique, vous
+            découvrez tout un univers : céramique, bijoux, décoration, tableaux
+            et pièces artisanales choisies avec soin.
           </p>
 
-          <div className="boutique-editorial__actions">
-            <a href="#boutique-scroll" className="boutique-btn">
-              Explorer les espaces
+          <div className="boutique-showroom__actions">
+            <a href="/reservation" className="boutique-btn">
+              Réserver une visite
               <ArrowRight size={18} />
             </a>
 
-            <a href="/reservation" className="boutique-btn boutique-btn--soft">
-              Réserver une visite
+            <a href="#boutique-spaces" className="boutique-btn boutique-btn--light">
+              Découvrir les espaces
             </a>
           </div>
         </div>
 
-        <div className="boutique-editorial__collage">
-          <div className="boutique-collage boutique-collage--large">
-            <img src={boutiqueImg1} alt="Entrée de la boutique" />
+        <div className="boutique-showroom__visual">
+          <div className="boutique-showroom__image boutique-showroom__image--main">
+            <img src={boutiqueImg1} alt="Boutique Artisan Medina" />
           </div>
 
-          <div className="boutique-collage boutique-collage--top">
-            <img src={boutiqueImg3} alt="Coin tapis" />
+          <div className="boutique-showroom__image boutique-showroom__image--small">
+            <img src={boutiqueImg3} alt="Céramique artisanale" />
           </div>
 
-          <div className="boutique-collage boutique-collage--bottom">
-            <img src={boutiqueImg8} alt="Mur des pièces rares" />
+          <div className="boutique-showroom__image boutique-showroom__image--wide">
+            <img src={boutiqueImg4} alt="Décoration artisanale" />
           </div>
 
-          <div className="boutique-editorial__badge">
-            <strong>16</strong>
-            <span>coins à découvrir</span>
+          <div className="boutique-showroom__badge">
+            <strong>+ieurs</strong>
+            <span>univers à découvrir</span>
           </div>
         </div>
       </section>
 
-      <section className="boutique-intro">
-        <div className="boutique-intro__card">
-          <span className="boutique-kicker">L’expérience Artisan Medina</span>
-
-          <h2>Chaque espace raconte une histoire.</h2>
-
+      <section className="boutique-univers">
+        <div className="boutique-section-heading">
+          <span className="boutique-kicker">Une boutique, plusieurs univers</span>
+          <h2>Bien plus que des tapis.</h2>
           <p>
-            Couleurs profondes, fibres naturelles, pièces uniques et ambiance
-            méditerranéenne : la boutique a été pensée comme un parcours
-            sensoriel, où chaque détail donne envie de prendre le temps.
+            Chaque coin révèle une partie de notre sélection artisanale, pensée
+            pour inspirer votre intérieur.
           </p>
         </div>
 
-        <div className="boutique-intro__stats">
-          <div>
-            <Store size={24} />
-            <strong>Showroom</strong>
-            <span>Un espace dédié à nos pièces uniques.</span>
-          </div>
+        <div className="boutique-univers__grid">
+          {univers.map((item) => {
+            const Icon = item.icon;
 
-          <div>
-            <Gem size={24} />
-            <strong>Pièces rares</strong>
-            <span>Sélectionnées pour leur qualité et leur histoire.</span>
-          </div>
+            return (
+              <article className="boutique-universe-card" key={item.title}>
+                <img src={item.image} alt={item.title} />
 
-          <div>
-            <HandHeart size={24} />
-            <strong>Artisanat</strong>
-            <span>Des créations faites main avec âme et caractère.</span>
-          </div>
+                <div className="boutique-universe-card__content">
+                  <div className="boutique-universe-card__icon">
+                    <Icon size={20} />
+                  </div>
+
+                  <h3>{item.title}</h3>
+                  <p>{item.text}</p>
+                </div>
+              </article>
+            );
+          })}
         </div>
       </section>
 
-      <section id="boutique-scroll" className="boutique-scroll">
-        <div className="boutique-scroll__header">
+      <section className="boutique-emotion">
+        <img src={boutiqueImg8} alt="Ambiance de la boutique Artisan Medina" />
+
+        <div className="boutique-emotion__overlay" />
+
+        <div className="boutique-emotion__content">
           <span className="boutique-kicker">
-            <Eye size={15} />
-            Visite immersive
+            <Store size={15} />
+            Expérience sur place
           </span>
 
-          <h2>Parcourez les plus beaux coins de notre boutique.</h2>
+          <h2>Un lieu pensé pour voir, toucher et choisir avec émotion.</h2>
 
           <p>
-            Faites défiler horizontalement pour découvrir l’ambiance, les salons,
-            les détails et les pièces signature.
+            La boutique vous permet de ressentir les matières, comparer les
+            couleurs et découvrir des pièces que les photos ne racontent jamais
+            complètement.
+          </p>
+        </div>
+      </section>
+
+      <section id="boutique-spaces" className="boutique-spaces">
+        <div className="boutique-section-heading">
+          <span className="boutique-kicker">
+            <Eye size={15} />
+            Visite en images
+          </span>
+
+          <h2>Les plus beaux coins de notre boutique.</h2>
+
+          <p>
+            Une sélection courte et claire pour présenter l’ambiance réelle du
+            showroom.
           </p>
         </div>
 
-        <div className="boutique-scroll__track">
-          {featuredImages.map((item, index) => (
-            <article className="boutique-scroll__card" key={item.title}>
+        <div className="boutique-spaces__grid">
+          {spaces.map((item, index) => (
+            <article className="boutique-space-card" key={item.title}>
               <img src={item.image} alt={item.title} />
 
-              <div className="boutique-scroll__content">
+              <div className="boutique-space-card__content">
                 <span>{String(index + 1).padStart(2, "0")}</span>
                 <h3>{item.title}</h3>
-                <p>{item.text}</p>
               </div>
             </article>
           ))}
         </div>
       </section>
 
-      <section id="boutique-gallery" className="boutique-gallery">
-        <div className="boutique-section-header">
-          <span className="boutique-kicker">Chaque coin a son histoire</span>
+      <section className="boutique-reasons">
+        <div className="boutique-reasons__intro">
+          <span className="boutique-kicker">
+            <MapPin size={15} />
+            Pourquoi venir ?
+          </span>
 
-          <h2>Une galerie pensée comme un parcours.</h2>
-
-          <p>
-            Une composition visuelle premium pour mettre en valeur l’ambiance,
-            les espaces, les matières et l’âme de la boutique.
-          </p>
+          <h2>La boutique complète l’expérience du site.</h2>
         </div>
 
-        <div className="boutique-gallery__grid">
-          {boutiqueImages.map((item, index) => (
-            <article className="boutique-gallery__card" key={item.title}>
-              <img src={item.image} alt={item.title} />
+        <div className="boutique-reasons__grid">
+          {visitReasons.map((item) => {
+            const Icon = item.icon;
 
-              <div className="boutique-gallery__content">
-                <span>{String(index + 1).padStart(2, "0")}</span>
+            return (
+              <article className="boutique-reason-card" key={item.title}>
+                <Icon size={24} />
                 <h3>{item.title}</h3>
                 <p>{item.text}</p>
-              </div>
-            </article>
-          ))}
+              </article>
+            );
+          })}
         </div>
       </section>
 
       <section className="boutique-rooftop">
-        <div className="boutique-section-header boutique-section-header--light">
+        <div className="boutique-rooftop__text">
           <span className="boutique-kicker">
             <Sun size={15} />
             Le rooftop
           </span>
 
-          <h2>Un coin lumineux pour prolonger la visite.</h2>
+          <h2>Une pause au-dessus de la médina.</h2>
 
           <p>
-            Notre rooftop offre une parenthèse calme et inspirante, entre ciel,
-            lumière naturelle et ambiance méditerranéenne.
+            Après la visite, le rooftop prolonge l’expérience dans une ambiance
+            calme, lumineuse et chaleureuse.
           </p>
         </div>
 
-        <div className="boutique-rooftop__grid">
-          {rooftopImages.map((item) => (
-            <article className="boutique-rooftop__card" key={item.title}>
-              <img src={item.image} alt={item.title} />
-
-              <div className="boutique-rooftop__content">
-                <h3>{item.title}</h3>
-                <p>{item.text}</p>
-              </div>
-            </article>
-          ))}
+        <div className="boutique-rooftop__images">
+          <img src={rooftop1} alt="Rooftop Artisan Medina" />
+          <img src={rooftop2} alt="Terrasse de la boutique" />
         </div>
       </section>
 
-      <section className="boutique-visit">
-        <div className="boutique-visit__text">
-          <span className="boutique-kicker">
-            <MapPin size={15} />
-            Venez nous voir
-          </span>
+      <section className="boutique-final">
+        <span className="boutique-kicker">
+          <Sparkles size={15} />
+          Visite privée
+        </span>
 
-          <h2>Une visite pour ressentir les matières en vrai.</h2>
+        <h2>Envie de découvrir la boutique ?</h2>
 
-          <p>
-            Les photos montrent l’ambiance, mais la vraie magie se vit sur
-            place : toucher les fibres, comparer les couleurs, découvrir les
-            détails et choisir la pièce qui vous ressemble.
-          </p>
+        <p>
+          Réservez un moment avec nous pour explorer les tapis, la céramique,
+          les bijoux et les pièces artisanales disponibles sur place.
+        </p>
 
-          <div className="boutique-visit__meta">
-            <div>
-              <Clock size={18} />
-              <span>Visite calme et personnalisée</span>
-            </div>
-
-            <div>
-              <Sparkles size={18} />
-              <span>Conseil décoration sur place</span>
-            </div>
-          </div>
-
-          <a href="/reservation" className="boutique-btn boutique-btn--dark">
-            Réserver une visite
-            <ArrowRight size={18} />
-          </a>
-        </div>
-
-        <div className="boutique-visit__image">
-          <img src={boutiqueImg2} alt="Visiter notre boutique" />
-        </div>
+        <a href="/reservation" className="boutique-btn boutique-btn--dark">
+          Réserver une visite
+          <ArrowRight size={18} />
+        </a>
       </section>
     </main>
   );
