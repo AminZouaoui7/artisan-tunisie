@@ -265,6 +265,18 @@ export default function BoutiquePage() {
         </div>
       </section>
 <section className="boutique-rooftop-hero">
+  <button
+    className="boutique-rooftop-hero__arrow boutique-rooftop-hero__arrow--left"
+    type="button"
+    onClick={() =>
+      document
+        .querySelector(".boutique-rooftop-hero__carousel")
+        ?.scrollBy({ left: -window.innerWidth, behavior: "smooth" })
+    }
+  >
+    ‹
+  </button>
+
   <div className="boutique-rooftop-hero__carousel">
     {rooftopGallery.map((image, index) => (
       <article className="boutique-rooftop-hero__slide" key={index}>
@@ -286,6 +298,18 @@ export default function BoutiquePage() {
       claire, lumineuse et ouverte sur l’esprit de la médina.
     </p>
   </div>
+
+  <button
+    className="boutique-rooftop-hero__arrow boutique-rooftop-hero__arrow--right"
+    type="button"
+    onClick={() =>
+      document
+        .querySelector(".boutique-rooftop-hero__carousel")
+        ?.scrollBy({ left: window.innerWidth, behavior: "smooth" })
+    }
+  >
+    ›
+  </button>
 </section>
 
       <section className="boutique-final">
