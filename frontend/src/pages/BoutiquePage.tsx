@@ -264,30 +264,29 @@ export default function BoutiquePage() {
           })}
         </div>
       </section>
+<section className="boutique-rooftop-hero">
+  <div className="boutique-rooftop-hero__carousel">
+    {rooftopGallery.map((image, index) => (
+      <article className="boutique-rooftop-hero__slide" key={index}>
+        <img src={image} alt={`Rooftop Artisan Medina ${index + 1}`} />
+      </article>
+    ))}
+  </div>
 
-      <section className="boutique-rooftop">
-        <div className="boutique-rooftop__header">
-          <span className="boutique-kicker">
-            <Sun size={15} />
-            Le rooftop
-          </span>
+  <div className="boutique-rooftop-hero__content">
+    <span className="boutique-kicker">
+      <Sun size={15} />
+      Le rooftop
+    </span>
 
-          <h2>Une pause au-dessus de la médina.</h2>
+    <h2>Une pause au-dessus de la médina.</h2>
 
-          <p>
-            Après la visite, le rooftop prolonge l’expérience dans une ambiance
-            claire, lumineuse et ouverte sur l’esprit de la médina.
-          </p>
-        </div>
-
-        <div className="boutique-rooftop__carousel">
-          {rooftopGallery.map((image, index) => (
-            <article className="boutique-rooftop__slide" key={index}>
-              <img src={image} alt={`Rooftop Artisan Medina ${index + 1}`} />
-            </article>
-          ))}
-        </div>
-      </section>
+    <p>
+      Après la visite, le rooftop prolonge l’expérience dans une ambiance
+      claire, lumineuse et ouverte sur l’esprit de la médina.
+    </p>
+  </div>
+</section>
 
       <section className="boutique-final">
         <span className="boutique-kicker">
