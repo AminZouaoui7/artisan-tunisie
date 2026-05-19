@@ -286,12 +286,7 @@ export default function BoutiquePage() {
   </div>
 
   <div className="boutique-rooftop-hero__content">
-    <span className="boutique-kicker">
-      <Sun size={15} />
-      Le rooftop
-    </span>
-
-    <h2>Une pause au-dessus de la médina.</h2>
+  <h2>Une pause au-dessus de la médina.</h2>
 
     <p>
       Après la visite, le rooftop prolonge l’expérience dans une ambiance
