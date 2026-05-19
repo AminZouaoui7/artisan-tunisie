@@ -8,7 +8,6 @@ import {
   Shapes,
   Sparkles,
   Store,
-  Sun,
 } from "lucide-react";
 
 import "../styles/BoutiquePage.css";
