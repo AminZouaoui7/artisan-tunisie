@@ -38,54 +38,62 @@ const univers = [
     icon: Store,
     image: boutiqueImg2,
     title: "Tapis & textiles",
-    text: "Nos pièces principales, sélectionnées pour leurs matières, leurs couleurs et leur caractère.",
+    text: "Des pièces uniques sélectionnées pour leurs matières, leurs couleurs et leur caractère.",
   },
   {
     icon: Palette,
     image: boutiqueImg3,
     title: "Céramique artisanale",
-    text: "Assiettes, vases et objets décoratifs façonnés dans l’esprit tunisien.",
+    text: "Assiettes, vases et objets décoratifs inspirés du savoir-faire tunisien.",
   },
   {
     icon: Gem,
     image: boutiqueImg4,
     title: "Bijoux & accessoires",
-    text: "Des détails précieux pour découvrir une autre facette de l’artisanat.",
+    text: "Des créations colorées et raffinées à découvrir directement en boutique.",
   },
   {
     icon: Shapes,
-    image: boutiqueImg1,
+    image: boutiqueImg8,
     title: "Décoration & pièces rares",
-    text: "Tableaux, objets muraux et créations uniques à voir uniquement sur place.",
+    text: "Tableaux, objets muraux et pièces signature pour donner une âme à votre intérieur.",
   },
 ];
 
-const spaces = [
-  { image: boutiqueImg1, title: "L’entrée galerie" },
-  { image: boutiqueImg2, title: "Le salon principal" },
-  { image: boutiqueImg3, title: "Le coin céramique" },
-  { image: boutiqueImg4, title: "Les pièces colorées" },
-  { image: boutiqueImg5, title: "Les objets déco" },
-  { image: boutiqueImg8, title: "Les pièces murales" },
-  { image: boutiqueImg12, title: "L’espace conseil" },
-  { image: boutiqueImg16, title: "L’expérience boutique" },
+const boutiqueGallery = [
+  { image: boutiqueImg1, title: "L’entrée galerie", category: "Accueil" },
+  { image: boutiqueImg2, title: "Le salon principal", category: "Tapis" },
+  { image: boutiqueImg3, title: "Le coin céramique", category: "Céramique" },
+  { image: boutiqueImg4, title: "Les pièces colorées", category: "Objets" },
+  { image: boutiqueImg5, title: "Les détails artisanaux", category: "Décoration" },
+  { image: boutiqueImg6, title: "Le salon d’inspiration", category: "Ambiance" },
+  { image: boutiqueImg7, title: "Les couleurs de la médina", category: "Matières" },
+  { image: boutiqueImg8, title: "Le mur des pièces rares", category: "Galerie" },
+  { image: boutiqueImg9, title: "L’espace découverte", category: "Visite" },
+  { image: boutiqueImg10, title: "La galerie intérieure", category: "Parcours" },
+  { image: boutiqueImg11, title: "L’ambiance maison", category: "Maison" },
+  { image: boutiqueImg12, title: "Le coin conseil", category: "Conseil" },
+  { image: boutiqueImg13, title: "Les pièces signature", category: "Signature" },
+  { image: boutiqueImg14, title: "Le parcours boutique", category: "Showroom" },
+  { image: boutiqueImg15, title: "Le dernier salon", category: "Inspiration" },
+  { image: boutiqueImg16, title: "L’expérience complète", category: "Boutique" },
 ];
 
 const visitReasons = [
   {
     icon: Eye,
     title: "Voir les matières en vrai",
-    text: "Couleurs, textures et détails se découvrent mieux sur place.",
+    text: "Les couleurs, les textures et les détails se découvrent mieux sur place.",
   },
   {
     icon: HandHeart,
     title: "Recevoir un conseil personnalisé",
-    text: "Nous vous aidons à choisir selon votre intérieur et votre style.",
+    text: "Nous vous aidons à choisir selon votre intérieur, vos envies et votre style.",
   },
   {
     icon: Sparkles,
     title: "Découvrir l’inédit",
-    text: "Certaines pièces de la boutique ne sont pas disponibles en ligne.",
+    text: "Certaines pièces artisanales sont uniquement visibles dans notre boutique.",
   },
 ];
 
@@ -103,8 +111,8 @@ export default function BoutiquePage() {
 
           <p>
             En ligne, nous mettons surtout en avant nos tapis. En boutique, vous
-            découvrez tout un univers : céramique, bijoux, décoration, tableaux
-            et pièces artisanales choisies avec soin.
+            découvrez tout un univers : céramique, bijoux, décoration, tableaux,
+            objets artisanaux et pièces rares.
           </p>
 
           <div className="boutique-showroom__actions">
@@ -113,8 +121,8 @@ export default function BoutiquePage() {
               <ArrowRight size={18} />
             </a>
 
-            <a href="#boutique-spaces" className="boutique-btn boutique-btn--light">
-              Découvrir les espaces
+            <a href="#boutique-gallery" className="boutique-btn boutique-btn--light">
+              Voir la boutique
             </a>
           </div>
         </div>
@@ -129,12 +137,12 @@ export default function BoutiquePage() {
           </div>
 
           <div className="boutique-showroom__image boutique-showroom__image--wide">
-            <img src={boutiqueImg4} alt="Décoration artisanale" />
+            <img src={boutiqueImg8} alt="Pièces rares Artisan Medina" />
           </div>
 
           <div className="boutique-showroom__badge">
-            <strong>+ieurs</strong>
-            <span>univers à découvrir</span>
+            <strong>18</strong>
+            <span>photos à découvrir</span>
           </div>
         </div>
       </section>
@@ -144,7 +152,7 @@ export default function BoutiquePage() {
           <span className="boutique-kicker">Une boutique, plusieurs univers</span>
           <h2>Bien plus que des tapis.</h2>
           <p>
-            Chaque coin révèle une partie de notre sélection artisanale, pensée
+            Chaque espace révèle une sélection artisanale différente, pensée
             pour inspirer votre intérieur.
           </p>
         </div>
@@ -172,7 +180,7 @@ export default function BoutiquePage() {
       </section>
 
       <section className="boutique-emotion">
-        <img src={boutiqueImg8} alt="Ambiance de la boutique Artisan Medina" />
+        <img src={boutiqueImg6} alt="Ambiance boutique Artisan Medina" />
 
         <div className="boutique-emotion__overlay" />
 
@@ -185,35 +193,34 @@ export default function BoutiquePage() {
           <h2>Un lieu pensé pour voir, toucher et choisir avec émotion.</h2>
 
           <p>
-            La boutique vous permet de ressentir les matières, comparer les
-            couleurs et découvrir des pièces que les photos ne racontent jamais
-            complètement.
+            La visite permet de ressentir les matières, comparer les couleurs et
+            découvrir les pièces que les photos ne racontent jamais complètement.
           </p>
         </div>
       </section>
 
-      <section id="boutique-spaces" className="boutique-spaces">
+      <section id="boutique-gallery" className="boutique-gallery-full">
         <div className="boutique-section-heading">
           <span className="boutique-kicker">
             <Eye size={15} />
             Visite en images
           </span>
 
-          <h2>Les plus beaux coins de notre boutique.</h2>
+          <h2>Tous les coins de notre boutique.</h2>
 
           <p>
-            Une sélection courte et claire pour présenter l’ambiance réelle du
-            showroom.
+            Une galerie complète pour présenter l’ambiance réelle du showroom,
+            des tapis aux objets artisanaux.
           </p>
         </div>
 
-        <div className="boutique-spaces__grid">
-          {spaces.map((item, index) => (
-            <article className="boutique-space-card" key={item.title}>
+        <div className="boutique-gallery-full__grid">
+          {boutiqueGallery.map((item, index) => (
+            <article className="boutique-gallery-full__card" key={item.title}>
               <img src={item.image} alt={item.title} />
 
-              <div className="boutique-space-card__content">
-                <span>{String(index + 1).padStart(2, "0")}</span>
+              <div className="boutique-gallery-full__content">
+                <span>{String(index + 1).padStart(2, "0")} · {item.category}</span>
                 <h3>{item.title}</h3>
               </div>
             </article>
@@ -277,7 +284,8 @@ export default function BoutiquePage() {
 
         <p>
           Réservez un moment avec nous pour explorer les tapis, la céramique,
-          les bijoux et les pièces artisanales disponibles sur place.
+          les bijoux, les objets déco et les pièces artisanales disponibles sur
+          place.
         </p>
 
         <a href="/reservation" className="boutique-btn boutique-btn--dark">
