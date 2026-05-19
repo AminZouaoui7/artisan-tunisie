@@ -14,25 +14,25 @@ import {
 
 import "../styles/BoutiquePage.css";
 
-import boutiqueImg1 from "../assets/boutique/ChatGPT Image May 5, 2026, 02_21_18 PM.png";
-import boutiqueImg2 from "../assets/boutique/ChatGPT Image May 5, 2026, 02_21_30 PM.png";
-import boutiqueImg3 from "../assets/boutique/ChatGPT Image May 5, 2026, 02_21_36 PM.png";
-import boutiqueImg4 from "../assets/boutique/ChatGPT Image May 5, 2026, 02_21_42 PM.png";
-import boutiqueImg5 from "../assets/boutique/ChatGPT Image May 5, 2026, 02_21_46 PM.png";
-import boutiqueImg6 from "../assets/boutique/ChatGPT Image May 5, 2026, 02_22_04 PM.png";
-import boutiqueImg7 from "../assets/boutique/ChatGPT Image May 5, 2026, 02_22_16 PM.png";
-import boutiqueImg8 from "../assets/boutique/ChatGPT Image May 5, 2026, 02_22_21 PM.png";
-import boutiqueImg9 from "../assets/boutique/ChatGPT Image May 5, 2026, 02_22_27 PM.png";
-import boutiqueImg10 from "../assets/boutique/ChatGPT Image May 5, 2026, 02_22_33 PM.png";
-import boutiqueImg11 from "../assets/boutique/ChatGPT Image May 5, 2026, 02_22_39 PM.png";
-import boutiqueImg12 from "../assets/boutique/ChatGPT Image May 5, 2026, 02_23_09 PM.png";
-import boutiqueImg13 from "../assets/boutique/ChatGPT Image May 5, 2026, 02_23_17 PM.png";
-import boutiqueImg14 from "../assets/boutique/ChatGPT Image May 5, 2026, 02_23_25 PM.png";
+import boutiqueImg1 from "../assets/ChatGPT Image May 5, 2026, 02_21_18 PM.png";
+import boutiqueImg2 from "../assets/ChatGPT Image May 5, 2026, 02_21_30 PM.png";
+import boutiqueImg3 from "../assets/ChatGPT Image May 5, 2026, 02_21_36 PM.png";
+import boutiqueImg4 from "../assets/ChatGPT Image May 5, 2026, 02_21_42 PM.png";
+import boutiqueImg5 from "../assets/ChatGPT Image May 5, 2026, 02_21_46 PM.png";
+import boutiqueImg6 from "../assets/ChatGPT Image May 5, 2026, 02_22_04 PM.png";
+import boutiqueImg7 from "../assets/ChatGPT Image May 5, 2026, 02_22_16 PM.png";
+import boutiqueImg8 from "../assets/ChatGPT Image May 5, 2026, 02_22_21 PM.png";
+import boutiqueImg9 from "../assets/ChatGPT Image May 5, 2026, 02_22_27 PM.png";
+import boutiqueImg10 from "../assets/ChatGPT Image May 5, 2026, 02_22_33 PM.png";
+import boutiqueImg11 from "../assets/ChatGPT Image May 5, 2026, 02_22_39 PM.png";
+import boutiqueImg12 from "../assets/ChatGPT Image May 5, 2026, 02_23_09 PM.png";
+import boutiqueImg13 from "../assets/ChatGPT Image May 5, 2026, 02_23_17 PM.png";
+import boutiqueImg14 from "../assets/ChatGPT Image May 5, 2026, 02_23_25 PM.png";
 import boutiqueImg15 from "../assets/boutique/ChatGPT Image May 5, 2026, 02_23_31 PM.png";
 import boutiqueImg16 from "../assets/boutique/ChatGPT Image May 5, 2026, 02_23_38 PM.png";
 
-import rooftop1 from "../assets/boutique/image00103.png";
-import rooftop2 from "../assets/boutique/image00108.png";
+import rooftop1 from "../assets/image00103.png";
+import rooftop2 from "../assets/image00108.png";
 
 const boutiqueImages = [
   { image: boutiqueImg1, title: "L’entrée de la boutique", text: "Une première immersion dans notre univers, entre élégance, matières nobles et esprit médina." },
