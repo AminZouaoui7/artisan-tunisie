@@ -1,14 +1,14 @@
 import {
   ArrowRight,
+  Eye,
   Gem,
+  HandHeart,
   MapPin,
   Palette,
+  Shapes,
   Sparkles,
   Store,
   Sun,
-  HandHeart,
-  Eye,
-  Shapes,
 } from "lucide-react";
 
 import "../styles/BoutiquePage.css";
@@ -152,7 +152,7 @@ export default function BoutiquePage() {
           </div>
 
           <div className="boutique-showroom__badge">
-            <strong>23</strong>
+            <strong>21</strong>
             <span>photos à découvrir</span>
           </div>
         </div>
@@ -219,8 +219,8 @@ export default function BoutiquePage() {
           <h2>Tous les coins de notre boutique.</h2>
 
           <p>
-            Une galerie complète pour présenter l’ambiance réelle du showroom,
-            des tapis aux objets artisanaux.
+            Une galerie complète, plus grande et plus respirante, pour montrer
+            la vraie richesse du showroom.
           </p>
         </div>
 
@@ -266,7 +266,7 @@ export default function BoutiquePage() {
       </section>
 
       <section className="boutique-rooftop">
-        <div className="boutique-rooftop__text">
+        <div className="boutique-rooftop__header">
           <span className="boutique-kicker">
             <Sun size={15} />
             Le rooftop
@@ -276,7 +276,7 @@ export default function BoutiquePage() {
 
           <p>
             Après la visite, le rooftop prolonge l’expérience dans une ambiance
-            calme, lumineuse et chaleureuse.
+            claire, lumineuse et ouverte sur l’esprit de la médina.
           </p>
         </div>
 
