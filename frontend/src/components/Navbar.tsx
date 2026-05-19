@@ -72,6 +72,7 @@ export default function Navbar() {
   const links = [
     { to: "/", label: t("nav.home") },
     { to: "/our-story", label: t("nav.ourStory") },
+    { to: "/boutique", label: "Notre Boutique" },
     { to: "/products", label: t("nav.products") },
     { to: "/reservation", label: t("nav.reservation") },
     { to: "/contact", label: t("nav.contact") },
@@ -282,7 +283,7 @@ export default function Navbar() {
               className="nb__drawer-link"
               onClick={() => setMenuOpen(false)}
             >
-              <span className="nb__drawer-num">06</span>
+              <span className="nb__drawer-num">07</span>
               {t("nav.cart")} {cartCount > 0 ? `(${cartCount})` : ""}
             </NavLink>
           )}
@@ -294,7 +295,7 @@ export default function Navbar() {
                 className="nb__drawer-link"
                 onClick={() => setMenuOpen(false)}
               >
-                <span className="nb__drawer-num">06</span>
+                <span className="nb__drawer-num">07</span>
                 {t("auth.common.loginNav")}
               </NavLink>
 
@@ -303,7 +304,7 @@ export default function Navbar() {
                 className="nb__drawer-link"
                 onClick={() => setMenuOpen(false)}
               >
-                <span className="nb__drawer-num">07</span>
+                <span className="nb__drawer-num">08</span>
                 {t("auth.common.registerNav")}
               </NavLink>
             </>
@@ -315,7 +316,7 @@ export default function Navbar() {
                 onClick={() => setMenuOpen(false)}
               >
                 <span className="nb__drawer-num">
-                  {canUseCart ? "07" : "06"}
+                  {canUseCart ? "08" : "07"}
                 </span>
                 {t("account.nav.dashboard")}
               </NavLink>
@@ -326,7 +327,7 @@ export default function Navbar() {
                 onClick={() => setMenuOpen(false)}
               >
                 <span className="nb__drawer-num">
-                  {canUseCart ? "08" : "07"}
+                  {canUseCart ? "09" : "08"}
                 </span>
                 {t("account.reservations.title")}
               </NavLink>
@@ -337,7 +338,7 @@ export default function Navbar() {
                 onClick={() => setMenuOpen(false)}
               >
                 <span className="nb__drawer-num">
-                  {canUseCart ? "09" : "08"}
+                  {canUseCart ? "10" : "09"}
                 </span>
                 {t("account.ordersTitle")}
               </NavLink>

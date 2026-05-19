@@ -1,5 +1,3 @@
-
-
 import { useEffect, useState } from "react";
 import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
 
@@ -9,6 +7,7 @@ import Footer from "./components/Footer";
 import HomePage from "./pages/HomePage";
 import ProductsPage from "./pages/ProductsPage";
 import OurStoryPage from "./pages/OurStoryPage";
+import BoutiquePage from "./pages/BoutiquePage";
 import ReservationPage from "./pages/ReservationPage";
 import ContactPage from "./pages/ContactPage";
 import LoginPage from "./pages/LoginPage";
@@ -73,9 +72,11 @@ function AppContent() {
 
       const pathname = customEvent.detail?.pathname || window.location.pathname;
       const requestMethod = customEvent.detail?.requestMethod || "GET";
+
       const isProtectedPage =
         protectedRoutes.includes(pathname) ||
         protectedPrefixes.some((prefix) => pathname.startsWith(prefix));
+
       const isProtectedAction = requestMethod !== "GET";
 
       if (isProtectedPage || isProtectedAction) {
@@ -157,6 +158,8 @@ function AppContent() {
 
               <Route path="/our-story" element={<OurStoryPage />} />
 
+              <Route path="/boutique" element={<BoutiquePage />} />
+
               <Route path="/reservation" element={<ReservationPage />} />
 
               <Route path="/contact" element={<ContactPage />} />
@@ -165,10 +168,7 @@ function AppContent() {
 
               <Route path="/register" element={<RegisterPage />} />
 
-              <Route
-                path="/verify-email"
-                element={<VerifyEmailPage />}
-              />
+              <Route path="/verify-email" element={<VerifyEmailPage />} />
 
               <Route
                 path="/session-expired"
@@ -201,15 +201,9 @@ function AppContent() {
                   </ProtectedRoute>
                 }
               >
-                <Route
-                  index
-                  element={<AccountDashboardPage />}
-                />
+                <Route index element={<AccountDashboardPage />} />
 
-                <Route
-                  path="orders"
-                  element={<AccountOrdersPage />}
-                />
+                <Route path="orders" element={<AccountOrdersPage />} />
 
                 <Route
                   path="reservations"
@@ -219,16 +213,11 @@ function AppContent() {
                 <Route
                   path="price-requests"
                   element={
-                    <AccountComingSoonPage
-                      titleKey="account.nav.priceRequests"
-                    />
+                    <AccountComingSoonPage titleKey="account.nav.priceRequests" />
                   }
                 />
 
-                <Route
-                  path="settings"
-                  element={<AccountDashboardPage />}
-                />
+                <Route path="settings" element={<AccountDashboardPage />} />
               </Route>
             </Routes>
           </main>
