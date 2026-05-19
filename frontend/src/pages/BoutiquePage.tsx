@@ -32,6 +32,9 @@ import boutiqueImg16 from "../assets/ChatGPT Image May 5, 2026, 02_23_38 PM.png"
 
 import rooftop1 from "../assets/image00103.png";
 import rooftop2 from "../assets/image00108.png";
+import rooftop4 from "../assets/rooftop1 (1).png";
+import rooftop6 from "../assets/rooftop1 (2).png";
+import rooftop7 from "../assets/rooftop1 (3).png";
 
 const univers = [
   {
@@ -77,6 +80,14 @@ const boutiqueGallery = [
   { image: boutiqueImg14, title: "Le parcours boutique", category: "Showroom" },
   { image: boutiqueImg15, title: "Le dernier salon", category: "Inspiration" },
   { image: boutiqueImg16, title: "L’expérience complète", category: "Boutique" },
+];
+
+const rooftopGallery = [
+  rooftop1,
+  rooftop2,
+  rooftop4,
+  rooftop6,
+  rooftop7,
 ];
 
 const visitReasons = [
@@ -141,7 +152,7 @@ export default function BoutiquePage() {
           </div>
 
           <div className="boutique-showroom__badge">
-            <strong>18</strong>
+            <strong>23</strong>
             <span>photos à découvrir</span>
           </div>
         </div>
@@ -181,7 +192,6 @@ export default function BoutiquePage() {
 
       <section className="boutique-emotion">
         <img src={boutiqueImg6} alt="Ambiance boutique Artisan Medina" />
-
         <div className="boutique-emotion__overlay" />
 
         <div className="boutique-emotion__content">
@@ -220,7 +230,9 @@ export default function BoutiquePage() {
               <img src={item.image} alt={item.title} />
 
               <div className="boutique-gallery-full__content">
-                <span>{String(index + 1).padStart(2, "0")} · {item.category}</span>
+                <span>
+                  {String(index + 1).padStart(2, "0")} · {item.category}
+                </span>
                 <h3>{item.title}</h3>
               </div>
             </article>
@@ -268,9 +280,12 @@ export default function BoutiquePage() {
           </p>
         </div>
 
-        <div className="boutique-rooftop__images">
-          <img src={rooftop1} alt="Rooftop Artisan Medina" />
-          <img src={rooftop2} alt="Terrasse de la boutique" />
+        <div className="boutique-rooftop__carousel">
+          {rooftopGallery.map((image, index) => (
+            <article className="boutique-rooftop__slide" key={index}>
+              <img src={image} alt={`Rooftop Artisan Medina ${index + 1}`} />
+            </article>
+          ))}
         </div>
       </section>
 
