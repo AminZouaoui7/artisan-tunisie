@@ -73,8 +73,7 @@ export default function OurStoryPage() {
             <p className="story-body">
               L’histoire commence avec Haj Bechir Ben Ghorbel, fondateur
               visionnaire qui a donné naissance à l’une des premières boutiques
-              dédiées à l’artisanat tunisien authentique. Plus qu’un commerce,
-              il a construit un héritage familial.
+              dédiées à l’artisanat tunisien authentique.
             </p>
 
             <div className="story-pullquote">
@@ -88,8 +87,7 @@ export default function OurStoryPage() {
             <p className="story-body">
               Depuis 1962, chaque génération ajoute sa touche à cette histoire.
               La boutique continue de faire rayonner l’artisanat tunisien avec
-              la même passion : préserver les gestes, soutenir les artisans et
-              transmettre une part de notre patrimoine.
+              la même passion.
             </p>
 
             <div className="story-stats">
@@ -119,21 +117,21 @@ export default function OurStoryPage() {
       <section className="story-legacy">
         <div className="story-legacy-inner">
           <div className="story-legacy-text">
-            <p className="story-kicker">Héritage familial</p>
+            <p className="story-kicker">Invités d’honneur</p>
 
             <h2 className="story-section-title">
-              Un savoir-faire transmis avec passion.
+              Des rencontres qui ont marqué notre histoire.
             </h2>
 
             <p className="story-body">
-              De génération en génération, L’Artisan de la Médina garde le même
-              engagement : choisir des pièces authentiques, valoriser le travail
-              fait main et proposer des tapis qui racontent une histoire.
+              Au fil des générations, L’Artisan de la Médina a eu l’honneur
+              d’accueillir des personnalités importantes venues découvrir la
+              richesse de l’artisanat tunisien.
             </p>
 
             <p className="story-body">
-              Chaque tapis est choisi avec soin pour apporter chaleur, caractère
-              et authenticité à votre intérieur.
+              Ces moments précieux témoignent de la place unique de notre maison
+              dans la mémoire culturelle de la Médina.
             </p>
 
             <div className="story-legacy-cta-row">
@@ -144,30 +142,57 @@ export default function OurStoryPage() {
           </div>
 
           <div className="story-legacy-visual">
-            <div className="story-legacy-grid">
-              <div className="story-legacy-image-card story-legacy-image-card--main">
+            <div className="story-guests-grid">
+              <article className="story-guest-card story-guest-card--large">
                 <img
                   src={founderDecorImage}
-                  alt="Moment historique de la boutique"
-                  className="story-legacy-image"
+                  alt="Sophie de Grèce"
+                  className="story-guest-image"
                 />
-              </div>
 
-              <div className="story-legacy-image-card story-legacy-image-card--medium">
+                <div className="story-guest-caption">
+                  <span>Invitée d’honneur</span>
+                  <strong>Sophie de Grèce</strong>
+                  <p>
+                    Une visite prestigieuse au cœur de la Médina, symbole du
+                    rayonnement de l’artisanat tunisien.
+                  </p>
+                </div>
+              </article>
+
+              <article className="story-guest-card">
                 <img
                   src={ourstory1}
-                  alt="Artisanat tunisien"
-                  className="story-legacy-image"
+                  alt="Ministre tunisien"
+                  className="story-guest-image"
                 />
-              </div>
 
-              <div className="story-legacy-image-card story-legacy-image-card--small">
+                <div className="story-guest-caption">
+                  <span>Visite officielle</span>
+                  <strong>Ministre tunisien</strong>
+                  <p>
+                    Une rencontre importante autour du patrimoine, du tapis et
+                    du savoir-faire artisanal.
+                  </p>
+                </div>
+              </article>
+
+              <article className="story-guest-card">
                 <img
                   src={ourstory2}
-                  alt="Patrimoine artisanal"
-                  className="story-legacy-image"
+                  alt="Président Carlos Menem"
+                  className="story-guest-image"
                 />
-              </div>
+
+                <div className="story-guest-caption">
+                  <span>Invité international</span>
+                  <strong>Président Carlos Menem</strong>
+                  <p>
+                    Un moment historique qui reflète l’élégance et l’ouverture
+                    internationale de notre maison.
+                  </p>
+                </div>
+              </article>
             </div>
           </div>
         </div>
