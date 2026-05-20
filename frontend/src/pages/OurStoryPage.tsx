@@ -62,10 +62,6 @@ export default function OurStoryPage() {
           </div>
 
           <div className="story-founder-text">
-            <div className="story-founder-top-image">
-              <img src={founderDecorImage} alt="Patrimoine tunisien" />
-            </div>
-
             <p className="story-kicker">Le fondateur</p>
 
             <h2 className="story-section-title">
@@ -149,7 +145,15 @@ export default function OurStoryPage() {
 
           <div className="story-legacy-visual">
             <div className="story-legacy-grid">
-              <div className="story-legacy-image-card story-legacy-image-card--large">
+              <div className="story-legacy-image-card story-legacy-image-card--main">
+                <img
+                  src={founderDecorImage}
+                  alt="Moment historique de la boutique"
+                  className="story-legacy-image"
+                />
+              </div>
+
+              <div className="story-legacy-image-card story-legacy-image-card--medium">
                 <img
                   src={ourstory1}
                   alt="Artisanat tunisien"
