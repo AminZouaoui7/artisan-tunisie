@@ -34,8 +34,9 @@ export default function Navbar() {
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 18);
-    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
 
+    window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
@@ -108,7 +109,6 @@ export default function Navbar() {
               src={logoMain}
               alt="L’ARTISAN DE LA MÉDINA"
             />
-
             <span className="nb__logo-text">L’ARTISAN DE LA MÉDINA</span>
           </NavLink>
 

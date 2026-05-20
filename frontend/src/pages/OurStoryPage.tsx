@@ -1,32 +1,46 @@
 import { Link } from "react-router-dom";
 import lhajjImage from "../assets/lhajj.jpg";
+import founderDecorImage from "../assets/imageeess.png";
+
 import "../styles/OurStoryPage.css";
+
 import ourstory1 from "../assets/ourstory1.jpg";
 import ourstory2 from "../assets/ourstory2.jpg";
+
 import { useI18n } from "../i18n/i18n";
+
 const IMG_FOUNDER = lhajjImage;
 
 export default function OurStoryPage() {
   const { t } = useI18n();
+
   return (
     <div className="story-page">
       <section className="story-hero">
         <div className="story-hero-inner">
           <div className="story-hero-kicker">
             <span className="story-hero-kicker-line" />
-            {t("nav.ourStory")}
+            Notre histoire
             <span className="story-hero-kicker-line" />
           </div>
 
           <h1 className="story-hero-title">
-            {t("ourStory.title")}
+            Une boutique née
             <br />
-            <em>{t("ourStory.titleEmphasis")}</em>
+            <em>après l’indépendance</em>
           </h1>
 
           <p className="story-hero-sub">
-            {t("ourStory.description")}
+            Au cœur de la Médina, notre histoire commence dans une Tunisie
+            nouvelle, portée par la fierté de son artisanat. Après
+            l’indépendance, la boutique ouvre ses portes avec une ambition
+            claire : préserver les gestes anciens, soutenir les artisans et
+            transmettre l’âme du tapis tunisien.
           </p>
+
+          <div className="story-hero-highlight">
+            <span>Ouverture inaugurée en présence du Président Habib Bourguiba</span>
+          </div>
 
           <div className="story-ornament">
             <span className="story-ornament-line" />
@@ -35,15 +49,11 @@ export default function OurStoryPage() {
               className="story-ornament-gem"
               style={{ fontSize: 13, letterSpacing: 4 }}
             >
-              {t("common.brandNameAscii")}
+              L’ARTISAN DE LA MÉDINA
             </span>
             <span className="story-ornament-gem">✦</span>
             <span className="story-ornament-line story-ornament-line--rev" />
           </div>
-        </div>
-
-        <div className="story-scroll-hint">
-          <div className="story-scroll-line" />
         </div>
       </section>
 
@@ -53,21 +63,25 @@ export default function OurStoryPage() {
             <div className="story-founder-image-card">
               <img
                 src={IMG_FOUNDER}
-                alt={t("ourStory.page.generations.g1962.title")}
+                alt="Haj Bechir Ben Ghorbel"
                 className="story-founder-image"
               />
 
               <div className="story-founder-badge">
                 <span className="story-founder-badge-year">1962</span>
                 <span className="story-founder-badge-label">
-                  {t("ourStory.badgePlace")}
+                  La Médina
                 </span>
               </div>
             </div>
           </div>
 
           <div className="story-founder-text">
-            <p className="story-kicker">{t("ourStory.page.generations.g1962.label")}</p>
+            <div className="story-founder-top-image">
+              <img src={founderDecorImage} alt="Patrimoine tunisien" />
+            </div>
+
+            <p className="story-kicker">Le fondateur</p>
 
             <h2 className="story-section-title">
               Haj Bechir
@@ -76,40 +90,48 @@ export default function OurStoryPage() {
             </h2>
 
             <p className="story-body">
-              {t("ourStory.page.generations.g1962.text")}
+              L’histoire commence avec Haj Bechir Ben Ghorbel, fondateur
+              visionnaire qui a donné naissance à l’une des premières boutiques
+              dédiées à l’artisanat tunisien authentique. Plus qu’un commerce,
+              il a construit un héritage familial.
             </p>
 
             <div className="story-pullquote">
               <p>
-                {t("ourStory.page.intro.text")}
+                Chaque objet sélectionné porte une trace : celle d’une main,
+                d’une région, d’un geste ancien et d’une famille qui a choisi
+                de protéger ce patrimoine.
               </p>
             </div>
 
             <p className="story-body">
-              {t("ourStory.page.legacy.text")}
+              Depuis 1962, chaque génération ajoute sa touche à cette histoire.
+              La boutique continue de faire rayonner l’artisanat tunisien avec
+              la même passion : préserver les gestes, soutenir les artisans et
+              transmettre une part de notre patrimoine.
             </p>
 
             <div className="story-stats">
               <div className="story-stat">
                 <span className="story-stat-number">60+</span>
                 <span className="story-stat-label">
-                  {t("ourStory.page.stats.history")}
+                  ans d’histoire
                 </span>
               </div>
 
               <div className="story-stat">
                 <span className="story-stat-number">5</span>
                 <span className="story-stat-label">
-                  {t("ourStory.page.stats.generations")}
+                  générations
                 </span>
               </div>
 
               <div className="story-stat">
                 <span className="story-stat-number">100%</span>
                 <span className="story-stat-label">
-                  Tunisian
-                  <br />
                   artisans
+                  <br />
+                  tunisiens
                 </span>
               </div>
             </div>
@@ -118,59 +140,55 @@ export default function OurStoryPage() {
       </section>
 
       <section className="story-legacy">
-  <div className="story-legacy-inner">
-    
-    <div className="story-legacy-text">
-      <p className="story-kicker">{t("ourStory.page.legacy.kicker")}</p>
+        <div className="story-legacy-inner">
+          <div className="story-legacy-text">
+            <p className="story-kicker">
+              Héritage familial
+            </p>
 
-      <h2 className="story-section-title">
-        {t("ourStory.page.legacy.title")}
-      </h2>
+            <h2 className="story-section-title">
+              Un savoir-faire transmis avec passion.
+            </h2>
 
-      <p className="story-body">
-        {t("ourStory.page.legacy.text")}
-      </p>
+            <p className="story-body">
+              De génération en génération, L’Artisan de la Médina garde le même
+              engagement : choisir des pièces authentiques, valoriser le travail
+              fait main et proposer des tapis qui racontent une histoire.
+            </p>
 
-      <p className="story-body">
-        {t("ourStory.page.legacy.closing")}
-      </p>
+            <p className="story-body">
+              Chaque tapis est choisi avec soin pour apporter chaleur,
+              caractère et authenticité à votre intérieur.
+            </p>
 
-      <div className="story-legacy-cta-row">
-        <Link to="/products" className="story-btn-primary">
-          {t("ourStory.ctaProducts")}
-        </Link>
-      </div>
-    </div>
+            <div className="story-legacy-cta-row">
+              <Link to="/products" className="story-btn-primary">
+                Découvrir nos tapis
+              </Link>
+            </div>
+          </div>
 
-    <div className="story-legacy-visual">
-      <div className="story-legacy-grid">
-        
-        <div className="story-legacy-image-card story-legacy-image-card--large">
-          <img
-            src={ourstory1}
-            alt="Artisanat tunisien"
-            className="story-legacy-image"
-          />
+          <div className="story-legacy-visual">
+            <div className="story-legacy-grid">
+              <div className="story-legacy-image-card story-legacy-image-card--large">
+                <img
+                  src={ourstory1}
+                  alt="Artisanat tunisien"
+                  className="story-legacy-image"
+                />
+              </div>
 
-     
+              <div className="story-legacy-image-card story-legacy-image-card--small">
+                <img
+                  src={ourstory2}
+                  alt="Patrimoine artisanal"
+                  className="story-legacy-image"
+                />
+              </div>
+            </div>
+          </div>
         </div>
-
-        <div className="story-legacy-image-card story-legacy-image-card--small">
-          <img
-            src={ourstory2}
-            alt="Patrimoine artisanal"
-            className="story-legacy-image"
-          />
-
-         
-        </div>
-
-      </div>
-    </div>
-  </div>
-</section>
-
-
+      </section>
     </div>
   );
 }
