@@ -108,7 +108,7 @@ export default function BoutiquePage() {
               Voir la collection
             </a>
 
-            <a href="/contact" className="boutique-btn boutique-btn--ghost">
+            <a href="/product" className="boutique-btn boutique-btn--ghost">
               <Home size={16} />
               Visiter la boutique
             </a>
