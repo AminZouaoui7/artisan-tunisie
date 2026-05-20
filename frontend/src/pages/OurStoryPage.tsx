@@ -13,12 +13,10 @@ export default function OurStoryPage() {
   return (
     <div className="story-page">
       <section className="story-hero">
-        <div className="story-hero-inner">
-          <div className="story-hero-kicker">
-            <span className="story-hero-kicker-line" />
-            Notre histoire
-            <span className="story-hero-kicker-line" />
-          </div>
+        <div className="story-hero-photo" />
+
+        <div className="story-hero-panel">
+          <p className="story-hero-kicker">Notre histoire</p>
 
           <h1 className="story-hero-title">
             Une boutique née
@@ -27,30 +25,21 @@ export default function OurStoryPage() {
           </h1>
 
           <p className="story-hero-sub">
-            Au cœur de la Médina, notre histoire commence dans une Tunisie
-            nouvelle, portée par la fierté de son artisanat. Après
-            l’indépendance, la boutique ouvre ses portes avec une ambition
-            claire : préserver les gestes anciens, soutenir les artisans et
-            transmettre l’âme du tapis tunisien.
+            Au cœur de la Médina, notre boutique ouvre ses portes dans une
+            Tunisie nouvelle, portée par la fierté de son artisanat et la volonté
+            de préserver les gestes anciens.
           </p>
 
           <div className="story-hero-highlight">
-            <span>
-              Ouverture inaugurée en présence du Président Habib Bourguiba
-            </span>
+            Ouverture inaugurée en présence du Président Habib Bourguiba
           </div>
 
           <div className="story-ornament">
             <span className="story-ornament-line" />
             <span className="story-ornament-gem">✦</span>
-            <span
-              className="story-ornament-gem"
-              style={{ fontSize: 13, letterSpacing: 4 }}
-            >
-              L’ARTISAN DE LA MÉDINA
-            </span>
+            <span className="story-ornament-brand">L’ARTISAN DE LA MÉDINA</span>
             <span className="story-ornament-gem">✦</span>
-            <span className="story-ornament-line story-ornament-line--rev" />
+            <span className="story-ornament-line" />
           </div>
         </div>
       </section>
