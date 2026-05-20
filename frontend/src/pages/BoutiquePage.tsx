@@ -1,12 +1,11 @@
 import {
   ArrowRight,
   Gem,
-  MapPin,
   MessageCircle,
   Sparkles,
   Eye,
   Store,
-  Sun,
+  Palette,
 } from "lucide-react";
 
 import "../styles/BoutiquePage.css";
@@ -31,7 +30,7 @@ import tab3 from "../assets/tab3.png";
 import tab4 from "../assets/tab4.png";
 import tab5 from "../assets/tab5.png";
 
-const boutiqueProducts = [
+const ceramicProducts = [
   {
     name: "Céramique artisanale",
     category: "Pièces peintes à la main",
@@ -39,7 +38,7 @@ const boutiqueProducts = [
     text: "Assiettes, bols, vases et pièces décoratives inspirées du savoir-faire tunisien.",
   },
   {
-    name: "Collection bleue",
+    name: "Collection colorée",
     category: "Art de table",
     image: ceramic1,
     text: "Des créations uniques aux motifs méditerranéens pour sublimer votre intérieur.",
@@ -69,7 +68,7 @@ const boutiqueProducts = [
     text: "Des objets décoratifs pensés pour créer une ambiance artisanale chic.",
   },
   {
-    name: "Céramique colorée",
+    name: "Céramique murale",
     category: "Collection boutique",
     image: ceramic6,
     text: "Des couleurs vivantes et des finitions artisanales pour une touche unique.",
@@ -80,28 +79,131 @@ const boutiqueProducts = [
     image: ceramic7,
     text: "Des pièces disponibles en petite quantité, visibles uniquement sur place.",
   },
+];
+
+const bijouProducts = [
+  {
+    name: "Bijoux artisanaux",
+    category: "Accessoires faits main",
+    image: bijouxImg,
+    text: "Une sélection de bijoux fins, inspirés de l’artisanat oriental et méditerranéen.",
+  },
+];
+
+const mosaiqueProducts = [
   {
     name: "Mosaïque tunisienne",
     category: "Décoration murale",
     image: mosaiqueImg,
-    text: "Des créations en mosaïque pour décorer vos espaces avec authenticité.",
-  },
-  {
-    name: "Bijoux artisanaux",
-    category: "Accessoires",
-    image: bijouxImg,
-    text: "Une sélection de bijoux faits main, entre finesse et inspiration orientale.",
+    text: "Des créations en mosaïque colorées pour donner du caractère à vos espaces.",
   },
 ];
 
-const rooftopImages = [tab1, tab2, tab3, tab4, tab5];
+const tableauProducts = [
+  {
+    name: "Tableau médina",
+    category: "Art mural",
+    image: tab1,
+    text: "Une pièce décorative inspirée des ruelles, portes et couleurs de la médina.",
+  },
+  {
+    name: "Illustration artisanale",
+    category: "Souvenir artistique",
+    image: tab2,
+    text: "Des tableaux lumineux qui racontent l’ambiance tunisienne avec douceur.",
+  },
+  {
+    name: "Collection portes bleues",
+    category: "Décoration murale",
+    image: tab3,
+    text: "Une série de tableaux inspirée des portes traditionnelles et paysages méditerranéens.",
+  },
+  {
+    name: "Tableau oriental",
+    category: "Pièce décorative",
+    image: tab4,
+    text: "Des compositions riches en détails, parfaites pour une décoration authentique.",
+  },
+  {
+    name: "Mini tableaux",
+    category: "Sélection boutique",
+    image: tab5,
+    text: "Des petits formats décoratifs faciles à offrir ou à collectionner.",
+  },
+];
+
+function ProductSection({
+  id,
+  eyebrow,
+  title,
+  description,
+  products,
+}: {
+  id: string;
+  eyebrow: string;
+  title: string;
+  description: string;
+  products: {
+    name: string;
+    category: string;
+    image: string;
+    text: string;
+  }[];
+}) {
+  return (
+    <section className="boutique-category-section" id={id}>
+      <div className="boutique-section-header">
+        <span className="boutique-eyebrow boutique-eyebrow--dark">
+          <Gem size={15} />
+          {eyebrow}
+        </span>
+
+        <h2>{title}</h2>
+        <p>{description}</p>
+      </div>
+
+      <div
+        className={
+          products.length <= 2
+            ? "boutique-products__grid boutique-products__grid--small"
+            : "boutique-products__grid"
+        }
+      >
+        {products.map((product, index) => (
+          <article
+            className="boutique-product-card"
+            key={product.name}
+            style={{ animationDelay: `${index * 0.06}s` }}
+          >
+            <div className="boutique-product-card__image">
+              <img src={product.image} alt={product.name} />
+              <span>{product.category}</span>
+            </div>
+
+            <div className="boutique-product-card__content">
+              <h3>{product.name}</h3>
+              <p>{product.text}</p>
+
+              <div className="boutique-product-card__footer">
+                <span>
+                  <Eye size={15} />
+                  Disponible en boutique
+                </span>
+                <MessageCircle size={18} />
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
 
 export default function BoutiquePage() {
   return (
     <main className="boutique-page">
       <section className="boutique-hero">
         <img src={heroImage} alt="Boutique Artisan Medina" />
-
         <div className="boutique-hero__overlay" />
 
         <div className="boutique-hero__content">
@@ -114,19 +216,19 @@ export default function BoutiquePage() {
 
           <p>
             Notre boutique réunit une sélection raffinée de créations faites
-            main : céramique, mosaïque, bijoux et objets décoratifs. Ces pièces
-            ne sont pas vendues en ligne afin de préserver leur caractère rare
-            et leur expérience de découverte.
+            main : céramique, mosaïque, bijoux, tableaux et objets décoratifs.
+            Ces pièces ne sont pas vendues en ligne afin de préserver leur
+            caractère rare et leur expérience de découverte.
           </p>
 
           <div className="boutique-hero__actions">
-            <a href="#collection" className="boutique-btn boutique-btn--primary">
+            <a href="#ceramique" className="boutique-btn boutique-btn--primary">
               Voir la collection
               <ArrowRight size={18} />
             </a>
 
-            <a href="#rooftop" className="boutique-btn boutique-btn--ghost">
-              Découvrir le rooftop
+            <a href="#tableaux" className="boutique-btn boutique-btn--ghost">
+              Découvrir les tableaux
             </a>
           </div>
         </div>
@@ -148,84 +250,41 @@ export default function BoutiquePage() {
         </p>
       </section>
 
-      <section className="boutique-products" id="collection">
-        <div className="boutique-section-header">
-          <span className="boutique-eyebrow boutique-eyebrow--dark">
-            <Gem size={15} />
-            Nos pièces en boutique
-          </span>
-          <h2>Des créations uniques, visibles sur place.</h2>
-        </div>
+      <ProductSection
+        id="ceramique"
+        eyebrow="Céramique"
+        title="Céramiques artisanales peintes à la main."
+        description="Une collection riche en couleurs, motifs et formes traditionnelles pour décorer votre maison avec authenticité."
+        products={ceramicProducts}
+      />
 
-        <div className="boutique-products__grid">
-          {boutiqueProducts.map((product, index) => (
-            <article
-              className="boutique-product-card"
-              key={product.name}
-              style={{ animationDelay: `${index * 0.06}s` }}
-            >
-              <div className="boutique-product-card__image">
-                <img src={product.image} alt={product.name} />
-                <span>{product.category}</span>
-              </div>
+      <ProductSection
+        id="bijoux"
+        eyebrow="Bijoux"
+        title="Bijoux artisanaux et accessoires raffinés."
+        description="Des pièces délicates à découvrir en boutique, idéales pour offrir ou compléter une tenue avec une touche artisanale."
+        products={bijouProducts}
+      />
 
-              <div className="boutique-product-card__content">
-                <h3>{product.name}</h3>
-                <p>{product.text}</p>
+      <ProductSection
+        id="mosaique"
+        eyebrow="Mosaïque"
+        title="Mosaïques décoratives inspirées de la tradition tunisienne."
+        description="Des créations murales colorées, travaillées avec soin pour apporter du caractère à chaque intérieur."
+        products={mosaiqueProducts}
+      />
 
-                <div className="boutique-product-card__footer">
-                  <span>
-                    <Eye size={15} />
-                    Disponible en boutique
-                  </span>
-                  <MessageCircle size={18} />
-                </div>
-              </div>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section className="boutique-rooftop" id="rooftop">
-        <div className="boutique-rooftop__content">
-          <span className="boutique-eyebrow">
-            <Sun size={16} />
-            Rooftop Artisan Medina
-          </span>
-
-          <h2>Un lieu chaleureux pour découvrir nos créations autrement.</h2>
-
-          <p>
-            Notre rooftop prolonge l’expérience boutique dans une ambiance
-            lumineuse et méditerranéenne. Un espace idéal pour admirer nos
-            pièces, prendre le temps d’échanger et vivre l’univers Artisan
-            Medina.
-          </p>
-
-          <div className="boutique-rooftop__info">
-            <span>
-              <MapPin size={17} />
-              Boutique & rooftop
-            </span>
-            <span>
-              <Sparkles size={17} />
-              Expérience artisanale
-            </span>
-          </div>
-        </div>
-
-        <div className="boutique-rooftop__gallery">
-          {rooftopImages.map((image, index) => (
-            <div className="boutique-rooftop__photo" key={index}>
-              <img src={image} alt={`Rooftop Artisan Medina ${index + 1}`} />
-            </div>
-          ))}
-        </div>
-      </section>
+      <ProductSection
+        id="tableaux"
+        eyebrow="Tableaux"
+        title="Tableaux et illustrations inspirés de la médina."
+        description="Des œuvres murales lumineuses qui capturent les portes, les ruelles, les couleurs et l’âme de l’artisanat tunisien."
+        products={tableauProducts}
+      />
 
       <section className="boutique-final-cta">
         <span className="boutique-eyebrow boutique-eyebrow--dark">
-          <MessageCircle size={15} />
+          <Palette size={15} />
           Visite boutique
         </span>
 
