@@ -298,7 +298,6 @@ export default function BoutiquePage() {
 
         <a href="/contact" className="boutique-btn boutique-btn--primary">
           Nous contacter
-          <ArrowRight size={18} />
         </a>
       </section>
     </main>
