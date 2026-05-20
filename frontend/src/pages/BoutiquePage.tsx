@@ -4,6 +4,9 @@ import {
   MapPin,
   MessageCircle,
   Sparkles,
+  Eye,
+  Store,
+  Sun,
 } from "lucide-react";
 
 import "../styles/BoutiquePage.css";
@@ -28,85 +31,102 @@ import tab3 from "../assets/tab3.png";
 import tab4 from "../assets/tab4.png";
 import tab5 from "../assets/tab5.png";
 
-
-import rooftop2 from "../assets/rooftop1 (1).png";
-import rooftop4 from "../assets/rooftop1 (2).png";
-import rooftop5 from "../assets/rooftop1 (3).png";
-
-const collections = [
+const boutiqueProducts = [
   {
-    title: "Céramique artisanale tunisienne",
-    text: "Des pièces façonnées et décorées avec patience, entre couleurs méditerranéennes et gestes traditionnels.",
+    name: "Céramique artisanale",
+    category: "Pièces peintes à la main",
     image: ceramicImg,
-    tag: "Fait main",
+    text: "Assiettes, bols, vases et pièces décoratives inspirées du savoir-faire tunisien.",
   },
   {
-    title: "Tableaux décoratifs",
-    text: "Des œuvres choisies pour habiller les intérieurs avec une présence chaleureuse et authentique.",
-    image: tab1,
-    tag: "Galerie",
+    name: "Collection bleue",
+    category: "Art de table",
+    image: ceramic1,
+    text: "Des créations uniques aux motifs méditerranéens pour sublimer votre intérieur.",
   },
   {
-    title: "Mosaïque & décoration",
-    text: "Des objets rares qui racontent la matière, la lumière et l’âme des maisons tunisiennes.",
+    name: "Poterie décorative",
+    category: "Décoration",
+    image: ceramic2,
+    text: "Des formes authentiques, façonnées pour apporter chaleur et caractère.",
+  },
+  {
+    name: "Céramique premium",
+    category: "Pièce unique",
+    image: ceramic3,
+    text: "Une sélection raffinée disponible uniquement dans notre boutique.",
+  },
+  {
+    name: "Motifs traditionnels",
+    category: "Fait main",
+    image: ceramic4,
+    text: "Chaque détail raconte une histoire entre tradition, couleur et élégance.",
+  },
+  {
+    name: "Objets d’intérieur",
+    category: "Maison",
+    image: ceramic5,
+    text: "Des objets décoratifs pensés pour créer une ambiance artisanale chic.",
+  },
+  {
+    name: "Céramique colorée",
+    category: "Collection boutique",
+    image: ceramic6,
+    text: "Des couleurs vivantes et des finitions artisanales pour une touche unique.",
+  },
+  {
+    name: "Édition artisanale",
+    category: "Sélection limitée",
+    image: ceramic7,
+    text: "Des pièces disponibles en petite quantité, visibles uniquement sur place.",
+  },
+  {
+    name: "Mosaïque tunisienne",
+    category: "Décoration murale",
     image: mosaiqueImg,
-    tag: "Pièces rares",
+    text: "Des créations en mosaïque pour décorer vos espaces avec authenticité.",
   },
   {
-    title: "Bijoux & accessoires",
-    text: "Des détails artisanaux élégants, pensés comme de petites pièces de caractère.",
+    name: "Bijoux artisanaux",
+    category: "Accessoires",
     image: bijouxImg,
-    tag: "Sélection",
+    text: "Une sélection de bijoux faits main, entre finesse et inspiration orientale.",
   },
 ];
 
-const gallery = [
-  ceramic1,
-  ceramic2,
-  ceramic3,
-  ceramic4,
-  ceramic5,
-  ceramic6,
-  ceramic7,
-  tab2,
-  tab3,
-  tab4,
-  tab5,
-  mosaiqueImg,
-];
-
-const rooftopImages = [ rooftop2, rooftop4, rooftop5];
+const rooftopImages = [tab1, tab2, tab3, tab4, tab5];
 
 export default function BoutiquePage() {
   return (
     <main className="boutique-page">
       <section className="boutique-hero">
-        <img src={heroImage} alt="Boutique Artisan de la Médina" />
+        <img src={heroImage} alt="Boutique Artisan Medina" />
 
         <div className="boutique-hero__overlay" />
 
         <div className="boutique-hero__content">
-          <span className="boutique-kicker">
+          <span className="boutique-eyebrow">
             <Sparkles size={16} />
-            Showroom artisanal
+            Boutique Artisan Medina
           </span>
 
-          <h1>Nos Collections</h1>
+          <h1>Des pièces artisanales à découvrir uniquement sur place.</h1>
 
           <p>
-            Un univers intime où la céramique, les tableaux, les objets rares et
-            les pièces faites à la main prolongent l’héritage familial
-            d’Artisan de la Médina.
+            Notre boutique réunit une sélection raffinée de créations faites
+            main : céramique, mosaïque, bijoux et objets décoratifs. Ces pièces
+            ne sont pas vendues en ligne afin de préserver leur caractère rare
+            et leur expérience de découverte.
           </p>
 
           <div className="boutique-hero__actions">
-            <a href="#boutique-showroom" className="boutique-btn boutique-btn--primary">
-              Visiter la boutique
+            <a href="#collection" className="boutique-btn boutique-btn--primary">
+              Voir la collection
               <ArrowRight size={18} />
             </a>
 
-            <a href="#disponibilite" className="boutique-btn boutique-btn--glass">
-              Demander disponibilité
+            <a href="#rooftop" className="boutique-btn boutique-btn--ghost">
+              Découvrir le rooftop
             </a>
           </div>
         </div>
@@ -114,117 +134,113 @@ export default function BoutiquePage() {
 
       <section className="boutique-intro">
         <div>
-          <span className="boutique-eyebrow">L’âme de la médina</span>
-          <h2>Une sélection vivante, disponible en boutique.</h2>
+          <span className="boutique-eyebrow boutique-eyebrow--dark">
+            <Store size={15} />
+            Sélection exclusive
+          </span>
+          <h2>Une boutique pensée comme une galerie artisanale.</h2>
         </div>
 
         <p>
-          Au-delà des tapis artisanaux, notre boutique physique réunit des
-          objets choisis avec soin : céramiques tunisiennes, tableaux, cuivre,
-          accessoires, pièces décoratives et créations rares. Chaque collection
-          évolue selon les arrivages, les rencontres avec les artisans et les
-          coups de cœur de la famille.
+          Chaque objet est choisi pour sa beauté, son histoire et son lien avec
+          l’artisanat méditerranéen. Les produits présentés ici sont disponibles
+          uniquement dans notre espace boutique.
         </p>
       </section>
 
-      <section className="boutique-cards" id="boutique-showroom">
-        {collections.map((item) => (
-          <article className="boutique-card" key={item.title}>
-            <img src={item.image} alt={item.title} />
-
-            <div className="boutique-card__shade" />
-
-            <div className="boutique-card__content">
-              <span>{item.tag}</span>
-              <h3>{item.title}</h3>
-              <p>{item.text}</p>
-            </div>
-          </article>
-        ))}
-      </section>
-
-      <section className="boutique-gallery-section">
+      <section className="boutique-products" id="collection">
         <div className="boutique-section-header">
-          <span className="boutique-eyebrow">Galerie boutique</span>
-          <h2>Des pièces à découvrir comme dans un showroom.</h2>
-          <p>
-            Pas de fiches produits, pas de panier : seulement des matières, des
-            couleurs et des objets qui se découvrent en vrai.
-          </p>
+          <span className="boutique-eyebrow boutique-eyebrow--dark">
+            <Gem size={15} />
+            Nos pièces en boutique
+          </span>
+          <h2>Des créations uniques, visibles sur place.</h2>
         </div>
 
-        <div className="boutique-masonry">
-          {gallery.map((image, index) => (
-            <figure className="boutique-masonry__item" key={index}>
-              <img src={image} alt={`Collection artisanale ${index + 1}`} />
-              <figcaption>
-                {index % 3 === 0
-                  ? "Disponible en boutique"
-                  : index % 3 === 1
-                  ? "Sélection artisanale"
-                  : "Pièce sur demande"}
-              </figcaption>
-            </figure>
+        <div className="boutique-products__grid">
+          {boutiqueProducts.map((product, index) => (
+            <article
+              className="boutique-product-card"
+              key={product.name}
+              style={{ animationDelay: `${index * 0.06}s` }}
+            >
+              <div className="boutique-product-card__image">
+                <img src={product.image} alt={product.name} />
+                <span>{product.category}</span>
+              </div>
+
+              <div className="boutique-product-card__content">
+                <h3>{product.name}</h3>
+                <p>{product.text}</p>
+
+                <div className="boutique-product-card__footer">
+                  <span>
+                    <Eye size={15} />
+                    Disponible en boutique
+                  </span>
+                  <MessageCircle size={18} />
+                </div>
+              </div>
+            </article>
           ))}
         </div>
       </section>
 
-      <section className="boutique-rooftop">
+      <section className="boutique-rooftop" id="rooftop">
         <div className="boutique-rooftop__content">
-          <span className="boutique-eyebrow">Notre rooftop</span>
-          <h2>Un lieu chaleureux pour vivre l’expérience Artisan de la Médina.</h2>
+          <span className="boutique-eyebrow">
+            <Sun size={16} />
+            Rooftop Artisan Medina
+          </span>
+
+          <h2>Un lieu chaleureux pour découvrir nos créations autrement.</h2>
+
           <p>
-            Notre rooftop prolonge l’univers de la boutique : un espace
-            méditerranéen, intime et élégant, pensé pour accueillir les visiteurs
-            et présenter les pièces dans une ambiance authentique.
+            Notre rooftop prolonge l’expérience boutique dans une ambiance
+            lumineuse et méditerranéenne. Un espace idéal pour admirer nos
+            pièces, prendre le temps d’échanger et vivre l’univers Artisan
+            Medina.
           </p>
+
+          <div className="boutique-rooftop__info">
+            <span>
+              <MapPin size={17} />
+              Boutique & rooftop
+            </span>
+            <span>
+              <Sparkles size={17} />
+              Expérience artisanale
+            </span>
+          </div>
         </div>
 
-        <div className="boutique-rooftop__grid">
+        <div className="boutique-rooftop__gallery">
           {rooftopImages.map((image, index) => (
-            <img src={image} alt={`Rooftop Artisan de la Médina ${index + 1}`} key={index} />
+            <div className="boutique-rooftop__photo" key={index}>
+              <img src={image} alt={`Rooftop Artisan Medina ${index + 1}`} />
+            </div>
           ))}
         </div>
       </section>
 
-      <section className="boutique-availability" id="disponibilite">
-        <div className="boutique-availability__icon">
-          <Gem size={28} />
-        </div>
+      <section className="boutique-final-cta">
+        <span className="boutique-eyebrow boutique-eyebrow--dark">
+          <MessageCircle size={15} />
+          Visite boutique
+        </span>
 
-        <h2>Des pièces disponibles en boutique ou sur demande.</h2>
+        <h2>Venez découvrir les pièces en vrai.</h2>
 
         <p>
-          Chaque objet est sélectionné en petite quantité. Certaines pièces sont
-          uniques, d’autres peuvent être réservées ou commandées selon leur
-          disponibilité auprès de nos artisans partenaires.
+          Certaines créations ne peuvent être pleinement appréciées qu’en les
+          voyant de près : les matières, les couleurs, les détails et la main de
+          l’artisan.
         </p>
 
-        <div className="boutique-availability__actions">
-          <a href="/reservation-privee" className="boutique-btn boutique-btn--primary">
-            <MapPin size={18} />
-            Visiter la boutique
-          </a>
-
-          <a href="/contact" className="boutique-btn boutique-btn--light">
-            Demander disponibilité
-          </a>
-
-          <a
-            href="https://wa.me/21600000000"
-            target="_blank"
-            rel="noreferrer"
-            className="boutique-btn boutique-btn--whatsapp"
-          >
-            <MessageCircle size={18} />
-            WhatsApp
-          </a>
-        </div>
-
-        <p className="boutique-note">
-          Les tapis artisanaux sont disponibles à l’achat en ligne dans notre
-          boutique dédiée.
-        </p>
+        <a href="/contact" className="boutique-btn boutique-btn--primary">
+          Nous contacter
+          <ArrowRight size={18} />
+        </a>
       </section>
     </main>
   );
