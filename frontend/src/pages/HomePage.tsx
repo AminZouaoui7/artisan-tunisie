@@ -4,12 +4,12 @@ import { Star, X, ChevronLeft, ChevronRight, Eye } from "lucide-react";
 import { useEffect, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import PhoneInput from "../components/PhoneInput";
-import boutiqueImg1 from "../assets/ChatGPT Image May 5, 2026, 02_21_18 PM.png";
-import boutiqueImg2 from "../assets/ChatGPT Image May 5, 2026, 02_21_30 PM.png";
-import boutiqueImg3 from "../assets/ChatGPT Image May 5, 2026, 02_21_36 PM.png";
-import boutiqueImg4 from "../assets/ChatGPT Image May 5, 2026, 02_21_42 PM.png";
-import boutiqueImg5 from "../assets/ChatGPT Image May 5, 2026, 02_21_46 PM.png";
-import boutiqueImg6 from "../assets/ChatGPT Image May 5, 2026, 02_22_04 PM.png";
+import boutiqueImg1 from "../assets/ceramic1.png";
+import boutiqueImg2 from "../assets/rooftop1 (1).png";
+import boutiqueImg3 from "../assets/tab2.png";
+import boutiqueImg4 from "../assets/bijoux.png";
+import boutiqueImg5 from "../assets/mosaique.png";
+import boutiqueImg6 from "../assets/mosaique.png";
 
 import heroRug from "../assets/088fc89b-c8a7-49da-8450-cc19fc82ade1.png";
 import storyImage from "../assets/cbd0ea42-92dc-4cd6-a8e7-0b3133fe44f2.png";
