@@ -73,7 +73,7 @@ export default function Navbar() {
   const links = [
     { to: "/", label: t("nav.home") },
     { to: "/our-story", label: t("nav.ourStory") },
-    { to: "/boutique", label: "Notre boutique" },
+    { to: "/boutique", label: "Nos Collections" },
     { to: "/products", label: t("nav.products") },
     { to: "/reservation", label: t("nav.reservation") },
     { to: "/contact", label: t("nav.contact") },
