@@ -7,13 +7,9 @@ import "../styles/OurStoryPage.css";
 import ourstory1 from "../assets/ourstory1.jpg";
 import ourstory2 from "../assets/ourstory2.jpg";
 
-import { useI18n } from "../i18n/i18n";
-
 const IMG_FOUNDER = lhajjImage;
 
 export default function OurStoryPage() {
-  const { t } = useI18n();
-
   return (
     <div className="story-page">
       <section className="story-hero">
@@ -39,7 +35,9 @@ export default function OurStoryPage() {
           </p>
 
           <div className="story-hero-highlight">
-            <span>Ouverture inaugurée en présence du Président Habib Bourguiba</span>
+            <span>
+              Ouverture inaugurée en présence du Président Habib Bourguiba
+            </span>
           </div>
 
           <div className="story-ornament">
@@ -69,9 +67,7 @@ export default function OurStoryPage() {
 
               <div className="story-founder-badge">
                 <span className="story-founder-badge-year">1962</span>
-                <span className="story-founder-badge-label">
-                  La Médina
-                </span>
+                <span className="story-founder-badge-label">La Médina</span>
               </div>
             </div>
           </div>
@@ -114,16 +110,12 @@ export default function OurStoryPage() {
             <div className="story-stats">
               <div className="story-stat">
                 <span className="story-stat-number">60+</span>
-                <span className="story-stat-label">
-                  ans d’histoire
-                </span>
+                <span className="story-stat-label">ans d’histoire</span>
               </div>
 
               <div className="story-stat">
                 <span className="story-stat-number">5</span>
-                <span className="story-stat-label">
-                  générations
-                </span>
+                <span className="story-stat-label">générations</span>
               </div>
 
               <div className="story-stat">
@@ -142,9 +134,7 @@ export default function OurStoryPage() {
       <section className="story-legacy">
         <div className="story-legacy-inner">
           <div className="story-legacy-text">
-            <p className="story-kicker">
-              Héritage familial
-            </p>
+            <p className="story-kicker">Héritage familial</p>
 
             <h2 className="story-section-title">
               Un savoir-faire transmis avec passion.
@@ -157,8 +147,8 @@ export default function OurStoryPage() {
             </p>
 
             <p className="story-body">
-              Chaque tapis est choisi avec soin pour apporter chaleur,
-              caractère et authenticité à votre intérieur.
+              Chaque tapis est choisi avec soin pour apporter chaleur, caractère
+              et authenticité à votre intérieur.
             </p>
 
             <div className="story-legacy-cta-row">
