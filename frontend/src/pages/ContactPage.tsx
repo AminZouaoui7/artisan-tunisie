@@ -132,9 +132,9 @@ export default function ContactPage() {
           <div className="contact-card">
             {isEmailSuccess ? (
               <ActionSuccess
-                title="Message envoye"
-                message="Merci pour votre message. Nous reviendrons vers vous dans les meilleurs delais."
-                primaryActionLabel="Retour a l'accueil"
+                title={t("contact.successTitle")}
+                message={t("contact.successMessage")}
+                primaryActionLabel={t("contact.successPrimaryAction")}
                 primaryActionTo="/"
                 variant="contact"
               />

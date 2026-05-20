@@ -6,6 +6,7 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import App from "./App";
 import { AuthProvider } from "./context/AuthContext.tsx";
 import { CartProvider } from "./context/CartContext";
+import { CurrencyProvider } from "./context/CurrencyContext";
 
 import "./index.css";
 
@@ -15,11 +16,13 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <GoogleOAuthProvider clientId={googleClientId}>
       <BrowserRouter>
-        <AuthProvider>
-          <CartProvider>
-            <App />
-          </CartProvider>
-        </AuthProvider>
+        <CurrencyProvider>
+          <AuthProvider>
+            <CartProvider>
+              <App />
+            </CartProvider>
+          </AuthProvider>
+        </CurrencyProvider>
       </BrowserRouter>
     </GoogleOAuthProvider>
   </React.StrictMode>

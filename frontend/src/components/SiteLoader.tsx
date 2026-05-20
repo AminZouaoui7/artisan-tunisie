@@ -1,5 +1,6 @@
 import type { CSSProperties } from "react";
 import logoMain from "../assets/color white.png";
+import { useI18n } from "../i18n/i18n";
 
 type SiteLoaderProps = {
   isVisible: boolean;
@@ -404,6 +405,8 @@ const CSS = `
 `;
 
 export default function SiteLoader({ isVisible }: SiteLoaderProps) {
+  const { t } = useI18n();
+
   if (!isVisible) {
     return null;
   }
@@ -440,7 +443,7 @@ export default function SiteLoader({ isVisible }: SiteLoaderProps) {
             <CornerOrnament pos="br" />
 
             <div className="am-logo-wrap">
-              <img className="am-logo" src={logoMain} alt="L'Artisan de la Médina" />
+              <img className="am-logo" src={logoMain} alt={t("loader.logoAlt")} />
             </div>
 
             <div className="am-divider">
@@ -449,8 +452,8 @@ export default function SiteLoader({ isVisible }: SiteLoaderProps) {
               <div className="am-divider-line" />
             </div>
 
-            <p className="am-name">L'Artisan de la Médina</p>
-            <p className="am-sub">Artisanat Tunisien Authentique</p>
+            <p className="am-name">{t("loader.name")}</p>
+            <p className="am-sub">{t("loader.subtitle")}</p>
           </div>
         </div>
 

@@ -1,37 +1,38 @@
+import { useI18n } from "../i18n/i18n";
+
 export default function Hero() {
+  const { t } = useI18n();
+
   return (
     <section className="hero" id="hero">
       <div className="container hero-content">
         <div className="hero-text">
-          <span className="hero-badge">Tapis artisanaux de Tunisie</span>
+          <span className="hero-badge">{t("legacy.hero.badge")}</span>
 
           <h1>
-            Sublimez votre intérieur avec des tapis
-            <span> faits main</span>
+            {t("legacy.hero.titleLine1")}
+            <span> {t("legacy.hero.titleEmphasis")}</span>
           </h1>
 
-          <p>
-            Découvrez une sélection élégante de tapis artisanaux tunisiens,
-            créés avec passion par des artisans au savoir-faire authentique.
-          </p>
+          <p>{t("legacy.hero.description")}</p>
 
           <div className="hero-actions">
-            <button className="btn btn-primary">Voir les tapis</button>
-            <button className="btn btn-light">Notre histoire</button>
+            <button className="btn btn-primary">{t("legacy.hero.ctaProducts")}</button>
+            <button className="btn btn-light">{t("legacy.hero.ctaStory")}</button>
           </div>
 
           <div className="hero-stats">
             <div>
-              <strong>100%</strong>
-              <span>Artisanal</span>
+              <strong>{t("legacy.hero.stat1Value")}</strong>
+              <span>{t("legacy.hero.stat1Label")}</span>
             </div>
             <div>
-              <strong>Authentique</strong>
-              <span>Made in Tunisia</span>
+              <strong>{t("legacy.hero.stat2Value")}</strong>
+              <span>{t("legacy.hero.stat2Label")}</span>
             </div>
             <div>
-              <strong>Premium</strong>
-              <span>Qualité & design</span>
+              <strong>{t("legacy.hero.stat3Value")}</strong>
+              <span>{t("legacy.hero.stat3Label")}</span>
             </div>
           </div>
         </div>
@@ -39,7 +40,7 @@ export default function Hero() {
         <div className="hero-card">
           <img
             src="https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1200&q=80"
-            alt="Tapis artisanal"
+            alt={t("legacy.hero.imageAlt")}
           />
         </div>
       </div>

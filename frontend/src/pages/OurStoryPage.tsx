@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { useI18n } from "../i18n/i18n";
 import lhajjImage from "../assets/lhajj.jpg";
 import founderDecorImage from "../assets/imageeess.png";
 
@@ -10,34 +11,58 @@ import ourstory2 from "../assets/ourstory2.jpg";
 const IMG_FOUNDER = lhajjImage;
 
 export default function OurStoryPage() {
+  const { t } = useI18n();
+  const guests = [
+    {
+      image: founderDecorImage,
+      alt: t("ourStory.custom.guests.greece.alt"),
+      label: t("ourStory.custom.guests.greece.label"),
+      name: t("ourStory.custom.guests.greece.name"),
+      text: t("ourStory.custom.guests.greece.text"),
+      large: true,
+    },
+    {
+      image: ourstory1,
+      alt: t("ourStory.custom.guests.minister.alt"),
+      label: t("ourStory.custom.guests.minister.label"),
+      name: t("ourStory.custom.guests.minister.name"),
+      text: t("ourStory.custom.guests.minister.text"),
+      large: false,
+    },
+    {
+      image: ourstory2,
+      alt: t("ourStory.custom.guests.menem.alt"),
+      label: t("ourStory.custom.guests.menem.label"),
+      name: t("ourStory.custom.guests.menem.name"),
+      text: t("ourStory.custom.guests.menem.text"),
+      large: false,
+    },
+  ];
+
   return (
     <div className="story-page">
       <section className="story-hero">
         <div className="story-hero-photo" />
 
         <div className="story-hero-panel">
-          <p className="story-hero-kicker">Notre histoire</p>
+          <p className="story-hero-kicker">{t("nav.ourStory")}</p>
 
           <h1 className="story-hero-title">
-            Une boutique née
+            {t("ourStory.custom.hero.titleLine1")}
             <br />
-            <em>après l’indépendance</em>
+            <em>{t("ourStory.custom.hero.titleEmphasis")}</em>
           </h1>
 
-          <p className="story-hero-sub">
-            Au cœur de la Médina, notre boutique ouvre ses portes dans une
-            Tunisie nouvelle, portée par la fierté de son artisanat et la volonté
-            de préserver les gestes anciens.
-          </p>
+          <p className="story-hero-sub">{t("ourStory.custom.hero.description")}</p>
 
           <div className="story-hero-highlight">
-            Ouverture inaugurée en présence du Président Habib Bourguiba
+            {t("ourStory.custom.hero.highlight")}
           </div>
 
           <div className="story-ornament">
             <span className="story-ornament-line" />
             <span className="story-ornament-gem">✦</span>
-            <span className="story-ornament-brand">L’ARTISAN DE LA MÉDINA</span>
+            <span className="story-ornament-brand">{t("common.brandName")}</span>
             <span className="story-ornament-gem">✦</span>
             <span className="story-ornament-line" />
           </div>
@@ -50,63 +75,49 @@ export default function OurStoryPage() {
             <div className="story-founder-image-card">
               <img
                 src={IMG_FOUNDER}
-                alt="Haj Bechir Ben Ghorbel"
+                alt={t("ourStory.page.generations.g1962.title")}
                 className="story-founder-image"
               />
 
               <div className="story-founder-badge">
                 <span className="story-founder-badge-year">1962</span>
-                <span className="story-founder-badge-label">La Médina</span>
+                <span className="story-founder-badge-label">{t("ourStory.badgePlace")}</span>
               </div>
             </div>
           </div>
 
           <div className="story-founder-text">
-            <p className="story-kicker">Le fondateur</p>
+            <p className="story-kicker">{t("ourStory.custom.founder.kicker")}</p>
 
             <h2 className="story-section-title">
-              Haj Bechir
-              <br />
-              <em>Ben Ghorbel</em>
+              {t("ourStory.page.generations.g1962.title")}
             </h2>
 
-            <p className="story-body">
-              L’histoire commence avec Haj Bechir Ben Ghorbel, fondateur
-              visionnaire qui a donné naissance à l’une des premières boutiques
-              dédiées à l’artisanat tunisien authentique.
-            </p>
+            <p className="story-body">{t("ourStory.custom.founder.body1")}</p>
 
             <div className="story-pullquote">
-              <p>
-                Chaque objet sélectionné porte une trace : celle d’une main,
-                d’une région, d’un geste ancien et d’une famille qui a choisi
-                de protéger ce patrimoine.
-              </p>
+              <p>{t("ourStory.page.intro.text")}</p>
             </div>
 
-            <p className="story-body">
-              Depuis 1962, chaque génération ajoute sa touche à cette histoire.
-              La boutique continue de faire rayonner l’artisanat tunisien avec
-              la même passion.
-            </p>
+            <p className="story-body">{t("ourStory.custom.founder.body2")}</p>
 
             <div className="story-stats">
               <div className="story-stat">
                 <span className="story-stat-number">60+</span>
-                <span className="story-stat-label">ans d’histoire</span>
+                <span className="story-stat-label">{t("ourStory.page.stats.history")}</span>
               </div>
 
               <div className="story-stat">
                 <span className="story-stat-number">5</span>
-                <span className="story-stat-label">générations</span>
+                <span className="story-stat-label">{t("ourStory.page.stats.generations")}</span>
               </div>
 
               <div className="story-stat">
                 <span className="story-stat-number">100%</span>
                 <span className="story-stat-label">
-                  artisans
+                  {t("ourStory.custom.founder.statArtisansLine1")}
                   <br />
-                  tunisiens
+                  {t("ourStory.custom.founder.statArtisansLine2")}
                 </span>
               </div>
             </div>
@@ -117,82 +128,43 @@ export default function OurStoryPage() {
       <section className="story-legacy">
         <div className="story-legacy-inner">
           <div className="story-legacy-text">
-            <p className="story-kicker">Invités d’honneur</p>
+            <p className="story-kicker">{t("ourStory.custom.guests.kicker")}</p>
 
             <h2 className="story-section-title">
-              Des rencontres qui ont marqué notre histoire.
+              {t("ourStory.custom.guests.title")}
             </h2>
 
-            <p className="story-body">
-              Au fil des générations, L’Artisan de la Médina a eu l’honneur
-              d’accueillir des personnalités importantes venues découvrir la
-              richesse de l’artisanat tunisien.
-            </p>
+            <p className="story-body">{t("ourStory.custom.guests.body1")}</p>
 
-            <p className="story-body">
-              Ces moments précieux témoignent de la place unique de notre maison
-              dans la mémoire culturelle de la Médina.
-            </p>
+            <p className="story-body">{t("ourStory.custom.guests.body2")}</p>
 
             <div className="story-legacy-cta-row">
               <Link to="/products" className="story-btn-primary">
-                Découvrir nos tapis
+                {t("ourStory.ctaProducts")}
               </Link>
             </div>
           </div>
 
           <div className="story-legacy-visual">
             <div className="story-guests-grid">
-              <article className="story-guest-card story-guest-card--large">
-                <img
-                  src={founderDecorImage}
-                  alt="Sophie de Grèce"
-                  className="story-guest-image"
-                />
+              {guests.map((guest) => (
+                <article
+                  key={guest.name}
+                  className={`story-guest-card${guest.large ? " story-guest-card--large" : ""}`}
+                >
+                  <img
+                    src={guest.image}
+                    alt={guest.alt}
+                    className="story-guest-image"
+                  />
 
-                <div className="story-guest-caption">
-                  <span>Invitée d’honneur</span>
-                  <strong>Sophie de Grèce</strong>
-                  <p>
-                    Une visite prestigieuse au cœur de la Médina, symbole du
-                    rayonnement de l’artisanat tunisien.
-                  </p>
-                </div>
-              </article>
-
-              <article className="story-guest-card">
-                <img
-                  src={ourstory1}
-                  alt="Ministre tunisien"
-                  className="story-guest-image"
-                />
-
-                <div className="story-guest-caption">
-                  <span>Visite officielle</span>
-                  <strong>Ministre tunisien</strong>
-                  <p>
-                    Une rencontre importante autour du patrimoine, du tapis et
-                    du savoir-faire artisanal.
-                  </p>
-                </div>
-              </article>
-
-              <article className="story-guest-card">
-                <img
-                  src={ourstory2}
-                  alt="Président Carlos Menem"
-                  className="story-guest-image"
-                />
-
-                <div className="story-guest-caption">
-                  <span>Invité international</span>
-                  <strong>Président Carlos Menem</strong>
-                  <p>
-                    Un moment historique qui reflète l’élégance et l’ouverture
-                    internationale de notre maison.
-                  </p>
-                </div>
-              </article>
+                  <div className="story-guest-caption">
+                    <span>{guest.label}</span>
+                    <strong>{guest.name}</strong>
+                    <p>{guest.text}</p>
+                  </div>
+                </article>
+              ))}
             </div>
           </div>
         </div>

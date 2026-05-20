@@ -28,7 +28,7 @@ import {
 } from "../services/productService";
 import { createPriceRequest } from "../services/priceRequestService";
 import { useI18n } from "../i18n/i18n";
-import { formatEurPrice } from "../utils/price";
+import { useCurrency } from "../context/CurrencyContext";
 
 const fadeUp = { hidden: { opacity: 0, y: 24 }, visible: { opacity: 1, y: 0 } };
 const fadeLeft = { hidden: { opacity: 0, x: -24 }, visible: { opacity: 1, x: 0 } };
@@ -57,6 +57,7 @@ const boutiqueImages = [
 
 export default function HomePage() {
   const { t } = useI18n();
+  const { formatPrice } = useCurrency();
   const navigate = useNavigate();
   const { isAuthenticated, loadingAuth } = useAuth();
   const shouldReduceMotion = useReducedMotion();
@@ -305,7 +306,7 @@ export default function HomePage() {
       <motion.img
         key={index}
         src={img}
-        alt="Boutique Artisan Madina"
+        alt={t("home.heroImageAlt")}
         initial={false}
         animate={{ opacity: index === boutiqueIndex ? 1 : 0 }}
         transition={{
@@ -346,7 +347,7 @@ export default function HomePage() {
     type="button"
     className="home-boutique-hero-btn home-boutique-hero-btn--left"
     onClick={prevBoutiqueImage}
-    aria-label="Image précédente"
+    aria-label={t("home.prevImage")}
   >
     <ChevronLeft size={28} />
   </button>
@@ -355,7 +356,7 @@ export default function HomePage() {
     type="button"
     className="home-boutique-hero-btn home-boutique-hero-btn--right"
     onClick={nextBoutiqueImage}
-    aria-label="Image suivante"
+    aria-label={t("home.nextImage")}
   >
     <ChevronRight size={28} />
   </button>
@@ -369,7 +370,7 @@ export default function HomePage() {
           boutiqueIndex === index ? "home-boutique-hero-dot--active" : ""
         }`}
         onClick={() => setBoutiqueIndex(index)}
-        aria-label={`Afficher l’image ${index + 1}`}
+        aria-label={`${t("common.view")} ${t("home.nextImage").toLowerCase()} ${index + 1}`}
       />
     ))}
   </div>
@@ -558,7 +559,7 @@ export default function HomePage() {
                           }`}
                         >
                           {showVisiblePrice && product.price != null
-                            ? formatEurPrice(product.price)
+                            ? formatPrice(product.price)
                             : showPriceOnRequest
                             ? t("home.priceOnRequest")
                             : "-"}
@@ -860,7 +861,7 @@ export default function HomePage() {
               >
                 {shouldShowProductPrice(selectedProduct) &&
                 selectedProduct.price != null
-                  ? formatEurPrice(selectedProduct.price)
+                  ? formatPrice(selectedProduct.price)
                   : shouldShowPriceOnRequest(selectedProduct)
                   ? t("home.priceOnRequest")
                   : "-"}
@@ -1062,15 +1063,15 @@ export default function HomePage() {
               />
 
               <PhoneInput
-  value={priceRequestForm.phone}
-  onChange={(value) =>
-    setPriceRequestForm((prev) => ({
-      ...prev,
-      phone: value,
-    }))
-  }
-  placeholder="Téléphone"
-/>
+                value={priceRequestForm.phone}
+                onChange={(value) =>
+                  setPriceRequestForm((prev) => ({
+                    ...prev,
+                    phone: value,
+                  }))
+                }
+                placeholder={t("home.phone")}
+              />
 
               <textarea
                 placeholder={t("home.yourMessage")}
@@ -1116,14 +1117,18 @@ export default function HomePage() {
             </button>
 
             <ActionSuccess
-              title="Demande de prix envoyee"
-              message="Votre demande a bien ete recue. Notre equipe vous repondra rapidement avec les informations de prix et de disponibilite."
+              title={t("products.priceRequestSuccessTitle")}
+              message={t("products.priceRequestSuccessMessage")}
               details={
-                <span>Piece concernee : {priceRequestSuccessProductName}</span>
+                <span>
+                  {t("products.priceRequestProduct", {
+                    name: priceRequestSuccessProductName,
+                  })}
+                </span>
               }
-              primaryActionLabel="Voir mes demandes"
+              primaryActionLabel={t("products.priceRequestPrimaryAction")}
               primaryActionTo="/account/price-requests"
-              secondaryActionLabel="Continuer a explorer"
+              secondaryActionLabel={t("products.priceRequestSecondaryAction")}
               secondaryActionTo="/products"
               variant="priceRequest"
             />

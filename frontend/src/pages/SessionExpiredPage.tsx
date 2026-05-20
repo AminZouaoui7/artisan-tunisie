@@ -21,7 +21,11 @@ export default function SessionExpiredPage() {
 
       <div className="session-expired-card">
         <div className="session-expired-logo-wrap">
-          <img src={logo} alt="Artisan Medina" className="session-expired-logo" />
+          <img
+            src={logo}
+            alt={t("common.brandNameAscii")}
+            className="session-expired-logo"
+          />
         </div>
 
         <div className="session-expired-icon">

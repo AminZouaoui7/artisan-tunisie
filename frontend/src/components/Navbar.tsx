@@ -14,6 +14,7 @@ import { useI18n } from "../i18n/i18n";
 import { useAuth } from "../context/useAuth";
 import { useCart } from "../context/useCart";
 import { getStoredUserLocation } from "../services/apiClient";
+import CurrencySelector from "./CurrencySelector";
 
 export default function Navbar() {
   const location = useLocation();
@@ -73,7 +74,7 @@ export default function Navbar() {
   const links = [
     { to: "/", label: t("nav.home") },
     { to: "/our-story", label: t("nav.ourStory") },
-    { to: "/boutique", label: "Nos Collections" },
+    { to: "/boutique", label: t("nav.boutique") },
     { to: "/products", label: t("nav.products") },
     { to: "/reservation", label: t("nav.reservation") },
     { to: "/contact", label: t("nav.contact") },
@@ -107,9 +108,9 @@ export default function Navbar() {
             <img
               className="nb__logo-image"
               src={logoMain}
-              alt="L’ARTISAN DE LA MÉDINA"
+              alt={t("common.brandNameAscii")}
             />
-            <span className="nb__logo-text">L’ARTISAN DE LA MÉDINA</span>
+            <span className="nb__logo-text">{t("common.brandName")}</span>
           </NavLink>
 
           <nav className="nb__nav" aria-label={t("common.mainNavigation")}>
@@ -130,6 +131,10 @@ export default function Navbar() {
           </nav>
 
           <div className="nb__right">
+            <div className="nb__currency">
+              <CurrencySelector />
+            </div>
+
             {canUseCart && (
               <Link
                 to="/cart"
@@ -395,8 +400,8 @@ export default function Navbar() {
             aria-modal="true"
             aria-labelledby="logout-confirm-title"
           >
-            <h3 id="logout-confirm-title">Déconnexion</h3>
-            <p>Voulez-vous vraiment vous déconnecter ?</p>
+            <h3 id="logout-confirm-title">{t("nav.logout")}</h3>
+            <p>{t("account.common.logoutConfirmMessage")}</p>
 
             <div className="nb__logout-actions">
               <button
@@ -404,7 +409,7 @@ export default function Navbar() {
                 className="nb__logout-cancel"
                 onClick={cancelLogout}
               >
-                Annuler
+                {t("common.cancel")}
               </button>
 
               <button
@@ -412,7 +417,7 @@ export default function Navbar() {
                 className="nb__logout-confirm"
                 onClick={confirmLogout}
               >
-                Oui, me déconnecter
+                {t("account.common.logoutConfirmAction")}
               </button>
             </div>
           </div>

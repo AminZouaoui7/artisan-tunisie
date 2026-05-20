@@ -11,9 +11,9 @@ import {
   X,
 } from "lucide-react";
 
+import { useCurrency } from "../context/CurrencyContext";
 import { getMyOrders, type CustomerOrder } from "../services/orderService";
 import { buildAssetUrl } from "../services/apiClient";
-import { formatEurPrice } from "../utils/price";
 import { useI18n } from "../i18n/i18n";
 import "../styles/AccountOrdersPage.css";
 
@@ -98,6 +98,7 @@ function getShippingLabel(order: CustomerOrder, t: any) {
 
 export default function AccountOrdersPage() {
   const { t, language } = useI18n();
+  const { formatPrice } = useCurrency();
   const [orders, setOrders] = useState<CustomerOrder[]>([]);
   const [selectedOrder, setSelectedOrder] = useState<CustomerOrder | null>(null);
   const [loading, setLoading] = useState(true);
@@ -146,7 +147,7 @@ export default function AccountOrdersPage() {
         setError(
           err instanceof Error
             ? err.message
-            : "Erreur lors du chargement des commandes."
+            : t("account.orders.loadError")
         );
       } finally {
         setLoading(false);
@@ -225,7 +226,7 @@ export default function AccountOrdersPage() {
                   {getStatusLabel(order, t)}
                 </span>
 
-                <strong>{formatEurPrice(order.totalAmount)}</strong>
+                <strong>{formatPrice(order.totalAmount)}</strong>
 
                 <button
                   className="account-order-detail-btn"
@@ -271,7 +272,7 @@ export default function AccountOrdersPage() {
 
               <div>
                 <span>{t("account.orders.fields.total")}</span>
-                <strong>{formatEurPrice(selectedOrder.totalAmount)}</strong>
+                <strong>{formatPrice(selectedOrder.totalAmount)}</strong>
               </div>
 
               <div>
@@ -345,7 +346,7 @@ export default function AccountOrdersPage() {
                         <small>{t("account.orders.quantity", { count: item.quantity ?? 1 })}</small>
                       </div>
 
-                      <strong>{formatEurPrice(item.totalPrice)}</strong>
+                      <strong>{formatPrice(item.totalPrice)}</strong>
                     </div>
                   );
                 })}

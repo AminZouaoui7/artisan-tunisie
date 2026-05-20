@@ -10,13 +10,14 @@ import {
   PackageCheck,
 } from "lucide-react";
 
+import { useCurrency } from "../context/CurrencyContext";
 import { useCart } from "../context/useCart";
-import { formatEurPrice } from "../utils/price";
 import { useI18n } from "../i18n/i18n";
 import "../styles/CartPage.css";
 
 export default function CartPage() {
   const { t } = useI18n();
+  const { currency, formatPrice } = useCurrency();
   const navigate = useNavigate();
   const { items, cartTotal, removeFromCart, clearCart } = useCart();
 
@@ -118,7 +119,7 @@ export default function CartPage() {
                         : t("cart.fallbackDimension"))}
                   </p>
 
-                  <strong>{formatEurPrice(item.price)}</strong>
+                  <strong>{formatPrice(item.price)}</strong>
                 </div>
 
                 <button
@@ -146,7 +147,7 @@ export default function CartPage() {
 
             <div className="cart-summary-row">
               <span>{t("cart.subtotal")}</span>
-              <strong>{formatEurPrice(cartTotal)}</strong>
+              <strong>{formatPrice(cartTotal)}</strong>
             </div>
 
             <div className="cart-summary-row">
@@ -156,9 +157,15 @@ export default function CartPage() {
 
             <div className="cart-summary-total">
               <span>{t("cart.estimatedTotal")}</span>
-              <strong>{formatEurPrice(cartTotal)}</strong>
+              <strong>{formatPrice(cartTotal)}</strong>
             </div>
           </div>
+
+          {currency !== "EUR" && (
+            <p className="currency-note">
+              {t("cart.currencyNote")}
+            </p>
+          )}
 
           <p className="cart-summary-note">
             {t("cart.shippingNote")}

@@ -10,10 +10,10 @@ import {
 } from "lucide-react";
 
 import ActionSuccess from "../components/ActionSuccess";
+import { useCurrency } from "../context/CurrencyContext";
 import { useCart } from "../context/useCart";
 import { useAuth } from "../context/AuthContext";
 import { apiFetch } from "../services/apiClient";
-import { formatEurPrice } from "../utils/price";
 import { useI18n } from "../i18n/i18n";
 import "../styles/CheckoutPage.css";
 
@@ -41,6 +41,7 @@ function flagUrl(code: string) {
 
 export default function CheckoutPage() {
   const { t } = useI18n();
+  const { currency, formatPrice } = useCurrency();
   const { items, cartTotal, clearCart } = useCart();
   const { user } = useAuth();
 
@@ -256,18 +257,18 @@ export default function CheckoutPage() {
         </section>
 
         <ActionSuccess
-          title="Commande recue avec succes"
-          message="Merci pour votre commande. Notre equipe va la verifier et vous recevrez un email de confirmation tres prochainement."
+          title={t("checkout.successTitle")}
+          message={t("checkout.successMessage")}
           details={
             orderSuccess.orderId ? (
-              <span>Reference de commande : {orderSuccess.orderId}</span>
+              <span>{t("checkout.orderReference", { id: orderSuccess.orderId })}</span>
             ) : orderSuccess.message ? (
               <span>{orderSuccess.message}</span>
             ) : undefined
           }
-          primaryActionLabel="Voir mes commandes"
+          primaryActionLabel={t("checkout.successPrimaryAction")}
           primaryActionTo="/account/orders"
-          secondaryActionLabel="Continuer mes achats"
+          secondaryActionLabel={t("checkout.successSecondaryAction")}
           secondaryActionTo="/products"
           variant="order"
         />
@@ -288,11 +289,11 @@ export default function CheckoutPage() {
         <div className="checkout-hero-badges">
           <span>
             <Truck size={16} />
-            International delivery
+            {t("checkout.heroBadgeDelivery")}
           </span>
           <span>
             <CheckCircle2 size={16} />
-            Secure validation
+            {t("checkout.heroBadgeValidation")}
           </span>
         </div>
       </section>
@@ -308,41 +309,41 @@ export default function CheckoutPage() {
                   <MapPin size={20} />
                 </div>
                 <div>
-                  <span>Step 1</span>
+                  <span>{t("checkout.steps.step", { number: 1 })}</span>
                   <h2>{t("checkout.deliveryTitle")}</h2>
                 </div>
               </div>
 
               <div className="checkout-form-grid">
                 <div className="checkout-field">
-                  <label>First name</label>
+                  <label>{t("checkout.fields.firstName")}</label>
                   <input
                     type="text"
                     value={form.firstName}
                     onChange={(e) => updateField("firstName", e.target.value)}
-                    placeholder="Chaima"
+                    placeholder={t("checkout.placeholders.firstName")}
                     required
                   />
                 </div>
 
                 <div className="checkout-field">
-                  <label>Last name</label>
+                  <label>{t("checkout.fields.lastName")}</label>
                   <input
                     type="text"
                     value={form.lastName}
                     onChange={(e) => updateField("lastName", e.target.value)}
-                    placeholder="Chalbi"
+                    placeholder={t("checkout.placeholders.lastName")}
                     required
                   />
                 </div>
 
                 <div className="checkout-field checkout-field--full">
-                  <label>Email</label>
+                  <label>{t("checkout.fields.email")}</label>
                   <input
                     type="email"
                     value={form.email}
                     onChange={(e) => updateField("email", e.target.value)}
-                    placeholder="email@example.com"
+                    placeholder={t("common.emailPlaceholder")}
                     required
                   />
                 </div>
@@ -375,7 +376,7 @@ export default function CheckoutPage() {
                             type="text"
                             value={countrySearch}
                             onChange={(e) => setCountrySearch(e.target.value)}
-                            placeholder="Search country..."
+                            placeholder={t("checkout.placeholders.searchCountry")}
                           />
                         </div>
 
@@ -403,7 +404,7 @@ export default function CheckoutPage() {
                     type="text"
                     value={form.city}
                     onChange={(e) => updateField("city", e.target.value)}
-                    placeholder="Paris, Tunis, New York..."
+                    placeholder={t("checkout.placeholders.city")}
                     required
                   />
                 </div>
@@ -414,30 +415,30 @@ export default function CheckoutPage() {
                     type="text"
                     value={form.addressLine1}
                     onChange={(e) => updateField("addressLine1", e.target.value)}
-                    placeholder="12 rue de la Paix"
+                    placeholder={t("checkout.placeholders.addressLine1")}
                     required
                   />
                 </div>
 
                 <div className="checkout-field checkout-field--full">
-                  <label>Address complement</label>
+                  <label>{t("checkout.fields.addressLine2")}</label>
                   <input
                     type="text"
                     value={form.addressLine2}
                     onChange={(e) => updateField("addressLine2", e.target.value)}
-                    placeholder="Apartment, floor, building..."
+                    placeholder={t("checkout.placeholders.addressLine2")}
                   />
                 </div>
 
                 <div className="checkout-field">
-                  <label>State / Province</label>
+                  <label>{t("checkout.fields.state")}</label>
                   <input
                     type="text"
                     value={form.stateOrProvince}
                     onChange={(e) =>
                       updateField("stateOrProvince", e.target.value)
                     }
-                    placeholder="Île-de-France"
+                    placeholder={t("checkout.placeholders.state")}
                   />
                 </div>
 
@@ -447,7 +448,7 @@ export default function CheckoutPage() {
                     type="text"
                     value={form.postalCode}
                     onChange={(e) => updateField("postalCode", e.target.value)}
-                    placeholder="75000"
+                    placeholder={t("checkout.placeholders.postalCode")}
                     required
                   />
                 </div>
@@ -481,7 +482,7 @@ export default function CheckoutPage() {
                               type="text"
                               value={phoneSearch}
                               onChange={(e) => setPhoneSearch(e.target.value)}
-                              placeholder="Search..."
+                              placeholder={t("checkout.placeholders.search")}
                             />
                           </div>
 
@@ -509,18 +510,18 @@ export default function CheckoutPage() {
                       type="tel"
                       value={form.phoneNumber}
                       onChange={(e) => updateField("phoneNumber", e.target.value)}
-                      placeholder="55 123 456"
+                      placeholder={t("checkout.placeholders.phoneNumber")}
                       required
                     />
                   </div>
                 </div>
 
                 <div className="checkout-field checkout-field--full">
-                  <label>Notes</label>
+                  <label>{t("checkout.fields.notes")}</label>
                   <textarea
                     value={form.notes}
                     onChange={(e) => updateField("notes", e.target.value)}
-                    placeholder="Delivery notes, preferred contact time..."
+                    placeholder={t("checkout.placeholders.notes")}
                     rows={4}
                   />
                 </div>
@@ -533,7 +534,7 @@ export default function CheckoutPage() {
                   <CreditCard size={20} />
                 </div>
                 <div>
-                  <span>Step 2</span>
+                  <span>{t("checkout.steps.step", { number: 2 })}</span>
                   <h2>{t("checkout.paymentTitle")}</h2>
                 </div>
               </div>
@@ -608,7 +609,7 @@ export default function CheckoutPage() {
 
                   <div className="checkout-item-info">
                     <strong>{item.name}</strong>
-                    <span>{formatEurPrice(item.price)}</span>
+                    <span>{formatPrice(item.price)}</span>
                   </div>
                 </div>
               ))}
@@ -618,7 +619,7 @@ export default function CheckoutPage() {
 
             <div className="checkout-summary-row">
               <span>{t("checkout.subtotal")}</span>
-              <span>{formatEurPrice(cartTotal)}</span>
+              <span>{formatPrice(cartTotal)}</span>
             </div>
 
             <div className="checkout-summary-row">
@@ -630,8 +631,14 @@ export default function CheckoutPage() {
 
             <div className="checkout-summary-total">
               <span>{t("checkout.total")}</span>
-              <strong>{formatEurPrice(cartTotal)}</strong>
+              <strong>{formatPrice(cartTotal)}</strong>
             </div>
+
+            {currency !== "EUR" && (
+              <p className="currency-note">
+                {t("checkout.finalCurrencyNote")}
+              </p>
+            )}
 
             <button
               type="submit"

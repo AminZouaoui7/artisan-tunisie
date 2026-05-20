@@ -7,11 +7,28 @@ export const translations: Record<Language, Record<string, unknown>> = {
     common: {
       brandName: "L’ARTISAN DE LA MÉDINA",
       brandNameAscii: "L'ARTISAN DE LA MÉDINA",
+      yes: "Oui",
+      no: "Non",
       close: "Fermer",
+      cancel: "Annuler",
+      confirm: "Confirmer",
+      retry: "Réessayer",
+      save: "Enregistrer",
+      search: "Rechercher",
+      filter: "Filtrer",
+      clear: "Effacer",
+      view: "Voir",
+      viewProduct: "Voir le produit",
+      addToCart: "Ajouter au panier",
+      priceOnRequest: "Prix sur demande",
+      unavailable: "Indisponible",
+      available: "Disponible",
+      featured: "En vedette",
       openMenu: "Ouvrir le menu",
       closeMenu: "Fermer le menu",
       mainNavigation: "Navigation principale",
       languageSwitch: "Sélecteur de langue",
+      currencySwitch: "Sélecteur de devise",
       reset: "Réinitialiser",
       loading: "Chargement...",
       unknownError: "Une erreur est survenue.",
@@ -26,6 +43,7 @@ export const translations: Record<Language, Record<string, unknown>> = {
     },
     nav: {
       home: "Accueil",
+      boutique: "Nos Collections",
       ourStory: "Notre Histoire",
       products: "Nos Tapis",
       reservation: "Réservation",
@@ -46,6 +64,11 @@ export const translations: Record<Language, Record<string, unknown>> = {
         "Pièces artisanales tunisiennes, façonnées avec héritage, élégance et un esprit artisanal intemporel.",
       navigation: "Navigation",
       findUs: "Nous Trouver",
+      description:
+        "Pièces artisanales tunisiennes, façonnées avec héritage, élégance et un esprit artisanal intemporel.",
+      quickLinks: "Navigation",
+      contact: "Contact",
+      rights: "Tous droits réservés",
       newsletter: "Newsletter",
       newsletterText:
         "Recevez nos nouvelles collections et offres exclusives directement dans votre boîte mail.",
@@ -174,6 +197,9 @@ export const translations: Record<Language, Record<string, unknown>> = {
       boutiqueKicker: "Notre boutique",
       boutiqueTitle: "Un lieu rempli d’artisanat tunisien",
       boutiqueDescription: "Découvrez notre espace à Tunis, où chaque pièce raconte l’histoire du savoir-faire artisanal.",
+      heroImageAlt: "Boutique Artisan Madina",
+      prevImage: "Image précédente",
+      nextImage: "Image suivante",
     },
     products: {
       kicker: "Collection",
@@ -215,7 +241,20 @@ export const translations: Record<Language, Record<string, unknown>> = {
         'Bonjour, je souhaite connaître le prix du tapis "{productName}".',
       priceRequestSuccess:
         "Votre demande a bien été envoyée. Notre équipe vous répondra rapidement.",
+      priceRequestSuccessTitle: "Demande de prix envoyee",
+      priceRequestSuccessMessage:
+        "Votre demande a bien ete recue. Notre equipe vous repondra rapidement avec les informations de prix et de disponibilite.",
+      priceRequestProduct: "Piece concernee : {name}",
+      priceRequestPrimaryAction: "Voir mes demandes",
+      priceRequestSecondaryAction: "Continuer a explorer",
       priceRequestError: "Impossible d’envoyer la demande pour le moment.",
+      fields: {
+        age: "Âge",
+        density: "Densité",
+        shape: "Forme",
+        handmade: "Fait main",
+        storyTitle: "Histoire de la pièce",
+      },
       sizeLabels: {
         unknown: "Taille non précisée",
         small: "Petit tapis",
@@ -312,6 +351,54 @@ export const translations: Record<Language, Record<string, unknown>> = {
           },
         },
       },
+      custom: {
+        hero: {
+          titleLine1: "Une boutique née",
+          titleEmphasis: "après l’indépendance",
+          description:
+            "Au cœur de la Médina, notre boutique ouvre ses portes dans une Tunisie nouvelle, portée par la fierté de son artisanat et la volonté de préserver les gestes anciens.",
+          highlight:
+            "Ouverture inaugurée en présence du Président Habib Bourguiba",
+        },
+        founder: {
+          kicker: "Le fondateur",
+          body1:
+            "L’histoire commence avec Haj Bechir Ben Ghorbel, fondateur visionnaire qui a donné naissance à l’une des premières boutiques dédiées à l’artisanat tunisien authentique.",
+          body2:
+            "Depuis 1962, chaque génération ajoute sa touche à cette histoire. La boutique continue de faire rayonner l’artisanat tunisien avec la même passion.",
+          statArtisansLine1: "artisans",
+          statArtisansLine2: "tunisiens",
+        },
+        guests: {
+          kicker: "Invités d’honneur",
+          title: "Des rencontres qui ont marqué notre histoire.",
+          body1:
+            "Au fil des générations, L’Artisan de la Médina a eu l’honneur d’accueillir des personnalités importantes venues découvrir la richesse de l’artisanat tunisien.",
+          body2:
+            "Ces moments précieux témoignent de la place unique de notre maison dans la mémoire culturelle de la Médina.",
+          greece: {
+            alt: "Sophie de Grèce",
+            label: "Invitée d’honneur",
+            name: "Sophie de Grèce",
+            text:
+              "Une visite prestigieuse au cœur de la Médina, symbole du rayonnement de l’artisanat tunisien.",
+          },
+          minister: {
+            alt: "Ministre tunisien",
+            label: "Visite officielle",
+            name: "Ministre tunisien",
+            text:
+              "Une rencontre importante autour du patrimoine, du tapis et du savoir-faire artisanal.",
+          },
+          menem: {
+            alt: "Président Carlos Menem",
+            label: "Invité international",
+            name: "Président Carlos Menem",
+            text:
+              "Un moment historique qui reflète l’élégance et l’ouverture internationale de notre maison.",
+          },
+        },
+      },
       values: {
         selectedTitle: "Pièces sélectionnées",
         selectedDesc:
@@ -385,6 +472,12 @@ export const translations: Record<Language, Record<string, unknown>> = {
         "Votre demande de réservation a bien été envoyée. Notre équipe vous contactera rapidement pour validation.",
       submitUnknownError: "Une erreur est survenue pendant l’envoi.",
       success: "Votre demande de visite a bien été envoyée ! ✨",
+      successTitle: "Reservation envoyee",
+      successMessage:
+        "Votre demande de visite showroom a bien ete transmise. Notre equipe vous confirmera le creneau par email.",
+      successPrimaryAction: "Retour a l'accueil",
+      successSecondaryAction: "Decouvrir les pieces",
+      stickyCta: "Reserver ma visite",
       processing: "Traitement...",
       submit: "Confirmer la demande",
       fields: {
@@ -441,6 +534,10 @@ export const translations: Record<Language, Record<string, unknown>> = {
       toastError: "Erreur",
       emailSent: "Votre message a bien été envoyé par email ✨",
       emailSendError: "Impossible d’envoyer l’email. Réessayez.",
+      successTitle: "Message envoye",
+      successMessage:
+        "Merci pour votre message. Nous reviendrons vers vous dans les meilleurs delais.",
+      successPrimaryAction: "Retour a l'accueil",
       whatsAppOpened: "WhatsApp est ouvert avec votre message ✨",
       whatsAppTemplate:
         "Bonjour L'ARTISAN DE LA MÉDINA,\n\nNom : {name}\nEmail : {email}\nTéléphone : {phone}\n\nMessage :\n{message}\n",
@@ -454,6 +551,11 @@ export const translations: Record<Language, Record<string, unknown>> = {
         registerNav: "Inscription",
         emailLabel: "Adresse email",
         passwordLabel: "Mot de passe",
+        googleUnavailable: "Connexion Google impossible.",
+        googleTokenMissing: "Token Google introuvable.",
+        googleCancelled: "Connexion Google annulée ou impossible.",
+        continueWithGoogle: "Continuer avec Google",
+        loadingWithGoogle: "Connexion avec Google...",
       },
       login: {
         visualTitleLine1: "Votre espace",
@@ -475,6 +577,7 @@ export const translations: Record<Language, Record<string, unknown>> = {
         cardTitleEmphasis: "un compte.",
         subtitle: "Inscrivez-vous pour passer commande, réserver ou demander un prix.",
         continueWithGoogle: "Continuer avec Google",
+        loadingWithGoogle: "Connexion avec Google...",
         loading: "Création...",
         submit: "Créer mon compte",
         alreadyAccount: "Déjà un compte ?",
@@ -484,6 +587,10 @@ export const translations: Record<Language, Record<string, unknown>> = {
         confirmPassword: "Confirmer le mot de passe",
         googleNotReady:
           "La connexion Google n’est pas encore activée côté backend. On l’ajoutera après l’inscription classique.",
+        successTitle: "Compte cree avec succes",
+        successMessage:
+          "Votre compte Artisan Medina est pret. Vous pouvez maintenant suivre vos demandes, commandes et reservations.",
+        successPrimaryAction: "Acceder a mon compte",
         errors: {
           missingName: "Veuillez saisir votre prénom et votre nom.",
           missingEmail: "Veuillez saisir votre adresse email.",
@@ -497,6 +604,7 @@ export const translations: Record<Language, Record<string, unknown>> = {
         title: "Confirmez votre compte",
         subtitle: "Nous avons envoyé un code de confirmation à :",
         emailNotFound: "Adresse email introuvable",
+        codePlaceholder: "000000",
         loading: "Vérification...",
         submit: "Valider le code",
         alreadyConfirmed: "Déjà confirmé ?",
@@ -540,6 +648,8 @@ export const translations: Record<Language, Record<string, unknown>> = {
       shippingNote:
         "Les frais de livraison seront confirmés selon le pays, la ville et le mode de transport choisi.",
       checkout: "Passer la commande",
+      currencyNote:
+        "Prix affiche a titre indicatif. La commande finale est enregistree en EUR.",
       trust: {
         secureOrder: "Commande sécurisée",
         reservedAfterValidation: "Pièces réservées après validation",
@@ -580,6 +690,14 @@ export const translations: Record<Language, Record<string, unknown>> = {
       confirm: "Confirmer la commande",
       processing: "Traitement...",
       securePayment: "Paiement sécurisé",
+      successTitle: "Commande recue avec succes",
+      successMessage:
+        "Merci pour votre commande. Notre equipe va la verifier et vous recevrez un email de confirmation tres prochainement.",
+      orderReference: "Reference de commande : {id}",
+      successPrimaryAction: "Voir mes commandes",
+      successSecondaryAction: "Continuer mes achats",
+      heroBadgeDelivery: "Livraison internationale",
+      heroBadgeValidation: "Validation securisee",
       steps: {
         step: "Étape {number}",
         contact: "Contact client",
@@ -640,6 +758,8 @@ export const translations: Record<Language, Record<string, unknown>> = {
       productsTotal: "Total produits",
       shippingNote:
         "Les frais de livraison seront calculés selon le pays, le poids, les dimensions et le transporteur choisi.",
+      finalCurrencyNote:
+        "Prix affiche a titre indicatif. La commande finale est enregistree en EUR.",
       validation: {
         emptyCart: "Votre panier est vide.",
         firstName: "Le prénom doit contenir au moins 2 caractères.",
@@ -674,6 +794,8 @@ export const translations: Record<Language, Record<string, unknown>> = {
         notProvided: "Non renseigné",
         view: "Consulter",
         accountMenuLabel: "Menu compte",
+        logoutConfirmMessage: "Voulez-vous vraiment vous déconnecter ?",
+        logoutConfirmAction: "Oui, me déconnecter",
         person: "personne",
         people: "personnes",
         minutesShort: "min",
@@ -747,6 +869,7 @@ export const translations: Record<Language, Record<string, unknown>> = {
         currentPassword: "Ancien mot de passe",
         newPassword: "Nouveau mot de passe",
         verificationCode: "Code de vérification",
+        passwordPlaceholder: "••••••••",
         codePlaceholder: "6 chiffres",
         changingPassword: "Modification…",
         submitPassword: "Modifier le mot de passe",
@@ -834,16 +957,106 @@ export const translations: Record<Language, Record<string, unknown>> = {
         ],
       },
     },
+    boutiquePage: {
+      heroEyebrow: "Boutique Artisan Medina",
+      heroTitle: "Des pièces artisanales à découvrir uniquement sur place.",
+      heroDescription:
+        "Notre boutique réunit une sélection raffinée de créations faites main : céramique, mosaïque, bijoux, tableaux et objets décoratifs. Ces pièces ne sont pas vendues en ligne afin de préserver leur caractère rare et leur expérience de découverte.",
+      heroPrimaryCta: "Voir la collection",
+      heroSecondaryCta: "Visiter la boutique",
+      showcaseEyebrow: "Sélection exclusive",
+      showcaseTitle: "Une boutique pensée comme une galerie artisanale.",
+      showcaseDescription:
+        "Chaque objet est choisi pour sa beauté, son histoire et son lien avec l’artisanat méditerranéen. Les produits présentés ici sont disponibles uniquement dans notre espace boutique.",
+      discoverCollection: "Découvrir la collection",
+      categories: {
+        ceramic: {
+          title: "Céramique",
+          text:
+            "Pièces peintes à la main, vases, bols et objets décoratifs aux motifs traditionnels.",
+        },
+        jewelry: {
+          title: "Bijoux",
+          text:
+            "Bijoux artisanaux et accessoires raffinés, inspirés de l’art oriental.",
+        },
+        mosaic: {
+          title: "Mosaïque",
+          text:
+            "Mosaïques décoratives faites main pour embellir vos espaces avec authenticité.",
+        },
+        paintings: {
+          title: "Tableaux",
+          text:
+            "Tableaux et illustrations inspirés de la médina, des portes et paysages tunisiens.",
+        },
+      },
+      sections: {
+        ceramic: {
+          eyebrow: "Collection céramique",
+          title: "L’art de la céramique tunisienne.",
+          text:
+            "Une collection artisanale riche en couleurs, motifs et détails peints à la main.",
+          imageAlt: "Céramique artisanale {index}",
+        },
+        jewelry: {
+          eyebrow: "Bijoux artisanaux",
+          title: "Des pièces fines et élégantes.",
+          text:
+            "Des bijoux inspirés de l’art oriental et méditerranéen, disponibles uniquement en boutique.",
+          featureEyebrow: "Accessoires faits main",
+          featureTitle: "Bijoux artisanaux",
+          featureText:
+            "Une sélection raffinée de pièces lumineuses, idéales pour offrir ou compléter une tenue avec une touche orientale chic.",
+          imageAlt: "Bijoux artisanaux",
+        },
+        mosaic: {
+          eyebrow: "Mosaïque",
+          title: "Des mosaïques décoratives lumineuses.",
+          text:
+            "Des créations murales inspirées du patrimoine tunisien, pensées pour apporter couleur et caractère à votre intérieur.",
+          featureEyebrow: "Décoration murale",
+          featureTitle: "Mosaïque tunisienne",
+          featureText:
+            "Des motifs colorés, une finition artisanale et une présence forte pour transformer chaque mur en pièce unique.",
+          imageAlt: "Mosaïque tunisienne",
+        },
+        paintings: {
+          eyebrow: "Tableaux artisanaux",
+          title: "Illustrations inspirées de la médina.",
+          text:
+            "Des tableaux colorés représentant portes, ruelles et paysages tunisiens.",
+          imageAlt: "Tableau artisanal {index}",
+        },
+      },
+    },
   },
   EN: {
     common: {
       brandName: "L’ARTISAN DE LA MÉDINA",
       brandNameAscii: "L'ARTISAN DE LA MÉDINA",
+      yes: "Yes",
+      no: "No",
       close: "Close",
+      cancel: "Cancel",
+      confirm: "Confirm",
+      retry: "Retry",
+      save: "Save",
+      search: "Search",
+      filter: "Filter",
+      clear: "Clear",
+      view: "View",
+      viewProduct: "View product",
+      addToCart: "Add to cart",
+      priceOnRequest: "Price on request",
+      unavailable: "Unavailable",
+      available: "Available",
+      featured: "Featured",
       openMenu: "Open menu",
       closeMenu: "Close menu",
       mainNavigation: "Main navigation",
       languageSwitch: "Language switch",
+      currencySwitch: "Currency selector",
       reset: "Reset",
       loading: "Loading...",
       unknownError: "Something went wrong.",
@@ -858,6 +1071,7 @@ export const translations: Record<Language, Record<string, unknown>> = {
     },
     nav: {
       home: "Home",
+      boutique: "Collections",
       ourStory: "Our Story",
       products: "Products",
       reservation: "Reservation",
@@ -878,6 +1092,11 @@ export const translations: Record<Language, Record<string, unknown>> = {
         "Tunisian artisanal pieces, crafted with heritage, elegance, and a timeless handmade spirit.",
       navigation: "Navigation",
       findUs: "Find Us",
+      description:
+        "Tunisian artisanal pieces, crafted with heritage, elegance, and a timeless handmade spirit.",
+      quickLinks: "Navigation",
+      contact: "Contact",
+      rights: "All rights reserved",
       newsletter: "Newsletter",
       newsletterText:
         "Get our new collections and exclusive offers directly in your inbox.",
@@ -1001,12 +1220,21 @@ export const translations: Record<Language, Record<string, unknown>> = {
         'Hello, I would like to know the price of the rug "{productName}".',
       priceRequestSuccess:
         "Your request has been sent. Our team will get back to you shortly.",
+      priceRequestSuccessTitle: "Price request sent",
+      priceRequestSuccessMessage:
+        "Your request has been received. Our team will get back to you soon with pricing and availability details.",
+      priceRequestProduct: "Requested piece: {name}",
+      priceRequestPrimaryAction: "View my requests",
+      priceRequestSecondaryAction: "Keep exploring",
       priceRequestError: "Unable to send the request right now.",
       productsLoadError: "Unable to load rugs at the moment.",
       newBadge: "New",
       boutiqueKicker: "Our shop",
       boutiqueTitle: "A place filled with Tunisian craftsmanship",
       boutiqueDescription: "Discover our space in Tunis, where each piece tells the story of artisanal know-how.",
+      heroImageAlt: "Artisan Madina boutique",
+      prevImage: "Previous image",
+      nextImage: "Next image",
     },
     products: {
       kicker: "Collection",
@@ -1049,6 +1277,13 @@ export const translations: Record<Language, Record<string, unknown>> = {
       priceRequestSuccess:
         "Your request has been sent. Our team will get back to you shortly.",
       priceRequestError: "Unable to send the request right now.",
+      fields: {
+        age: "Age",
+        density: "Density",
+        shape: "Shape",
+        handmade: "Handmade",
+        storyTitle: "Story of the piece",
+      },
       sizeLabels: {
         unknown: "Size not specified",
         small: "Small rug",
@@ -1145,6 +1380,54 @@ export const translations: Record<Language, Record<string, unknown>> = {
           },
         },
       },
+      custom: {
+        hero: {
+          titleLine1: "A shop born",
+          titleEmphasis: "after independence",
+          description:
+            "In the heart of the Medina, our boutique opened in a new Tunisia, driven by pride in its craftsmanship and the desire to preserve ancestral gestures.",
+          highlight:
+            "Opening inaugurated in the presence of President Habib Bourguiba",
+        },
+        founder: {
+          kicker: "The founder",
+          body1:
+            "The story begins with Haj Bechir Ben Ghorbel, a visionary founder who created one of the first boutiques dedicated to authentic Tunisian craftsmanship.",
+          body2:
+            "Since 1962, each generation has added its touch to this story. The boutique continues to showcase Tunisian craftsmanship with the same passion.",
+          statArtisansLine1: "Tunisian",
+          statArtisansLine2: "artisans",
+        },
+        guests: {
+          kicker: "Honored guests",
+          title: "Meetings that shaped our story.",
+          body1:
+            "Across the generations, L’Artisan de la Médina has had the honor of welcoming important personalities who came to discover the richness of Tunisian craftsmanship.",
+          body2:
+            "These precious moments reflect the unique place our house holds in the cultural memory of the Medina.",
+          greece: {
+            alt: "Sophie of Greece",
+            label: "Guest of honor",
+            name: "Sophie of Greece",
+            text:
+              "A prestigious visit in the heart of the Medina, symbolizing the international reach of Tunisian craftsmanship.",
+          },
+          minister: {
+            alt: "Tunisian minister",
+            label: "Official visit",
+            name: "Tunisian minister",
+            text:
+              "An important meeting around heritage, rugs, and artisanal know-how.",
+          },
+          menem: {
+            alt: "President Carlos Menem",
+            label: "International guest",
+            name: "President Carlos Menem",
+            text:
+              "A historic moment reflecting the elegance and international openness of our house.",
+          },
+        },
+      },
       values: {
         selectedTitle: "Curated pieces",
         selectedDesc:
@@ -1218,6 +1501,12 @@ export const translations: Record<Language, Record<string, unknown>> = {
         "Your booking request has been sent. Our team will contact you shortly to confirm.",
       submitUnknownError: "An error occurred while sending.",
       success: "Your visit request has been sent! ✨",
+      successTitle: "Booking sent",
+      successMessage:
+        "Your showroom visit request has been sent. Our team will confirm the time slot by email.",
+      successPrimaryAction: "Back to home",
+      successSecondaryAction: "Explore the pieces",
+      stickyCta: "Book my visit",
       processing: "Processing...",
       submit: "Confirm request",
       fields: {
@@ -1274,6 +1563,10 @@ export const translations: Record<Language, Record<string, unknown>> = {
       toastError: "Error",
       emailSent: "Your message was sent by email ✨",
       emailSendError: "Unable to send the email. Please try again.",
+      successTitle: "Message sent",
+      successMessage:
+        "Thank you for your message. We will get back to you as soon as possible.",
+      successPrimaryAction: "Back to home",
       whatsAppOpened: "WhatsApp opened with your message ✨",
       whatsAppTemplate:
         "Hello L'ARTISAN DE LA MÉDINA,\n\nName: {name}\nEmail: {email}\nPhone: {phone}\n\nMessage:\n{message}\n",
@@ -1287,6 +1580,11 @@ export const translations: Record<Language, Record<string, unknown>> = {
         registerNav: "Sign up",
         emailLabel: "Email address",
         passwordLabel: "Password",
+        googleUnavailable: "Google sign-in failed.",
+        googleTokenMissing: "Google token not found.",
+        googleCancelled: "Google sign-in was cancelled or failed.",
+        continueWithGoogle: "Continue with Google",
+        loadingWithGoogle: "Signing in with Google...",
       },
       login: {
         visualTitleLine1: "Your",
@@ -1309,6 +1607,7 @@ export const translations: Record<Language, Record<string, unknown>> = {
         subtitle:
           "Sign up to place orders, book a private demo, or request a price.",
         continueWithGoogle: "Continue with Google",
+        loadingWithGoogle: "Signing in with Google...",
         loading: "Creating...",
         submit: "Create my account",
         alreadyAccount: "Already have an account?",
@@ -1318,6 +1617,10 @@ export const translations: Record<Language, Record<string, unknown>> = {
         confirmPassword: "Confirm password",
         googleNotReady:
           "Google sign-in is not enabled on the backend yet. We’ll add it after the classic signup flow.",
+        successTitle: "Account created successfully",
+        successMessage:
+          "Your Artisan Medina account is ready. You can now track your requests, orders, and bookings.",
+        successPrimaryAction: "Go to my account",
         errors: {
           missingName: "Please enter your first name and last name.",
           missingEmail: "Please enter your email address.",
@@ -1331,6 +1634,7 @@ export const translations: Record<Language, Record<string, unknown>> = {
         title: "Confirm your account",
         subtitle: "We sent a confirmation code to:",
         emailNotFound: "Email address not found",
+        codePlaceholder: "000000",
         loading: "Verifying...",
         submit: "Confirm code",
         alreadyConfirmed: "Already confirmed?",
@@ -1374,6 +1678,8 @@ export const translations: Record<Language, Record<string, unknown>> = {
       shippingNote:
         "Shipping fees will be confirmed based on the destination, city, and selected carrier.",
       checkout: "Place order",
+      currencyNote:
+        "Displayed price is indicative only. The final order is recorded in EUR.",
       trust: {
         secureOrder: "Secure order",
         reservedAfterValidation: "Reserved after validation",
@@ -1414,6 +1720,14 @@ export const translations: Record<Language, Record<string, unknown>> = {
       confirm: "Confirm order",
       processing: "Processing...",
       securePayment: "Secure payment",
+      successTitle: "Order received successfully",
+      successMessage:
+        "Thank you for your order. Our team will review it and you will receive a confirmation email shortly.",
+      orderReference: "Order reference: {id}",
+      successPrimaryAction: "View my orders",
+      successSecondaryAction: "Continue shopping",
+      heroBadgeDelivery: "International delivery",
+      heroBadgeValidation: "Secure validation",
       steps: {
         step: "Step {number}",
         contact: "Customer contact",
@@ -1473,6 +1787,8 @@ export const translations: Record<Language, Record<string, unknown>> = {
       productsTotal: "Products total",
       shippingNote:
         "Shipping fees will be calculated based on the destination, weight, dimensions, and selected carrier.",
+      finalCurrencyNote:
+        "Displayed price is indicative only. The final order is recorded in EUR.",
       validation: {
         emptyCart: "Your cart is empty.",
         firstName: "First name must be at least 2 characters.",
@@ -1507,6 +1823,8 @@ export const translations: Record<Language, Record<string, unknown>> = {
         notProvided: "Not provided",
         view: "View",
         accountMenuLabel: "Account menu",
+        logoutConfirmMessage: "Do you really want to log out?",
+        logoutConfirmAction: "Yes, log me out",
         person: "person",
         people: "people",
         minutesShort: "min",
@@ -1580,6 +1898,7 @@ export const translations: Record<Language, Record<string, unknown>> = {
         currentPassword: "Current password",
         newPassword: "New password",
         verificationCode: "Verification code",
+        passwordPlaceholder: "••••••••",
         codePlaceholder: "6 digits",
         changingPassword: "Updating…",
         submitPassword: "Update password",
@@ -1665,6 +1984,79 @@ export const translations: Record<Language, Record<string, unknown>> = {
           { name: "Sandy Berber Rug", price: "€380" },
           { name: "Djerba Prestige Rug", price: "€520" },
         ],
+      },
+    },
+    boutiquePage: {
+      heroEyebrow: "Artisan Medina Boutique",
+      heroTitle: "Artisanal pieces to discover only in-store.",
+      heroDescription:
+        "Our boutique brings together a refined selection of handmade creations: ceramics, mosaics, jewelry, paintings, and decorative objects. These pieces are not sold online in order to preserve their rare character and discovery experience.",
+      heroPrimaryCta: "View the collection",
+      heroSecondaryCta: "Visit the shop",
+      showcaseEyebrow: "Exclusive selection",
+      showcaseTitle: "A boutique designed like an artisanal gallery.",
+      showcaseDescription:
+        "Each object is chosen for its beauty, story, and connection to Mediterranean craftsmanship. The items shown here are available only in our boutique space.",
+      discoverCollection: "Discover the collection",
+      categories: {
+        ceramic: {
+          title: "Ceramics",
+          text:
+            "Hand-painted pieces, vases, bowls, and decorative objects with traditional patterns.",
+        },
+        jewelry: {
+          title: "Jewelry",
+          text:
+            "Handcrafted jewelry and refined accessories inspired by oriental art.",
+        },
+        mosaic: {
+          title: "Mosaic",
+          text:
+            "Handmade decorative mosaics to enhance your spaces with authenticity.",
+        },
+        paintings: {
+          title: "Paintings",
+          text:
+            "Paintings and illustrations inspired by the medina, doors, and Tunisian landscapes.",
+        },
+      },
+      sections: {
+        ceramic: {
+          eyebrow: "Ceramic collection",
+          title: "The art of Tunisian ceramics.",
+          text:
+            "A handcrafted collection rich in colors, patterns, and hand-painted details.",
+          imageAlt: "Handmade ceramic {index}",
+        },
+        jewelry: {
+          eyebrow: "Handcrafted jewelry",
+          title: "Fine and elegant pieces.",
+          text:
+            "Jewelry inspired by oriental and Mediterranean art, available only in-store.",
+          featureEyebrow: "Handmade accessories",
+          featureTitle: "Handcrafted jewelry",
+          featureText:
+            "A refined selection of radiant pieces, ideal as gifts or to complete an outfit with a chic oriental touch.",
+          imageAlt: "Handcrafted jewelry",
+        },
+        mosaic: {
+          eyebrow: "Mosaic",
+          title: "Bright decorative mosaics.",
+          text:
+            "Wall creations inspired by Tunisian heritage, designed to bring color and character to your interior.",
+          featureEyebrow: "Wall decor",
+          featureTitle: "Tunisian mosaic",
+          featureText:
+            "Colorful patterns, artisanal finishing, and strong presence to turn every wall into a unique piece.",
+          imageAlt: "Tunisian mosaic",
+        },
+        paintings: {
+          eyebrow: "Artisanal paintings",
+          title: "Illustrations inspired by the medina.",
+          text:
+            "Colorful paintings depicting doors, alleys, and Tunisian landscapes.",
+          imageAlt: "Artisanal painting {index}",
+        },
       },
     },
   },

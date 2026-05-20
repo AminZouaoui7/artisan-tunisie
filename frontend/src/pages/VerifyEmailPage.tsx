@@ -59,7 +59,7 @@ export default function VerifyEmailPage() {
       setError(
         err instanceof Error
           ? err.message
-          : "Une erreur est survenue."
+          : t("auth.verifyEmail.errors.unknown")
       );
     } finally {
       setLoading(false);
@@ -90,7 +90,7 @@ export default function VerifyEmailPage() {
             <input
               className="verify-code-input"
               type="text"
-              placeholder="000000"
+              placeholder={t("auth.verifyEmail.codePlaceholder")}
               value={code}
               onChange={(e: ChangeEvent<HTMLInputElement>) =>
                 setCode(e.target.value.replace(/\D/g, ""))

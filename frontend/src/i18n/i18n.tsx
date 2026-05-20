@@ -14,7 +14,10 @@ import {
 
 export type I18nContextValue = {
   language: Language;
+  lang: Language;
   setLanguage: (language: Language) => void;
+  setLang: (language: Language) => void;
+  changeLanguage: (language: Language) => void;
   t: (key: string, params?: TranslationParams) => string;
 };
 
@@ -82,7 +85,10 @@ export function I18nProvider({ children }: { children: ReactNode }) {
   const value = useMemo<I18nContextValue>(
     () => ({
       language,
+      lang: language,
       setLanguage,
+      setLang: setLanguage,
+      changeLanguage: setLanguage,
       t,
     }),
     [language]

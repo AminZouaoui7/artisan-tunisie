@@ -253,6 +253,13 @@
   font-weight: 900;
 }
 
+.currency-note {
+  margin-top: 10px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: rgba(43, 22, 8, 0.62);
+}
+
 .cart-summary-note {
   margin: 22px 0;
   color: #776b60;

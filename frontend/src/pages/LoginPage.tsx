@@ -55,7 +55,7 @@ export default function LoginPage() {
       setError(
         err instanceof Error
           ? err.message
-          : "Connexion Google impossible."
+          : t("auth.common.googleUnavailable")
       );
     } finally {
       setGoogleLoading(false);
@@ -67,14 +67,14 @@ export default function LoginPage() {
     scope: "openid email profile",
     onSuccess: async (tokenResponse) => {
       if (!tokenResponse.access_token) {
-        setError("Token Google introuvable.");
+        setError(t("auth.common.googleTokenMissing"));
         return;
       }
 
       await handleGoogleSuccess(tokenResponse.access_token);
     },
     onError: () => {
-      setError("Connexion Google annulée ou impossible.");
+      setError(t("auth.common.googleCancelled"));
       setGoogleLoading(false);
     },
   });
@@ -97,7 +97,7 @@ export default function LoginPage() {
       setError(
         err instanceof Error
           ? err.message
-          : "Une erreur est survenue."
+          : t("auth.login.errorUnknown")
       );
     } finally {
       setLoading(false);
@@ -185,8 +185,8 @@ export default function LoginPage() {
 </svg>            )}
 
             {googleLoading
-              ? "Connexion avec Google..."
-              : "Continuer avec Google"}
+              ? t("auth.common.loadingWithGoogle")
+              : t("auth.common.continueWithGoogle")}
           </button>
 
           <div className="login-divider">

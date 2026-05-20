@@ -1,6 +1,9 @@
 import type { ReactNode } from "react";
 import { Link } from "react-router-dom";
 import {
+  useI18n
+} from "../i18n/i18n";
+import {
   CalendarCheck2,
   CheckCircle2,
   MailCheck,
@@ -47,6 +50,7 @@ export default function ActionSuccess({
   secondaryActionTo,
   variant = "order",
 }: ActionSuccessProps) {
+  const { t } = useI18n();
   const Icon = iconByVariant[variant];
   const showSecondaryAction = Boolean(
     secondaryActionLabel && secondaryActionTo
@@ -68,7 +72,7 @@ export default function ActionSuccess({
         </div>
 
         <div className="action-success__content">
-          <p className="action-success__eyebrow">Artisan Medina</p>
+          <p className="action-success__eyebrow">{t("common.brandNameAscii")}</p>
           <h2 className="action-success__title">{title}</h2>
           <p className="action-success__message">{message}</p>
 

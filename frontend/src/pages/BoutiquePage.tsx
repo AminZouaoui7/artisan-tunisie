@@ -7,6 +7,7 @@ import {
   Sparkles,
   Store,
 } from "lucide-react";
+import { useI18n } from "../i18n/i18n";
 
 import "../styles/BoutiquePage.css";
 
@@ -30,37 +31,6 @@ import tab3 from "../assets/tab3.png";
 import tab4 from "../assets/tab4.png";
 import tab5 from "../assets/tab5.png";
 
-const categoryCards = [
-  {
-    id: "ceramique",
-    title: "Céramique",
-    image: ceramicImg,
-    icon: Store,
-    text: "Pièces peintes à la main, vases, bols et objets décoratifs aux motifs traditionnels.",
-  },
-  {
-    id: "bijoux",
-    title: "Bijoux",
-    image: bijouxImg,
-    icon: Gem,
-    text: "Bijoux artisanaux et accessoires raffinés, inspirés de l’art oriental.",
-  },
-  {
-    id: "mosaique",
-    title: "Mosaïque",
-    image: mosaiqueImg,
-    icon: Sparkles,
-    text: "Mosaïques décoratives faites main pour embellir vos espaces avec authenticité.",
-  },
-  {
-    id: "tableaux",
-    title: "Tableaux",
-    image: tab1,
-    icon: Palette,
-    text: "Tableaux et illustrations inspirés de la médina, des portes et paysages tunisiens.",
-  },
-];
-
 const ceramicImages = [
   ceramicImg,
   ceramic1,
@@ -75,19 +45,51 @@ const ceramicImages = [
 const tableauImages = [tab1, tab2, tab3, tab4, tab5];
 
 export default function BoutiquePage() {
+  const { t } = useI18n();
+  const categoryCards = [
+    {
+      id: "ceramique",
+      title: t("boutiquePage.categories.ceramic.title"),
+      image: ceramicImg,
+      icon: Store,
+      text: t("boutiquePage.categories.ceramic.text"),
+    },
+    {
+      id: "bijoux",
+      title: t("boutiquePage.categories.jewelry.title"),
+      image: bijouxImg,
+      icon: Gem,
+      text: t("boutiquePage.categories.jewelry.text"),
+    },
+    {
+      id: "mosaique",
+      title: t("boutiquePage.categories.mosaic.title"),
+      image: mosaiqueImg,
+      icon: Sparkles,
+      text: t("boutiquePage.categories.mosaic.text"),
+    },
+    {
+      id: "tableaux",
+      title: t("boutiquePage.categories.paintings.title"),
+      image: tab1,
+      icon: Palette,
+      text: t("boutiquePage.categories.paintings.text"),
+    },
+  ];
+
   return (
     <main className="boutique-page">
       <section className="boutique-hero">
-        <img src={heroImage} alt="Boutique Artisan Medina" />
+        <img src={heroImage} alt={t("boutiquePage.heroEyebrow")} />
         <div className="boutique-hero__overlay" />
 
         <div className="boutique-hero__content">
           <span className="boutique-eyebrow">
             <Sparkles size={15} />
-            Boutique Artisan Medina
+            {t("boutiquePage.heroEyebrow")}
           </span>
 
-          <h1>Des pièces artisanales à découvrir uniquement sur place.</h1>
+          <h1>{t("boutiquePage.heroTitle")}</h1>
 
           <div className="boutique-ornament">
             <span />
@@ -95,22 +97,17 @@ export default function BoutiquePage() {
             <span />
           </div>
 
-          <p>
-            Notre boutique réunit une sélection raffinée de créations faites
-            main : céramique, mosaïque, bijoux, tableaux et objets décoratifs.
-            Ces pièces ne sont pas vendues en ligne afin de préserver leur
-            caractère rare et leur expérience de découverte.
-          </p>
+          <p>{t("boutiquePage.heroDescription")}</p>
 
           <div className="boutique-hero__actions">
             <a href="#collections" className="boutique-btn boutique-btn--primary">
               <Eye size={16} />
-              Voir la collection
+              {t("boutiquePage.heroPrimaryCta")}
             </a>
 
             <a href="/products" className="boutique-btn boutique-btn--ghost">
               <Home size={16} />
-              Visiter la boutique
+              {t("boutiquePage.heroSecondaryCta")}
             </a>
           </div>
         </div>
@@ -120,10 +117,10 @@ export default function BoutiquePage() {
         <div className="boutique-showcase__header">
           <span className="boutique-eyebrow boutique-eyebrow--dark">
             <Sparkles size={15} />
-            Sélection exclusive
+            {t("boutiquePage.showcaseEyebrow")}
           </span>
 
-          <h2>Une boutique pensée comme une galerie artisanale.</h2>
+          <h2>{t("boutiquePage.showcaseTitle")}</h2>
 
           <div className="boutique-ornament boutique-ornament--dark">
             <span />
@@ -131,11 +128,7 @@ export default function BoutiquePage() {
             <span />
           </div>
 
-          <p>
-            Chaque objet est choisi pour sa beauté, son histoire et son lien
-            avec l’artisanat méditerranéen. Les produits présentés ici sont
-            disponibles uniquement dans notre espace boutique.
-          </p>
+          <p>{t("boutiquePage.showcaseDescription")}</p>
         </div>
 
         <div className="boutique-category-grid">
@@ -161,7 +154,7 @@ export default function BoutiquePage() {
                   <p>{item.text}</p>
 
                   <a href={`#${item.id}`}>
-                    Découvrir la collection
+                    {t("boutiquePage.discoverCollection")}
                     <ArrowRight size={16} />
                   </a>
                 </div>
@@ -175,21 +168,23 @@ export default function BoutiquePage() {
         <div className="boutique-gallery-header">
           <span className="boutique-eyebrow boutique-eyebrow--dark">
             <Store size={15} />
-            Collection céramique
+            {t("boutiquePage.sections.ceramic.eyebrow")}
           </span>
 
-          <h2>L’art de la céramique tunisienne.</h2>
+          <h2>{t("boutiquePage.sections.ceramic.title")}</h2>
 
-          <p>
-            Une collection artisanale riche en couleurs, motifs et détails
-            peints à la main.
-          </p>
+          <p>{t("boutiquePage.sections.ceramic.text")}</p>
         </div>
 
         <div className="boutique-masonry">
           {ceramicImages.map((image, index) => (
             <div className="boutique-masonry__item" key={index}>
-              <img src={image} alt={`Céramique artisanale ${index + 1}`} />
+              <img
+                src={image}
+                alt={t("boutiquePage.sections.ceramic.imageAlt", {
+                  index: index + 1,
+                })}
+              />
             </div>
           ))}
         </div>
@@ -199,27 +194,21 @@ export default function BoutiquePage() {
         <div className="boutique-gallery-header">
           <span className="boutique-eyebrow boutique-eyebrow--dark">
             <Gem size={15} />
-            Bijoux artisanaux
+            {t("boutiquePage.sections.jewelry.eyebrow")}
           </span>
 
-          <h2>Des pièces fines et élégantes.</h2>
+          <h2>{t("boutiquePage.sections.jewelry.title")}</h2>
 
-          <p>
-            Des bijoux inspirés de l’art oriental et méditerranéen, disponibles
-            uniquement en boutique.
-          </p>
+          <p>{t("boutiquePage.sections.jewelry.text")}</p>
         </div>
 
         <div className="boutique-feature-showcase boutique-feature-showcase--bijoux">
-          <img src={bijouxImg} alt="Bijoux artisanaux" />
+          <img src={bijouxImg} alt={t("boutiquePage.sections.jewelry.imageAlt")} />
 
           <div>
-            <span>Accessoires faits main</span>
-            <h3>Bijoux artisanaux</h3>
-            <p>
-              Une sélection raffinée de pièces lumineuses, idéales pour offrir
-              ou compléter une tenue avec une touche orientale chic.
-            </p>
+            <span>{t("boutiquePage.sections.jewelry.featureEyebrow")}</span>
+            <h3>{t("boutiquePage.sections.jewelry.featureTitle")}</h3>
+            <p>{t("boutiquePage.sections.jewelry.featureText")}</p>
           </div>
         </div>
       </section>
@@ -228,27 +217,21 @@ export default function BoutiquePage() {
         <div className="boutique-gallery-header">
           <span className="boutique-eyebrow boutique-eyebrow--dark">
             <Sparkles size={15} />
-            Mosaïque
+            {t("boutiquePage.sections.mosaic.eyebrow")}
           </span>
 
-          <h2>Des mosaïques décoratives lumineuses.</h2>
+          <h2>{t("boutiquePage.sections.mosaic.title")}</h2>
 
-          <p>
-            Des créations murales inspirées du patrimoine tunisien, pensées pour
-            apporter couleur et caractère à votre intérieur.
-          </p>
+          <p>{t("boutiquePage.sections.mosaic.text")}</p>
         </div>
 
         <div className="boutique-feature-showcase">
-          <img src={mosaiqueImg} alt="Mosaïque tunisienne" />
+          <img src={mosaiqueImg} alt={t("boutiquePage.sections.mosaic.imageAlt")} />
 
           <div>
-            <span>Décoration murale</span>
-            <h3>Mosaïque tunisienne</h3>
-            <p>
-              Des motifs colorés, une finition artisanale et une présence forte
-              pour transformer chaque mur en pièce unique.
-            </p>
+            <span>{t("boutiquePage.sections.mosaic.featureEyebrow")}</span>
+            <h3>{t("boutiquePage.sections.mosaic.featureTitle")}</h3>
+            <p>{t("boutiquePage.sections.mosaic.featureText")}</p>
           </div>
         </div>
       </section>
@@ -257,45 +240,29 @@ export default function BoutiquePage() {
         <div className="boutique-gallery-header">
           <span className="boutique-eyebrow boutique-eyebrow--dark">
             <Palette size={15} />
-            Tableaux artisanaux
+            {t("boutiquePage.sections.paintings.eyebrow")}
           </span>
 
-          <h2>Illustrations inspirées de la médina.</h2>
+          <h2>{t("boutiquePage.sections.paintings.title")}</h2>
 
-          <p>
-            Des tableaux colorés représentant portes, ruelles et paysages
-            tunisiens.
-          </p>
+          <p>{t("boutiquePage.sections.paintings.text")}</p>
         </div>
 
         <div className="boutique-tableaux-grid">
           {tableauImages.map((image, index) => (
             <div className="boutique-tableaux-card" key={index}>
-              <img src={image} alt={`Tableau artisanal ${index + 1}`} />
+              <img
+                src={image}
+                alt={t("boutiquePage.sections.paintings.imageAlt", {
+                  index: index + 1,
+                })}
+              />
             </div>
           ))}
         </div>
       </section>
 
-      <section className="boutique-final-cta">
-        <span className="boutique-eyebrow boutique-eyebrow--dark">
-          <Palette size={15} />
-          Visite boutique
-        </span>
-
-        <h2>Venez découvrir les pièces en vrai.</h2>
-
-        <p>
-          Certaines créations ne peuvent être pleinement appréciées qu’en les
-          voyant de près : les matières, les couleurs, les détails et la main de
-          l’artisan.
-        </p>
-
-        <a href="/contact" className="boutique-btn boutique-btn--primary">
-          Nous contacter
-          <ArrowRight size={18} />
-        </a>
-      </section>
+      
     </main>
   );
 }

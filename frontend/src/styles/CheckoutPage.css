@@ -544,6 +544,13 @@
   font-size: 24px;
 }
 
+.currency-note {
+  margin-top: 10px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: rgba(43, 22, 8, 0.62);
+}
+
 .checkout-submit-btn {
   width: 100%;
   min-height: 56px;

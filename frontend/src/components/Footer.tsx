@@ -94,19 +94,19 @@ export default function Footer() {
                 <rect x="18" y="18" width="12" height="12" fill="rgba(140,100,60,0.15)" stroke="rgba(140,100,60,0.4)" strokeWidth="1" transform="rotate(45 24 24)"/>
               </svg>
             </div>
-            <h3 className="artisan-footer-brand">Artisan Madina</h3>
+            <h3 className="artisan-footer-brand">{t("common.brandNameAscii")}</h3>
           </div>
           <p className="artisan-footer-tagline">
-            Pièces artisanales tunisiennes, façonnées avec héritage, élégance et un esprit artisanal intemporel.
+            {t("footer.description")}
           </p>
           <div className="artisan-footer-socials">
-            <a href="https://instagram.com" target="_blank" rel="noreferrer" className="artisan-social-btn" aria-label="Instagram">
+            <a href="https://instagram.com" target="_blank" rel="noreferrer" className="artisan-social-btn" aria-label={t("footer.instagram")}>
               <InstagramIcon size={18} />
-              <span>Instagram</span>
+              <span>{t("footer.instagram")}</span>
             </a>
-            <a href="https://facebook.com" target="_blank" rel="noreferrer" className="artisan-social-btn" aria-label="Facebook">
+            <a href="https://facebook.com" target="_blank" rel="noreferrer" className="artisan-social-btn" aria-label={t("footer.facebook")}>
               <FacebookIcon size={18} />
-              <span>Facebook</span>
+              <span>{t("footer.facebook")}</span>
             </a>
           </div>
         </div>
@@ -118,7 +118,7 @@ export default function Footer() {
         <div className="artisan-footer-col">
           <h4 className="artisan-footer-heading">
             <span className="artisan-heading-line" />
-            {t("nav.menu")}
+            {t("footer.quickLinks")}
           </h4>
           <nav className="artisan-footer-nav">
             {[
@@ -143,7 +143,7 @@ export default function Footer() {
         <div className="artisan-footer-col">
           <h4 className="artisan-footer-heading">
             <span className="artisan-heading-line" />
-            Contact
+            {t("footer.contact")}
           </h4>
           <ul className="artisan-footer-contact">
             <li>
@@ -168,14 +168,14 @@ export default function Footer() {
         <div className="artisan-footer-col">
           <h4 className="artisan-footer-heading">
             <span className="artisan-heading-line" />
-            Newsletter
+            {t("footer.newsletter")}
           </h4>
           <p className="artisan-newsletter-text">
-            Recevez nos nouvelles collections et offres exclusives directement dans votre boîte mail.
+            {t("footer.newsletterText")}
           </p>
           {subscribed ? (
             <div className="artisan-subscribed-msg">
-              ✦ Merci ! Vous êtes bien inscrit.
+              {t("footer.subscribed")}
             </div>
           ) : (
             <form className="artisan-newsletter-form" onSubmit={handleSubscribe}>
@@ -185,14 +185,14 @@ export default function Footer() {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="votre@email.com"
+                  placeholder={t("common.emailPlaceholder")}
                   className="artisan-newsletter-input"
                   required
                 />
               </div>
               <button type="submit" className="artisan-newsletter-btn">
                 <Send size={15} />
-                S'abonner
+                {t("footer.subscribe")}
               </button>
             </form>
           )}

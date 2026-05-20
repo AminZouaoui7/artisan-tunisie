@@ -14,7 +14,7 @@ import { useI18n } from "../i18n/i18n";
 import "../styles/RegisterPage.css";
 
 export default function RegisterPage() {
-  useI18n();
+  const { t } = useI18n();
 
   const navigate = useNavigate();
   const { loginWithGoogle } = useAuth();
@@ -61,7 +61,7 @@ export default function RegisterPage() {
     setError(
       err instanceof Error
         ? err.message
-        : "Inscription Google impossible."
+        : t("auth.common.googleUnavailable")
     );
   } finally {
     setGoogleLoading(false);
@@ -73,14 +73,14 @@ export default function RegisterPage() {
     scope: "openid email profile",
     onSuccess: async (tokenResponse) => {
       if (!tokenResponse.access_token) {
-        setError("Token Google introuvable.");
+        setError(t("auth.common.googleTokenMissing"));
         return;
       }
 
       await handleGoogleSuccess(tokenResponse.access_token);
     },
     onError: () => {
-      setError("Connexion Google annulée ou impossible.");
+      setError(t("auth.common.googleCancelled"));
       setGoogleLoading(false);
     },
   });
@@ -90,22 +90,22 @@ export default function RegisterPage() {
     setError("");
 
     if (!form.firstName.trim() || !form.lastName.trim()) {
-      setError("Veuillez saisir votre prénom et votre nom.");
+      setError(t("auth.register.errors.missingName"));
       return;
     }
 
     if (!form.email.trim()) {
-      setError("Veuillez saisir votre adresse email.");
+      setError(t("auth.register.errors.missingEmail"));
       return;
     }
 
     if (form.password.length < 8) {
-      setError("Le mot de passe doit contenir au moins 8 caractères.");
+      setError(t("auth.register.errors.passwordTooShort"));
       return;
     }
 
     if (form.password !== form.confirmPassword) {
-      setError("Les mots de passe ne correspondent pas.");
+      setError(t("auth.register.errors.passwordMismatch"));
       return;
     }
 
@@ -147,7 +147,7 @@ export default function RegisterPage() {
       setError(
         err instanceof Error
           ? err.message
-          : "Une erreur est survenue pendant la création du compte."
+          : t("auth.register.errors.unknown")
       );
     } finally {
       setLoading(false);
@@ -161,14 +161,14 @@ export default function RegisterPage() {
 
         <div className="register-visual-badge">
           <div className="register-visual-badge-dot" />
-          <span>Artisanat tunisien</span>
+          <span>{t("auth.common.badge")}</span>
         </div>
 
         <div className="register-visual-content">
           <h1>
-            Rejoignez notre
+            {t("auth.register.visualTitleLine1")}
             <br />
-            <em>univers artisanal</em>
+            <em>{t("auth.register.visualTitleEmphasis")}</em>
           </h1>
 
           <div className="register-visual-rule" />
@@ -181,26 +181,26 @@ export default function RegisterPage() {
         <div className="register-card-inner">
           {registrationSuccess ? (
             <ActionSuccess
-              title="Compte cree avec succes"
-              message="Votre compte Artisan Medina est pret. Vous pouvez maintenant suivre vos demandes, commandes et reservations."
-              primaryActionLabel="Acceder a mon compte"
+              title={t("auth.register.successTitle")}
+              message={t("auth.register.successMessage")}
+              primaryActionLabel={t("auth.register.successPrimaryAction")}
               primaryActionTo="/account"
               variant="auth"
             />
           ) : (
             <>
               <div className="register-card-kicker">
-                <span>Espace client</span>
+                <span>{t("auth.common.kicker")}</span>
               </div>
 
               <h2 className="register-card-title">
-                Créer
+                {t("auth.register.cardTitleLine1")}
                 <br />
-                <em>un compte.</em>
+                <em>{t("auth.register.cardTitleEmphasis")}</em>
               </h2>
 
               <p className="register-subtitle">
-                Inscrivez-vous pour passer commande, réserver ou demander un prix.
+                {t("auth.register.subtitle")}
               </p>
 
               {error && <div className="register-error">{error}</div>}
@@ -228,12 +228,12 @@ export default function RegisterPage() {
                 )}
 
                 {googleLoading
-                  ? "Connexion avec Google..."
-                  : "Continuer avec Google"}
+                  ? t("auth.register.loadingWithGoogle")
+                  : t("auth.register.continueWithGoogle")}
               </button>
 
               <div className="register-divider">
-                <span>ou</span>
+                <span>{t("auth.common.or")}</span>
               </div>
 
               <form onSubmit={handleSubmit} className="register-form">
@@ -247,7 +247,7 @@ export default function RegisterPage() {
                       onChange={handleChange}
                       autoComplete="given-name"
                     />
-                    <label htmlFor="firstName">Prénom</label>
+                    <label htmlFor="firstName">{t("auth.register.firstName")}</label>
                   </div>
 
                   <div className="register-field">
@@ -259,7 +259,7 @@ export default function RegisterPage() {
                       onChange={handleChange}
                       autoComplete="family-name"
                     />
-                    <label htmlFor="lastName">Nom</label>
+                    <label htmlFor="lastName">{t("auth.register.lastName")}</label>
                   </div>
                 </div>
 
@@ -273,7 +273,7 @@ export default function RegisterPage() {
                     onChange={handleChange}
                     autoComplete="email"
                   />
-                  <label htmlFor="email">Adresse email</label>
+                  <label htmlFor="email">{t("auth.common.emailLabel")}</label>
                 </div>
 
                 <div className="register-field">
@@ -285,7 +285,7 @@ export default function RegisterPage() {
                     onChange={handleChange}
                     autoComplete="tel"
                   />
-                  <label htmlFor="phone">Téléphone</label>
+                  <label htmlFor="phone">{t("auth.register.phone")}</label>
                 </div>
 
                 <div className="register-field">
@@ -298,7 +298,7 @@ export default function RegisterPage() {
                     onChange={handleChange}
                     autoComplete="new-password"
                   />
-                  <label htmlFor="password">Mot de passe</label>
+                  <label htmlFor="password">{t("auth.common.passwordLabel")}</label>
                 </div>
 
                 <div className="register-field">
@@ -312,7 +312,7 @@ export default function RegisterPage() {
                     autoComplete="new-password"
                   />
                   <label htmlFor="confirmPassword">
-                    Confirmer le mot de passe
+                    {t("auth.register.confirmPassword")}
                   </label>
                 </div>
 
@@ -322,12 +322,12 @@ export default function RegisterPage() {
                   disabled={loading || googleLoading}
                 >
                   {loading && <span className="register-btn-spinner" />}
-                  {loading ? "Création..." : "Créer mon compte"}
+                  {loading ? t("auth.register.loading") : t("auth.register.submit")}
                 </button>
               </form>
 
               <p className="register-footer">
-                Déjà un compte ? <Link to="/login">Se connecter</Link>
+                {t("auth.register.alreadyAccount")} <Link to="/login">{t("auth.login.submit")}</Link>
               </p>
             </>
           )}

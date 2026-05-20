@@ -31,14 +31,15 @@ import {
   type ProductViewDto,
 } from "../services/productService";
 import { createPriceRequest } from "../services/priceRequestService";
+import { useCurrency } from "../context/CurrencyContext";
 import "../styles/ProductsPage.css";
 import { useI18n } from "../i18n/i18n";
-import { formatEurPrice } from "../utils/price";
 
 type SizeFilter = "all" | "small" | "medium" | "large" | "xl";
 
 export default function ProductsPage() {
   const { t } = useI18n();
+  const { formatPrice } = useCurrency();
   const navigate = useNavigate();
   const { isAuthenticated, loadingAuth, user } = useAuth();
   const { addToCart } = useCart();
@@ -199,7 +200,7 @@ export default function ProductsPage() {
       name: product.name,
       slug: product.slug,
       price: product.price,
-      priceLabel: formatEurPrice(product.price),
+      priceLabel: formatPrice(product.price),
       mainImageUrl:
         getProductImages(product)[0] || product.fullMainImageUrl || "",
       dimensions: product.dimensions,
@@ -575,7 +576,7 @@ export default function ProductsPage() {
                         }
                       >
                         {hasVisiblePrice
-                          ? formatEurPrice(product.price)
+                          ? formatPrice(product.price)
                           : showPriceOnRequest
                           ? t("products.priceOnRequest")
                           : "-"}
@@ -723,7 +724,7 @@ export default function ProductsPage() {
               >
                 {shouldShowProductPrice(detailProduct) &&
                 detailProduct.price != null
-                  ? formatEurPrice(detailProduct.price)
+                  ? formatPrice(detailProduct.price)
                   : shouldShowPriceOnRequest(detailProduct)
                   ? t("products.priceOnRequest")
                   : "-"}
@@ -766,7 +767,7 @@ export default function ProductsPage() {
                   {detailProduct.weightKg ? `${detailProduct.weightKg} kg` : "-"}
                 </strong>
 
-                <span>Âge</span>
+                <span>{t("products.fields.age")}</span>
                 <strong>
                   {detailProduct.ageYears ? `${detailProduct.ageYears} ans` : "-"}
                 </strong>
@@ -774,10 +775,10 @@ export default function ProductsPage() {
                 <span>{t("home.fields.condition")}</span>
                 <strong>{detailProduct.condition || "-"}</strong>
 
-                <span>Densité</span>
+                <span>{t("products.fields.density")}</span>
                 <strong>{detailProduct.density || "-"}</strong>
 
-                <span>Forme</span>
+                <span>{t("products.fields.shape")}</span>
                 <strong>{detailProduct.shape || "-"}</strong>
 
                 <span>{t("home.fields.style")}</span>
@@ -787,10 +788,16 @@ export default function ProductsPage() {
                 <strong>{detailProduct.usageSpace || "-"}</strong>
 
                 <span>{t("products.unique")}</span>
-                <strong>{detailProduct.isUniquePiece ? "Oui" : "Non"}</strong>
+                <strong>
+                  {detailProduct.isUniquePiece
+                    ? t("common.yes")
+                    : t("common.no")}
+                </strong>
 
-                <span>Fait main</span>
-                <strong>{detailProduct.isHandmade ? "Oui" : "Non"}</strong>
+                <span>{t("products.fields.handmade")}</span>
+                <strong>
+                  {detailProduct.isHandmade ? t("common.yes") : t("common.no")}
+                </strong>
 
                 <span>{t("home.fields.stock")}</span>
                 <strong>{detailProduct.stock ?? "-"}</strong>
@@ -805,7 +812,7 @@ export default function ProductsPage() {
 
               {detailProduct.shortStory && (
                 <div className="products-detail-care">
-                  <strong>Histoire de la pièce</strong>
+                  <strong>{t("products.fields.storyTitle")}</strong>
                   <p>{detailProduct.shortStory}</p>
                 </div>
               )}
@@ -910,16 +917,16 @@ export default function ProductsPage() {
               />
 
               <PhoneInput
-  className="price-request-phone"
-  value={priceRequestForm.phone}
-  onChange={(value) =>
-    setPriceRequestForm((prev) => ({
-      ...prev,
-      phone: value,
-    }))
-  }
-  placeholder="Téléphone"
-/>
+                className="price-request-phone"
+                value={priceRequestForm.phone}
+                onChange={(value) =>
+                  setPriceRequestForm((prev) => ({
+                    ...prev,
+                    phone: value,
+                  }))
+                }
+                placeholder={t("products.phone")}
+              />
 
               <textarea
                 placeholder={t("products.yourMessage")}
@@ -967,14 +974,14 @@ export default function ProductsPage() {
             </button>
 
             <ActionSuccess
-              title="Demande de prix envoyee"
-              message="Votre demande a bien ete recue. Notre equipe vous repondra rapidement avec les informations de prix et de disponibilite."
+              title={t("products.priceRequestSuccessTitle")}
+              message={t("products.priceRequestSuccessMessage")}
               details={
-                <span>Piece concernee : {priceRequestSuccessProductName}</span>
+                <span>{t("products.priceRequestProduct", { name: priceRequestSuccessProductName })}</span>
               }
-              primaryActionLabel="Voir mes demandes"
+              primaryActionLabel={t("products.priceRequestPrimaryAction")}
               primaryActionTo="/account/price-requests"
-              secondaryActionLabel="Continuer a explorer"
+              secondaryActionLabel={t("products.priceRequestSecondaryAction")}
               secondaryActionTo="/products"
               variant="priceRequest"
             />

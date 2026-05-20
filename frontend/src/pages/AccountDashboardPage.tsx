@@ -162,7 +162,7 @@ export default function AccountDashboardPage() {
                 <LockKeyhole size={15} />
                 <input
                   type="password"
-                  placeholder="••••••••"
+                  placeholder={t("account.dashboard.passwordPlaceholder")}
                   value={passwordForm.currentPassword}
                   onChange={(e) =>
                     setPasswordForm((p) => ({
@@ -181,7 +181,7 @@ export default function AccountDashboardPage() {
                 <LockKeyhole size={15} />
                 <input
                   type="password"
-                  placeholder="••••••••"
+                  placeholder={t("account.dashboard.passwordPlaceholder")}
                   value={passwordForm.newPassword}
                   onChange={(e) =>
                     setPasswordForm((p) => ({

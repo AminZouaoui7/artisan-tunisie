@@ -189,12 +189,12 @@ export default function ReservationPage() {
     return (
       <section className="page-section reservation-page">
         <ActionSuccess
-          title="Reservation envoyee"
-          message="Votre demande de visite showroom a bien ete transmise. Notre equipe vous confirmera le creneau par email."
+          title={t("reservation.successTitle")}
+          message={t("reservation.successMessage")}
           details={successDetails ? <span>{successDetails}</span> : undefined}
-          primaryActionLabel="Retour a l'accueil"
+          primaryActionLabel={t("reservation.successPrimaryAction")}
           primaryActionTo="/"
-          secondaryActionLabel="Decouvrir les pieces"
+          secondaryActionLabel={t("reservation.successSecondaryAction")}
           secondaryActionTo="/products"
           variant="reservation"
         />
@@ -209,7 +209,7 @@ export default function ReservationPage() {
         className="reservation-mobile-sticky-cta"
         onClick={scrollToForm}
       >
-        Réserver ma visite
+        {t("reservation.stickyCta")}
       </button>
 
       <div className="reservation-layout">
