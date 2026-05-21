@@ -13,6 +13,7 @@ import logoMain from "../assets/color white.png";
 import { useI18n } from "../i18n/i18n";
 import { useAuth } from "../context/useAuth";
 import { useCart } from "../context/useCart";
+import { useCurrency } from "../context/CurrencyContext";
 import { getStoredUserLocation } from "../services/apiClient";
 import CurrencySelector from "./CurrencySelector";
 
@@ -21,6 +22,7 @@ export default function Navbar() {
   const { language, setLanguage, t } = useI18n();
   const { user, isAuthenticated, logout } = useAuth();
   const { cartCount } = useCart();
+  const { currency, setCurrency } = useCurrency();
 
   const [visitorLocation, setVisitorLocation] = useState(() =>
     getStoredUserLocation()
@@ -379,22 +381,29 @@ export default function Navbar() {
         </nav>
 
         <div className="nb__drawer-foot">
-          <div className="nb__mobile-currency-language-row">
-            <div className="nb__currency nb__currency--drawer nb-mobile-currency">
-              <CurrencySelector />
+          <div className="nb-mobile-switches">
+            <div className="nb-mobile-currency">
+              {(["EUR", "USD"] as const).map((item) => (
+                <button
+                  key={item}
+                  type="button"
+                  className={currency === item ? "active" : ""}
+                  onClick={() => setCurrency(item)}
+                  aria-pressed={currency === item}
+                >
+                  {item === "EUR" ? "EUR €" : "USD $"}
+                </button>
+              ))}
             </div>
 
-            <div className="nb__lang nb__lang--drawer nb-mobile-language">
-              {(["FR", "EN"] as const).map((l, i) => (
+            <div className="nb-mobile-lang">
+              {(["FR", "EN"] as const).map((l) => (
                 <Fragment key={l}>
-                  {i === 1 && <span className="nb__lang-sep" />}
-
                   <button
                     type="button"
-                    className={`nb__lang-btn${
-                      language === l ? " nb__lang-btn--active" : ""
-                    }`}
+                    className={language === l ? "active" : ""}
                     onClick={() => setLanguage(l)}
+                    aria-pressed={language === l}
                   >
                     {l}
                   </button>
