@@ -52,57 +52,6 @@ export default function BoutiquePage() {
     },
   ];
 
-  const collectionSections = [
-    {
-      id: "ceramique",
-      icon: Store,
-      image: ceramicImg,
-      eyebrow: t("boutiquePage.sections.ceramic.eyebrow"),
-      title: t("boutiquePage.sections.ceramic.title"),
-      text: t("boutiquePage.sections.ceramic.text"),
-      featureEyebrow: t("boutiquePage.sections.ceramic.featureEyebrow"),
-      featureTitle: t("boutiquePage.sections.ceramic.featureTitle"),
-      featureText: t("boutiquePage.sections.ceramic.featureText"),
-      imageAlt: t("boutiquePage.sections.ceramic.imageAlt", { index: 1 }),
-    },
-    {
-      id: "bijoux",
-      icon: Gem,
-      image: bijouxImg,
-      eyebrow: t("boutiquePage.sections.jewelry.eyebrow"),
-      title: t("boutiquePage.sections.jewelry.title"),
-      text: t("boutiquePage.sections.jewelry.text"),
-      featureEyebrow: t("boutiquePage.sections.jewelry.featureEyebrow"),
-      featureTitle: t("boutiquePage.sections.jewelry.featureTitle"),
-      featureText: t("boutiquePage.sections.jewelry.featureText"),
-      imageAlt: t("boutiquePage.sections.jewelry.imageAlt"),
-    },
-    {
-      id: "mosaique",
-      icon: Sparkles,
-      image: mosaiqueImg,
-      eyebrow: t("boutiquePage.sections.mosaic.eyebrow"),
-      title: t("boutiquePage.sections.mosaic.title"),
-      text: t("boutiquePage.sections.mosaic.text"),
-      featureEyebrow: t("boutiquePage.sections.mosaic.featureEyebrow"),
-      featureTitle: t("boutiquePage.sections.mosaic.featureTitle"),
-      featureText: t("boutiquePage.sections.mosaic.featureText"),
-      imageAlt: t("boutiquePage.sections.mosaic.imageAlt"),
-    },
-    {
-      id: "tableaux",
-      icon: Palette,
-      image: tab1,
-      eyebrow: t("boutiquePage.sections.paintings.eyebrow"),
-      title: t("boutiquePage.sections.paintings.title"),
-      text: t("boutiquePage.sections.paintings.text"),
-      featureEyebrow: t("boutiquePage.sections.paintings.featureEyebrow"),
-      featureTitle: t("boutiquePage.sections.paintings.featureTitle"),
-      featureText: t("boutiquePage.sections.paintings.featureText"),
-      imageAlt: t("boutiquePage.sections.paintings.imageAlt", { index: 1 }),
-    },
-  ];
-
   return (
     <main className="boutique-page">
       <section className="boutique-hero">
@@ -190,32 +139,26 @@ export default function BoutiquePage() {
         </div>
       </section>
 
-      {collectionSections.map((section, index) => {
+      {categoryCards.map((section, index) => {
         const Icon = section.icon;
 
         return (
-          <section className="boutique-gallery-section" id={section.id} key={section.id}>
-            <div className="boutique-gallery-header">
-              <span className="boutique-eyebrow boutique-eyebrow--dark">
-                <Icon size={15} />
-                {section.eyebrow}
-              </span>
-
-              <h2>{section.title}</h2>
-              <p>{section.text}</p>
-            </div>
-
-            <div
-              className={`boutique-feature-showcase ${
-                index % 2 === 1 ? "boutique-feature-showcase--reverse" : ""
-              }`}
-            >
-              <img src={section.image} alt={section.imageAlt} />
+          <section
+            className="boutique-gallery-section"
+            id={section.id}
+            key={section.id}
+          >
+            <div className="boutique-feature-showcase">
+              <img src={section.image} alt={section.title} />
 
               <div>
-                <span>{section.featureEyebrow}</span>
-                <h3>{section.featureTitle}</h3>
-                <p>{section.featureText}</p>
+                <span>
+                  <Icon size={15} />
+                  {section.title}
+                </span>
+
+                <h3>{section.title}</h3>
+                <p>{section.text}</p>
               </div>
             </div>
           </section>

@@ -471,3 +471,8 @@
     font-size: 2.65rem;
   }
 }
+.boutique-feature-showcase span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
