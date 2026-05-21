@@ -675,3 +675,88 @@
     letter-spacing: 0.14em !important;
   }
 }
+/* HERO plus lumineux : photo visible + texte lisible */
+.story-hero {
+  height: 660px !important;
+  min-height: 660px !important;
+  padding: 72px 24px !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: #120b07 !important;
+}
+
+.story-hero-photo {
+  background-position: center center !important;
+  filter: contrast(1.08) saturate(1.02) brightness(1.08) !important;
+  transform: scale(1.01) !important;
+}
+
+.story-hero::after {
+  background:
+    linear-gradient(
+      90deg,
+      rgba(8, 4, 2, 0.5) 0%,
+      rgba(8, 4, 2, 0.26) 38%,
+      rgba(8, 4, 2, 0.1) 68%,
+      rgba(8, 4, 2, 0.18) 100%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(8, 4, 2, 0.24) 0%,
+      rgba(8, 4, 2, 0.08) 45%,
+      rgba(8, 4, 2, 0.34) 100%
+    ) !important;
+}
+
+.story-hero-panel {
+  width: min(760px, 92vw) !important;
+  padding: 32px 36px !important;
+  border-radius: 30px !important;
+  text-align: center !important;
+  background: rgba(18, 9, 3, 0.08) !important;
+  border: 1px solid rgba(255, 249, 233, 0.22) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  box-shadow: none !important;
+}
+
+.story-hero-title {
+  font-size: clamp(3rem, 5vw, 5.2rem) !important;
+  text-shadow:
+    0 5px 18px rgba(0, 0, 0, 0.78),
+    0 1px 4px rgba(0, 0, 0, 0.7) !important;
+}
+
+.story-hero-sub,
+.story-hero-highlight,
+.story-hero-kicker,
+.story-ornament {
+  text-shadow: 0 4px 14px rgba(0, 0, 0, 0.72) !important;
+}
+
+@media (max-width: 640px) {
+  .story-hero {
+    height: auto !important;
+    min-height: 620px !important;
+    padding: 95px 20px 90px !important;
+  }
+
+  .story-hero-photo {
+    background-position: center top !important;
+  }
+
+  .story-hero::after {
+    background:
+      linear-gradient(
+        180deg,
+        rgba(8, 4, 2, 0.08) 0%,
+        rgba(8, 4, 2, 0.18) 45%,
+        rgba(8, 4, 2, 0.58) 100%
+      ) !important;
+  }
+
+  .story-hero-panel {
+    background: rgba(18, 9, 3, 0.16) !important;
+    padding: 26px 22px !important;
+  }
+}
