@@ -14,7 +14,7 @@
 
 @media (max-width: 768px) {
   .site-content {
-    padding-top: var(--mobile-navbar-height, 86px);
+    padding-top: 0 !important;
   }
 }
 

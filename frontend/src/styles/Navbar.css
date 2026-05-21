@@ -3,7 +3,8 @@
 /* ── TOKENS ── */
 :root {
   --nb-h: 68px;
-  --mobile-navbar-height: 86px;
+  --mobile-navbar-height: 78px;
+  --mobile-navbar-offset: calc(var(--mobile-navbar-height) + env(safe-area-inset-top, 0px));
   --nb-cream: #fefce7;
   --nb-dark: #2b1608;
   --nb-clay: #7a3f16;
@@ -967,7 +968,7 @@ body {
 
 @media (max-width: 980px) {
   body {
-    padding-top: var(--mobile-navbar-height);
+    padding-top: var(--mobile-navbar-offset);
   }
 
   .nb__inner {
@@ -1112,5 +1113,64 @@ body {
   .nb__mobile-currency-language-row {
     gap: 8px;
     padding: 8px 10px;
+  }
+}
+
+/* =========================
+   SAFARI MOBILE NAVBAR FIX
+========================= */
+
+@media (max-width: 768px) {
+  body {
+    padding-top: var(--mobile-navbar-offset) !important;
+  }
+
+  .nb,
+  .nb--scrolled,
+  .nb.hidden,
+  .nb--hidden,
+  .nb.is-hidden,
+  .nb.scrolled {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    height: var(--mobile-navbar-offset) !important;
+    min-height: var(--mobile-navbar-offset) !important;
+    padding-top: env(safe-area-inset-top, 0px) !important;
+    z-index: 99999 !important;
+    transform: none !important;
+    translate: none !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    animation: none !important;
+    transition: none !important;
+    background: rgba(255, 248, 232, 0.96) !important;
+    backdrop-filter: blur(16px) !important;
+    -webkit-backdrop-filter: blur(16px) !important;
+    border-bottom: 1px solid rgba(122, 63, 22, 0.12) !important;
+    box-shadow: 0 6px 18px rgba(43, 22, 8, 0.08) !important;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    will-change: auto;
+  }
+
+  .nb__inner {
+    height: var(--mobile-navbar-height) !important;
+    min-height: var(--mobile-navbar-height) !important;
+    align-items: center !important;
+  }
+
+  .nb__drawer {
+    top: 0 !important;
+    height: 100dvh !important;
+    min-height: 100dvh !important;
+    padding-top: calc(var(--mobile-navbar-offset) + 12px) !important;
+  }
+
+  .nb__backdrop {
+    position: fixed !important;
+    inset: 0 !important;
   }
 }

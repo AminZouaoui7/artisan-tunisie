@@ -21,8 +21,29 @@ body {
   background: var(--color-cream);
   color: var(--color-dark);
   overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+}
+
+@media (max-width: 768px) {
+  html,
+  body {
+    overflow-x: hidden !important;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .site-shell,
+  .site-content {
+    overflow-x: hidden !important;
+  }
+
+  .home,
+  .story-page,
+  .boutique-page,
+  .products-page {
+    margin-top: 0 !important;
+  }
 }
 
 /* =========================
