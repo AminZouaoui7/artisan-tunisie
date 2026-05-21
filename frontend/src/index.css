@@ -41,8 +41,23 @@ body {
   .home,
   .story-page,
   .boutique-page,
-  .products-page {
+  .products-page,
+  .login-page {
+    padding-top: 0 !important;
     margin-top: 0 !important;
+  }
+
+  .home-hero,
+  .home-boutique-hero,
+  .story-hero,
+  .boutique-hero {
+    margin-top: 0 !important;
+  }
+
+  .favorite-topbar,
+  .top-favorites-bar,
+  .desktop-topbar {
+    display: none !important;
   }
 }
 

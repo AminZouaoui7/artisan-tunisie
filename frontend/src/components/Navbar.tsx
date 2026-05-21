@@ -34,11 +34,28 @@ export default function Navbar() {
   const [logoutConfirmOpen, setLogoutConfirmOpen] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 18);
+    const mediaQuery = window.matchMedia("(max-width: 768px)");
+
+    const onScroll = () => {
+      if (mediaQuery.matches) {
+        setScrolled(false);
+        return;
+      }
+
+      setScrolled(window.scrollY > 18);
+    };
+
     onScroll();
 
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+
+    const handleMediaChange = () => onScroll();
+    mediaQuery.addEventListener("change", handleMediaChange);
+
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      mediaQuery.removeEventListener("change", handleMediaChange);
+    };
   }, []);
 
   useEffect(() => {

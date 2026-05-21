@@ -3,8 +3,8 @@
 /* ── TOKENS ── */
 :root {
   --nb-h: 68px;
-  --mobile-navbar-height: 78px;
-  --mobile-navbar-offset: calc(var(--mobile-navbar-height) + env(safe-area-inset-top, 0px));
+  --mobile-navbar-height: 74px;
+  --mobile-navbar-offset: var(--mobile-navbar-height);
   --nb-cream: #fefce7;
   --nb-dark: #2b1608;
   --nb-clay: #7a3f16;
@@ -1122,7 +1122,7 @@ body {
 
 @media (max-width: 768px) {
   body {
-    padding-top: var(--mobile-navbar-offset) !important;
+    padding-top: var(--mobile-navbar-height) !important;
   }
 
   .nb,
@@ -1132,15 +1132,16 @@ body {
   .nb.is-hidden,
   .nb.scrolled {
     position: fixed !important;
-    top: 0 !important;
+    top: env(safe-area-inset-top, 0px) !important;
     left: 0 !important;
     right: 0 !important;
     width: 100% !important;
-    height: var(--mobile-navbar-offset) !important;
-    min-height: var(--mobile-navbar-offset) !important;
-    padding-top: env(safe-area-inset-top, 0px) !important;
-    z-index: 99999 !important;
-    transform: none !important;
+    height: var(--mobile-navbar-height) !important;
+    min-height: var(--mobile-navbar-height) !important;
+    display: flex !important;
+    padding-top: 0 !important;
+    z-index: 999999 !important;
+    transform: translateY(0) !important;
     translate: none !important;
     opacity: 1 !important;
     visibility: visible !important;
@@ -1151,9 +1152,22 @@ body {
     -webkit-backdrop-filter: blur(16px) !important;
     border-bottom: 1px solid rgba(122, 63, 22, 0.12) !important;
     box-shadow: 0 6px 18px rgba(43, 22, 8, 0.08) !important;
+    pointer-events: auto !important;
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
     will-change: auto;
+  }
+
+  .nb::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: calc(env(safe-area-inset-top, 0px) * -1);
+    height: env(safe-area-inset-top, 0px);
+    background: rgba(255, 248, 232, 0.96);
+    border-bottom: 1px solid rgba(122, 63, 22, 0.08);
+    pointer-events: none;
   }
 
   .nb__inner {
@@ -1166,7 +1180,7 @@ body {
     top: 0 !important;
     height: 100dvh !important;
     min-height: 100dvh !important;
-    padding-top: calc(var(--mobile-navbar-offset) + 12px) !important;
+    padding-top: calc(var(--mobile-navbar-height) + 12px) !important;
   }
 
   .nb__backdrop {
