@@ -129,7 +129,7 @@ export default function Navbar() {
               src={logoMain}
               alt={t("common.brandNameAscii")}
             />
-            <span className="nb__logo-text">{t("common.brandName")}</span>
+<span className="nb__logo-text">L’Artisan de la Médina</span>
           </NavLink>
 
           <nav className="nb__nav" aria-label={t("common.mainNavigation")}>
