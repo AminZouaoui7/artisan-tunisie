@@ -6,8 +6,8 @@ import {
   ShoppingBag,
   Settings,
   CalendarDays,
-  Instagram,
-  Facebook,
+  Camera,
+  BadgeInfo,
   MapPin,
 } from "lucide-react";
 
@@ -429,7 +429,7 @@ export default function Navbar() {
               aria-label={t("footer.instagram")}
               onClick={() => setMenuOpen(false)}
             >
-              <Instagram size={16} />
+              <Camera size={16} />
               <span>{t("footer.instagram")}</span>
             </a>
             <a
@@ -440,7 +440,7 @@ export default function Navbar() {
               aria-label={t("footer.facebook")}
               onClick={() => setMenuOpen(false)}
             >
-              <Facebook size={16} />
+              <BadgeInfo size={16} />
               <span>{t("footer.facebook")}</span>
             </a>
             <a

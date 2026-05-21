@@ -5,8 +5,8 @@ import {
   Mail,
   ArrowRight,
   Send,
-  Instagram,
-  Facebook,
+  Camera,
+  BadgeInfo,
 } from "lucide-react";
 import { useState } from "react";
 import "../styles/Footer.css";
@@ -84,7 +84,7 @@ export default function Footer() {
               className="artisan-social-btn"
               aria-label={t("footer.instagram")}
             >
-              <Instagram size={18} />
+              <Camera size={18} />
             </a>
             <a
               href={FACEBOOK_URL}
@@ -93,7 +93,7 @@ export default function Footer() {
               className="artisan-social-btn"
               aria-label={t("footer.facebook")}
             >
-              <Facebook size={18} />
+              <BadgeInfo size={18} />
             </a>
             <a
               href={GOOGLE_MAPS_URL}
