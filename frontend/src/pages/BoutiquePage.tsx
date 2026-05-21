@@ -57,35 +57,6 @@ export default function BoutiquePage() {
       <section className="boutique-hero">
         <img src={heroImage} alt={t("boutiquePage.heroEyebrow")} />
         <div className="boutique-hero__overlay" />
-
-        <div className="boutique-hero__content">
-          <span className="boutique-eyebrow">
-            <Sparkles size={15} />
-            {t("boutiquePage.heroEyebrow")}
-          </span>
-
-          <h1>{t("boutiquePage.heroTitle")}</h1>
-
-          <div className="boutique-ornament">
-            <span />
-            <i />
-            <span />
-          </div>
-
-          <p>{t("boutiquePage.heroDescription")}</p>
-
-          <div className="boutique-hero__actions">
-            <a href="#collections" className="boutique-btn boutique-btn--primary">
-              <Eye size={16} />
-              {t("boutiquePage.heroPrimaryCta")}
-            </a>
-
-            <a href="/products" className="boutique-btn boutique-btn--ghost">
-              <Home size={16} />
-              {t("boutiquePage.heroSecondaryCta")}
-            </a>
-          </div>
-        </div>
       </section>
 
       <section className="boutique-showcase" id="collections">

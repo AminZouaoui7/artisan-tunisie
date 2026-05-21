@@ -517,3 +517,37 @@
   letter-spacing: 0.18em;
   text-transform: uppercase;
 }
+.boutique-gallery-section {
+  width: min(1450px, 92vw);
+  margin: 0 auto 140px;
+}
+
+.boutique-feature-showcase {
+  grid-template-columns: 1.25fr 0.95fr;
+  min-height: 620px;
+  border-radius: 42px;
+}
+
+.boutique-feature-showcase img {
+  height: 620px;
+}
+
+.boutique-feature-showcase div {
+  padding: 72px 74px;
+}
+
+.boutique-feature-showcase h3 {
+  margin: 18px 0 26px;
+  font-size: clamp(3.8rem, 6vw, 6rem);
+  line-height: 0.9;
+}
+
+.boutique-feature-showcase p {
+  max-width: 520px;
+  font-size: 1.12rem;
+  line-height: 1.9;
+}
+
+.boutique-feature-showcase span {
+  margin-bottom: 8px;
+}
