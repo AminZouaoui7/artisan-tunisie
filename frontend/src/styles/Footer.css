@@ -382,3 +382,31 @@
     gap: 8px;
   }
 }
+
+.artisan-footer-map-link {
+  width: fit-content;
+  margin-top: 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 11px 17px;
+  border-radius: 999px;
+  color: #fff8e8;
+  text-decoration: none;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: linear-gradient(135deg, #9b5a1e, #c4862c);
+  box-shadow: 0 14px 30px rgba(122, 63, 22, 0.18);
+}
+
+.artisan-footer-contact a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.artisan-footer-contact a:hover,
+.artisan-footer-map-link:hover {
+  transform: translateY(-2px);
+}
