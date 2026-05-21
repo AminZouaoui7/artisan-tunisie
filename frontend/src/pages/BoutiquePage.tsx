@@ -1,7 +1,4 @@
-import {
-  Eye,
-  Store,
-} from "lucide-react";
+import { Eye } from "lucide-react";
 import { useI18n } from "../i18n/i18n";
 
 import "../styles/BoutiquePage.css";
@@ -21,7 +18,6 @@ export default function BoutiquePage() {
       id: "ceramique",
       title: t("boutiquePage.categories.ceramic.title"),
       image: ceramicImg,
-      icon: Store,
       text: t("boutiquePage.categories.ceramic.text"),
     },
     {
@@ -66,7 +62,7 @@ export default function BoutiquePage() {
           <p>{t("boutiquePage.heroDescription")}</p>
 
           <div className="boutique-hero__actions">
-            <a href="#collections" className="boutique-btn boutique-btn--primary">
+            <a href="#ceramique" className="boutique-btn boutique-btn--primary">
               <Eye size={16} />
               {t("boutiquePage.heroPrimaryCta")}
             </a>
@@ -78,42 +74,31 @@ export default function BoutiquePage() {
         </div>
       </section>
 
-     
-
       <section className="boutique-collection-intro">
         <div className="boutique-collection-divider">
           <span />
           <i />
           <span />
         </div>
-
       </section>
 
-      {categoryCards.map((section) => {
-        const Icon = section.icon;
+      {categoryCards.map((section) => (
+        <section
+          className="boutique-gallery-section"
+          id={section.id}
+          key={section.id}
+        >
+          <div className="boutique-feature-showcase">
+            <img src={section.image} alt={section.title} />
 
-        return (
-          <section
-            className="boutique-gallery-section"
-            id={section.id}
-            key={section.id}
-          >
-            <div className="boutique-feature-showcase">
-              <img src={section.image} alt={section.title} />
-
-              <div>
-                <span>
-                  <Icon size={15} />
-                  {section.title}
-                </span>
-
-                <h3>{section.title}</h3>
-                <p>{section.text}</p>
-              </div>
+            <div>
+              <span>{section.title}</span>
+              <h3>{section.title}</h3>
+              <p>{section.text}</p>
             </div>
-          </section>
-        );
-      })}
+          </div>
+        </section>
+      ))}
     </main>
   );
 }
