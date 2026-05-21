@@ -3886,3 +3886,133 @@
     overflow-y: auto !important;
   }
 }
+
+/* =========================
+   FINAL HERO PROPORTIONS
+========================= */
+
+.home-boutique-hero {
+  height: 660px !important;
+  min-height: 660px !important;
+  max-height: none !important;
+  padding: 88px 24px 78px !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.home-boutique-hero-bg,
+.home-boutique-hero-bg img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: center !important;
+}
+
+.home-boutique-hero-overlay {
+  background:
+    radial-gradient(circle at center, rgba(18, 9, 5, 0.34), rgba(18, 9, 5, 0.78)),
+    linear-gradient(
+      90deg,
+      rgba(18, 9, 5, 0.74),
+      rgba(18, 9, 5, 0.34),
+      rgba(18, 9, 5, 0.68)
+    ) !important;
+}
+
+.home-boutique-hero-content {
+  width: min(850px, 92vw) !important;
+  max-width: 850px !important;
+  margin: 0 auto !important;
+  text-align: center !important;
+}
+
+.home-boutique-hero-kicker {
+  margin: 0 0 18px !important;
+  font-size: 0.73rem !important;
+  letter-spacing: 0.15em !important;
+}
+
+.home-boutique-hero-content h1 {
+  max-width: 920px !important;
+  margin: 0 auto 20px !important;
+  font-size: clamp(3rem, 5vw, 5.2rem) !important;
+  font-weight: 600 !important;
+  line-height: 0.92 !important;
+  letter-spacing: -0.045em !important;
+}
+
+.home-boutique-hero-content p:not(.home-boutique-hero-kicker) {
+  max-width: 690px !important;
+  margin: 0 auto !important;
+  font-size: 1rem !important;
+  line-height: 1.7 !important;
+  color: rgba(255, 249, 233, 0.88) !important;
+}
+
+.home-boutique-hero-btn {
+  width: 56px !important;
+  height: 56px !important;
+}
+
+.home-boutique-hero-btn--left {
+  left: 24px !important;
+}
+
+.home-boutique-hero-btn--right {
+  right: 24px !important;
+}
+
+.home-boutique-hero-dots {
+  bottom: 26px !important;
+}
+
+@media only screen and (max-width: 640px) {
+  .home-boutique-hero {
+    height: auto !important;
+    min-height: 620px !important;
+    max-height: none !important;
+    padding: 95px 20px 90px !important;
+  }
+
+  .home-boutique-hero-content {
+    width: min(100%, 390px) !important;
+    max-width: 390px !important;
+    padding: 0 !important;
+  }
+
+  .home-boutique-hero-kicker {
+    margin-bottom: 16px !important;
+    font-size: 0.7rem !important;
+    letter-spacing: 0.14em !important;
+  }
+
+  .home-boutique-hero-content h1 {
+    font-size: 3rem !important;
+    line-height: 0.92 !important;
+    margin-bottom: 16px !important;
+  }
+
+  .home-boutique-hero-content p:not(.home-boutique-hero-kicker) {
+    max-width: 330px !important;
+    font-size: 0.93rem !important;
+    line-height: 1.65 !important;
+  }
+
+  .home-boutique-hero-btn {
+    width: 44px !important;
+    height: 44px !important;
+  }
+
+  .home-boutique-hero-btn--left {
+    left: 12px !important;
+  }
+
+  .home-boutique-hero-btn--right {
+    right: 12px !important;
+  }
+
+  .home-boutique-hero-dots {
+    bottom: 22px !important;
+    padding: 9px 14px !important;
+  }
+}
