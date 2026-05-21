@@ -47,9 +47,7 @@ export default function BoutiquePage() {
         <div className="boutique-hero__overlay" />
 
         <div className="boutique-hero__content">
-          <span className="boutique-eyebrow">
-            {t("boutiquePage.heroEyebrow")}
-          </span>
+          
 
           <h1>{t("boutiquePage.heroTitle")}</h1>
 
