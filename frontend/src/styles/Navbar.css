@@ -3,7 +3,7 @@
 /* ── TOKENS ── */
 :root {
   --nb-h: 68px;
-  --mobile-navbar-height: 74px;
+  --mobile-navbar-height: 78px;
   --mobile-navbar-offset: var(--mobile-navbar-height);
   --nb-cream: #fefce7;
   --nb-dark: #2b1608;
@@ -1122,7 +1122,7 @@ body {
 
 @media (max-width: 768px) {
   body {
-    padding-top: var(--mobile-navbar-height) !important;
+    padding-top: 0 !important;
   }
 
   .nb,
@@ -1186,5 +1186,54 @@ body {
   .nb__backdrop {
     position: fixed !important;
     inset: 0 !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .nb {
+    position: sticky !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    z-index: 999999 !important;
+    width: 100% !important;
+    height: 78px !important;
+    min-height: 78px !important;
+    display: flex !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
+    background: rgba(255, 248, 232, 0.98) !important;
+    backdrop-filter: blur(14px) !important;
+    -webkit-backdrop-filter: blur(14px) !important;
+    border-bottom: 1px solid rgba(43, 22, 8, 0.08) !important;
+  }
+
+  .nb.is-hidden,
+  .nb.hidden,
+  .nb--hidden,
+  .nb.scrolled-hidden,
+  .nb--scrolled,
+  .nb.scrolled {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
+    position: sticky !important;
+    top: 0 !important;
+    box-shadow: 0 6px 18px rgba(43, 22, 8, 0.08) !important;
+  }
+
+  .nb::before {
+    display: none !important;
+  }
+
+  .nb__inner {
+    height: 78px !important;
+    min-height: 78px !important;
+  }
+
+  .nb__drawer {
+    top: 0 !important;
+    padding-top: calc(78px + 12px) !important;
   }
 }

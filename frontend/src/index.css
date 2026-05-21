@@ -28,7 +28,10 @@ body {
 
 @media (max-width: 768px) {
   html,
-  body {
+  body,
+  #root {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
     overflow-x: hidden !important;
     -webkit-overflow-scrolling: touch;
   }
@@ -50,14 +53,19 @@ body {
   .home-hero,
   .home-boutique-hero,
   .story-hero,
-  .boutique-hero {
+  .boutique-hero,
+  .login-hero {
     margin-top: 0 !important;
   }
 
+  .favorites-bar,
   .favorite-topbar,
   .top-favorites-bar,
-  .desktop-topbar {
+  .desktop-topbar,
+  .topbar {
     display: none !important;
+    height: 0 !important;
+    min-height: 0 !important;
   }
 }
 
