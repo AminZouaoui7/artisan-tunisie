@@ -29,7 +29,6 @@ import {
 import { createPriceRequest } from "../services/priceRequestService";
 import { useI18n } from "../i18n/i18n";
 import { useCurrency } from "../context/CurrencyContext";
-import { GOOGLE_MAPS_URL } from "../constants/externalLinks";
 
 const fadeUp = { hidden: { opacity: 0, y: 24 }, visible: { opacity: 1, y: 0 } };
 const fadeLeft = { hidden: { opacity: 0, x: -24 }, visible: { opacity: 1, x: 0 } };
@@ -764,9 +763,9 @@ export default function HomePage() {
             <p>{t("home.shopParagraph")}</p>
 
             <a
-              href={GOOGLE_MAPS_URL}
+              href="https://www.google.com/maps"
               target="_blank"
-              rel="noopener noreferrer"
+              rel="noreferrer"
               className="home-btn-primary"
             >
               {t("home.seeOnGoogleMaps")}

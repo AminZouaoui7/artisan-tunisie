@@ -81,60 +81,33 @@
 
 .artisan-footer-socials {
   display: flex;
-  align-items: center;
-  gap: 14px;
+  gap: 10px;
   flex-wrap: wrap;
-  margin-top: 18px;
 }
 
 .artisan-social-btn {
-  width: 46px;
-  height: 46px;
-  border-radius: 50%;
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
+  gap: 7px;
   text-decoration: none;
-  color: #fff8e8;
-  background: rgba(43, 22, 8, 0.78);
-  border: 1px solid rgba(255, 248, 232, 0.2);
+  color: #1e0c02;
+  background: rgba(255, 248, 235, 0.65);
+  border: 1px solid rgba(100, 60, 15, 0.28);
+  border-radius: 999px;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
   transition: all 0.25s ease;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(4px);
 }
 
 .artisan-social-btn:hover {
-  transform: translateY(-3px);
-  background: linear-gradient(135deg, #9b5a1e, #c4862c);
-  box-shadow: 0 16px 36px rgba(122, 63, 22, 0.22);
-}
-
-.artisan-footer-map-btn,
-.artisan-footer-contact-map {
-  width: fit-content;
-  min-height: 46px;
-  padding: 0 18px;
-  border-radius: 999px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  text-decoration: none;
-  background: linear-gradient(135deg, rgba(31, 15, 6, 0.92), rgba(78, 45, 18, 0.9));
-  border: 1px solid rgba(255, 248, 232, 0.12);
-  color: #fff8e8;
-  font-size: 13px;
-  font-weight: 800;
-  letter-spacing: 0.04em;
-  transition: all 0.25s ease;
-  box-shadow: 0 14px 30px rgba(43, 22, 8, 0.14);
-}
-
-.artisan-footer-map-btn:hover,
-.artisan-footer-contact-map:hover {
+  background: rgba(255, 248, 235, 0.9);
+  border-color: rgba(100, 60, 15, 0.45);
   transform: translateY(-2px);
-  background: linear-gradient(135deg, #9b5a1e, #c4862c);
-  box-shadow: 0 18px 34px rgba(122, 63, 22, 0.22);
+  box-shadow: 0 8px 20px rgba(60, 30, 5, 0.15);
+  color: #0a0401;
 }
 
 .artisan-footer-heading {
@@ -401,16 +374,6 @@
 
   .artisan-footer-brand {
     font-size: 23px;
-  }
-
-  .artisan-footer-socials {
-    gap: 12px;
-  }
-
-  .artisan-footer-map-btn,
-  .artisan-footer-contact-map {
-    width: 100%;
-    justify-content: center;
   }
 
   .artisan-footer-bottom-inner {

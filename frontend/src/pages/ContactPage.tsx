@@ -9,7 +9,6 @@ import {
 import { useI18n } from "../i18n/i18n";
 import ActionSuccess from "../components/ActionSuccess";
 import { apiFetch } from "../services/apiClient";
-import { GOOGLE_MAPS_URL } from "../constants/externalLinks";
 import "../styles/ContactPage.css";
 
 export default function ContactPage() {
@@ -226,15 +225,6 @@ export default function ContactPage() {
             <h3>{t("contact.infoShop")}</h3>
             <p>{t("contact.infoShopDesc")}</p>
             <span>{t("contact.address")}</span>
-            <a
-              className="contact-map-link"
-              href={GOOGLE_MAPS_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <MapPin size={16} />
-              {t("footer.viewOnGoogleMaps")}
-            </a>
           </article>
         </div>
       </section>

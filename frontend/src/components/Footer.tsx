@@ -1,21 +1,44 @@
 import { Link } from "react-router-dom";
-import {
-  MapPin,
-  Phone,
-  Mail,
-  ArrowRight,
-  Send,
-  Camera,
-  BadgeInfo,
-} from "lucide-react";
-import { useState } from "react";
+import { MapPin, Phone, Mail, ArrowRight, Send } from "lucide-react";
 import "../styles/Footer.css";
 import { useI18n } from "../i18n/i18n";
-import {
-  FACEBOOK_URL,
-  GOOGLE_MAPS_URL,
-  INSTAGRAM_URL,
-} from "../constants/externalLinks";
+
+function InstagramIcon({ size = 18 }: { size?: number }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+      <circle cx="12" cy="12" r="4" />
+      <circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none" />
+    </svg>
+  );
+}
+
+function FacebookIcon({ size = 18 }: { size?: number }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+    </svg>
+  );
+}
+import { useState } from "react";
 
 export default function Footer() {
   const { t } = useI18n();
@@ -77,43 +100,15 @@ export default function Footer() {
             {t("footer.description")}
           </p>
           <div className="artisan-footer-socials">
-            <a
-              href={INSTAGRAM_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="artisan-social-btn"
-              aria-label={t("footer.instagram")}
-            >
-              <Camera size={18} />
+            <a href="https://instagram.com" target="_blank" rel="noreferrer" className="artisan-social-btn" aria-label={t("footer.instagram")}>
+              <InstagramIcon size={18} />
+              <span>{t("footer.instagram")}</span>
             </a>
-            <a
-              href={FACEBOOK_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="artisan-social-btn"
-              aria-label={t("footer.facebook")}
-            >
-              <BadgeInfo size={18} />
-            </a>
-            <a
-              href={GOOGLE_MAPS_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="artisan-social-btn"
-              aria-label={t("footer.googleMaps")}
-            >
-              <MapPin size={18} />
+            <a href="https://facebook.com" target="_blank" rel="noreferrer" className="artisan-social-btn" aria-label={t("footer.facebook")}>
+              <FacebookIcon size={18} />
+              <span>{t("footer.facebook")}</span>
             </a>
           </div>
-          <a
-            href={GOOGLE_MAPS_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="artisan-footer-map-btn"
-          >
-            <MapPin size={18} />
-            <span>{t("footer.viewOnGoogleMaps")}</span>
-          </a>
         </div>
 
         {/* Vertical divider */}
@@ -164,15 +159,6 @@ export default function Footer() {
               <a href="mailto:contact@artisan-medina.com">contact@artisan-medina.com</a>
             </li>
           </ul>
-          <a
-            href={GOOGLE_MAPS_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="artisan-footer-contact-map"
-          >
-            <MapPin size={16} />
-            <span>{t("footer.viewOnGoogleMaps")}</span>
-          </a>
         </div>
 
         {/* Vertical divider */}

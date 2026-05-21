@@ -1435,38 +1435,6 @@ body {
     box-shadow: 0 18px 48px rgba(43, 22, 8, 0.08) !important;
   }
 
-  .nb__mobile-socials {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-  }
-
-  .nb__mobile-social-link {
-    flex: 1 1 0;
-    min-width: 0;
-    min-height: 44px;
-    padding: 0 10px;
-    border-radius: 999px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    text-decoration: none;
-    background: rgba(255, 252, 240, 0.88);
-    border: 1px solid rgba(43, 22, 8, 0.08);
-    color: #2b1608;
-    font-size: 0.72rem;
-    font-weight: 800;
-    letter-spacing: 0.04em;
-    box-shadow: 0 12px 24px rgba(43, 22, 8, 0.08);
-  }
-
-  .nb__mobile-social-link:hover {
-    background: linear-gradient(135deg, #9b5a1e, #c4862c);
-    color: #fff9e9;
-  }
-
   .nb-mobile-currency,
   .nb-mobile-lang {
     display: grid !important;
@@ -1522,14 +1490,5 @@ body {
     max-width: 132px !important;
     font-size: 9.5px !important;
     letter-spacing: 0.07em !important;
-  }
-
-  .nb__mobile-socials {
-    gap: 8px;
-  }
-
-  .nb__mobile-social-link {
-    padding: 0 8px;
-    font-size: 0.68rem;
   }
 }
