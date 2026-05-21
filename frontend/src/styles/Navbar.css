@@ -980,3 +980,137 @@ body {
     flex: 1 !important;
   }
 }
+
+/* =========================
+   FINAL MOBILE NAVBAR UX
+========================= */
+
+.nb__mobile-currency-language-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.nb__currency--drawer {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .nb {
+    overflow: visible !important;
+  }
+
+  .nb__inner {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) auto !important;
+    align-items: center !important;
+    gap: 10px !important;
+    padding: 0 14px !important;
+  }
+
+  .nb__logo {
+    min-width: 0 !important;
+    max-width: 100% !important;
+  }
+
+  .nb__logo-text {
+    max-width: 44vw !important;
+    font-size: 10px !important;
+    letter-spacing: 0.08em !important;
+  }
+
+  .nb__right {
+    gap: 8px !important;
+    flex-shrink: 0 !important;
+  }
+
+  .nb__currency {
+    display: none !important;
+  }
+
+  .nb__lang:not(.nb__lang--drawer) {
+    display: none !important;
+  }
+
+  .nb__cart,
+  .nb__burger {
+    width: 40px !important;
+    height: 40px !important;
+    border-radius: 12px !important;
+  }
+
+  .nb__cart {
+    background: rgba(255, 252, 241, 0.84) !important;
+  }
+
+  .nb__burger {
+    background: rgba(255, 252, 241, 0.9) !important;
+  }
+
+  .nb__drawer {
+    width: min(340px, 88vw) !important;
+    overflow-y: auto !important;
+    overscroll-behavior: contain;
+  }
+
+  .nb__drawer-foot {
+    gap: 14px !important;
+  }
+
+  .nb__mobile-currency-language-row {
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    border-radius: 18px;
+    background: rgba(255, 251, 240, 0.82);
+    border: 1px solid rgba(43, 22, 8, 0.08);
+  }
+
+  .nb__currency--drawer {
+    display: inline-flex;
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+
+  .nb__lang--drawer {
+    flex: 0 0 auto;
+    justify-content: flex-end;
+  }
+}
+
+@media (max-width: 430px) {
+  .nb__inner {
+    padding: 0 12px !important;
+    gap: 8px !important;
+  }
+
+  .nb__logo-image {
+    width: 32px !important;
+    height: 32px !important;
+  }
+
+  .nb__logo-text {
+    max-width: 132px !important;
+    font-size: 9.5px !important;
+    letter-spacing: 0.07em !important;
+  }
+
+  .nb__cart,
+  .nb__burger {
+    width: 38px !important;
+    height: 38px !important;
+  }
+
+  .nb__drawer {
+    width: min(320px, 90vw) !important;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+
+  .nb__mobile-currency-language-row {
+    gap: 8px;
+    padding: 8px 10px;
+  }
+}
