@@ -1,9 +1,5 @@
 import {
   Eye,
-  Gem,
-  Home,
-  Palette,
-  Sparkles,
   Store,
 } from "lucide-react";
 import { useI18n } from "../i18n/i18n";
@@ -32,21 +28,18 @@ export default function BoutiquePage() {
       id: "bijoux",
       title: t("boutiquePage.categories.jewelry.title"),
       image: bijouxImg,
-      icon: Gem,
       text: t("boutiquePage.categories.jewelry.text"),
     },
     {
       id: "mosaique",
       title: t("boutiquePage.categories.mosaic.title"),
       image: mosaiqueImg,
-      icon: Sparkles,
       text: t("boutiquePage.categories.mosaic.text"),
     },
     {
       id: "tableaux",
       title: t("boutiquePage.categories.paintings.title"),
       image: tab1,
-      icon: Palette,
       text: t("boutiquePage.categories.paintings.text"),
     },
   ];
@@ -59,7 +52,6 @@ export default function BoutiquePage() {
 
         <div className="boutique-hero__content">
           <span className="boutique-eyebrow">
-            <Sparkles size={15} />
             {t("boutiquePage.heroEyebrow")}
           </span>
 
@@ -80,7 +72,6 @@ export default function BoutiquePage() {
             </a>
 
             <a href="/products" className="boutique-btn boutique-btn--ghost">
-              <Home size={16} />
               {t("boutiquePage.heroSecondaryCta")}
             </a>
           </div>
@@ -96,7 +87,6 @@ export default function BoutiquePage() {
           <span />
         </div>
 
-        <p>Take a look at our handmade boutique collections</p>
       </section>
 
       {categoryCards.map((section) => {
