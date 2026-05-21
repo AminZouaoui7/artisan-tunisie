@@ -76,6 +76,8 @@ export const translations: Record<Language, Record<string, unknown>> = {
       subscribe: "S'abonner",
       instagram: "Instagram",
       facebook: "Facebook",
+      googleMaps: "Google Maps",
+      viewOnGoogleMaps: "Voir sur Google Maps",
       address: "Médina de Tunis, Tunisie",
       copyright:
         "© {year} L’ARTISAN DE LA MÉDINA — Tous droits réservés",
@@ -1104,6 +1106,8 @@ export const translations: Record<Language, Record<string, unknown>> = {
       subscribe: "Subscribe",
       instagram: "Instagram",
       facebook: "Facebook",
+      googleMaps: "Google Maps",
+      viewOnGoogleMaps: "View on Google Maps",
       address: "Medina of Tunis, Tunisia",
       copyright:
         "© {year} L’ARTISAN DE LA MÉDINA — All rights reserved",

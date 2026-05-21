@@ -43,7 +43,7 @@ export default function BoutiquePage() {
   return (
     <main className="boutique-page">
       <section className="boutique-hero">
-        <img src={heroImage} alt={t("boutiquePage.heroEyebrow")} />
+        <img src={heroImage}  />
         <div className="boutique-hero__overlay" />
 
         <div className="boutique-hero__content">

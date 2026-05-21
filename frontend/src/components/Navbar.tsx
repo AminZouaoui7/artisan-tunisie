@@ -6,6 +6,9 @@ import {
   ShoppingBag,
   Settings,
   CalendarDays,
+  Instagram,
+  Facebook,
+  MapPin,
 } from "lucide-react";
 
 import "../styles/Navbar.css";
@@ -15,6 +18,11 @@ import { useAuth } from "../context/useAuth";
 import { useCart } from "../context/useCart";
 import { useCurrency } from "../context/CurrencyContext";
 import { getStoredUserLocation } from "../services/apiClient";
+import {
+  FACEBOOK_URL,
+  GOOGLE_MAPS_URL,
+  INSTAGRAM_URL,
+} from "../constants/externalLinks";
 import CurrencySelector from "./CurrencySelector";
 
 export default function Navbar() {
@@ -410,6 +418,42 @@ export default function Navbar() {
                 </Fragment>
               ))}
             </div>
+          </div>
+
+          <div className="nb__mobile-socials">
+            <a
+              href={INSTAGRAM_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="nb__mobile-social-link"
+              aria-label={t("footer.instagram")}
+              onClick={() => setMenuOpen(false)}
+            >
+              <Instagram size={16} />
+              <span>{t("footer.instagram")}</span>
+            </a>
+            <a
+              href={FACEBOOK_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="nb__mobile-social-link"
+              aria-label={t("footer.facebook")}
+              onClick={() => setMenuOpen(false)}
+            >
+              <Facebook size={16} />
+              <span>{t("footer.facebook")}</span>
+            </a>
+            <a
+              href={GOOGLE_MAPS_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="nb__mobile-social-link"
+              aria-label={t("footer.googleMaps")}
+              onClick={() => setMenuOpen(false)}
+            >
+              <MapPin size={16} />
+              <span>{t("footer.googleMaps")}</span>
+            </a>
           </div>
 
           <p className="nb__drawer-tagline">{t("nav.drawerTagline")}</p>
