@@ -1,5 +1,4 @@
 import {
-  ArrowRight,
   Eye,
   Gem,
   Home,
@@ -57,58 +56,38 @@ export default function BoutiquePage() {
       <section className="boutique-hero">
         <img src={heroImage} alt={t("boutiquePage.heroEyebrow")} />
         <div className="boutique-hero__overlay" />
-      </section>
 
-      <section className="boutique-showcase" id="collections">
-        <div className="boutique-showcase__header">
-          <span className="boutique-eyebrow boutique-eyebrow--dark">
+        <div className="boutique-hero__content">
+          <span className="boutique-eyebrow">
             <Sparkles size={15} />
-            {t("boutiquePage.showcaseEyebrow")}
+            {t("boutiquePage.heroEyebrow")}
           </span>
 
-          <h2>{t("boutiquePage.showcaseTitle")}</h2>
+          <h1>{t("boutiquePage.heroTitle")}</h1>
 
-          <div className="boutique-ornament boutique-ornament--dark">
+          <div className="boutique-ornament">
             <span />
             <i />
             <span />
           </div>
 
-          <p>{t("boutiquePage.showcaseDescription")}</p>
-        </div>
+          <p>{t("boutiquePage.heroDescription")}</p>
 
-        <div className="boutique-category-grid">
-          {categoryCards.map((item, index) => {
-            const Icon = item.icon;
+          <div className="boutique-hero__actions">
+            <a href="#collections" className="boutique-btn boutique-btn--primary">
+              <Eye size={16} />
+              {t("boutiquePage.heroPrimaryCta")}
+            </a>
 
-            return (
-              <article
-                className="boutique-category-card"
-                key={item.id}
-                style={{ animationDelay: `${index * 0.08}s` }}
-              >
-                <div className="boutique-category-card__image">
-                  <img src={item.image} alt={item.title} />
-                </div>
-
-                <div className="boutique-category-card__icon">
-                  <Icon size={27} />
-                </div>
-
-                <div className="boutique-category-card__content">
-                  <h3>{item.title}</h3>
-                  <p>{item.text}</p>
-
-                  <a href={`#${item.id}`}>
-                    {t("boutiquePage.discoverCollection")}
-                    <ArrowRight size={16} />
-                  </a>
-                </div>
-              </article>
-            );
-          })}
+            <a href="/products" className="boutique-btn boutique-btn--ghost">
+              <Home size={16} />
+              {t("boutiquePage.heroSecondaryCta")}
+            </a>
+          </div>
         </div>
       </section>
+
+     
 
       <section className="boutique-collection-intro">
         <div className="boutique-collection-divider">
