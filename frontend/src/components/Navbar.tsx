@@ -380,11 +380,11 @@ export default function Navbar() {
 
         <div className="nb__drawer-foot">
           <div className="nb__mobile-currency-language-row">
-            <div className="nb__currency nb__currency--drawer">
+            <div className="nb__currency nb__currency--drawer nb-mobile-currency">
               <CurrencySelector />
             </div>
 
-            <div className="nb__lang nb__lang--drawer">
+            <div className="nb__lang nb__lang--drawer nb-mobile-language">
               {(["FR", "EN"] as const).map((l, i) => (
                 <Fragment key={l}>
                   {i === 1 && <span className="nb__lang-sep" />}
