@@ -22,6 +22,7 @@
   padding: 42px 24px 155px;
   background: #130905;
 }
+
 .boutique-hero > img {
   position: absolute;
   inset: 0;
@@ -46,8 +47,8 @@
   text-align: center;
   color: #fff9e9;
   animation: boutiqueFadeUp 0.9s ease both;
-  margin-top: 0;
 }
+
 .boutique-eyebrow {
   display: inline-flex;
   align-items: center;
@@ -74,8 +75,7 @@
 
 .boutique-hero h1,
 .boutique-showcase h2,
-.boutique-gallery-header h2,
-.boutique-final-cta h2 {
+.boutique-gallery-header h2 {
   font-family: "Cormorant Garamond", serif;
   font-weight: 600;
   line-height: 0.98;
@@ -87,8 +87,8 @@
   margin: 0 auto;
   font-size: clamp(3.3rem, 5.2vw, 5.6rem);
   line-height: 0.92;
-  letter-spacing: -0.055em;
 }
+
 .boutique-ornament {
   display: flex;
   align-items: center;
@@ -186,16 +186,14 @@
 }
 
 .boutique-showcase h2,
-.boutique-gallery-header h2,
-.boutique-final-cta h2 {
+.boutique-gallery-header h2 {
   margin: 0;
   color: #2b1608;
   font-size: clamp(2.25rem, 4vw, 4.1rem);
 }
 
 .boutique-showcase__header p,
-.boutique-gallery-header p,
-.boutique-final-cta p {
+.boutique-gallery-header p {
   max-width: 680px;
   margin: 0 auto;
   color: rgba(43, 22, 8, 0.62);
@@ -306,37 +304,25 @@
   margin: 0 auto 110px;
 }
 
-.boutique-masonry {
-  columns: 4 260px;
-  column-gap: 18px;
-}
-
-.boutique-masonry__item {
-  overflow: hidden;
-  margin-bottom: 18px;
-  border-radius: 28px;
-  background: #120b07;
-  break-inside: avoid;
-  box-shadow: 0 24px 60px rgba(43, 22, 8, 0.14);
-}
-
-.boutique-masonry__item img {
-  width: 100%;
-  display: block;
-  transition: transform 0.8s ease;
-}
-
-.boutique-masonry__item:hover img {
-  transform: scale(1.06);
-}
-
 .boutique-feature-showcase {
   display: grid;
   grid-template-columns: 1.1fr 0.9fr;
   overflow: hidden;
   border-radius: 36px;
-  background: rgba(255, 252, 240, 0.92);
+  background: rgba(255, 252, 240, 0.94);
   box-shadow: 0 28px 80px rgba(43, 22, 8, 0.16);
+}
+
+.boutique-feature-showcase--reverse {
+  grid-template-columns: 0.9fr 1.1fr;
+}
+
+.boutique-feature-showcase--reverse img {
+  order: 2;
+}
+
+.boutique-feature-showcase--reverse div {
+  order: 1;
 }
 
 .boutique-feature-showcase img {
@@ -369,51 +355,10 @@
 }
 
 .boutique-feature-showcase p {
+  margin: 0;
   color: rgba(43, 22, 8, 0.66);
   font-size: 1rem;
   line-height: 1.8;
-}
-
-.boutique-tableaux-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 22px;
-}
-
-.boutique-tableaux-card {
-  overflow: hidden;
-  border-radius: 28px;
-  background: #fff;
-  box-shadow: 0 24px 60px rgba(43, 22, 8, 0.12);
-}
-
-.boutique-tableaux-card img {
-  width: 100%;
-  height: 340px;
-  object-fit: cover;
-  transition: transform 0.8s ease;
-}
-
-.boutique-tableaux-card:hover img {
-  transform: scale(1.05);
-}
-
-.boutique-final-cta {
-  width: min(900px, 88vw);
-  margin: 0 auto 90px;
-  padding: 62px 44px;
-  text-align: center;
-  border-radius: 38px;
-  background:
-    radial-gradient(circle at top, rgba(185, 119, 53, 0.18), transparent 45%),
-    rgba(255, 252, 231, 0.88);
-  border: 1px solid rgba(122, 63, 22, 0.12);
-  box-shadow: 0 28px 80px rgba(43, 22, 8, 0.12);
-}
-
-.boutique-final-cta p {
-  margin-top: 20px;
-  margin-bottom: 28px;
 }
 
 @keyframes boutiqueFadeUp {
@@ -443,16 +388,18 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .boutique-feature-showcase {
+  .boutique-feature-showcase,
+  .boutique-feature-showcase--reverse {
     grid-template-columns: 1fr;
   }
 
-  .boutique-feature-showcase img {
-    height: 420px;
+  .boutique-feature-showcase--reverse img,
+  .boutique-feature-showcase--reverse div {
+    order: initial;
   }
 
-  .boutique-tableaux-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  .boutique-feature-showcase img {
+    height: 430px;
   }
 }
 
@@ -487,13 +434,11 @@
   }
 
   .boutique-showcase h2,
-  .boutique-gallery-header h2,
-  .boutique-final-cta h2 {
+  .boutique-gallery-header h2 {
     font-size: 2.35rem;
   }
 
-  .boutique-category-grid,
-  .boutique-tableaux-grid {
+  .boutique-category-grid {
     grid-template-columns: 1fr;
   }
 
@@ -510,19 +455,19 @@
     margin-bottom: 70px;
   }
 
+  .boutique-feature-showcase {
+    border-radius: 28px;
+  }
+
   .boutique-feature-showcase img {
-    height: 360px;
+    height: 340px;
   }
 
   .boutique-feature-showcase div {
-    padding: 30px 24px;
+    padding: 30px 24px 34px;
   }
 
-  .boutique-tableaux-card img {
-    height: 320px;
-  }
-
-  .boutique-final-cta {
-    padding: 44px 22px;
+  .boutique-feature-showcase h3 {
+    font-size: 2.65rem;
   }
 }
