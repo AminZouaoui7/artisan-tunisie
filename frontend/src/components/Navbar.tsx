@@ -100,10 +100,10 @@ export default function Navbar() {
   ];
 
   const askLogout = () => {
-    setAccountOpen(false);
-    setLogoutConfirmOpen(true);
-  };
-
+  setAccountOpen(false);
+  setMenuOpen(false);
+  setLogoutConfirmOpen(true);
+};
   const confirmLogout = () => {
     logout();
     setAccountOpen(false);

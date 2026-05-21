@@ -1538,3 +1538,24 @@ body {
     height: 38px !important;
   }
 }
+/* FIX LOGOUT MODAL ABOVE MOBILE DRAWER */
+.nb__logout-modal-backdrop {
+  z-index: 1000005 !important;
+}
+
+.nb__logout-modal {
+  position: relative;
+  z-index: 1000006 !important;
+}
+
+@media (max-width: 768px) {
+  .nb__logout-modal-backdrop {
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 1000005 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 22px !important;
+  }
+}
