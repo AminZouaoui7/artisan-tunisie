@@ -139,31 +139,41 @@ export default function BoutiquePage() {
         </div>
       </section>
 
-     {categoryCards.map((section) => {
-  const Icon = section.icon;
-
-  return (
-    <section
-      className="boutique-gallery-section"
-      id={section.id}
-      key={section.id}
-    >
-      <div className="boutique-feature-showcase">
-        <img src={section.image} alt={section.title} />
-
-        <div>
-          <span>
-            <Icon size={15} />
-            {section.title}
-          </span>
-
-          <h3>{section.title}</h3>
-          <p>{section.text}</p>
+      <section className="boutique-collection-intro">
+        <div className="boutique-collection-divider">
+          <span />
+          <i />
+          <span />
         </div>
-      </div>
-    </section>
-  );
-})}
+
+        <p>Take a look at our handmade boutique collections</p>
+      </section>
+
+      {categoryCards.map((section) => {
+        const Icon = section.icon;
+
+        return (
+          <section
+            className="boutique-gallery-section"
+            id={section.id}
+            key={section.id}
+          >
+            <div className="boutique-feature-showcase">
+              <img src={section.image} alt={section.title} />
+
+              <div>
+                <span>
+                  <Icon size={15} />
+                  {section.title}
+                </span>
+
+                <h3>{section.title}</h3>
+                <p>{section.text}</p>
+              </div>
+            </div>
+          </section>
+        );
+      })}
     </main>
   );
 }
