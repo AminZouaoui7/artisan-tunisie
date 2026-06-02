@@ -1,4 +1,5 @@
-import { Eye } from "lucide-react";
+import { useState } from "react";
+import { ChevronLeft, ChevronRight, Eye } from "lucide-react";
 import { useI18n } from "../i18n/i18n";
 
 import "../styles/BoutiquePage.css";
@@ -26,54 +27,66 @@ import tab3 from "../assets/tab3.png";
 import tab4 from "../assets/tab4.png";
 import tab5 from "../assets/tab5.png";
 
+type CategoryCard = {
+  id: string;
+  title: string;
+  text: string;
+  gallery: string[];
+};
+
 export default function BoutiquePage() {
   const { t } = useI18n();
 
-  const categoryCards = [
+  const categoryCards: CategoryCard[] = [
     {
       id: "ceramique",
       title: t("boutiquePage.categories.ceramic.title"),
-      image: ceramicImg,
       text: t("boutiquePage.categories.ceramic.text"),
-      gallery: [
-        ceramicImg,
-        ceramic2,
-        ceramic3,
-        ceramic4,
-        ceramic5,
-        ceramic6,
-        
-      ],
+      gallery: [ceramicImg, ceramic2, ceramic3, ceramic4, ceramic5, ceramic6],
     },
     {
       id: "bijoux",
       title: t("boutiquePage.categories.jewelry.title"),
-      image: bijouxImg,
       text: t("boutiquePage.categories.jewelry.text"),
       gallery: [bijouxImg],
     },
     {
       id: "mosaique",
       title: t("boutiquePage.categories.mosaic.title"),
-      image: mosaiqueImg,
       text: t("boutiquePage.categories.mosaic.text"),
       gallery: [mosaiqueImg, mosaique2],
     },
     {
       id: "bois",
       title: "Bois d'Olivier",
-      image: boisImg,
       text: "Découvrez notre collection d'objets artisanaux en bois d'olivier tunisien : plateaux, planches de présentation, jeux d'échecs, bols, mortiers et pièces uniques façonnées à la main par des artisans passionnés.",
       gallery: [boisImg, bois2Img],
     },
     {
       id: "tableaux",
       title: t("boutiquePage.categories.paintings.title"),
-      image: tab1,
       text: t("boutiquePage.categories.paintings.text"),
       gallery: [tab1, tab2, tab3, tab4, tab5],
     },
   ];
+
+  const [activeImages, setActiveImages] = useState<Record<string, number>>({});
+
+  const getActiveIndex = (id: string) => activeImages[id] ?? 0;
+
+  const goPrevious = (id: string, total: number) => {
+    setActiveImages((prev) => ({
+      ...prev,
+      [id]: getActiveIndex(id) === 0 ? total - 1 : getActiveIndex(id) - 1,
+    }));
+  };
+
+  const goNext = (id: string, total: number) => {
+    setActiveImages((prev) => ({
+      ...prev,
+      [id]: getActiveIndex(id) === total - 1 ? 0 : getActiveIndex(id) + 1,
+    }));
+  };
 
   return (
     <main className="boutique-page">
@@ -113,31 +126,80 @@ export default function BoutiquePage() {
         </div>
       </section>
 
-      {categoryCards.map((section) => (
-        <section
-          className="boutique-gallery-section"
-          id={section.id}
-          key={section.id}
-        >
-          <div className="boutique-feature-showcase">
-            <img src={section.image} alt={section.title} />
+      {categoryCards.map((section) => {
+        const activeIndex = getActiveIndex(section.id);
+        const activeImage = section.gallery[activeIndex];
 
-            <div>
-              <span>{section.title}</span>
-              <h3>{section.title}</h3>
-              <p>{section.text}</p>
-            </div>
-          </div>
+        return (
+          <section
+            className="boutique-gallery-section"
+            id={section.id}
+            key={section.id}
+          >
+            <div className="boutique-feature-showcase boutique-feature-showcase--slider">
+              <div className="boutique-slider-card">
+                <img src={activeImage} alt={section.title} />
 
-          <div className="boutique-category-gallery">
-            {section.gallery.map((img, index) => (
-              <div className="boutique-category-gallery__item" key={index}>
-                <img src={img} alt={`${section.title} ${index + 1}`} />
+                {section.gallery.length > 1 && (
+                  <>
+                    <button
+                      className="boutique-slider-arrow boutique-slider-arrow--left"
+                      onClick={() =>
+                        goPrevious(section.id, section.gallery.length)
+                      }
+                      type="button"
+                      aria-label="Image précédente"
+                    >
+                      <ChevronLeft size={24} />
+                    </button>
+
+                    <button
+                      className="boutique-slider-arrow boutique-slider-arrow--right"
+                      onClick={() => goNext(section.id, section.gallery.length)}
+                      type="button"
+                      aria-label="Image suivante"
+                    >
+                      <ChevronRight size={24} />
+                    </button>
+                  </>
+                )}
+
+                <div className="boutique-slider-counter">
+                  {activeIndex + 1} / {section.gallery.length}
+                </div>
               </div>
-            ))}
-          </div>
-        </section>
-      ))}
+
+              <div>
+                <span>{section.title}</span>
+                <h3>{section.title}</h3>
+                <p>{section.text}</p>
+
+                <div className="boutique-slider-thumbs">
+                  {section.gallery.map((img, index) => (
+                    <button
+                      key={index}
+                      type="button"
+                      className={
+                        index === activeIndex
+                          ? "boutique-slider-thumb active"
+                          : "boutique-slider-thumb"
+                      }
+                      onClick={() =>
+                        setActiveImages((prev) => ({
+                          ...prev,
+                          [section.id]: index,
+                        }))
+                      }
+                    >
+                      <img src={img} alt={`${section.title} ${index + 1}`} />
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </section>
+        );
+      })}
     </main>
   );
 }

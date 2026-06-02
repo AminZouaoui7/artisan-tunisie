@@ -782,28 +782,99 @@
   }
 }
 
-.boutique-category-gallery {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 22px;
-  margin-top: 34px;
+.boutique-feature-showcase--slider {
+  align-items: stretch;
 }
 
-.boutique-category-gallery__item {
-  overflow: hidden;
-  border-radius: 24px;
-  box-shadow: 0 22px 55px rgba(57, 38, 19, 0.14);
-  background: #fff;
-}
-
-.boutique-category-gallery__item img {
+.boutique-slider-card {
+  position: relative;
   width: 100%;
-  height: 330px;
+  min-height: 620px;
+  overflow: hidden;
+  border-radius: 34px 0 0 34px;
+  background: #f7efe1;
+}
+
+.boutique-slider-card img {
+  width: 100%;
+  height: 100%;
+  min-height: 620px;
   object-fit: cover;
   display: block;
-  transition: transform 0.45s ease;
 }
 
-.boutique-category-gallery__item:hover img {
-  transform: scale(1.06);
+.boutique-slider-arrow {
+  position: absolute;
+  top: 50%;
+  z-index: 3;
+  width: 48px;
+  height: 48px;
+  border: none;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.88);
+  color: #3b1f12;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transform: translateY(-50%);
+  box-shadow: 0 14px 35px rgba(50, 32, 18, 0.22);
+}
+
+.boutique-slider-arrow--left {
+  left: 18px;
+}
+
+.boutique-slider-arrow--right {
+  right: 18px;
+}
+
+.boutique-slider-counter {
+  position: absolute;
+  right: 18px;
+  bottom: 18px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.9);
+  color: #3b1f12;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.boutique-slider-thumbs {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 28px;
+}
+
+.boutique-slider-thumb {
+  width: 74px;
+  height: 74px;
+  padding: 0;
+  border: 2px solid transparent;
+  border-radius: 16px;
+  overflow: hidden;
+  background: transparent;
+  cursor: pointer;
+}
+
+.boutique-slider-thumb.active {
+  border-color: #9b5a1c;
+}
+
+.boutique-slider-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@media (max-width: 900px) {
+  .boutique-slider-card {
+    min-height: 420px;
+    border-radius: 28px 28px 0 0;
+  }
+
+  .boutique-slider-card img {
+    min-height: 420px;
+  }
 }
