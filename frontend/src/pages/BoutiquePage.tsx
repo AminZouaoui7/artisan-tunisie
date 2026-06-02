@@ -169,32 +169,10 @@ export default function BoutiquePage() {
                 </div>
               </div>
 
-              <div>
+              <div className="boutique-feature-content">
                 <span>{section.title}</span>
                 <h3>{section.title}</h3>
                 <p>{section.text}</p>
-
-                <div className="boutique-slider-thumbs">
-                  {section.gallery.map((img, index) => (
-                    <button
-                      key={index}
-                      type="button"
-                      className={
-                        index === activeIndex
-                          ? "boutique-slider-thumb active"
-                          : "boutique-slider-thumb"
-                      }
-                      onClick={() =>
-                        setActiveImages((prev) => ({
-                          ...prev,
-                          [section.id]: index,
-                        }))
-                      }
-                    >
-                      <img src={img} alt={`${section.title} ${index + 1}`} />
-                    </button>
-                  ))}
-                </div>
               </div>
             </div>
           </section>

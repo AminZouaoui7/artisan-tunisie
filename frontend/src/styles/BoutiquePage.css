@@ -784,12 +784,14 @@
 
 .boutique-feature-showcase--slider {
   align-items: stretch;
+  min-height: 480px !important;
 }
 
 .boutique-slider-card {
   position: relative;
   width: 100%;
-  min-height: 620px;
+  min-height: 480px !important;
+  max-height: 480px !important;
   overflow: hidden;
   border-radius: 34px 0 0 34px;
   background: #f7efe1;
@@ -797,21 +799,28 @@
 
 .boutique-slider-card img {
   width: 100%;
-  height: 100%;
-  min-height: 620px;
+  height: 480px !important;
+  min-height: 480px !important;
   object-fit: cover;
   display: block;
+}
+
+.boutique-feature-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 56px 60px !important;
 }
 
 .boutique-slider-arrow {
   position: absolute;
   top: 50%;
   z-index: 3;
-  width: 48px;
-  height: 48px;
+  width: 42px;
+  height: 42px;
   border: none;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.88);
+  background: rgba(255, 255, 255, 0.9);
   color: #3b1f12;
   display: grid;
   place-items: center;
@@ -821,60 +830,59 @@
 }
 
 .boutique-slider-arrow--left {
-  left: 18px;
+  left: 16px;
 }
 
 .boutique-slider-arrow--right {
-  right: 18px;
+  right: 16px;
 }
 
 .boutique-slider-counter {
   position: absolute;
   right: 18px;
   bottom: 18px;
-  padding: 8px 14px;
+  padding: 7px 13px;
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.9);
   color: #3b1f12;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 700;
 }
 
-.boutique-slider-thumbs {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin-top: 28px;
-}
-
+.boutique-slider-thumbs,
 .boutique-slider-thumb {
-  width: 74px;
-  height: 74px;
-  padding: 0;
-  border: 2px solid transparent;
-  border-radius: 16px;
-  overflow: hidden;
-  background: transparent;
-  cursor: pointer;
-}
-
-.boutique-slider-thumb.active {
-  border-color: #9b5a1c;
-}
-
-.boutique-slider-thumb img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  display: none !important;
 }
 
 @media (max-width: 900px) {
+  .boutique-feature-showcase--slider {
+    min-height: auto !important;
+  }
+
   .boutique-slider-card {
-    min-height: 420px;
+    min-height: 320px !important;
+    max-height: 320px !important;
     border-radius: 28px 28px 0 0;
   }
 
   .boutique-slider-card img {
-    min-height: 420px;
+    height: 320px !important;
+    min-height: 320px !important;
+  }
+
+  .boutique-feature-content {
+    padding: 30px 24px !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .boutique-slider-card {
+    min-height: 250px !important;
+    max-height: 250px !important;
+  }
+
+  .boutique-slider-card img {
+    height: 250px !important;
+    min-height: 250px !important;
   }
 }
