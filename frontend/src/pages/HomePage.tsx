@@ -4,7 +4,7 @@ import { Star, X, ChevronLeft, ChevronRight, Eye } from "lucide-react";
 import { useEffect, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import PhoneInput from "../components/PhoneInput";
-import boutiqueImg1 from "../assets/ceramic1.png";
+import boutiqueImg1 from "../assets/ceramic4.png";
 import boutiqueImg2 from "../assets/rooftop1 (1).png";
 import boutiqueImg3 from "../assets/tab2.png";
 import boutiqueImg4 from "../assets/bijoux.png";
