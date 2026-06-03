@@ -122,22 +122,25 @@ export default function ProductsPage() {
 
   const detailImages = getProductImages(detailProduct);
 
-  async function openDetailProduct(product: ProductViewDto) {
-    setDetailProduct(product);
-    setDetailImageIndex(0);
-    setSelectedProduct(null);
-    setDetailVariants([]);
+ async function openDetailProduct(product: ProductViewDto) {
+  setDetailProduct(product);
+  setDetailImageIndex(0);
+  setSelectedProduct(null);
+  setDetailVariants([]);
 
-    try {
-      setDetailVariantsLoading(true);
-      const variants = await getProductVariants(product.id, product.countryCode);
-      setDetailVariants(variants);
-    } catch {
-      setDetailVariants([]);
-    } finally {
-      setDetailVariantsLoading(false);
-    }
+  try {
+    setDetailVariantsLoading(true);
+    const variants = await getProductVariants(
+      product.id,
+      product.countryCode ?? undefined
+    );
+    setDetailVariants(variants);
+  } catch {
+    setDetailVariants([]);
+  } finally {
+    setDetailVariantsLoading(false);
   }
+}
 
   function closeDetailProduct() {
     setDetailProduct(null);
