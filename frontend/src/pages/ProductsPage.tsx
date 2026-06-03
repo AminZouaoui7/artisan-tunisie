@@ -67,6 +67,9 @@ export default function ProductsPage() {
   const [detailVariantsLoading, setDetailVariantsLoading] = useState(false);
 
   const [detailImageIndex, setDetailImageIndex] = useState(0);
+  const [lightboxImageIndex, setLightboxImageIndex] = useState<number | null>(
+    null
+  );
 
   const [addedProductId, setAddedProductId] = useState<string | number | null>(
     null
@@ -154,10 +157,81 @@ export default function ProductsPage() {
   }, [products]);
 
   const detailImages = getProductImages(detailProduct);
+  const isLightboxOpen = lightboxImageIndex !== null;
+
+  const openLightbox = useCallback(
+    (index: number) => {
+      if (!detailImages.length) return;
+      const safeIndex = Math.max(0, Math.min(index, detailImages.length - 1));
+      setLightboxImageIndex(safeIndex);
+    },
+    [detailImages.length]
+  );
+
+  const closeLightbox = useCallback(() => {
+    setLightboxImageIndex(null);
+  }, []);
+
+  const nextLightboxImage = useCallback(() => {
+    if (!detailImages.length) return;
+    setLightboxImageIndex((prev) => {
+      if (prev === null) return prev;
+      return (prev + 1) % detailImages.length;
+    });
+  }, [detailImages.length]);
+
+  const prevLightboxImage = useCallback(() => {
+    if (!detailImages.length) return;
+    setLightboxImageIndex((prev) => {
+      if (prev === null) return prev;
+      return prev === 0 ? detailImages.length - 1 : prev - 1;
+    });
+  }, [detailImages.length]);
+
+  useEffect(() => {
+    if (!isLightboxOpen) return;
+
+    function onKeyDown(e: KeyboardEvent) {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        closeLightbox();
+        return;
+      }
+
+      if (e.key === "ArrowRight") {
+        e.preventDefault();
+        nextLightboxImage();
+        return;
+      }
+
+      if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        prevLightboxImage();
+      }
+    }
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [closeLightbox, isLightboxOpen, nextLightboxImage, prevLightboxImage]);
+
+  useEffect(() => {
+    if (!isLightboxOpen) return;
+    if (!detailImages.length) {
+      closeLightbox();
+      return;
+    }
+
+    setLightboxImageIndex((prev) => {
+      if (prev === null) return prev;
+      if (prev >= detailImages.length) return detailImages.length - 1;
+      return prev;
+    });
+  }, [closeLightbox, detailImages.length, isLightboxOpen]);
 
   async function openDetailProduct(product: ProductViewDto) {
     setDetailProduct(product);
     setDetailImageIndex(0);
+    closeLightbox();
     setSelectedProduct(null);
     setDetailVariants([]);
 
@@ -178,6 +252,7 @@ export default function ProductsPage() {
   function closeDetailProduct() {
     setDetailProduct(null);
     setDetailImageIndex(0);
+    closeLightbox();
     setDetailVariants([]);
     setDetailVariantsLoading(false);
   }
@@ -703,10 +778,17 @@ export default function ProductsPage() {
             <div className="products-detail-gallery">
               <div className="products-detail-image">
                 {detailImages[detailImageIndex] ? (
-                  <img
-                    src={detailImages[detailImageIndex]}
-                    alt={detailProduct.name}
-                  />
+                  <button
+                    type="button"
+                    className="products-detail-image-button"
+                    onClick={() => openLightbox(detailImageIndex)}
+                    aria-label={detailProduct.name}
+                  >
+                    <img
+                      src={detailImages[detailImageIndex]}
+                      alt={detailProduct.name}
+                    />
+                  </button>
                 ) : (
                   <div className="product-image-placeholder">
                     {t("products.imageUnavailable")}
@@ -747,7 +829,15 @@ export default function ProductsPage() {
                       }`}
                       onClick={() => setDetailImageIndex(index)}
                     >
-                      <img src={img} alt={`${detailProduct.name} ${index + 1}`} />
+                      <img
+                        src={img}
+                        alt={`${detailProduct.name} ${index + 1}`}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setDetailImageIndex(index);
+                          openLightbox(index);
+                        }}
+                      />
                     </button>
                   ))}
                 </div>
@@ -945,6 +1035,59 @@ export default function ProductsPage() {
           </div>
         </div>
       )}
+
+      {isLightboxOpen &&
+        lightboxImageIndex !== null &&
+        detailImages[lightboxImageIndex] && (
+          <div
+            className="products-image-lightbox"
+            onClick={closeLightbox}
+            role="dialog"
+            aria-modal="true"
+          >
+            <div
+              className="products-image-lightbox-content"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button
+                type="button"
+                className="products-image-lightbox-close"
+                onClick={closeLightbox}
+                aria-label={t("products.close")}
+              >
+                <X size={20} />
+              </button>
+
+              {detailImages.length > 1 && (
+                <button
+                  type="button"
+                  className="products-image-lightbox-nav products-image-lightbox-nav--left"
+                  onClick={prevLightboxImage}
+                  aria-label="Previous image"
+                >
+                  <ChevronLeft size={26} />
+                </button>
+              )}
+
+              <img
+                src={detailImages[lightboxImageIndex]}
+                alt={detailProduct?.name || ""}
+                className="products-image-lightbox-image"
+              />
+
+              {detailImages.length > 1 && (
+                <button
+                  type="button"
+                  className="products-image-lightbox-nav products-image-lightbox-nav--right"
+                  onClick={nextLightboxImage}
+                  aria-label="Next image"
+                >
+                  <ChevronRight size={26} />
+                </button>
+              )}
+            </div>
+          </div>
+        )}
 
       {showPriceRequestModal && selectedProduct && (
         <div className="products-price-modal" onClick={closePriceRequest}>
