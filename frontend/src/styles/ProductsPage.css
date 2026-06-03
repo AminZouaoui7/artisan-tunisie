@@ -1570,7 +1570,7 @@
   .products-price-fields textarea {
     min-height: 100px !important;
   }
-}@media (max-width: 768px) {
+}
 
 .products-image-lightbox {
   position: fixed;
@@ -1879,5 +1879,4 @@
   .products-detail-variant-card small {
     font-size: 0.68rem;
   }
-}
 }
