@@ -1,4 +1,3 @@
-import { keepLargestProductByVariantGroup } from "../services/productService";
 import {
   useCallback,
   useEffect,
@@ -103,30 +102,35 @@ export default function ProductsPage() {
     loadProducts();
   }, []);
 
+  function getSurfaceM2(product: ProductViewDto) {
+    if (!product.lengthCm || !product.widthCm) return 0;
+    return (product.lengthCm * product.widthCm) / 10000;
+  }
 
-  function getVisibleVariantProducts(products: ProductViewDto[]) {
-  const bestByGroup = new Map<string, ProductViewDto>();
-  const productsWithoutGroup: ProductViewDto[] = [];
+  function getVisibleVariantProducts(productsList: ProductViewDto[]) {
+    const bestByGroup = new Map<string, ProductViewDto>();
+    const productsWithoutGroup: ProductViewDto[] = [];
 
-  products.forEach((product) => {
-    const groupKey = product.variantGroupKey?.trim();
+    productsList.forEach((product) => {
+      const groupKey = product.variantGroupKey?.trim();
 
-    if (!groupKey) {
-      productsWithoutGroup.push(product);
-      return;
-    }
+      if (!groupKey) {
+        productsWithoutGroup.push(product);
+        return;
+      }
 
-    const currentBest = bestByGroup.get(groupKey);
-    const productSurface = getSurfaceM2(product);
-    const currentSurface = currentBest ? getSurfaceM2(currentBest) : 0;
+      const currentBest = bestByGroup.get(groupKey);
+      const productSurface = getSurfaceM2(product);
+      const currentSurface = currentBest ? getSurfaceM2(currentBest) : 0;
 
-    if (!currentBest || productSurface > currentSurface) {
-      bestByGroup.set(groupKey, product);
-    }
-  });
+      if (!currentBest || productSurface > currentSurface) {
+        bestByGroup.set(groupKey, product);
+      }
+    });
 
-  return [...productsWithoutGroup, ...Array.from(bestByGroup.values())];
-}
+    return [...productsWithoutGroup, ...Array.from(bestByGroup.values())];
+  }
+
   function getProductImages(product: ProductViewDto | null) {
     if (!product) return [];
 
@@ -145,27 +149,31 @@ export default function ProductsPage() {
     return [];
   }
 
+  const visibleCatalogProducts = useMemo(() => {
+    return getVisibleVariantProducts(products);
+  }, [products]);
+
   const detailImages = getProductImages(detailProduct);
 
- async function openDetailProduct(product: ProductViewDto) {
-  setDetailProduct(product);
-  setDetailImageIndex(0);
-  setSelectedProduct(null);
-  setDetailVariants([]);
-
-  try {
-    setDetailVariantsLoading(true);
-    const variants = await getProductVariants(
-      product.id,
-      product.countryCode ?? undefined
-    );
-    setDetailVariants(variants);
-  } catch {
+  async function openDetailProduct(product: ProductViewDto) {
+    setDetailProduct(product);
+    setDetailImageIndex(0);
+    setSelectedProduct(null);
     setDetailVariants([]);
-  } finally {
-    setDetailVariantsLoading(false);
+
+    try {
+      setDetailVariantsLoading(true);
+      const variants = await getProductVariants(
+        product.id,
+        product.countryCode ?? undefined
+      );
+      setDetailVariants(variants);
+    } catch {
+      setDetailVariants([]);
+    } finally {
+      setDetailVariantsLoading(false);
+    }
   }
-}
 
   function closeDetailProduct() {
     setDetailProduct(null);
@@ -300,17 +308,15 @@ export default function ProductsPage() {
   }
 
   const types = useMemo(() => {
-  const visibleProducts = keepLargestProductByVariantGroup(products);
+    const uniqueTypes = visibleCatalogProducts
+      .map((product) => product.type)
+      .filter((item): item is string => Boolean(item));
 
-  const uniqueTypes = visibleProducts
-    .map((product) => product.type)
-    .filter((item): item is string => Boolean(item));
-
-  return ["all", ...Array.from(new Set(uniqueTypes))];
-}, [products]);
+    return ["all", ...Array.from(new Set(uniqueTypes))];
+  }, [visibleCatalogProducts]);
 
   const colors = useMemo(() => {
-    const allColors = products.flatMap((product) =>
+    const allColors = visibleCatalogProducts.flatMap((product) =>
       product.colors
         ? product.colors
             .split(",")
@@ -320,10 +326,10 @@ export default function ProductsPage() {
     );
 
     return ["all", ...Array.from(new Set(allColors))];
-  }, [products]);
+  }, [visibleCatalogProducts]);
 
   const spaces = useMemo(() => {
-    const allSpaces = products.flatMap((product) =>
+    const allSpaces = visibleCatalogProducts.flatMap((product) =>
       product.usageSpace
         ? product.usageSpace
             .split(",")
@@ -333,12 +339,7 @@ export default function ProductsPage() {
     );
 
     return ["all", ...Array.from(new Set(allSpaces))];
-  }, [products]);
-
-  function getSurfaceM2(product: ProductViewDto) {
-    if (!product.lengthCm || !product.widthCm) return 0;
-    return (product.lengthCm * product.widthCm) / 10000;
-  }
+  }, [visibleCatalogProducts]);
 
   function getSizeLabel(product: ProductViewDto) {
     const surface = getSurfaceM2(product);
@@ -366,51 +367,52 @@ export default function ProductsPage() {
     },
     [size]
   );
-const filteredProducts = useMemo(() => {
-  const visibleProducts = keepLargestProductByVariantGroup(products);
 
-  return visibleProducts.filter((product) => {
-    const text = `
-      ${product.name || ""}
-      ${product.description || ""}
-      ${product.shortStory || ""}
-      ${product.type || ""}
-      ${product.technique || ""}
-      ${product.region || ""}
-      ${product.material || ""}
-      ${product.colors || ""}
-      ${product.style || ""}
-      ${product.usageSpace || ""}
-    `.toLowerCase();
+  const filteredProducts = useMemo(() => {
+    return visibleCatalogProducts.filter((product) => {
+      const text = `
+        ${product.name || ""}
+        ${product.description || ""}
+        ${product.shortStory || ""}
+        ${product.type || ""}
+        ${product.technique || ""}
+        ${product.region || ""}
+        ${product.material || ""}
+        ${product.colors || ""}
+        ${product.style || ""}
+        ${product.usageSpace || ""}
+      `.toLowerCase();
 
-    const matchSearch = text.includes(search.toLowerCase().trim());
-    const matchType = type === "all" || product.type === type;
+      const matchSearch = text.includes(search.toLowerCase().trim());
+      const matchType = type === "all" || product.type === type;
 
-    const productColors = product.colors
-      ?.toLowerCase()
-      .split(",")
-      .map((item) => item.trim()) ?? [];
+      const productColors =
+        product.colors
+          ?.toLowerCase()
+          .split(",")
+          .map((item) => item.trim()) ?? [];
 
-    const matchColor =
-      color === "all" || productColors.includes(color.toLowerCase());
+      const matchColor =
+        color === "all" || productColors.includes(color.toLowerCase());
 
-    const productSpaces = product.usageSpace
-      ?.toLowerCase()
-      .split(",")
-      .map((item) => item.trim()) ?? [];
+      const productSpaces =
+        product.usageSpace
+          ?.toLowerCase()
+          .split(",")
+          .map((item) => item.trim()) ?? [];
 
-    const matchSpace =
-      space === "all" || productSpaces.includes(space.toLowerCase());
+      const matchSpace =
+        space === "all" || productSpaces.includes(space.toLowerCase());
 
-    return (
-      matchSearch &&
-      matchType &&
-      matchColor &&
-      matchSizeFilter(product) &&
-      matchSpace
-    );
-  });
-}, [products, search, type, color, space, matchSizeFilter]);
+      return (
+        matchSearch &&
+        matchType &&
+        matchColor &&
+        matchSizeFilter(product) &&
+        matchSpace
+      );
+    });
+  }, [visibleCatalogProducts, search, type, color, space, matchSizeFilter]);
 
   const hasActiveFilters =
     search ||
