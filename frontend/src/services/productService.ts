@@ -33,6 +33,7 @@ export type ProductDto = {
   usageSpace?: string;
   careInstructions?: string;
   shortStory?: string;
+  variantGroupKey?: string | null;
 
   price: number | null;
   canShowPrice: boolean;
@@ -68,6 +69,8 @@ type ProductApiDto = ProductDto & {
   RequiresPriceRequest?: boolean;
   countryCode?: string | null;
   CountryCode?: string | null;
+  variantGroupKey?: string | null;
+  VariantGroupKey?: string | null;
 };
 
 function buildImageUrl(imageUrl?: string | null): string | null {
@@ -161,8 +164,6 @@ export function getProductPriceLabel(product: ProductDto): string {
 }
 
 function normalizeProduct(product: ProductApiDto): ProductViewDto {
-  console.log("product", product);
-
   const normalizedPrice = product.price ?? product.Price ?? null;
   const normalizedCanShowPrice =
     product.canShowPrice ?? product.CanShowPrice ?? false;
@@ -172,6 +173,8 @@ function normalizeProduct(product: ProductApiDto): ProductViewDto {
     product.requiresPriceRequest ?? product.RequiresPriceRequest ?? false;
   const normalizedCountryCode =
     product.countryCode ?? product.CountryCode ?? null;
+  const normalizedVariantGroupKey =
+    product.variantGroupKey ?? product.VariantGroupKey ?? null;
 
   const fullImages = (product.images || [])
     .map((img) => buildImageUrl(img))
@@ -187,6 +190,7 @@ function normalizeProduct(product: ProductApiDto): ProductViewDto {
     isPriceHidden: normalizedIsPriceHidden,
     requiresPriceRequest: normalizedRequiresPriceRequest,
     countryCode: normalizedCountryCode,
+    variantGroupKey: normalizedVariantGroupKey,
     priceLabel: getProductPriceLabel({
       ...product,
       price: normalizedPrice,
@@ -236,6 +240,28 @@ export async function getProductBySlug(
   const product: ProductApiDto = await res.json();
 
   return normalizeProduct(product);
+}
+
+export async function getProductVariants(
+  productId: number,
+  country?: string
+): Promise<ProductViewDto[]> {
+  const normalizedCountry =
+    normalizeCountry(country) || (await ensureVisitorCountryCode());
+
+  const res = await apiFetch(
+    `/products/${productId}/variants?country=${encodeURIComponent(
+      normalizedCountry
+    )}`
+  );
+
+  if (!res.ok) {
+    throw new Error("Erreur lors du chargement des variantes du produit");
+  }
+
+  const products: ProductApiDto[] = await res.json();
+
+  return products.map(normalizeProduct);
 }
 
 export async function getLatestProducts(limit = 6): Promise<ProductViewDto[]> {

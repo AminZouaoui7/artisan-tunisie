@@ -1806,3 +1806,106 @@
     padding: 12px 12px 0;
   }
 }
+/* =========================
+   PRODUCT VARIANTS / DIMENSIONS
+========================= */
+
+.products-detail-variants {
+  margin: 18px 0;
+  padding: 16px;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.42);
+  border: 1px solid rgba(94, 70, 35, 0.12);
+}
+
+.products-detail-variants > strong {
+  display: block;
+  margin-bottom: 12px;
+  color: #2b1b15;
+  font-size: 0.95rem;
+  font-weight: 950;
+}
+
+.products-detail-variants-loading {
+  margin: 0;
+  color: rgba(52, 39, 31, 0.62);
+  font-weight: 800;
+}
+
+.products-detail-variants-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(118px, 1fr));
+  gap: 10px;
+}
+
+.products-detail-variant-card {
+  border: 1px solid rgba(126, 70, 35, 0.18);
+  border-radius: 18px;
+  padding: 10px;
+  background: rgba(255, 248, 232, 0.88);
+  cursor: pointer;
+  text-align: center;
+  transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+}
+
+.products-detail-variant-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(156, 77, 42, 0.55);
+  box-shadow: 0 16px 32px rgba(55, 35, 19, 0.14);
+}
+
+.products-detail-variant-card img,
+.products-detail-variant-placeholder {
+  width: 100%;
+  height: 82px;
+  object-fit: contain;
+  border-radius: 14px;
+  background: #fff;
+  margin-bottom: 8px;
+}
+
+.products-detail-variant-card span {
+  display: block;
+  color: #2b1b15;
+  font-size: 0.82rem;
+  font-weight: 950;
+}
+
+.products-detail-variant-card small {
+  display: block;
+  margin-top: 5px;
+  color: #7b3b20;
+  font-size: 0.75rem;
+  font-weight: 900;
+}
+
+@media (max-width: 768px) {
+  .products-detail-variants {
+    padding: 12px !important;
+    border-radius: 18px !important;
+  }
+
+  .products-detail-variants-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .products-detail-variant-card {
+    padding: 8px;
+    border-radius: 14px;
+  }
+
+  .products-detail-variant-card img,
+  .products-detail-variant-placeholder {
+    height: 66px;
+    border-radius: 11px;
+  }
+
+  .products-detail-variant-card span {
+    font-size: 0.74rem;
+  }
+
+  .products-detail-variant-card small {
+    font-size: 0.68rem;
+  }
+}

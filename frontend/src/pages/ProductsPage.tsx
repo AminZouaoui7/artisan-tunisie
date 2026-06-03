@@ -26,6 +26,7 @@ import { getStoredUserLocation } from "../services/apiClient";
 import {
   canProductBeAddedToCart,
   getProducts,
+  getProductVariants,
   shouldShowPriceOnRequest,
   shouldShowProductPrice,
   type ProductViewDto,
@@ -62,6 +63,8 @@ export default function ProductsPage() {
 
   const [detailProduct, setDetailProduct] =
     useState<ProductViewDto | null>(null);
+  const [detailVariants, setDetailVariants] = useState<ProductViewDto[]>([]);
+  const [detailVariantsLoading, setDetailVariantsLoading] = useState(false);
 
   const [detailImageIndex, setDetailImageIndex] = useState(0);
 
@@ -119,15 +122,28 @@ export default function ProductsPage() {
 
   const detailImages = getProductImages(detailProduct);
 
-  function openDetailProduct(product: ProductViewDto) {
+  async function openDetailProduct(product: ProductViewDto) {
     setDetailProduct(product);
     setDetailImageIndex(0);
     setSelectedProduct(null);
+    setDetailVariants([]);
+
+    try {
+      setDetailVariantsLoading(true);
+      const variants = await getProductVariants(product.id, product.countryCode);
+      setDetailVariants(variants);
+    } catch {
+      setDetailVariants([]);
+    } finally {
+      setDetailVariantsLoading(false);
+    }
   }
 
   function closeDetailProduct() {
     setDetailProduct(null);
     setDetailImageIndex(0);
+    setDetailVariants([]);
+    setDetailVariantsLoading(false);
   }
 
   function nextDetailImage() {
@@ -730,6 +746,53 @@ export default function ProductsPage() {
                   : "-"}
               </strong>
 
+              {(detailVariantsLoading || detailVariants.length > 0) && (
+                <div className="products-detail-variants">
+                  <strong>Autres dimensions disponibles</strong>
+
+                  {detailVariantsLoading ? (
+                    <p className="products-detail-variants-loading">
+                      Chargement des dimensions...
+                    </p>
+                  ) : (
+                    <div className="products-detail-variants-list">
+                      {detailVariants.map((variant) => {
+                        const variantImage = getProductImages(variant)[0];
+
+                        return (
+                          <button
+                            key={variant.id}
+                            type="button"
+                            className="products-detail-variant-card"
+                            onClick={() => openDetailProduct(variant)}
+                          >
+                            {variantImage ? (
+                              <img src={variantImage} alt={variant.name} />
+                            ) : (
+                              <div className="products-detail-variant-placeholder" />
+                            )}
+
+                            <span>
+                              {variant.dimensions ||
+                                `${variant.lengthCm || "-"} × ${
+                                  variant.widthCm || "-"
+                                } cm`}
+                            </span>
+
+                            <small>
+                              {shouldShowProductPrice(variant) &&
+                              variant.price != null
+                                ? formatPrice(variant.price)
+                                : t("products.priceOnRequest")}
+                            </small>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+              )}
+
               <div className="products-detail-grid">
                 <span>{t("home.fields.category")}</span>
                 <strong>{detailProduct.category || "-"}</strong>
@@ -977,7 +1040,11 @@ export default function ProductsPage() {
               title={t("products.priceRequestSuccessTitle")}
               message={t("products.priceRequestSuccessMessage")}
               details={
-                <span>{t("products.priceRequestProduct", { name: priceRequestSuccessProductName })}</span>
+                <span>
+                  {t("products.priceRequestProduct", {
+                    name: priceRequestSuccessProductName,
+                  })}
+                </span>
               }
               primaryActionLabel={t("products.priceRequestPrimaryAction")}
               primaryActionTo="/account/price-requests"
