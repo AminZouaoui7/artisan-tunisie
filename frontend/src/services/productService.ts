@@ -98,6 +98,37 @@ function onlyAvailableProducts(products: ProductViewDto[]): ProductViewDto[] {
   });
 }
 
+export function getProductSurface(product: ProductViewDto): number {
+  const length = product.lengthCm ?? 0;
+  const width = product.widthCm ?? 0;
+
+  return length * width;
+}
+
+export function keepLargestProductByVariantGroup(
+  products: ProductViewDto[]
+): ProductViewDto[] {
+  const bestByGroup = new Map<string, ProductViewDto>();
+  const withoutGroup: ProductViewDto[] = [];
+
+  products.forEach((product) => {
+    const groupKey = product.variantGroupKey?.trim();
+
+    if (!groupKey) {
+      withoutGroup.push(product);
+      return;
+    }
+
+    const currentBest = bestByGroup.get(groupKey);
+
+    if (!currentBest || getProductSurface(product) > getProductSurface(currentBest)) {
+      bestByGroup.set(groupKey, product);
+    }
+  });
+
+  return [...withoutGroup, ...Array.from(bestByGroup.values())];
+}
+
 function normalizeCountry(country?: string | null): string {
   const normalized = country?.trim().toUpperCase();
 

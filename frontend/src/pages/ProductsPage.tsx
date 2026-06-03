@@ -1,3 +1,4 @@
+import { keepLargestProductByVariantGroup } from "../services/productService";
 import {
   useCallback,
   useEffect,
@@ -102,6 +103,30 @@ export default function ProductsPage() {
     loadProducts();
   }, []);
 
+
+  function getVisibleVariantProducts(products: ProductViewDto[]) {
+  const bestByGroup = new Map<string, ProductViewDto>();
+  const productsWithoutGroup: ProductViewDto[] = [];
+
+  products.forEach((product) => {
+    const groupKey = product.variantGroupKey?.trim();
+
+    if (!groupKey) {
+      productsWithoutGroup.push(product);
+      return;
+    }
+
+    const currentBest = bestByGroup.get(groupKey);
+    const productSurface = getSurfaceM2(product);
+    const currentSurface = currentBest ? getSurfaceM2(currentBest) : 0;
+
+    if (!currentBest || productSurface > currentSurface) {
+      bestByGroup.set(groupKey, product);
+    }
+  });
+
+  return [...productsWithoutGroup, ...Array.from(bestByGroup.values())];
+}
   function getProductImages(product: ProductViewDto | null) {
     if (!product) return [];
 
@@ -275,12 +300,14 @@ export default function ProductsPage() {
   }
 
   const types = useMemo(() => {
-    const uniqueTypes = products
-      .map((product) => product.type)
-      .filter((item): item is string => Boolean(item));
+  const visibleProducts = keepLargestProductByVariantGroup(products);
 
-    return ["all", ...Array.from(new Set(uniqueTypes))];
-  }, [products]);
+  const uniqueTypes = visibleProducts
+    .map((product) => product.type)
+    .filter((item): item is string => Boolean(item));
+
+  return ["all", ...Array.from(new Set(uniqueTypes))];
+}, [products]);
 
   const colors = useMemo(() => {
     const allColors = products.flatMap((product) =>
@@ -339,50 +366,51 @@ export default function ProductsPage() {
     },
     [size]
   );
+const filteredProducts = useMemo(() => {
+  const visibleProducts = keepLargestProductByVariantGroup(products);
 
-  const filteredProducts = useMemo(() => {
-    return products.filter((product) => {
-      const text = `
-        ${product.name || ""}
-        ${product.description || ""}
-        ${product.shortStory || ""}
-        ${product.type || ""}
-        ${product.technique || ""}
-        ${product.region || ""}
-        ${product.material || ""}
-        ${product.colors || ""}
-        ${product.style || ""}
-        ${product.usageSpace || ""}
-      `.toLowerCase();
+  return visibleProducts.filter((product) => {
+    const text = `
+      ${product.name || ""}
+      ${product.description || ""}
+      ${product.shortStory || ""}
+      ${product.type || ""}
+      ${product.technique || ""}
+      ${product.region || ""}
+      ${product.material || ""}
+      ${product.colors || ""}
+      ${product.style || ""}
+      ${product.usageSpace || ""}
+    `.toLowerCase();
 
-      const matchSearch = text.includes(search.toLowerCase().trim());
-      const matchType = type === "all" || product.type === type;
+    const matchSearch = text.includes(search.toLowerCase().trim());
+    const matchType = type === "all" || product.type === type;
 
-      const matchColor =
-        color === "all" ||
-        product.colors
-          ?.toLowerCase()
-          .split(",")
-          .map((item) => item.trim())
-          .includes(color.toLowerCase());
+    const productColors = product.colors
+      ?.toLowerCase()
+      .split(",")
+      .map((item) => item.trim()) ?? [];
 
-      const matchSpace =
-        space === "all" ||
-        product.usageSpace
-          ?.toLowerCase()
-          .split(",")
-          .map((item) => item.trim())
-          .includes(space.toLowerCase());
+    const matchColor =
+      color === "all" || productColors.includes(color.toLowerCase());
 
-      return (
-        matchSearch &&
-        matchType &&
-        matchColor &&
-        matchSizeFilter(product) &&
-        matchSpace
-      );
-    });
-  }, [products, search, type, color, space, matchSizeFilter]);
+    const productSpaces = product.usageSpace
+      ?.toLowerCase()
+      .split(",")
+      .map((item) => item.trim()) ?? [];
+
+    const matchSpace =
+      space === "all" || productSpaces.includes(space.toLowerCase());
+
+    return (
+      matchSearch &&
+      matchType &&
+      matchColor &&
+      matchSizeFilter(product) &&
+      matchSpace
+    );
+  });
+}, [products, search, type, color, space, matchSizeFilter]);
 
   const hasActiveFilters =
     search ||
