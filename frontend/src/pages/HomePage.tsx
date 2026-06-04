@@ -82,6 +82,8 @@ export default function HomePage() {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [selectedVariants, setSelectedVariants] = useState<ProductViewDto[]>([]);
   const [selectedVariantsLoading, setSelectedVariantsLoading] = useState(false);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [lightboxImageIndex, setLightboxImageIndex] = useState<number | null>(null);
 
   const [priceRequestOpen, setPriceRequestOpen] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
@@ -119,6 +121,8 @@ export default function HomePage() {
     setSelectedProduct(product);
     setSelectedImageIndex(0);
     setSelectedVariants([]);
+    setLightboxOpen(false);
+    setLightboxImageIndex(null);
     setPriceRequestOpen(false);
     setShowSuccessModal(false);
     setPriceRequestSuccessProductName(null);
@@ -141,6 +145,8 @@ export default function HomePage() {
     setSelectedImageIndex(0);
     setSelectedVariants([]);
     setSelectedVariantsLoading(false);
+    setLightboxOpen(false);
+    setLightboxImageIndex(null);
     setPriceRequestOpen(false);
     setShowSuccessModal(false);
     setPriceRequestSuccessProductName(null);
@@ -253,24 +259,6 @@ export default function HomePage() {
     }
   };
 
-  const selectedImages = selectedProduct?.fullImages?.length
-    ? selectedProduct.fullImages
-    : selectedProduct?.fullMainImageUrl
-    ? [selectedProduct.fullMainImageUrl]
-    : [];
-
-  const nextImage = () => {
-    if (!selectedImages.length) return;
-    setSelectedImageIndex((prev) => (prev + 1) % selectedImages.length);
-  };
-
-  const prevImage = () => {
-    if (!selectedImages.length) return;
-    setSelectedImageIndex((prev) =>
-      prev === 0 ? selectedImages.length - 1 : prev - 1
-    );
-  };
-
   const nextBoutiqueImage = () => {
     setBoutiqueIndex((prev) => (prev + 1) % boutiqueImages.length);
   };
@@ -345,6 +333,80 @@ export default function HomePage() {
   const motionTransition = disableScrollAnimations
     ? { duration: 0 }
     : scrollTransition;
+
+  const selectedProductImages = selectedProduct
+    ? [
+        selectedProduct.fullMainImageUrl,
+        ...selectedProduct.fullImages.filter(
+          (image) => image !== selectedProduct.fullMainImageUrl
+        ),
+      ].filter((image): image is string => Boolean(image))
+    : [];
+
+  function nextSelectedImage() {
+    if (!selectedProductImages.length) return;
+    setSelectedImageIndex((prev) => (prev + 1) % selectedProductImages.length);
+  }
+
+  function prevSelectedImage() {
+    if (!selectedProductImages.length) return;
+    setSelectedImageIndex((prev) =>
+      prev === 0 ? selectedProductImages.length - 1 : prev - 1
+    );
+  }
+
+  function closeLightbox() {
+    setLightboxOpen(false);
+    setLightboxImageIndex(null);
+  }
+
+  function nextLightboxImage() {
+    if (!selectedProductImages.length) return;
+    setLightboxImageIndex((prev) => {
+      const current = prev ?? selectedImageIndex;
+      return (current + 1) % selectedProductImages.length;
+    });
+  }
+
+  function prevLightboxImage() {
+    if (!selectedProductImages.length) return;
+    setLightboxImageIndex((prev) => {
+      const current = prev ?? selectedImageIndex;
+      return current === 0 ? selectedProductImages.length - 1 : current - 1;
+    });
+  }
+
+  useEffect(() => {
+    if (!lightboxOpen) return;
+    if (lightboxImageIndex !== null) return;
+    setLightboxImageIndex(selectedImageIndex);
+  }, [lightboxImageIndex, lightboxOpen, selectedImageIndex]);
+
+  useEffect(() => {
+    if (!lightboxOpen) return;
+
+    function onKeyDown(e: KeyboardEvent) {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        closeLightbox();
+        return;
+      }
+
+      if (e.key === "ArrowRight") {
+        e.preventDefault();
+        nextLightboxImage();
+        return;
+      }
+
+      if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        prevLightboxImage();
+      }
+    }
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [lightboxOpen, selectedProductImages.length, selectedImageIndex]);
 
   return (
     <div className="home">
@@ -536,7 +598,7 @@ export default function HomePage() {
             <div className="home-catalog-loading">{t("home.catalogEmpty")}</div>
           ) : (
             products.map((product, i) => {
-              const mainImage = product.fullMainImageUrl;
+              const coverImage = product.fullMainImageUrl;
               const isNewProduct = i < 2;
               const showVisiblePrice = shouldShowProductPrice(product);
               const showPriceOnRequest = shouldShowPriceOnRequest(product);
@@ -563,11 +625,11 @@ export default function HomePage() {
                       onClick={() => openProductModal(product)}
                       aria-label={t("home.viewDetailsOf", { name: product.name })}
                     >
-                      {mainImage ? (
-                        <img src={mainImage} alt={product.name} className="product-image" />
+                      {coverImage ? (
+                        <img src={coverImage} alt={product.name} className="product-image" />
                       ) : (
                         <div className="product-image-placeholder">
-                          {t("home.imagePlaceholder")}
+                          {t("products.imageUnavailable")}
                         </div>
                       )}
                     </button>
@@ -862,253 +924,265 @@ export default function HomePage() {
       </section>
 
       {selectedProduct && (
-        <div className="home-product-modal" onClick={closeProductModal}>
-          <div className="home-product-modal-card" onClick={(e) => e.stopPropagation()}>
+        <div
+          className="products-detail-modal"
+          role="dialog"
+          aria-modal="true"
+          onClick={closeProductModal}
+        >
+          <div className="products-detail-card" onClick={(e) => e.stopPropagation()}>
             <button
-              className="home-product-modal-close"
               type="button"
+              className="products-detail-close"
               onClick={closeProductModal}
-              aria-label={t("common.close")}
+              aria-label="Fermer"
             >
               <X size={20} />
             </button>
 
-            <div className="home-product-modal-gallery">
-              <div className="home-product-modal-main-img">
-                {selectedImages[selectedImageIndex] ? (
-                  <img src={selectedImages[selectedImageIndex]} alt={selectedProduct.name} />
-                ) : (
-                  <div className="home-rug-img-placeholder">{t("home.imagePlaceholder")}</div>
-                )}
-
-                {selectedImages.length > 1 && (
+            <div className="products-detail-gallery">
+              <div className="products-detail-image">
+                {selectedProductImages.length > 1 && (
                   <>
                     <button
-                      className="home-product-gallery-btn home-product-gallery-btn--left"
                       type="button"
-                      onClick={prevImage}
+                      className="products-detail-gallery-btn products-detail-gallery-btn--left"
+                      onClick={prevSelectedImage}
+                      aria-label="Image précédente"
                     >
                       <ChevronLeft size={22} />
                     </button>
 
                     <button
-                      className="home-product-gallery-btn home-product-gallery-btn--right"
                       type="button"
-                      onClick={nextImage}
+                      className="products-detail-gallery-btn products-detail-gallery-btn--right"
+                      onClick={nextSelectedImage}
+                      aria-label="Image suivante"
                     >
                       <ChevronRight size={22} />
                     </button>
                   </>
                 )}
+
+                <button
+                  type="button"
+                  className="products-detail-image-button"
+                  onClick={() => setLightboxOpen(true)}
+                >
+                  {selectedProductImages[selectedImageIndex] ? (
+                    <img
+                      src={selectedProductImages[selectedImageIndex]}
+                      alt={selectedProduct.name}
+                    />
+                  ) : (
+                    <div className="product-image-placeholder">
+                      {t("products.imageUnavailable")}
+                    </div>
+                  )}
+                </button>
               </div>
 
-              {selectedImages.length > 1 && (
-                <div className="home-product-thumbs">
-                  {selectedImages.map((img, index) => (
+              {selectedProductImages.length > 1 && (
+                <div className="products-detail-thumbs">
+                  {selectedProductImages.map((image, index) => (
                     <button
-                      key={img}
-                      className={`home-product-thumb${
-                        selectedImageIndex === index ? " home-product-thumb--active" : ""
-                      }`}
+                      key={`${image}-${index}`}
                       type="button"
+                      className={`products-detail-thumb ${
+                        index === selectedImageIndex ? "products-detail-thumb--active" : ""
+                      }`}
                       onClick={() => setSelectedImageIndex(index)}
                     >
-                      <img src={img} alt={`${selectedProduct.name} ${index + 1}`} />
+                      <img src={image} alt={`${selectedProduct.name} ${index + 1}`} />
                     </button>
                   ))}
                 </div>
               )}
+            </div>
+
+            <div className="products-detail-info">
+              <p className="page-kicker">Détail du produit</p>
+              <h2>{selectedProduct.name}</h2>
+
+              {selectedProduct.description && (
+                <p className="products-detail-desc">{selectedProduct.description}</p>
+              )}
+
+              <strong
+                className={`products-detail-price ${
+                  shouldShowPriceOnRequest(selectedProduct)
+                    ? "products-detail-price--request"
+                    : ""
+                }`}
+              >
+                {shouldShowProductPrice(selectedProduct) && selectedProduct.price != null
+                  ? formatPrice(selectedProduct.price)
+                  : t("products.priceOnRequest")}
+              </strong>
 
               {(selectedVariantsLoading || selectedVariants.length > 0) && (
-                <div className="home-product-variants">
-                  <h3>Autres dimensions disponibles</h3>
+                <div className="products-detail-variants">
+                  <strong>Autres dimensions disponibles</strong>
 
                   {selectedVariantsLoading ? (
-                    <p>Chargement des variantes...</p>
+                    <p className="products-detail-variants-loading">
+                      Chargement des variantes...
+                    </p>
                   ) : (
-                    <div className="home-product-variants-list">
+                    <div className="products-detail-variants-list">
                       {selectedVariants.map((variant) => (
                         <button
                           key={variant.id}
                           type="button"
-                          className="home-product-variant-card"
+                          className="products-detail-variant-card"
                           onClick={() => openProductModal(variant)}
                         >
-                          {variant.fullMainImageUrl && (
+                          {variant.fullMainImageUrl ? (
                             <img src={variant.fullMainImageUrl} alt={variant.name} />
+                          ) : (
+                            <div className="products-detail-variant-placeholder" />
                           )}
 
                           <span>{variant.dimensions || "Dimensions non précisées"}</span>
 
-                          <strong>
+                          <small>
                             {shouldShowProductPrice(variant) && variant.price != null
                               ? formatPrice(variant.price)
-                              : "Prix sur demande"}
-                          </strong>
+                              : t("products.priceOnRequest")}
+                          </small>
                         </button>
                       ))}
                     </div>
                   )}
                 </div>
               )}
-            </div>
 
-            <div className="home-product-modal-info">
-              <p className="page-kicker">{t("home.productDetailKicker")}</p>
-              <h2>{selectedProduct.name}</h2>
+              <div className="products-detail-grid">
+                <span>Catégorie</span>
+                <strong>{selectedProduct.category || "-"}</strong>
 
-              <p className="home-product-modal-desc">
-                {selectedProduct.description ||
-                  selectedProduct.shortStory ||
-                  t("home.selectedFallbackDescription")}
-              </p>
-
-              <div
-                className={`home-product-modal-price ${
-                  shouldShowPriceOnRequest(selectedProduct)
-                    ? "home-product-modal-price--request"
-                    : ""
-                }`}
-              >
-                {shouldShowProductPrice(selectedProduct) &&
-                selectedProduct.price != null
-                  ? formatPrice(selectedProduct.price)
-                  : shouldShowPriceOnRequest(selectedProduct)
-                  ? t("home.priceOnRequest")
-                  : "-"}
-              </div>
-
-              <div className="home-product-details-grid">
-                <span>{t("home.fields.category")}</span>
-                <strong>{selectedProduct.category || t("common.rug")}</strong>
-
-                <span>{t("home.fields.type")}</span>
+                <span>Type</span>
                 <strong>{selectedProduct.type || "-"}</strong>
 
-                <span>{t("home.fields.technique")}</span>
+                <span>Technique</span>
                 <strong>{selectedProduct.technique || "-"}</strong>
 
-                <span>{t("home.fields.region")}</span>
-                <strong>{selectedProduct.region || t("common.tunisia")}</strong>
+                <span>Région</span>
+                <strong>{selectedProduct.region || "-"}</strong>
 
-                <span>{t("home.fields.material")}</span>
+                <span>Matière</span>
                 <strong>{selectedProduct.material || "-"}</strong>
 
-                <span>{t("home.fields.colors")}</span>
+                <span>Couleurs</span>
                 <strong>{selectedProduct.colors || "-"}</strong>
 
-                <span>{t("home.fields.dimensions")}</span>
+                <span>Dimensions</span>
                 <strong>{selectedProduct.dimensions || "-"}</strong>
 
-                <span>{t("home.fields.weight")}</span>
-                <strong>{selectedProduct.weightKg ? `${selectedProduct.weightKg} kg` : "-"}</strong>
+                <span>Poids</span>
+                <strong>
+                  {selectedProduct.weightKg ? `${selectedProduct.weightKg} kg` : "-"}
+                </strong>
 
-                <span>{t("home.fields.condition")}</span>
+                <span>État</span>
                 <strong>{selectedProduct.condition || "-"}</strong>
 
-                <span>{t("home.fields.style")}</span>
+                <span>Style</span>
                 <strong>{selectedProduct.style || "-"}</strong>
 
-                <span>{t("home.fields.usage")}</span>
+                <span>Usage</span>
                 <strong>{selectedProduct.usageSpace || "-"}</strong>
 
-                <span>{t("home.fields.stock")}</span>
-                <strong>{selectedProduct.stock}</strong>
+                <span>Stock</span>
+                <strong>{selectedProduct.isAvailable ? "Disponible" : "Indisponible"}</strong>
               </div>
 
               {selectedProduct.careInstructions && (
-                <p className="home-product-care">
-                  <strong>{t("home.fields.carePrefix")}</strong>{" "}
-                  {selectedProduct.careInstructions}
-                </p>
+                <div className="products-detail-care">
+                  <strong>Entretien</strong>
+                  <p>{selectedProduct.careInstructions}</p>
+                </div>
               )}
 
-              <div className="home-product-modal-actions">
-                {!canProductBeAddedToCart(selectedProduct) ? (
+              <div className="products-detail-actions">
+                {shouldShowPriceOnRequest(selectedProduct) ? (
                   <button
                     type="button"
-                    className="home-btn-primary"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      openPriceRequestForm();
-                    }}
+                    className="product-cart-btn product-cart-btn--request"
+                    onClick={openPriceRequestForm}
                     disabled={loadingAuth}
                   >
-                    {loadingAuth ? t("home.catalogLoading") : t("home.requestPrice")}
+                    Demander le prix
                   </button>
                 ) : (
-                  <div className="home-product-buy-actions">
-                    <button
-                      type="button"
-                      className="home-btn-primary"
-                      onClick={(e) => {
-                        e.stopPropagation();
-
-                        if (!isAuthenticated) {
-                          closeProductModal();
-                          navigate("/login");
-                          return;
-                        }
-
-                        const result = addToCart({
-                          id: selectedProduct.id,
-                          name: selectedProduct.name,
-                          slug: selectedProduct.slug,
-                          price: selectedProduct.price,
-                          mainImageUrl: selectedProduct.fullMainImageUrl,
-                          dimensions: selectedProduct.dimensions,
-                          lengthCm: selectedProduct.lengthCm,
-                          widthCm: selectedProduct.widthCm,
-                          canShowPrice: selectedProduct.canShowPrice,
-                          isPriceHidden: selectedProduct.isPriceHidden,
-                          requiresPriceRequest: selectedProduct.requiresPriceRequest,
-                        });
-
-                        if (result.ok) {
-                          closeProductModal();
-                          navigate("/cart");
-                        }
-                      }}
-                    >
-                      {t("home.addToCart")}
-                    </button>
-
-                    <button
-                      type="button"
-                      className="home-btn-secondary"
-                      onClick={(e) => {
-                        e.stopPropagation();
-
-                        if (!isAuthenticated) {
-                          closeProductModal();
-                          navigate("/login");
-                          return;
-                        }
-
-                        addToCart({
-                          id: selectedProduct.id,
-                          name: selectedProduct.name,
-                          slug: selectedProduct.slug,
-                          price: selectedProduct.price,
-                          mainImageUrl: selectedProduct.fullMainImageUrl,
-                          dimensions: selectedProduct.dimensions,
-                          lengthCm: selectedProduct.lengthCm,
-                          widthCm: selectedProduct.widthCm,
-                          canShowPrice: selectedProduct.canShowPrice,
-                          isPriceHidden: selectedProduct.isPriceHidden,
-                          requiresPriceRequest: selectedProduct.requiresPriceRequest,
-                        });
-
-                        closeProductModal();
-                        navigate("/checkout");
-                      }}
-                    >
-                      {t("home.checkout")}
-                    </button>
-                  </div>
+                  <button
+                    type="button"
+                    className="product-cart-btn"
+                    onClick={() => handleAddToCart(selectedProduct)}
+                    disabled={loadingAuth || !canProductBeAddedToCart(selectedProduct)}
+                  >
+                    Ajouter au panier
+                  </button>
                 )}
               </div>
             </div>
+          </div>
+        </div>
+      )}
+
+      {lightboxOpen && (
+        <div
+          className="products-image-lightbox"
+          onClick={closeLightbox}
+          role="dialog"
+          aria-modal="true"
+        >
+          <div
+            className="products-image-lightbox-content"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              type="button"
+              className="products-image-lightbox-close"
+              onClick={closeLightbox}
+              aria-label="Fermer"
+            >
+              <X size={20} />
+            </button>
+
+            {selectedProductImages.length > 1 && (
+              <button
+                type="button"
+                className="products-image-lightbox-nav products-image-lightbox-nav--left"
+                onClick={prevLightboxImage}
+                aria-label="Image précédente"
+              >
+                <ChevronLeft size={26} />
+              </button>
+            )}
+
+            {selectedProductImages[lightboxImageIndex ?? selectedImageIndex] ? (
+              <img
+                src={selectedProductImages[lightboxImageIndex ?? selectedImageIndex]}
+                alt={selectedProduct?.name || ""}
+                className="products-image-lightbox-image"
+              />
+            ) : (
+              <div className="product-image-placeholder">
+                {t("products.imageUnavailable")}
+              </div>
+            )}
+
+            {selectedProductImages.length > 1 && (
+              <button
+                type="button"
+                className="products-image-lightbox-nav products-image-lightbox-nav--right"
+                onClick={nextLightboxImage}
+                aria-label="Image suivante"
+              >
+                <ChevronRight size={26} />
+              </button>
+            )}
           </div>
         </div>
       )}
