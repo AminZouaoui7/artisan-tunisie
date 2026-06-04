@@ -1,6 +1,6 @@
 import { useCart } from "../context/useCart";
 import { Link, useNavigate } from "react-router-dom";
-import { Star, X, ChevronLeft, ChevronRight, Eye } from "lucide-react";
+import { X, ChevronLeft, ChevronRight, Eye, ShoppingCart } from "lucide-react";
 import { useEffect, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import PhoneInput from "../components/PhoneInput";
@@ -15,6 +15,7 @@ import heroRug from "../assets/088fc89b-c8a7-49da-8450-cc19fc82ade1.png";
 import storyImage from "../assets/cbd0ea42-92dc-4cd6-a8e7-0b3133fe44f2.png";
 
 import "../styles/HomePage.css";
+import "../styles/ProductsPage.css";
 
 import { useAuth } from "../context/AuthContext";
 import ActionSuccess from "../components/ActionSuccess";
@@ -179,6 +180,34 @@ export default function HomePage() {
     setShowSuccessModal(false);
     setPriceRequestSuccessProductName(null);
   };
+
+  function handleAddToCart(product: ProductViewDto) {
+    if (loadingAuth) return;
+
+    if (!isAuthenticated) {
+      navigate("/login");
+      return;
+    }
+
+    if (!canProductBeAddedToCart(product)) {
+      openProductModal(product);
+      return;
+    }
+
+    addToCart({
+      id: product.id,
+      name: product.name,
+      slug: product.slug,
+      price: product.price,
+      mainImageUrl: product.fullMainImageUrl,
+      dimensions: product.dimensions,
+      lengthCm: product.lengthCm,
+      widthCm: product.widthCm,
+      canShowPrice: product.canShowPrice,
+      isPriceHidden: product.isPriceHidden,
+      requiresPriceRequest: product.requiresPriceRequest,
+    });
+  }
 
   const submitPriceRequest = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -515,7 +544,7 @@ export default function HomePage() {
               return (
                 <motion.article
                   key={product.id}
-                  className="home-rug-card"
+                  className="product-card"
                   variants={fadeUp}
                   initial={motionInitial}
                   animate={motionAnimate}
@@ -527,74 +556,104 @@ export default function HomePage() {
                       : { ...scrollTransition, delay: i * 0.06 }
                   }
                 >
-                  {isNewProduct && (
-                    <div className="home-rug-new-badge">{t("home.newBadge")}</div>
-                  )}
+                  <div className="product-card-media">
+                    <button
+                      type="button"
+                      className="product-card-image-frame"
+                      onClick={() => openProductModal(product)}
+                      aria-label={t("home.viewDetailsOf", { name: product.name })}
+                    >
+                      {mainImage ? (
+                        <img src={mainImage} alt={product.name} className="product-image" />
+                      ) : (
+                        <div className="product-image-placeholder">
+                          {t("home.imagePlaceholder")}
+                        </div>
+                      )}
+                    </button>
 
-                  <button
-                    className="home-rug-img"
-                    type="button"
-                    onClick={() => openProductModal(product)}
-                    aria-label={t("home.viewDetailsOf", { name: product.name })}
-                  >
-                    {mainImage ? (
-                      <img src={mainImage} alt={product.name} />
-                    ) : (
-                      <div className="home-rug-img-placeholder">
-                        {t("home.imagePlaceholder")}
+                    <div className="product-card-badges">
+                      {isNewProduct && (
+                        <span className="product-badge product-badge-featured">
+                          {t("home.newBadge")}
+                        </span>
+                      )}
+
+                      {product.isUniquePiece && (
+                        <span className="product-badge product-badge-unique">Pièce unique</span>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="product-content">
+                    <div className="product-meta">
+                      {product.type && <span>{product.type}</span>}
+                      {product.region && <span>{product.region}</span>}
+                      {product.usageSpace && <span>{product.usageSpace}</span>}
+                    </div>
+
+                    <h2>{product.name}</h2>
+
+                    <div className="product-card-specs">
+                      <div>
+                        <span>Matière</span>
+                        <strong>{product.material || "-"}</strong>
                       </div>
-                    )}
-                  </button>
 
-                  <div className="home-rug-info">
-                    <div className="home-rug-meta">
-                      <span className="home-rug-origin">
-                        ✦ {product.region || t("common.tunisia")}
-                      </span>
+                      <div>
+                        <span>Dimensions</span>
+                        <strong>{product.dimensions || "-"}</strong>
+                      </div>
 
-                      <span className="home-rug-size">
-                        {product.dimensions || t("products.miniFallbackDimensions")}
-                      </span>
+                      <div>
+                        <span>Technique</span>
+                        <strong>{product.technique || "-"}</strong>
+                      </div>
                     </div>
 
-                    <h3 className="home-rug-name">{product.name}</h3>
+                    <div
+                      className={`product-buy-zone ${
+                        showPriceOnRequest ? "product-buy-zone--request" : ""
+                      }`}
+                    >
+                      <div className="product-price-box">
+                        <p className="product-price-label">{showPriceOnRequest ? "Prix" : "Prix"}</p>
 
-                    <p className="home-rug-material">
-                      {product.material || product.type || t("ourStory.values.handmadeTitle")}
-                    </p>
-
-                    <div className="home-rug-rating">
-                      {Array.from({ length: 5 }).map((_, index) => (
-                        <Star key={index} size={12} fill="#c8a060" stroke="#c8a060" />
-                      ))}
-                      <span>{t("home.premiumLabel")}</span>
-                    </div>
-
-                    <div className="home-rug-footer">
-                      <div className="home-rug-price-block">
-                        <span
-                          className={`home-rug-price ${
-                            showPriceOnRequest ? "home-rug-price--request" : ""
-                          }`}
+                        <strong
+                          className={showPriceOnRequest ? "product-price-request" : "product-price"}
                         >
                           {showVisiblePrice && product.price != null
                             ? formatPrice(product.price)
                             : showPriceOnRequest
                             ? t("home.priceOnRequest")
                             : "-"}
-                        </span>
+                        </strong>
                       </div>
 
-                      <button
-                        className="home-rug-details-btn home-rug-details-btn--full"
-                        type="button"
-                        onClick={() => openProductModal(product)}
-                      >
-                        <Eye size={15} />
-                        {showPriceOnRequest
-                          ? t("home.requestPrice")
-                          : t("home.viewDetails")}
-                      </button>
+                      <div className="product-actions-row">
+                        <button
+                          type="button"
+                          className="product-detail-btn"
+                          onClick={() => openProductModal(product)}
+                        >
+                          <Eye size={16} />
+                          Détails
+                        </button>
+
+                        <button
+                          type="button"
+                          className={`product-cart-btn ${
+                            showPriceOnRequest ? "product-cart-btn--request" : ""
+                          }`}
+                          onClick={() =>
+                            showPriceOnRequest ? openProductModal(product) : handleAddToCart(product)
+                          }
+                          disabled={!showPriceOnRequest && !canProductBeAddedToCart(product)}
+                        >
+                          <ShoppingCart size={16} />
+                          <span>{showPriceOnRequest ? t("home.requestPrice") : "Ajouter"}</span>
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </motion.article>
