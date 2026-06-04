@@ -21,7 +21,8 @@ import ActionSuccess from "../components/ActionSuccess";
 import { getStoredUserLocation } from "../services/apiClient";
 import {
   canProductBeAddedToCart,
-  getLatestProducts,
+  getProducts,
+  keepLargestProductByVariantGroup,
   shouldShowPriceOnRequest,
   shouldShowProductPrice,
   type ProductViewDto,
@@ -262,9 +263,9 @@ export default function HomePage() {
         setLoadingProducts(true);
         setProductsErrorKey(null);
 
-        const data = await getLatestProducts();
+        const data = await getProducts();
 
-        const latestProducts = [...data]
+        const latestProducts = keepLargestProductByVariantGroup(data)
           .sort((a, b) => {
             const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
             const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
