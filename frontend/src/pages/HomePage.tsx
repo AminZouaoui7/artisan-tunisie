@@ -99,6 +99,24 @@ export default function HomePage() {
     message: "",
   });
 
+  function getProductImages(product: ProductViewDto | null) {
+    if (!product) return [];
+
+    if (product.fullImages?.length) {
+      return product.fullImages;
+    }
+
+    if (product.fullMainImageUrl) {
+      return [product.fullMainImageUrl];
+    }
+
+    if (product.mainImageUrl) {
+      return [product.mainImageUrl];
+    }
+
+    return [];
+  }
+
   const categories = [
     {
       tag: t("home.categories.items.0.tag"),
@@ -598,7 +616,8 @@ export default function HomePage() {
             <div className="home-catalog-loading">{t("home.catalogEmpty")}</div>
           ) : (
             products.map((product, i) => {
-              const coverImage = product.fullMainImageUrl;
+              const productImages = getProductImages(product);
+              const coverImage = productImages[0];
               const isNewProduct = i < 2;
               const showVisiblePrice = shouldShowProductPrice(product);
               const showPriceOnRequest = shouldShowPriceOnRequest(product);
