@@ -22,6 +22,7 @@ import { getStoredUserLocation } from "../services/apiClient";
 import {
   canProductBeAddedToCart,
   getProducts,
+  getProductVariants,
   keepLargestProductByVariantGroup,
   shouldShowPriceOnRequest,
   shouldShowProductPrice,
@@ -78,6 +79,8 @@ export default function HomePage() {
 
   const [selectedProduct, setSelectedProduct] = useState<ProductViewDto | null>(null);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [selectedVariants, setSelectedVariants] = useState<ProductViewDto[]>([]);
+  const [selectedVariantsLoading, setSelectedVariantsLoading] = useState(false);
 
   const [priceRequestOpen, setPriceRequestOpen] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
@@ -111,18 +114,32 @@ export default function HomePage() {
     },
   ];
 
-  const openProductModal = (product: ProductViewDto) => {
+  const openProductModal = async (product: ProductViewDto) => {
     setSelectedProduct(product);
     setSelectedImageIndex(0);
+    setSelectedVariants([]);
     setPriceRequestOpen(false);
     setShowSuccessModal(false);
     setPriceRequestSuccessProductName(null);
     setPriceRequestErrorKey(null);
+
+    try {
+      setSelectedVariantsLoading(true);
+      const variants = await getProductVariants(product.id);
+      setSelectedVariants(variants.filter((variant) => variant.id !== product.id));
+    } catch (error) {
+      console.error("Erreur chargement variantes :", error);
+      setSelectedVariants([]);
+    } finally {
+      setSelectedVariantsLoading(false);
+    }
   };
 
   const closeProductModal = () => {
     setSelectedProduct(null);
     setSelectedImageIndex(0);
+    setSelectedVariants([]);
+    setSelectedVariantsLoading(false);
     setPriceRequestOpen(false);
     setShowSuccessModal(false);
     setPriceRequestSuccessProductName(null);
@@ -840,6 +857,39 @@ export default function HomePage() {
                       <img src={img} alt={`${selectedProduct.name} ${index + 1}`} />
                     </button>
                   ))}
+                </div>
+              )}
+
+              {(selectedVariantsLoading || selectedVariants.length > 0) && (
+                <div className="home-product-variants">
+                  <h3>Autres dimensions disponibles</h3>
+
+                  {selectedVariantsLoading ? (
+                    <p>Chargement des variantes...</p>
+                  ) : (
+                    <div className="home-product-variants-list">
+                      {selectedVariants.map((variant) => (
+                        <button
+                          key={variant.id}
+                          type="button"
+                          className="home-product-variant-card"
+                          onClick={() => openProductModal(variant)}
+                        >
+                          {variant.fullMainImageUrl && (
+                            <img src={variant.fullMainImageUrl} alt={variant.name} />
+                          )}
+
+                          <span>{variant.dimensions || "Dimensions non précisées"}</span>
+
+                          <strong>
+                            {shouldShowProductPrice(variant) && variant.price != null
+                              ? formatPrice(variant.price)
+                              : "Prix sur demande"}
+                          </strong>
+                        </button>
+                      ))}
+                    </div>
+                  )}
                 </div>
               )}
             </div>
