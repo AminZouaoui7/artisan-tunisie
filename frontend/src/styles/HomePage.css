@@ -4546,3 +4546,36 @@
     font-size: 13px !important;
   }
 }
+/* FIX URGENT CATALOGUE MOBILE */
+
+@media (max-width: 768px) {
+  .home-catalog-track {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    width: calc(100% - 28px) !important;
+    margin: 0 auto !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    gap: 22px !important;
+  }
+
+  .home-rug-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    flex: none !important;
+    margin: 0 auto !important;
+    border-radius: 26px !important;
+  }
+
+  .home-rug-img {
+    height: 280px !important;
+    overflow: hidden !important;
+  }
+
+  .home-rug-img img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important;
+    padding: 18px !important;
+  }
+}
