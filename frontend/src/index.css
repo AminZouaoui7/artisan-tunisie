@@ -1234,9 +1234,9 @@ canvas {
 ========================= */
 
 @media (min-width: 1024px) {
-  html {
-    zoom: 0.9;
-  }
+ body {
+  zoom: 0.9;
+}
 
   .site-navbar-inner,
   .site-footer-inner,

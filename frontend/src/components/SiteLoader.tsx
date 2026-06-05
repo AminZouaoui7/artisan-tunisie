@@ -115,11 +115,14 @@ const CSS = `
 
 .am-loader {
   position: fixed;
-  inset: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   z-index: 99999;
 
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
 
   display: flex;
   align-items: center;
@@ -131,7 +134,6 @@ const CSS = `
   pointer-events: all;
 
   background: #ead8bc;
-  transform: translateZ(0);
 }
 .am-loader--hidden {
   opacity: 0 !important;
@@ -141,16 +143,15 @@ const CSS = `
 }
 
 .am-bg {
-  position: fixed;
+  position: absolute;
   inset: 0;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   background:
     radial-gradient(circle at 18% 12%, rgba(225,195,140,.55), transparent 38%),
     radial-gradient(circle at 82% 88%, rgba(210,175,115,.42), transparent 42%),
     linear-gradient(135deg, #f5ead5 0%, #ead8bc 52%, #d9c9a6 100%);
 }
-
 .am-bg::after {
   content: "";
   position: absolute;
