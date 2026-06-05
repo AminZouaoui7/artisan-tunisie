@@ -118,17 +118,12 @@ const CSS = `
   inset: 0;
   z-index: 99999;
 
-  width: 100%;
+  width: 100vw;
   height: 100vh;
-  height: 100svh;
-  height: 100dvh;
 
-  min-height: 100vh;
-  min-height: 100svh;
-  min-height: 100dvh;
-
-  display: grid;
-  place-items: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   overflow: hidden;
   opacity: 1;
@@ -137,9 +132,7 @@ const CSS = `
 
   background: #ead8bc;
   transform: translateZ(0);
-  contain: layout paint size;
 }
-
 .am-loader--hidden {
   opacity: 0 !important;
   visibility: hidden !important;
@@ -148,10 +141,10 @@ const CSS = `
 }
 
 .am-bg {
-  position: absolute;
-  inset: -3px;
-  width: calc(100% + 6px);
-  height: calc(100% + 6px);
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
   background:
     radial-gradient(circle at 18% 12%, rgba(225,195,140,.55), transparent 38%),
     radial-gradient(circle at 82% 88%, rgba(210,175,115,.42), transparent 42%),
@@ -287,7 +280,7 @@ const CSS = `
 
 .am-progress {
   position: fixed;
-  bottom: 38px;
+  bottom: 28px;
   left: 50%;
   z-index: 3;
   transform: translateX(-50%);
