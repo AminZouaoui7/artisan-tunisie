@@ -4406,3 +4406,54 @@
 .home-categories-header h2 em {
   color: var(--color-terracotta);
 }
+/* =========================
+   FIX HERO HOME DESKTOP
+========================= */
+
+@media (min-width: 1024px) {
+  .home-hero {
+    min-height: 620px !important;
+    height: 620px !important;
+  }
+
+  .home-hero-inner {
+    min-height: 620px !important;
+    height: 620px !important;
+    padding: 40px 0 50px !important;
+    grid-template-columns: 48% 52% !important;
+  }
+
+  .home-hero-title {
+    font-size: clamp(3rem, 4.4vw, 4.8rem) !important;
+  }
+
+  .home-hero-desc {
+    max-width: 520px !important;
+  }
+
+  .home-hero-3d {
+    min-height: 560px !important;
+  }
+
+  .home-rug-3d-scene {
+    width: min(470px, 36vw) !important;
+    height: 560px !important;
+    transform: translateX(0) translateY(0) !important;
+  }
+
+  .home-rug-3d-img {
+    width: 100% !important;
+    height: 100% !important;
+    transform:
+      rotateX(1deg)
+      rotateY(-4deg)
+      rotateZ(-1.5deg)
+      translateZ(40px)
+      scale(1) !important;
+  }
+
+  .home-rug-shadow {
+    bottom: 55px !important;
+    width: 62% !important;
+  }
+}
