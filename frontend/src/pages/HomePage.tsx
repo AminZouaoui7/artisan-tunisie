@@ -455,15 +455,14 @@ export default function HomePage() {
 
   <div className="home-boutique-hero-overlay" />
 
-  <motion.div
-    className="home-boutique-hero-content"
-    variants={fadeUp}
-    initial={motionInitial}
-    animate={motionAnimate}
-    whileInView={motionWhileInView}
-    viewport={motionViewport}
-    transition={motionTransition}
-  >
+ <motion.div
+  className="home-categories-grid"
+  variants={staggerContainer}
+  initial={motionInitial}
+  animate={motionAnimate}
+  whileInView={motionWhileInView}
+  viewport={motionViewport}
+>
     <p className="home-boutique-hero-kicker">{t("home.boutiqueKicker")}</p>
 
     <h1>{t("home.boutiqueTitle")}</h1>
