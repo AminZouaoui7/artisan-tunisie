@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://artisansdelamedina.com/sitemap.xml
+
