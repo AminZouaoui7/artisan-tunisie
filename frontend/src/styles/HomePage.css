@@ -4457,3 +4457,92 @@
     width: 62% !important;
   }
 }
+/* =========================
+   FIX CATALOG MOBILE HOMEPAGE
+========================= */
+
+@media (max-width: 768px) {
+  .home-catalog-section {
+    padding: 42px 0 50px !important;
+  }
+
+  .home-catalog-header {
+    width: calc(100% - 32px) !important;
+    margin: 0 auto 24px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 16px !important;
+  }
+
+  .home-catalog-header .home-section-title {
+    font-size: 34px !important;
+    line-height: 1.05 !important;
+  }
+
+  .home-catalog-see-all {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+
+  .home-catalog-track {
+    display: flex !important;
+    grid-template-columns: none !important;
+    overflow-x: auto !important;
+    gap: 18px !important;
+    padding: 4px 16px 22px !important;
+    width: 100% !important;
+    margin: 0 !important;
+    scroll-snap-type: x mandatory !important;
+    scrollbar-width: none !important;
+  }
+
+  .home-catalog-track::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  .home-rug-card {
+    flex: 0 0 86% !important;
+    max-width: 330px !important;
+    min-width: 0 !important;
+    border-radius: 26px !important;
+    scroll-snap-align: center !important;
+  }
+
+  .home-rug-img {
+    height: 260px !important;
+    border-radius: 22px !important;
+  }
+
+  .home-rug-img img {
+    padding: 16px !important;
+    object-fit: contain !important;
+  }
+
+  .home-rug-info {
+    padding: 18px 16px 20px !important;
+  }
+
+  .home-rug-name {
+    font-size: 20px !important;
+    line-height: 1.1 !important;
+  }
+
+  .home-rug-meta {
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    text-align: center !important;
+  }
+
+  .home-rug-details-grid,
+  .home-product-details-grid {
+    font-size: 12px !important;
+  }
+
+  .home-rug-details-btn,
+  .home-rug-details-btn--full {
+    min-height: 46px !important;
+    border-radius: 14px !important;
+    font-size: 13px !important;
+  }
+}
