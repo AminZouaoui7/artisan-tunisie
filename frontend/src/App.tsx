@@ -14,6 +14,12 @@ import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import VerifyEmailPage from "./pages/VerifyEmailPage";
 import SessionExpiredPage from "./pages/SessionExpiredPage";
+import TapisTunisiensPage from "./pages/TapisTunisiensPage";
+import TapisArtisanalTunisiePage from "./pages/TapisArtisanalTunisiePage";
+import TapisBerbereTunisiePage from "./pages/TapisBerbereTunisiePage";
+import TapisLaineTunisiePage from "./pages/TapisLaineTunisiePage";
+import TunisianRugsPage from "./pages/TunisianRugsPage";
+import BlogPage from "./pages/BlogPage";
 
 import CartPage from "./pages/CartPage";
 import CheckoutPage from "./pages/CheckoutPage";
@@ -163,6 +169,22 @@ function AppContent() {
               <Route path="/reservation" element={<ReservationPage />} />
 
               <Route path="/contact" element={<ContactPage />} />
+
+              <Route path="/tapis-tunisiens" element={<TapisTunisiensPage />} />
+              <Route
+                path="/tapis-artisanal-tunisie"
+                element={<TapisArtisanalTunisiePage />}
+              />
+              <Route
+                path="/tapis-berbere-tunisie"
+                element={<TapisBerbereTunisiePage />}
+              />
+              <Route
+                path="/tapis-laine-tunisie"
+                element={<TapisLaineTunisiePage />}
+              />
+              <Route path="/tunisian-rugs" element={<TunisianRugsPage />} />
+              <Route path="/blog" element={<BlogPage />} />
 
               <Route path="/login" element={<LoginPage />} />
 

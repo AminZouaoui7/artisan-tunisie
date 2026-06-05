@@ -209,6 +209,34 @@ export default function Footer() {
         <div className="artisan-footer-col">
           <h4 className="artisan-footer-heading">
             <span className="artisan-heading-line" />
+            {t("footer.guidesTitle")}
+          </h4>
+
+          <nav className="artisan-footer-nav">
+            {[
+              { to: "/tapis-tunisiens", label: t("seo.links.tapisTunisiens") },
+              {
+                to: "/tapis-artisanal-tunisie",
+                label: t("seo.links.tapisArtisanalTunisie"),
+              },
+              { to: "/tapis-berbere-tunisie", label: t("seo.links.tapisBerbereTunisie") },
+              { to: "/tapis-laine-tunisie", label: t("seo.links.tapisLaineTunisie") },
+              { to: "/tunisian-rugs", label: t("seo.links.tunisianRugs") },
+              { to: "/blog", label: t("seo.links.blog") },
+            ].map(({ to, label }) => (
+              <Link key={to} to={to} className="artisan-footer-link">
+                <ArrowRight size={13} className="artisan-link-arrow" />
+                {label}
+              </Link>
+            ))}
+          </nav>
+        </div>
+
+        <div className="artisan-footer-divider" aria-hidden="true" />
+
+        <div className="artisan-footer-col">
+          <h4 className="artisan-footer-heading">
+            <span className="artisan-heading-line" />
             {t("footer.contact")}
           </h4>
 

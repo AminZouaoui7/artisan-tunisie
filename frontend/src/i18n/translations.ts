@@ -67,6 +67,7 @@ export const translations: Record<Language, Record<string, unknown>> = {
       description:
         "Pièces artisanales tunisiennes, façonnées avec héritage, élégance et un esprit artisanal intemporel.",
       quickLinks: "Navigation",
+      guidesTitle: "Guides tapis",
       contact: "Contact",
       rights: "Tous droits réservés",
       newsletter: "Newsletter",
@@ -84,6 +85,199 @@ export const translations: Record<Language, Record<string, unknown>> = {
       links: {
         privacy: "Confidentialité",
         terms: "Conditions d'utilisation",
+      },
+    },
+    seo: {
+      common: {
+        kicker: "Guides tapis",
+        ctaProducts: "Découvrir la collection",
+        ctaReservation: "Réserver une visite",
+        faqTitle: "FAQ",
+      },
+      links: {
+        tapisTunisiens: "Tapis tunisiens",
+        tapisArtisanalTunisie: "Tapis artisanal Tunisie",
+        tapisBerbereTunisie: "Tapis berbère Tunisie",
+        tapisLaineTunisie: "Tapis laine Tunisie",
+        tunisianRugs: "Tunisian Rugs",
+        blog: "Blog",
+      },
+      tapisTunisiens: {
+        metaTitle: "Tapis tunisiens artisanaux | L’Artisan de la Médina",
+        metaDescription:
+          "Tapis tunisiens artisanaux : histoire, Médina de Tunis, laine, motifs et savoir-faire. Découvrez nos tapis Tunisie, tapis tunisien et tapis artisanal tunisien.",
+        h1: "Tapis tunisiens artisanaux",
+        lead:
+          "Du cœur de la Médina de Tunis à votre intérieur : découvrez l’univers du tapis tunisien, son histoire, ses matières naturelles et ses motifs, pour une décoration chaleureuse et authentique.",
+        sections: {
+          heritageTitle: "Un héritage vivant dans la Médina de Tunis",
+          heritageP1:
+            "Le tapis tunisien fait partie des arts décoratifs les plus emblématiques de Tunisie. Dans la Médina de Tunis, le savoir-faire se transmet : choix de la laine, teinture, nouage, tissage et finitions.",
+          heritageP2:
+            "Si vous recherchez “tapis tunisie”, “tapis tunisien” ou “tapis artisanal tunisien”, vous cherchez souvent plus qu’un objet : une pièce qui porte une histoire et un geste artisanal.",
+          savoirFaireTitle: "Savoir-faire artisanal, laine et finitions",
+          savoirFaireP1:
+            "Chaque tapis artisanal tunisien est sélectionné pour sa qualité, son caractère et sa cohérence : une matière agréable, une tenue durable, et une présence élégante au sol.",
+          decorationTitle: "Motifs, couleurs et décoration intérieure",
+          decorationP1:
+            "Les motifs racontent une identité : géométries, symboles, contrastes. Un tapis tunisien réchauffe un salon, structure une chambre, et s’intègre aussi bien dans un style moderne que traditionnel.",
+          shippingTitle: "Livraison internationale",
+          shippingP1:
+            "Nous accompagnons nos clients en Tunisie et à l’international : conseils, sélection, et expédition selon votre pays. Pour une pièce sur mesure ou un rendez-vous, réservez en ligne.",
+        },
+        cards: {
+          0: {
+            title: "Laine & matières",
+            text: "La laine naturelle offre confort, chaleur et résistance au quotidien.",
+          },
+          1: {
+            title: "Motifs & symboles",
+            text: "Des motifs inspirés de la tradition, choisis pour sublimer votre décoration.",
+          },
+          2: {
+            title: "Pièces uniques",
+            text: "Chaque tapis a son caractère : couleurs, dimensions et histoire.",
+          },
+        },
+      },
+      tapisArtisanalTunisie: {
+        metaTitle: "Tapis artisanal en Tunisie | L’Artisan de la Médina",
+        metaDescription:
+          "Tapis artisanal en Tunisie : fabrication à la main, artisans, tradition et pièces uniques. Découvrez comment reconnaître un tapis fait main tunisien et nos services de livraison.",
+        h1: "Tapis artisanal en Tunisie",
+        lead:
+          "Un tapis fait main en Tunisie, c’est une rencontre entre geste artisanal, laine et tradition : des pièces uniques à l’opposé du tapis industriel.",
+        sections: {
+          handmadeTitle: "Fabrication à la main : un travail d’artisans",
+          handmadeP1:
+            "Un tapis artisanal tunisien se distingue par la qualité du tissage, la régularité du travail et la richesse des motifs. Le temps de fabrication, les finitions et la matière font la différence.",
+          handmadeP2:
+            "Chaque pièce est unique : variations de couleur, relief, densité et détails. C’est précisément ce qui rend le tapis fait main vivant.",
+          whyTitle: "Pourquoi choisir un tapis fait main plutôt qu’un tapis industriel ?",
+          whyP1:
+            "Parce qu’un tapis artisanal apporte une histoire, une durabilité et une valeur décorative forte. Il traverse les années, et transforme l’atmosphère d’un espace.",
+        },
+        faq: {
+          0: {
+            q: "Comment reconnaître un tapis artisanal tunisien ?",
+            a: "Regardez la matière (laine), la densité, les finitions, et les petites irrégularités naturelles du fait main. Un tapis tunisien artisanal a du relief et un caractère unique.",
+          },
+          1: {
+            q: "Pourquoi choisir un tapis fait main ?",
+            a: "Pour la qualité, la durabilité, l’authenticité et la beauté des motifs. Un tapis artisanal tunisien donne une âme à votre intérieur.",
+          },
+          2: {
+            q: "Livrez-vous à l’international ?",
+            a: "Oui. Nous accompagnons la sélection et proposons la livraison selon votre pays. Vous pouvez aussi réserver une visite pour choisir votre tapis sur place.",
+          },
+        },
+      },
+      tapisBerbereTunisie: {
+        metaTitle: "Tapis berbère tunisien | L’Artisan de la Médina",
+        metaDescription:
+          "Tapis berbère tunisien : motifs, héritage maghrébin, laine et couleurs. Trouvez un tapis berbère pour salon ou chambre et découvrez nos collections.",
+        h1: "Tapis berbère tunisien",
+        lead:
+          "Les tapis berbères de Tunisie se reconnaissent par leurs motifs puissants, leur laine chaleureuse et des compositions qui donnent du caractère à un salon ou une chambre.",
+        sections: {
+          motifsTitle: "Motifs berbères : héritage et identité",
+          motifsP1:
+            "Les motifs berbères sont porteurs de symboles. Ils expriment une histoire familiale, un territoire, une mémoire du Maghreb et une esthétique intemporelle.",
+          motifsP2:
+            "Un tapis berbère tunisien s’intègre aussi bien dans un intérieur contemporain que dans une ambiance plus traditionnelle.",
+          roomsTitle: "Salon, chambre, entrée : comment l’intégrer ?",
+          roomsP1:
+            "Choisissez la bonne taille, privilégiez une laine agréable, et laissez le tapis structurer l’espace. Découvrez nos modèles dans la collection.",
+        },
+      },
+      tapisLaineTunisie: {
+        metaTitle: "Tapis en laine de Tunisie | L’Artisan de la Médina",
+        metaDescription:
+          "Tapis en laine de Tunisie : confort, durabilité, entretien et décoration. Découvrez les avantages d’un tapis en laine naturel, fait main.",
+        h1: "Tapis en laine de Tunisie",
+        lead:
+          "Un tapis en laine naturel offre chaleur, confort et tenue. Découvrez pourquoi la laine est au cœur du tapis artisanal tunisien, et comment l’entretenir.",
+        sections: {
+          naturalTitle: "La laine naturelle : confort et douceur",
+          naturalP1:
+            "La laine est une matière respirante et agréable. Elle apporte une sensation cosy, isole légèrement et sublime les couleurs.",
+          durabilityTitle: "Durabilité et résistance au quotidien",
+          durabilityP1:
+            "Un tapis en laine de qualité garde sa structure et son relief. C’est un choix durable pour un salon ou une pièce de vie.",
+          careTitle: "Entretien simple",
+          careP1:
+            "Aspiration régulière, rotation du tapis, nettoyage local doux : quelques gestes suffisent pour préserver la beauté de votre tapis fait main.",
+        },
+      },
+      tunisianRugs: {
+        metaTitle: "Authentic Tunisian Handmade Rugs | L’Artisan de la Médina",
+        metaDescription:
+          "Authentic Tunisian handmade rugs from the Medina of Tunis. Discover tunisian rugs, handmade tunisian rugs and authentic tunisian carpets with worldwide shipping.",
+        h1: "Authentic Tunisian Handmade Rugs",
+        lead:
+          "Discover tunisian rugs and handmade carpets from Tunisia — curated in the Medina of Tunis. Authentic souvenirs, timeless design, and worldwide shipping.",
+        sections: {
+          authenticTitle: "Handmade rugs from Tunisia, curated in the Medina",
+          authenticP1:
+            "Our selection focuses on authentic tunisian carpets: natural wool, strong character, and artisanal finishing — pieces that elevate any home.",
+          authenticP2:
+            "Whether you search for “tunisian rugs” or “handmade tunisian rugs”, you’re looking for authenticity. We help you choose the right size, style, and story.",
+        },
+        faq: {
+          0: {
+            q: "Do you ship worldwide?",
+            a: "Yes. We can ship worldwide depending on destination and carrier. Contact us or book a visit for personalized advice.",
+          },
+          1: {
+            q: "Are your rugs handmade?",
+            a: "Our rugs are selected for artisanal craftsmanship and authentic finishing, with natural materials such as wool when available.",
+          },
+          2: {
+            q: "Can I see rugs in person in Tunis?",
+            a: "Yes. You can book a visit to discover pieces and choose the best rug for your space.",
+          },
+        },
+      },
+      blog: {
+        metaTitle: "Blog | L’Artisan de la Médina",
+        metaDescription:
+          "Conseils et guides sur les tapis artisanaux tunisiens : choix, entretien, styles et traditions de la Médina de Tunis.",
+        h1: "Blog",
+        lead:
+          "Guides et inspirations autour du tapis tunisien : conseils pratiques, traditions, et idées déco pour choisir un tapis fait main.",
+        sectionTitle: "Articles & guides",
+        posts: {
+          0: {
+            title: "Comment choisir un tapis artisanal tunisien ?",
+            excerpt:
+              "Matière, dimensions, style et motifs : les critères essentiels pour choisir un tapis fait main en Tunisie.",
+            to: "/tapis-artisanal-tunisie",
+          },
+          1: {
+            title: "Tapis berbère ou kilim : quelles différences ?",
+            excerpt:
+              "Motifs, tissage et rendu : comprendre les styles pour trouver le tapis idéal pour votre intérieur.",
+            to: "/tapis-berbere-tunisie",
+          },
+          2: {
+            title: "Pourquoi acheter un tapis fait main en Tunisie ?",
+            excerpt:
+              "Authenticité, durabilité et savoir-faire : pourquoi un tapis artisanal tunisien change tout.",
+            to: "/tapis-tunisiens",
+          },
+          3: {
+            title: "Guide des tapis de la Médina de Tunis",
+            excerpt:
+              "De la tradition aux pièces contemporaines : repères pour acheter un tapis tunisien dans la Médina.",
+            to: "/tapis-tunisiens",
+          },
+          4: {
+            title: "Authentic Tunisian Rugs: A Guide for Travelers",
+            excerpt:
+              "A practical guide for travelers looking for tunisian rugs and authentic souvenirs in Tunis.",
+            to: "/tunisian-rugs",
+          },
+        },
       },
     },
     loader: {
@@ -1095,6 +1289,7 @@ export const translations: Record<Language, Record<string, unknown>> = {
       description:
         "Tunisian artisanal pieces, crafted with heritage, elegance, and a timeless handmade spirit.",
       quickLinks: "Navigation",
+      guidesTitle: "Rug Guides",
       contact: "Contact",
       rights: "All rights reserved",
       newsletter: "Newsletter",
@@ -1112,6 +1307,199 @@ export const translations: Record<Language, Record<string, unknown>> = {
       links: {
         privacy: "Privacy",
         terms: "Terms of use",
+      },
+    },
+    seo: {
+      common: {
+        kicker: "Rug Guides",
+        ctaProducts: "Explore the collection",
+        ctaReservation: "Book a visit",
+        faqTitle: "FAQ",
+      },
+      links: {
+        tapisTunisiens: "Tunisian rugs (FR)",
+        tapisArtisanalTunisie: "Handmade rugs Tunisia (FR)",
+        tapisBerbereTunisie: "Berber rugs Tunisia (FR)",
+        tapisLaineTunisie: "Wool rugs Tunisia (FR)",
+        tunisianRugs: "Tunisian Rugs",
+        blog: "Blog",
+      },
+      tapisTunisiens: {
+        metaTitle: "Handmade Tunisian Rugs | L’Artisan de la Médina",
+        metaDescription:
+          "Handmade Tunisian rugs: history, Medina of Tunis, wool, patterns and craftsmanship. Discover Tunisian rugs with worldwide shipping.",
+        h1: "Handmade Tunisian Rugs",
+        lead:
+          "From the Medina of Tunis to your home: discover Tunisian rugs, natural wool, and patterns that bring warmth and authenticity to any interior.",
+        sections: {
+          heritageTitle: "A living heritage in the Medina of Tunis",
+          heritageP1:
+            "Tunisian rugs are part of Tunisia’s most iconic crafts. In the Medina of Tunis, know-how is passed down through generations: wool selection, dyeing, weaving, and finishing.",
+          heritageP2:
+            "If you search for tunisian rugs and handmade carpets from Tunisia, you’re often looking for more than an object: a piece with a story and a handcrafted soul.",
+          savoirFaireTitle: "Craftsmanship, wool and finishing",
+          savoirFaireP1:
+            "We curate rugs for quality and character: comfortable materials, durable structure, and an elegant presence in your space.",
+          decorationTitle: "Patterns, colors and interior design",
+          decorationP1:
+            "Patterns carry identity: geometry, symbols, contrasts. A Tunisian rug warms a living room, defines a bedroom, and works with modern or traditional styles.",
+          shippingTitle: "Worldwide shipping",
+          shippingP1:
+            "We help customers in Tunisia and abroad with selection advice and shipping depending on destination. You can also book a visit to choose in person.",
+        },
+        cards: {
+          0: {
+            title: "Natural wool",
+            text: "Wool brings warmth, comfort, and everyday durability.",
+          },
+          1: {
+            title: "Symbols & patterns",
+            text: "Traditional-inspired motifs selected to elevate your décor.",
+          },
+          2: {
+            title: "Unique pieces",
+            text: "Each rug has its own character: colors, size, and story.",
+          },
+        },
+      },
+      tapisArtisanalTunisie: {
+        metaTitle: "Handmade Rugs in Tunisia | L’Artisan de la Médina",
+        metaDescription:
+          "Handmade rugs in Tunisia: artisans, tradition, unique pieces and worldwide shipping. Learn how to recognize a handcrafted rug.",
+        h1: "Handmade Rugs in Tunisia",
+        lead:
+          "A handmade rug in Tunisia is the result of time, tradition, and skilled artisans — a unique piece unlike industrial rugs.",
+        sections: {
+          handmadeTitle: "Handcrafted by artisans",
+          handmadeP1:
+            "A handmade Tunisian rug stands out through its weaving quality, finishing, and the richness of its patterns. Small natural variations are part of its charm.",
+          handmadeP2:
+            "Each piece is unique in color, relief, density, and detail — that’s what makes it feel alive.",
+          whyTitle: "Why choose handmade over industrial rugs?",
+          whyP1:
+            "Because handmade rugs offer authenticity, durability, and strong decorative value. They age beautifully and transform a room.",
+        },
+        faq: {
+          0: {
+            q: "How can you recognize a handmade Tunisian rug?",
+            a: "Look at the material (often wool), finishing, and natural irregularities. Handmade rugs have character and texture.",
+          },
+          1: {
+            q: "Why choose a handmade rug?",
+            a: "For quality, durability, authenticity, and timeless patterns that elevate your interior.",
+          },
+          2: {
+            q: "Do you ship worldwide?",
+            a: "Yes. We can ship depending on destination and carrier. You can also book a visit for personalized advice.",
+          },
+        },
+      },
+      tapisBerbereTunisie: {
+        metaTitle: "Tunisian Berber Rugs | L’Artisan de la Médina",
+        metaDescription:
+          "Tunisian Berber rugs: bold motifs, wool, colors, and heritage. Find a Berber rug for your living room or bedroom.",
+        h1: "Tunisian Berber Rug",
+        lead:
+          "Berber-inspired rugs from Tunisia are known for strong motifs, warm wool, and compositions that bring character to living rooms and bedrooms.",
+        sections: {
+          motifsTitle: "Berber motifs: heritage and identity",
+          motifsP1:
+            "Berber motifs carry symbols and stories. They reflect heritage, territory, and a timeless Maghreb aesthetic.",
+          motifsP2:
+            "A Tunisian Berber rug fits both contemporary and traditional interiors.",
+          roomsTitle: "Living room, bedroom, entry: how to style it",
+          roomsP1:
+            "Choose the right size, prioritize comfortable wool, and let the rug structure your space. Explore our collection for inspiration.",
+        },
+      },
+      tapisLaineTunisie: {
+        metaTitle: "Wool Rugs from Tunisia | L’Artisan de la Médina",
+        metaDescription:
+          "Wool rugs from Tunisia: comfort, durability, care, and design. Discover the benefits of natural wool and handcrafted pieces.",
+        h1: "Wool Rugs from Tunisia",
+        lead:
+          "Natural wool rugs bring warmth, comfort, and long-lasting structure. Learn why wool matters and how to care for a handmade rug.",
+        sections: {
+          naturalTitle: "Natural wool: comfort and softness",
+          naturalP1:
+            "Wool is breathable and comfortable. It creates a cozy feeling, softens acoustics, and highlights colors beautifully.",
+          durabilityTitle: "Durability for everyday life",
+          durabilityP1:
+            "Quality wool rugs keep their structure and texture. A durable choice for living spaces.",
+          careTitle: "Easy care",
+          careP1:
+            "Regular vacuuming, rotating the rug, and gentle spot cleaning are usually enough to preserve a handmade piece.",
+        },
+      },
+      tunisianRugs: {
+        metaTitle: "Authentic Tunisian Handmade Rugs | L’Artisan de la Médina",
+        metaDescription:
+          "Authentic Tunisian handmade rugs from the Medina of Tunis. Tunisian rugs, handmade Tunisian rugs, authentic Tunisian carpets. Worldwide shipping.",
+        h1: "Authentic Tunisian Handmade Rugs",
+        lead:
+          "Discover tunisian rugs and handmade tunisian rugs curated in the Medina of Tunis — authentic souvenirs with worldwide shipping.",
+        sections: {
+          authenticTitle: "Handmade carpets from Tunisia",
+          authenticP1:
+            "We curate authentic tunisian carpets with strong character: natural materials, artisanal finishing, and timeless design.",
+          authenticP2:
+            "We help travelers and customers choose the right rug for size, style, and story.",
+        },
+        faq: {
+          0: {
+            q: "Do you ship worldwide?",
+            a: "Yes, depending on destination and carrier. Contact us for details.",
+          },
+          1: {
+            q: "Are these rugs authentic souvenirs?",
+            a: "Our selection focuses on authentic craftsmanship from Tunisia, curated in the Medina of Tunis.",
+          },
+          2: {
+            q: "Can I visit in Tunis?",
+            a: "Yes. Book a visit to discover pieces in person and get advice.",
+          },
+        },
+      },
+      blog: {
+        metaTitle: "Blog | L’Artisan de la Médina",
+        metaDescription:
+          "Guides and tips about Tunisian handmade rugs: choosing, care, styles, and Medina traditions.",
+        h1: "Blog",
+        lead:
+          "Guides and inspiration around Tunisian rugs: practical advice, tradition, and décor ideas for choosing a handmade piece.",
+        sectionTitle: "Articles & guides",
+        posts: {
+          0: {
+            title: "How to choose a Tunisian handmade rug?",
+            excerpt:
+              "Materials, size, style, and patterns: the essentials for choosing a handcrafted rug.",
+            to: "/tapis-artisanal-tunisie",
+          },
+          1: {
+            title: "Berber rug or kilim: what’s the difference?",
+            excerpt:
+              "Patterns, weaving, and texture: understand styles to find your perfect rug.",
+            to: "/tapis-berbere-tunisie",
+          },
+          2: {
+            title: "Why buy a handmade rug in Tunisia?",
+            excerpt:
+              "Authenticity, durability, and craftsmanship: why handmade rugs are worth it.",
+            to: "/tapis-tunisiens",
+          },
+          3: {
+            title: "A guide to rugs in the Medina of Tunis",
+            excerpt:
+              "From tradition to contemporary pieces: what to look for when buying in Tunis.",
+            to: "/tapis-tunisiens",
+          },
+          4: {
+            title: "Authentic Tunisian Rugs: A Guide for Travelers",
+            excerpt:
+              "A practical guide for travelers looking for tunisian rugs and authentic souvenirs.",
+            to: "/tunisian-rugs",
+          },
+        },
       },
     },
     loader: {

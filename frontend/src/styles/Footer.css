@@ -25,7 +25,7 @@
   margin: 0 auto;
   padding: 52px 0 44px;
   display: grid;
-  grid-template-columns: 1.5fr auto 0.9fr auto 1fr auto 1.2fr;
+  grid-template-columns: 1.5fr auto 0.9fr auto 0.9fr auto 1fr auto 1.2fr;
   gap: 0;
   align-items: start;
 }
@@ -338,16 +338,17 @@
 
 @media (max-width: 1100px) {
   .artisan-footer-inner {
-    grid-template-columns: 1fr auto 1fr;
-    grid-template-rows: auto auto;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto auto;
     row-gap: 36px;
+    column-gap: 28px;
   }
 
-  .artisan-footer-divider:nth-child(4) {
+  .artisan-footer-divider {
     display: none;
   }
 
-  .artisan-footer-col:nth-child(7) {
+  .artisan-footer-col:nth-child(9) {
     grid-column: 1 / -1;
   }
 }
