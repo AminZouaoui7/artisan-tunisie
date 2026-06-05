@@ -167,10 +167,10 @@ const CSS = `
 
 .am-tile {
   position: fixed;
-  left: calc(50% + var(--tx));
-  top: calc(50% + var(--ty));
-  width: var(--ts);
-  height: var(--ts);
+  left: calc(50% + (var(--tx) * 0.75));
+  top: calc(50% + (var(--ty) * 0.75));
+  width: calc(var(--ts) * 0.8);
+  height: calc(var(--ts) * 0.8);
   background: var(--tc);
   border-radius: 2px;
   opacity: 0;
@@ -193,21 +193,21 @@ const CSS = `
 
 .am-card {
   position: relative;
-  width: min(100%, 470px);
-  min-width: 340px;
-  padding: 48px 68px 46px;
-  border-radius: 26px;
-  background: rgba(250,244,230,.9);
+  width: min(92vw, 430px);
+  min-width: 0;
+  padding: 38px 48px 36px;
+  border-radius: 24px;
+  background: rgba(250,244,230,.94);
   border: 1px solid rgba(180,130,60,.25);
   box-shadow:
-    0 24px 80px rgba(64,36,14,.14),
-    inset 0 0 0 1px rgba(255,255,255,.42);
+    0 22px 60px rgba(64,36,14,.12),
+    inset 0 0 0 1px rgba(255,255,255,.45);
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 20px;
+  gap: 16px;
   box-sizing: border-box;
 }
 
@@ -235,13 +235,12 @@ const CSS = `
 }
 
 .am-logo {
-  width: 185px;
-  height: 185px;
+  width: 145px;
+  height: 145px;
   object-fit: contain;
   display: block;
   animation: am-logo-glow 3.8s ease-in-out infinite;
 }
-
 .am-divider {
   display: flex;
   align-items: center;
@@ -266,9 +265,9 @@ const CSS = `
 .am-name {
   margin: 0;
   font-family: 'Cinzel', serif;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 500;
-  letter-spacing: .28em;
+  letter-spacing: .22em;
   color: rgba(55,26,12,.88);
   text-transform: uppercase;
   white-space: nowrap;
@@ -278,9 +277,9 @@ const CSS = `
 .am-sub {
   margin: 0;
   font-family: 'Cormorant Garamond', serif;
-  font-size: 18px;
+  font-size: 16px;
   font-style: italic;
-  letter-spacing: .06em;
+  letter-spacing: .05em;
   color: #a45b30;
   white-space: nowrap;
   animation: am-sub-in .85s ease .48s both;
