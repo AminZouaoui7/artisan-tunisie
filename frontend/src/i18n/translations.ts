@@ -577,6 +577,13 @@ export const translations: Record<Language, Record<string, unknown>> = {
             text:
               "Une visite prestigieuse au cœur de la Médina, symbole du rayonnement de l’artisanat tunisien.",
           },
+          moroccoPresident: {
+            alt: "Visite officielle d'une délégation marocaine dans la médina",
+            label: "Visite officielle",
+            name: "Présidence marocaine",
+            text:
+              "Une rencontre prestigieuse autour du patrimoine, de l'artisanat et du savoir-faire traditionnel.",
+          },
           minister: {
             alt: "Ministre tunisien",
             label: "Visite officielle",
@@ -1799,6 +1806,13 @@ export const translations: Record<Language, Record<string, unknown>> = {
             name: "Sophie of Greece",
             text:
               "A prestigious visit in the heart of the Medina, symbolizing the international reach of Tunisian craftsmanship.",
+          },
+          moroccoPresident: {
+            alt: "Official visit of a Moroccan delegation in the medina",
+            label: "Official visit",
+            name: "Moroccan presidency",
+            text:
+              "A prestigious meeting celebrating heritage, craftsmanship, and traditional know-how.",
           },
           minister: {
             alt: "Tunisian minister",

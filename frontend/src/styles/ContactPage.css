@@ -479,3 +479,155 @@
     max-width: none;
   }
 }
+/* =========================
+   COMPACT CONTACT PAGE
+========================= */
+
+.contact-hero {
+  padding: 84px 0 52px !important;
+}
+
+.contact-hero-inner {
+  width: min(1120px, calc(100% - 64px)) !important;
+  grid-template-columns: 0.92fr 1.08fr !important;
+  gap: 48px !important;
+}
+
+.contact-page .page-kicker {
+  margin-bottom: 12px !important;
+  font-size: 10px !important;
+  letter-spacing: 3.5px !important;
+}
+
+.contact-title {
+  margin-bottom: 18px !important;
+  font-size: clamp(36px, 4.4vw, 58px) !important;
+  letter-spacing: -2px !important;
+}
+
+.contact-description {
+  max-width: 500px !important;
+  margin-bottom: 24px !important;
+  font-size: 15px !important;
+  line-height: 1.65 !important;
+}
+
+.contact-whatsapp-btn,
+.contact-email-btn {
+  min-height: 48px !important;
+  padding: 0 20px !important;
+  font-size: 13px !important;
+}
+
+.contact-card {
+  padding: 14px !important;
+  border-radius: 32px !important;
+}
+
+.contact-form {
+  padding: 30px !important;
+  border-radius: 24px !important;
+}
+
+.contact-form-header h2 {
+  margin-bottom: 20px !important;
+  font-size: clamp(28px, 2.8vw, 38px) !important;
+  letter-spacing: -1.4px !important;
+}
+
+.contact-field {
+  gap: 6px !important;
+  margin-bottom: 12px !important;
+}
+
+.contact-field label {
+  font-size: 10px !important;
+  letter-spacing: 1.1px !important;
+}
+
+.contact-field input,
+.contact-field textarea {
+  border-radius: 14px !important;
+  padding: 12px 14px !important;
+  font-size: 13px !important;
+}
+
+.contact-field textarea {
+  min-height: 100px !important;
+}
+
+.contact-submit-actions {
+  gap: 10px !important;
+  margin-top: 8px !important;
+}
+
+.contact-submit-btn,
+.contact-whatsapp-submit {
+  min-height: 50px !important;
+  border-radius: 14px !important;
+  font-size: 13px !important;
+}
+
+.contact-info-section {
+  padding: 0 0 56px !important;
+}
+
+.contact-info-grid {
+  width: min(1080px, calc(100% - 64px)) !important;
+  gap: 16px !important;
+}
+
+.contact-info-card {
+  padding: 24px 22px !important;
+  border-radius: 22px !important;
+}
+
+.contact-info-card svg {
+  margin-bottom: 12px !important;
+}
+
+.contact-info-card h3 {
+  margin-bottom: 8px !important;
+  font-size: 21px !important;
+}
+
+.contact-info-card p {
+  margin-bottom: 12px !important;
+  font-size: 13px !important;
+  line-height: 1.55 !important;
+}
+
+.contact-info-card a,
+.contact-info-card span {
+  font-size: 13px !important;
+}
+
+@media (max-width: 1050px) {
+  .contact-hero-inner {
+    grid-template-columns: 1fr !important;
+    gap: 34px !important;
+  }
+}
+
+@media (max-width: 760px) {
+  .contact-hero {
+    padding: 68px 0 42px !important;
+  }
+
+  .contact-hero-inner,
+  .contact-info-grid {
+    width: min(100%, calc(100% - 28px)) !important;
+  }
+
+  .contact-title {
+    font-size: 34px !important;
+  }
+
+  .contact-form {
+    padding: 24px 18px !important;
+  }
+
+  .contact-field textarea {
+    min-height: 92px !important;
+  }
+}

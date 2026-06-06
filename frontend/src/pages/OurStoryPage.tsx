@@ -23,10 +23,10 @@ export default function OurStoryPage() {
     },
     {
       image: ourstory1,
-      alt: t("ourStory.custom.guests.minister.alt"),
-      label: t("ourStory.custom.guests.minister.label"),
-      name: t("ourStory.custom.guests.minister.name"),
-      text: t("ourStory.custom.guests.minister.text"),
+      alt: t("ourStory.custom.guests.moroccoPresident.alt"),
+      label: t("ourStory.custom.guests.moroccoPresident.label"),
+      name: t("ourStory.custom.guests.moroccoPresident.name"),
+      text: t("ourStory.custom.guests.moroccoPresident.text"),
       large: false,
     },
     {
