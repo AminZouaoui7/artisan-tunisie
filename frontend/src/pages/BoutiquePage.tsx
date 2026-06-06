@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { ChevronLeft, ChevronRight, Eye } from "lucide-react";
 import { useI18n } from "../i18n/i18n";
 
@@ -105,15 +106,11 @@ export default function BoutiquePage() {
 
           <p>{t("boutiquePage.heroDescription")}</p>
 
-          <div className="boutique-hero__actions">
-            <a href="#ceramique" className="boutique-btn boutique-btn--primary">
+          <div className="boutique-hero__actions boutique-hero__actions--single">
+            <Link to="/products" className="boutique-btn boutique-btn--primary">
               <Eye size={16} />
               {t("boutiquePage.heroPrimaryCta")}
-            </a>
-
-            <a href="/products" className="boutique-btn boutique-btn--ghost">
-              {t("boutiquePage.heroSecondaryCta")}
-            </a>
+            </Link>
           </div>
         </div>
       </section>

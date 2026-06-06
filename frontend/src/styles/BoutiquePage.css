@@ -886,3 +886,10 @@
     min-height: 250px !important;
   }
 }
+.boutique-hero__actions--single {
+  justify-content: center;
+}
+
+.boutique-hero__actions--single .boutique-btn {
+  min-width: 280px;
+}
