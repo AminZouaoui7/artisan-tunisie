@@ -2068,233 +2068,55 @@
   }
 }
 
-.products-detail-modal {
-  padding: 84px 42px 34px !important;
-  align-items: center !important;
-  overflow: hidden !important;
-}
-
-.products-detail-card {
-  width: min(1640px, 94vw) !important;
-  height: min(820px, calc(100vh - 118px)) !important;
-  max-height: none !important;
-  display: grid !important;
-  grid-template-columns: minmax(0, 1.28fr) minmax(420px, 0.72fr) !important;
-  gap: 34px !important;
-  padding: 34px !important;
-  border-radius: 38px !important;
-  overflow: hidden !important;
-}
-
-.products-detail-close {
-  position: absolute !important;
-  top: 20px !important;
-  right: 20px !important;
-  z-index: 50 !important;
-  width: 46px !important;
-  height: 46px !important;
-  background: rgba(255, 248, 232, 0.96) !important;
-  box-shadow: 0 14px 34px rgba(31, 16, 4, 0.18) !important;
-}
-
-.products-detail-gallery {
-  height: 100% !important;
-  min-height: 0 !important;
-  display: grid !important;
-  grid-template-rows: 1fr auto !important;
-  gap: 12px !important;
-  overflow: hidden !important;
-}
-
-.products-detail-image {
-  width: 100% !important;
-  height: 100% !important;
-  min-height: 0 !important;
-  max-height: none !important;
-  border-radius: 30px !important;
-  overflow: hidden !important;
-  background: #fffaf0 !important;
-}
-
-.products-detail-image-button {
-  width: 100% !important;
-  height: 100% !important;
-}
-
-.products-detail-image img {
-  width: 100% !important;
-  height: 100% !important;
-  max-height: none !important;
-  object-fit: contain !important;
-  padding: 26px !important;
-}
+/* FIX FINAL POPUP DETAILS - STOP COMPRESSING RIGHT CONTENT */
 
 .products-detail-info {
-  height: 100% !important;
-  overflow: hidden !important;
-  padding: 18px 4px 10px 0 !important;
-  display: flex !important;
-  flex-direction: column !important;
+  justify-content: flex-start !important;
+  overflow-y: auto !important;
+  padding-bottom: 20px !important;
 }
 
-.products-detail-info h2 {
-  font-size: clamp(2.2rem, 3vw, 3.4rem) !important;
-  line-height: 0.95 !important;
-  margin: 0 0 12px !important;
-}
-
-.products-detail-desc {
-  margin: 0 0 14px !important;
-  font-size: 0.95rem !important;
-  line-height: 1.55 !important;
-}
-
-.products-detail-price {
-  margin: 0 0 20px !important;
-  font-size: 2rem !important;
-  font-weight: 950 !important;
-}
-
-.products-detail-variants {
-  margin: 0 0 16px !important;
-  padding: 16px !important;
-  border-radius: 24px !important;
-  max-height: 270px !important;
-  overflow: hidden !important;
-}
-
-.products-detail-variants > strong {
-  font-size: 0.95rem !important;
-  margin-bottom: 12px !important;
+.products-detail-variants,
+.products-detail-highlights,
+.products-detail-care {
+  max-height: none !important;
+  height: auto !important;
+  overflow: visible !important;
+  display: block !important;
 }
 
 .products-detail-variants-list {
   display: grid !important;
-  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-  gap: 10px !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 12px !important;
 }
 
 .products-detail-variant-card {
-  padding: 8px !important;
-  border-radius: 16px !important;
+  min-height: 145px !important;
 }
 
 .products-detail-variant-card img,
 .products-detail-variant-placeholder {
-  height: 62px !important;
-  border-radius: 12px !important;
-  margin-bottom: 8px !important;
-}
-
-.products-detail-variant-card span {
-  font-size: 0.78rem !important;
-  line-height: 1.1 !important;
-}
-
-.products-detail-variant-card small {
-  font-size: 0.72rem !important;
-}
-
-.products-detail-highlights {
-  margin-top: auto !important;
-  padding: 14px !important;
-  border-radius: 22px !important;
-  max-height: 220px !important;
-  overflow: hidden !important;
-}
-
-.products-detail-section-title {
-  margin-bottom: 10px !important;
-}
-
-.products-detail-section-title span {
-  font-size: 0.95rem !important;
-}
-
-.products-detail-section-title small {
-  font-size: 0.68rem !important;
+  height: 82px !important;
 }
 
 .products-detail-highlight-grid {
+  display: grid !important;
   grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-  gap: 8px !important;
 }
 
-.products-detail-highlight-card {
-  padding: 9px 10px !important;
-  border-radius: 14px !important;
+.products-detail-care {
+  margin-top: 14px !important;
+  padding: 16px !important;
+  border-radius: 18px !important;
 }
 
-.products-detail-highlight-card span {
-  margin-bottom: 4px !important;
-  font-size: 0.58rem !important;
+.products-detail-card {
+  overflow: hidden !important;
 }
 
-.products-detail-highlight-card strong {
-  font-size: 0.78rem !important;
-}
-
-.products-detail-thumbs {
-  max-height: 86px !important;
-}
-
-.products-detail-thumb {
-  flex: 0 0 74px !important;
-  width: 74px !important;
-  height: 74px !important;
-  border-radius: 16px !important;
-}
-
-.products-detail-gallery-btn {
-  width: 44px !important;
-  height: 44px !important;
-}
-
-.products-detail-gallery-btn--left {
-  left: 18px !important;
-}
-
-.products-detail-gallery-btn--right {
-  right: 18px !important;
-}
-
-@media (max-width: 900px) {
-  .products-detail-modal {
-    padding: 82px 12px 22px !important;
-    overflow-y: auto !important;
-    align-items: flex-start !important;
-  }
-
-  .products-detail-card {
-    width: 100% !important;
-    height: auto !important;
-    grid-template-columns: 1fr !important;
-    padding: 18px !important;
-    border-radius: 28px !important;
-    overflow-y: auto !important;
-  }
-
-  .products-detail-gallery {
-    height: auto !important;
-  }
-
-  .products-detail-image {
-    height: 360px !important;
-  }
-
+@media (min-width: 901px) {
   .products-detail-info {
-    height: auto !important;
-    overflow: visible !important;
-  }
-
-  .products-detail-variants,
-  .products-detail-highlights {
-    max-height: none !important;
-    overflow: visible !important;
-  }
-
-  .products-detail-variants-list,
-  .products-detail-highlight-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    max-height: 100% !important;
   }
 }
