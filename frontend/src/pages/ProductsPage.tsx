@@ -767,15 +767,6 @@ export default function ProductsPage() {
               filteredProducts.length === 1 ? "" : "s"
             } found`}
       </p>
-      <p className="products-filter-hint">
-        {hasActiveFilters
-          ? language === "FR"
-            ? "Filtres actifs appliqués."
-            : "Active filters applied."
-          : language === "FR"
-          ? "Sélection variée : types, régions, couleurs et dimensions mélangés."
-          : "Varied selection: mixed types, regions, colors, and sizes."}
-      </p>
 
       {loading && (
         <div className="products-state">
