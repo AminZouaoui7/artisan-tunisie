@@ -317,15 +317,74 @@ export default function HomePage() {
 
         const data = await getProducts();
 
-        const latestProducts = keepLargestProductByVariantGroup(data)
-          .sort((a, b) => {
-            const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
-            const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
-            return dateB - dateA;
-          })
-          .slice(0, 6);
+       const getSurfaceM2 = (product: ProductViewDto) => {
+  const length = product.lengthCm || 0;
+  const width = product.widthCm || 0;
 
-        if (isMounted) setProducts(latestProducts);
+  if (!length || !width) return 0;
+
+  return (length * width) / 10000;
+};
+
+const normalizeValue = (value?: string | null) =>
+  (value || "").toLowerCase().trim();
+
+const getVarietyScore = (product: ProductViewDto) => {
+  let score = 0;
+
+  if (product.isFeatured) score += 100;
+  if (product.isUniquePiece) score += 40;
+  if (product.fullMainImageUrl || product.mainImageUrl) score += 30;
+  if (product.type) score += 10;
+  if (product.region) score += 10;
+  if (product.colors) score += 10;
+  if (product.usageSpace) score += 8;
+  if (product.dimensions) score += 8;
+
+  return score;
+};
+
+const diversifyHomeProducts = (items: ProductViewDto[]) => {
+  const selected: ProductViewDto[] = [];
+  const remaining = [...items].sort((a, b) => {
+    const scoreDiff = getVarietyScore(b) - getVarietyScore(a);
+    if (scoreDiff !== 0) return scoreDiff;
+
+    return getSurfaceM2(b) - getSurfaceM2(a);
+  });
+
+  while (selected.length < 6 && remaining.length > 0) {
+    const index = remaining.findIndex((candidate) => {
+      return !selected.some((chosen) => {
+        const sameType =
+          normalizeValue(chosen.type) &&
+          normalizeValue(chosen.type) === normalizeValue(candidate.type);
+
+        const sameColor =
+          normalizeValue(chosen.colors) &&
+          normalizeValue(chosen.colors) === normalizeValue(candidate.colors);
+
+        const sameRegion =
+          normalizeValue(chosen.region) &&
+          normalizeValue(chosen.region) === normalizeValue(candidate.region);
+
+        return sameType && (sameColor || sameRegion);
+      });
+    });
+
+    const pickedIndex = index === -1 ? 0 : index;
+    const [picked] = remaining.splice(pickedIndex, 1);
+    selected.push(picked);
+  }
+
+  return selected;
+};
+
+const homeProducts = diversifyHomeProducts(
+  keepLargestProductByVariantGroup(data)
+);
+
+if (isMounted) setProducts(homeProducts);
       } catch (error) {
         console.error("Erreur chargement produits :", error);
         if (isMounted) setProductsErrorKey("home.productsLoadError");
