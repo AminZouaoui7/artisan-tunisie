@@ -110,6 +110,85 @@ export default function ProductsPage() {
     return (product.lengthCm * product.widthCm) / 10000;
   }
 
+  function normalizeText(value?: string | null) {
+    return (value || "")
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .trim();
+  }
+
+  function splitValues(value?: string | null) {
+    return (value || "")
+      .split(",")
+      .map((item) => item.trim())
+      .filter(Boolean);
+  }
+
+  function getProductVarietyKey(product: ProductViewDto) {
+    return [
+      normalizeText(product.type),
+      normalizeText(product.region),
+      normalizeText(product.colors),
+      normalizeText(product.usageSpace),
+      getSizeLabel(product),
+    ].join("|");
+  }
+
+  function getVarietyScore(product: ProductViewDto) {
+    let score = 0;
+
+    if (product.isFeatured) score += 100;
+    if (product.isUniquePiece) score += 30;
+    if (product.fullMainImageUrl || product.mainImageUrl || product.fullImages?.length)
+      score += 20;
+    if (product.type) score += 8;
+    if (product.region) score += 6;
+    if (product.colors) score += 6;
+    if (product.usageSpace) score += 5;
+    if (product.lengthCm && product.widthCm) score += 5;
+
+    return score;
+  }
+
+  function diversifyProducts(list: ProductViewDto[]) {
+    const sorted = [...list].sort((a, b) => {
+      const scoreDiff = getVarietyScore(b) - getVarietyScore(a);
+      if (scoreDiff !== 0) return scoreDiff;
+
+      const surfaceDiff = getSurfaceM2(b) - getSurfaceM2(a);
+      if (surfaceDiff !== 0) return surfaceDiff;
+
+      return String(a.name || "").localeCompare(String(b.name || ""));
+    });
+
+    const buckets = new Map<string, ProductViewDto[]>();
+
+    sorted.forEach((product) => {
+      const varietyKey = getProductVarietyKey(product);
+      const key =
+        normalizeText(product.type) ||
+        normalizeText(product.region) ||
+        normalizeText(varietyKey) ||
+        "other";
+      const bucket = buckets.get(key) || [];
+      bucket.push(product);
+      buckets.set(key, bucket);
+    });
+
+    const result: ProductViewDto[] = [];
+    const bucketValues = Array.from(buckets.values());
+
+    while (bucketValues.some((bucket) => bucket.length > 0)) {
+      bucketValues.forEach((bucket) => {
+        const item = bucket.shift();
+        if (item) result.push(item);
+      });
+    }
+
+    return result;
+  }
+
   function getVisibleVariantProducts(productsList: ProductViewDto[]) {
     const bestByGroup = new Map<string, ProductViewDto>();
     const productsWithoutGroup: ProductViewDto[] = [];
@@ -153,7 +232,7 @@ export default function ProductsPage() {
   }
 
   const visibleCatalogProducts = useMemo(() => {
-    return getVisibleVariantProducts(products);
+    return diversifyProducts(getVisibleVariantProducts(products));
   }, [products]);
 
   const detailImages = getProductImages(detailProduct);
@@ -384,36 +463,33 @@ export default function ProductsPage() {
 
   const types = useMemo(() => {
     const uniqueTypes = visibleCatalogProducts
-      .map((product) => product.type)
+      .map((product) => product.type?.trim())
       .filter((item): item is string => Boolean(item));
 
-    return ["all", ...Array.from(new Set(uniqueTypes))];
+    return [
+      "all",
+      ...Array.from(new Set(uniqueTypes)).sort((a, b) => a.localeCompare(b)),
+    ];
   }, [visibleCatalogProducts]);
 
   const colors = useMemo(() => {
     const allColors = visibleCatalogProducts.flatMap((product) =>
-      product.colors
-        ? product.colors
-            .split(",")
-            .map((item) => item.trim())
-            .filter(Boolean)
-        : []
+      splitValues(product.colors)
     );
-
-    return ["all", ...Array.from(new Set(allColors))];
+    return [
+      "all",
+      ...Array.from(new Set(allColors)).sort((a, b) => a.localeCompare(b)),
+    ];
   }, [visibleCatalogProducts]);
 
   const spaces = useMemo(() => {
     const allSpaces = visibleCatalogProducts.flatMap((product) =>
-      product.usageSpace
-        ? product.usageSpace
-            .split(",")
-            .map((item) => item.trim())
-            .filter(Boolean)
-        : []
+      splitValues(product.usageSpace)
     );
-
-    return ["all", ...Array.from(new Set(allSpaces))];
+    return [
+      "all",
+      ...Array.from(new Set(allSpaces)).sort((a, b) => a.localeCompare(b)),
+    ];
   }, [visibleCatalogProducts]);
 
   function getSizeLabel(product: ProductViewDto) {
@@ -443,9 +519,15 @@ export default function ProductsPage() {
     [size]
   );
 
+  const hasActiveFilters = Boolean(
+    search.trim() || type !== "all" || color !== "all" || size !== "all" || space !== "all"
+  );
+
   const filteredProducts = useMemo(() => {
-    return visibleCatalogProducts.filter((product) => {
-      const text = `
+    const normalizedSearch = normalizeText(search);
+
+    const result = visibleCatalogProducts.filter((product) => {
+      const text = normalizeText(`
         ${product.name || ""}
         ${product.description || ""}
         ${product.shortStory || ""}
@@ -456,28 +538,20 @@ export default function ProductsPage() {
         ${product.colors || ""}
         ${product.style || ""}
         ${product.usageSpace || ""}
-      `.toLowerCase();
+        ${product.dimensions || ""}
+      `);
 
-      const matchSearch = text.includes(search.toLowerCase().trim());
-      const matchType = type === "all" || product.type === type;
+      const matchSearch = !normalizedSearch || text.includes(normalizedSearch);
+      const matchType =
+        type === "all" || normalizeText(product.type) === normalizeText(type);
 
-      const productColors =
-        product.colors
-          ?.toLowerCase()
-          .split(",")
-          .map((item) => item.trim()) ?? [];
-
+      const productColors = splitValues(product.colors).map(normalizeText);
       const matchColor =
-        color === "all" || productColors.includes(color.toLowerCase());
+        color === "all" || productColors.includes(normalizeText(color));
 
-      const productSpaces =
-        product.usageSpace
-          ?.toLowerCase()
-          .split(",")
-          .map((item) => item.trim()) ?? [];
-
+      const productSpaces = splitValues(product.usageSpace).map(normalizeText);
       const matchSpace =
-        space === "all" || productSpaces.includes(space.toLowerCase());
+        space === "all" || productSpaces.includes(normalizeText(space));
 
       return (
         matchSearch &&
@@ -487,14 +561,17 @@ export default function ProductsPage() {
         matchSpace
       );
     });
-  }, [visibleCatalogProducts, search, type, color, space, matchSizeFilter]);
 
-  const hasActiveFilters =
-    search ||
-    type !== "all" ||
-    color !== "all" ||
-    size !== "all" ||
-    space !== "all";
+    return hasActiveFilters ? result : diversifyProducts(result);
+  }, [
+    visibleCatalogProducts,
+    search,
+    type,
+    color,
+    space,
+    matchSizeFilter,
+    hasActiveFilters,
+  ]);
 
   function resetFilters() {
     setSearch("");
@@ -503,6 +580,27 @@ export default function ProductsPage() {
     setSize("all");
     setSpace("all");
   }
+
+  const productDetailHighlights = detailProduct
+    ? [
+        { label: "Type", value: detailProduct.type },
+        { label: "Technique", value: detailProduct.technique },
+        { label: "Région", value: detailProduct.region },
+        { label: "Matière", value: detailProduct.material },
+        { label: "Couleurs", value: detailProduct.colors },
+        { label: "Dimensions", value: detailProduct.dimensions },
+        { label: "Style", value: detailProduct.style },
+        { label: "Usage", value: detailProduct.usageSpace },
+        {
+          label: "Pièce unique",
+          value: detailProduct.isUniquePiece ? "Oui" : undefined,
+        },
+        {
+          label: "Fait main",
+          value: detailProduct.isHandmade ? "Oui" : undefined,
+        },
+      ].filter((item) => item.value && item.value !== "-")
+    : [];
 
   return (
     <section className="products-page">
@@ -577,6 +675,11 @@ export default function ProductsPage() {
           count: filteredProducts.length,
           plural: filteredProducts.length !== 1 ? "s" : "",
         })}
+      </p>
+      <p className="products-filter-hint">
+        {hasActiveFilters
+          ? "Filtres actifs appliqués."
+          : "Sélection variée : types, régions, couleurs et dimensions mélangés."}
       </p>
 
       {loading && (
@@ -916,78 +1019,26 @@ export default function ProductsPage() {
                 </div>
               )}
 
-              <div className="products-detail-grid">
-                <span>{t("home.fields.category")}</span>
-                <strong>{detailProduct.category || "-"}</strong>
+              {productDetailHighlights.length > 0 && (
+                <div className="products-detail-highlights">
+                  <div className="products-detail-section-title">
+                    <span>Détails du tapis</span>
+                    <small>Informations essentielles</small>
+                  </div>
 
-                <span>{t("home.fields.type")}</span>
-                <strong>{detailProduct.type || "-"}</strong>
-
-                <span>{t("home.fields.technique")}</span>
-                <strong>{detailProduct.technique || "-"}</strong>
-
-                <span>{t("home.fields.region")}</span>
-                <strong>{detailProduct.region || "-"}</strong>
-
-                <span>{t("home.fields.material")}</span>
-                <strong>{detailProduct.material || "-"}</strong>
-
-                <span>{t("home.fields.colors")}</span>
-                <strong>{detailProduct.colors || "-"}</strong>
-
-                <span>{t("home.fields.dimensions")}</span>
-                <strong>{detailProduct.dimensions || "-"}</strong>
-
-                <span>{t("home.fields.length")}</span>
-                <strong>
-                  {detailProduct.lengthCm ? `${detailProduct.lengthCm} cm` : "-"}
-                </strong>
-
-                <span>{t("home.fields.width")}</span>
-                <strong>
-                  {detailProduct.widthCm ? `${detailProduct.widthCm} cm` : "-"}
-                </strong>
-
-                <span>{t("home.fields.weight")}</span>
-                <strong>
-                  {detailProduct.weightKg ? `${detailProduct.weightKg} kg` : "-"}
-                </strong>
-
-                <span>{t("products.fields.age")}</span>
-                <strong>
-                  {detailProduct.ageYears ? `${detailProduct.ageYears} ans` : "-"}
-                </strong>
-
-                <span>{t("home.fields.condition")}</span>
-                <strong>{detailProduct.condition || "-"}</strong>
-
-                <span>{t("products.fields.density")}</span>
-                <strong>{detailProduct.density || "-"}</strong>
-
-                <span>{t("products.fields.shape")}</span>
-                <strong>{detailProduct.shape || "-"}</strong>
-
-                <span>{t("home.fields.style")}</span>
-                <strong>{detailProduct.style || "-"}</strong>
-
-                <span>{t("home.fields.usage")}</span>
-                <strong>{detailProduct.usageSpace || "-"}</strong>
-
-                <span>{t("products.unique")}</span>
-                <strong>
-                  {detailProduct.isUniquePiece
-                    ? t("common.yes")
-                    : t("common.no")}
-                </strong>
-
-                <span>{t("products.fields.handmade")}</span>
-                <strong>
-                  {detailProduct.isHandmade ? t("common.yes") : t("common.no")}
-                </strong>
-
-                <span>{t("home.fields.stock")}</span>
-                <strong>{detailProduct.stock ?? "-"}</strong>
-              </div>
+                  <div className="products-detail-highlight-grid">
+                    {productDetailHighlights.map((item) => (
+                      <div
+                        className="products-detail-highlight-card"
+                        key={item.label}
+                      >
+                        <span>{item.label}</span>
+                        <strong>{item.value}</strong>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               {detailProduct.careInstructions && (
                 <div className="products-detail-care">
