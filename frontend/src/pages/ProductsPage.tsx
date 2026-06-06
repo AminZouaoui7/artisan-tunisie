@@ -39,7 +39,7 @@ import { useI18n } from "../i18n/i18n";
 type SizeFilter = "all" | "small" | "medium" | "large" | "xl";
 
 export default function ProductsPage() {
-  const { t } = useI18n();
+  const { t, language } = useI18n();
   const { formatPrice } = useCurrency();
   const navigate = useNavigate();
   const { isAuthenticated, loadingAuth, user } = useAuth();
@@ -123,6 +123,82 @@ export default function ProductsPage() {
       .split(",")
       .map((item) => item.trim())
       .filter(Boolean);
+  }
+
+  const colorLabels: Record<string, { fr: string; en: string }> = {
+    beige: { fr: "Beige", en: "Beige" },
+    bleu: { fr: "Bleu", en: "Blue" },
+    blue: { fr: "Bleu", en: "Blue" },
+    rouge: { fr: "Rouge", en: "Red" },
+    red: { fr: "Rouge", en: "Red" },
+    vert: { fr: "Vert", en: "Green" },
+    green: { fr: "Vert", en: "Green" },
+    noir: { fr: "Noir", en: "Black" },
+    black: { fr: "Noir", en: "Black" },
+    blanc: { fr: "Blanc", en: "White" },
+    white: { fr: "Blanc", en: "White" },
+    multicolore: { fr: "Multicolore", en: "Multicolor" },
+  };
+
+  const spaceLabels: Record<string, { fr: string; en: string }> = {
+    salon: { fr: "Salon", en: "Living room" },
+    livingroom: { fr: "Salon", en: "Living room" },
+    "living room": { fr: "Salon", en: "Living room" },
+    chambre: { fr: "Chambre à coucher", en: "Bedroom" },
+    bedroom: { fr: "Chambre à coucher", en: "Bedroom" },
+    couloir: { fr: "Couloir", en: "Hallway" },
+    hallway: { fr: "Couloir", en: "Hallway" },
+    entree: { fr: "Entrée", en: "Entrance" },
+    entrée: { fr: "Entrée", en: "Entrance" },
+    entrance: { fr: "Entrée", en: "Entrance" },
+    bureau: { fr: "Bureau", en: "Office" },
+    office: { fr: "Bureau", en: "Office" },
+  };
+
+  function canonicalColor(value?: string | null) {
+    const key = normalizeText(value);
+    if (["bleu", "blue"].includes(key)) return "blue";
+    if (["rouge", "red"].includes(key)) return "red";
+    if (["vert", "green"].includes(key)) return "green";
+    if (["noir", "black"].includes(key)) return "black";
+    if (["blanc", "white"].includes(key)) return "white";
+    if (["beige"].includes(key)) return "beige";
+    if (["multicolore", "multicolor"].includes(key)) return "multicolore";
+    return key;
+  }
+
+  function canonicalSpace(value?: string | null) {
+    const key = normalizeText(value).replace(/\s+/g, " ");
+
+    if (["salon", "living room", "livingroom"].includes(key)) return "salon";
+    if (["chambre", "chambre a coucher", "bedroom"].includes(key))
+      return "chambre";
+    if (["couloir", "hallway"].includes(key)) return "couloir";
+    if (["entree", "entrance"].includes(key)) return "entree";
+    if (["bureau", "office"].includes(key)) return "bureau";
+
+    return key;
+  }
+
+  function getColorLabel(value: string, lang: "fr" | "en") {
+    const canonical = canonicalColor(value);
+    return colorLabels[canonical]?.[lang] || value;
+  }
+
+  function getSpaceLabel(value: string, lang: "fr" | "en") {
+    const canonical = canonicalSpace(value);
+    return spaceLabels[canonical]?.[lang] || value;
+  }
+
+  function getSuggestedSpacesBySize(product: ProductViewDto) {
+    const surface = getSurfaceM2(product);
+
+    if (!surface) return [];
+
+    if (surface < 2) return ["couloir", "entree"];
+    if (surface < 4) return ["chambre", "bureau", "couloir"];
+    if (surface < 6) return ["salon", "chambre"];
+    return ["salon"];
   }
 
   function getProductVarietyKey(product: ProductViewDto) {
@@ -474,22 +550,20 @@ export default function ProductsPage() {
 
   const colors = useMemo(() => {
     const allColors = visibleCatalogProducts.flatMap((product) =>
-      splitValues(product.colors)
+      splitValues(product.colors).map(canonicalColor)
     );
-    return [
-      "all",
-      ...Array.from(new Set(allColors)).sort((a, b) => a.localeCompare(b)),
-    ];
+
+    return ["all", ...Array.from(new Set(allColors)).filter(Boolean).sort()];
   }, [visibleCatalogProducts]);
 
   const spaces = useMemo(() => {
-    const allSpaces = visibleCatalogProducts.flatMap((product) =>
-      splitValues(product.usageSpace)
-    );
-    return [
-      "all",
-      ...Array.from(new Set(allSpaces)).sort((a, b) => a.localeCompare(b)),
-    ];
+    const values = visibleCatalogProducts.flatMap((product) => {
+      const declaredSpaces = splitValues(product.usageSpace).map(canonicalSpace);
+      const suggestedSpaces = getSuggestedSpacesBySize(product);
+      return [...declaredSpaces, ...suggestedSpaces];
+    });
+
+    return ["all", ...Array.from(new Set(values)).filter(Boolean).sort()];
   }, [visibleCatalogProducts]);
 
   function getSizeLabel(product: ProductViewDto) {
@@ -545,13 +619,17 @@ export default function ProductsPage() {
       const matchType =
         type === "all" || normalizeText(product.type) === normalizeText(type);
 
-      const productColors = splitValues(product.colors).map(normalizeText);
+      const productColors = splitValues(product.colors).map(canonicalColor);
       const matchColor =
-        color === "all" || productColors.includes(normalizeText(color));
+        color === "all" || productColors.includes(canonicalColor(color));
 
-      const productSpaces = splitValues(product.usageSpace).map(normalizeText);
+      const productSpaces = [
+        ...splitValues(product.usageSpace).map(canonicalSpace),
+        ...getSuggestedSpacesBySize(product),
+      ];
+
       const matchSpace =
-        space === "all" || productSpaces.includes(normalizeText(space));
+        space === "all" || productSpaces.includes(canonicalSpace(space));
 
       return (
         matchSearch &&
@@ -621,7 +699,9 @@ export default function ProductsPage() {
             <Search size={17} />
             <input
               type="text"
-              placeholder={t("products.searchPlaceholder")}
+              placeholder={
+                language === "FR" ? "Rechercher un tapis..." : "Search for a rug..."
+              }
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
@@ -630,7 +710,7 @@ export default function ProductsPage() {
           <select value={type} onChange={(e) => setType(e.target.value)}>
             {types.map((item) => (
               <option key={item} value={item}>
-                {item === "all" ? t("products.typeAllLabel") : item}
+                {item === "all" ? "Type" : item}
               </option>
             ))}
           </select>
@@ -639,7 +719,7 @@ export default function ProductsPage() {
             value={size}
             onChange={(e) => setSize(e.target.value as SizeFilter)}
           >
-            <option value="all">{t("products.sizeAllLabel")}</option>
+            <option value="all">{language === "FR" ? "Taille" : "Size"}</option>
             <option value="small">{t("products.sizeFilter.small")}</option>
             <option value="medium">{t("products.sizeFilter.medium")}</option>
             <option value="large">{t("products.sizeFilter.large")}</option>
@@ -649,7 +729,11 @@ export default function ProductsPage() {
           <select value={color} onChange={(e) => setColor(e.target.value)}>
             {colors.map((item) => (
               <option key={item} value={item}>
-                {item === "all" ? t("products.colorAllLabel") : item}
+                {item === "all"
+                  ? language === "FR"
+                    ? "Couleur"
+                    : "Color"
+                  : getColorLabel(item, language === "FR" ? "fr" : "en")}
               </option>
             ))}
           </select>
@@ -657,29 +741,40 @@ export default function ProductsPage() {
           <select value={space} onChange={(e) => setSpace(e.target.value)}>
             {spaces.map((item) => (
               <option key={item} value={item}>
-                {item === "all" ? t("products.spaceAllLabel") : item}
+                {item === "all"
+                  ? language === "FR"
+                    ? "Pièce"
+                    : "Space"
+                  : getSpaceLabel(item, language === "FR" ? "fr" : "en")}
               </option>
             ))}
           </select>
 
           {hasActiveFilters && (
             <button type="button" onClick={resetFilters}>
-              {t("products.reset")}
+              {language === "FR" ? "Réinitialiser" : "Reset"}
             </button>
           )}
         </div>
       </div>
 
       <p className="products-count-line">
-        {t("products.countLine", {
-          count: filteredProducts.length,
-          plural: filteredProducts.length !== 1 ? "s" : "",
-        })}
+        {language === "FR"
+          ? `${filteredProducts.length} tapis ${
+              filteredProducts.length === 1 ? "trouvé" : "trouvés"
+            }`
+          : `${filteredProducts.length} rug${
+              filteredProducts.length === 1 ? "" : "s"
+            } found`}
       </p>
       <p className="products-filter-hint">
         {hasActiveFilters
-          ? "Filtres actifs appliqués."
-          : "Sélection variée : types, régions, couleurs et dimensions mélangés."}
+          ? language === "FR"
+            ? "Filtres actifs appliqués."
+            : "Active filters applied."
+          : language === "FR"
+          ? "Sélection variée : types, régions, couleurs et dimensions mélangés."
+          : "Varied selection: mixed types, regions, colors, and sizes."}
       </p>
 
       {loading && (
