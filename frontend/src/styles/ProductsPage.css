@@ -2014,14 +2014,14 @@
 }
 
 .products-detail-modal {
-  padding: 60px !important;
+  padding: 20px !important;
 }
 
 .products-detail-card {
-  width: min(1600px, 96vw) !important;
-  height: calc(100vh - 120px) !important;
-  max-height: none !important;
-  grid-template-columns: 1.4fr 0.9fr !important;
+  width: min(1700px, 97vw) !important;
+  height: calc(100vh - 40px) !important;
+  max-height: calc(100vh - 40px) !important;
+  grid-template-columns: minmax(0, 1.15fr) minmax(520px, 0.85fr) !important;
   gap: 40px !important;
   padding: 40px !important;
   border-radius: 40px !important;
@@ -2038,6 +2038,7 @@
   height: 100% !important;
   object-fit: contain !important;
   max-height: none !important;
+  padding: 40px !important;
 }
 
 .products-detail-info {
@@ -2065,6 +2066,7 @@
   .products-detail-card {
     width: 98vw !important;
     height: calc(100vh - 90px) !important;
+    max-height: calc(100vh - 90px) !important;
   }
 }
 
