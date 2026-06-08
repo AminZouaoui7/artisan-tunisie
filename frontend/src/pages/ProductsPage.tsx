@@ -125,6 +125,20 @@ export default function ProductsPage() {
       .filter(Boolean);
   }
 
+  function getVariantFamilyKey(product: ProductViewDto) {
+    const rawKey = product.variantGroupKey || product.slug || product.name || "";
+
+    return normalizeText(rawKey)
+      .replace(
+        /rouge|red|bleu|blue|noir|black|blanc|white|beige|vert|green|jaune|yellow|gris|gray|grey/g,
+        ""
+      )
+      .replace(/\b(xs|s|m|l|xl|xxl)\b/g, "")
+      .replace(/sb|sm|md|lg|xl/g, "")
+      .replace(/[^a-z0-9]/g, "")
+      .trim();
+  }
+
   const colorLabels: Record<string, { fr: string; en: string }> = {
     beige: { fr: "Beige", en: "Beige" },
     bleu: { fr: "Bleu", en: "Blue" },
@@ -680,6 +694,34 @@ export default function ProductsPage() {
       ].filter((item) => item.value && item.value !== "-")
     : [];
 
+  const detailColorVariants = useMemo(() => {
+    if (!detailProduct) return [];
+
+    const currentFamilyKey = getVariantFamilyKey(detailProduct);
+    const currentGroupKey = normalizeText(detailProduct.variantGroupKey);
+
+    if (!currentFamilyKey) return [];
+
+    const alreadyDisplayedIds = new Set([
+      detailProduct.id,
+      ...detailVariants.map((variant) => variant.id),
+    ]);
+
+    return products
+      .filter((product) => {
+        if (alreadyDisplayedIds.has(product.id)) return false;
+
+        const productFamilyKey = getVariantFamilyKey(product);
+        const productGroupKey = normalizeText(product.variantGroupKey);
+
+        return (
+          productFamilyKey === currentFamilyKey &&
+          productGroupKey !== currentGroupKey
+        );
+      })
+      .sort((a, b) => getSurfaceM2(b) - getSurfaceM2(a));
+  }, [detailProduct, detailVariants, products]);
+
   return (
     <section className="products-page">
       <div className="products-hero">
@@ -1058,49 +1100,101 @@ export default function ProductsPage() {
                   : "-"}
               </strong>
 
-              {(detailVariantsLoading || detailVariants.length > 0) && (
+              {(detailVariantsLoading ||
+                detailVariants.length > 0 ||
+                detailColorVariants.length > 0) && (
                 <div className="products-detail-variants">
-                  <strong>Autres dimensions disponibles</strong>
+                  <strong>Variantes disponibles</strong>
 
-                  {detailVariantsLoading ? (
-                    <p className="products-detail-variants-loading">
-                      Chargement des dimensions...
-                    </p>
-                  ) : (
-                    <div className="products-detail-variants-list">
-                      {detailVariants.map((variant) => {
-                        const variantImage = getProductImages(variant)[0];
+                  {(detailVariantsLoading || detailVariants.length > 0) && (
+                    <>
+                      <p>
+                        <strong>Autres dimensions</strong>
+                      </p>
 
-                        return (
-                          <button
-                            key={variant.id}
-                            type="button"
-                            className="products-detail-variant-card"
-                            onClick={() => openDetailProduct(variant)}
-                          >
-                            {variantImage ? (
-                              <img src={variantImage} alt={variant.name} />
-                            ) : (
-                              <div className="products-detail-variant-placeholder" />
-                            )}
+                      {detailVariantsLoading ? (
+                        <p className="products-detail-variants-loading">
+                          Chargement des dimensions...
+                        </p>
+                      ) : (
+                        <div className="products-detail-variants-list">
+                          {detailVariants.map((variant) => {
+                            const variantImage = getProductImages(variant)[0];
 
-                            <span>
-                              {variant.dimensions ||
-                                `${variant.lengthCm || "-"} × ${
-                                  variant.widthCm || "-"
-                                } cm`}
-                            </span>
+                            return (
+                              <button
+                                key={variant.id}
+                                type="button"
+                                className="products-detail-variant-card"
+                                onClick={() => openDetailProduct(variant)}
+                              >
+                                {variantImage ? (
+                                  <img src={variantImage} alt={variant.name} />
+                                ) : (
+                                  <div className="products-detail-variant-placeholder" />
+                                )}
 
-                            <small>
-                              {shouldShowProductPrice(variant) &&
-                              variant.price != null
-                                ? formatPrice(variant.price)
-                                : t("products.priceOnRequest")}
-                            </small>
-                          </button>
-                        );
-                      })}
-                    </div>
+                                <span>
+                                  {variant.dimensions ||
+                                    `${variant.lengthCm || "-"} × ${
+                                      variant.widthCm || "-"
+                                    } cm`}
+                                </span>
+
+                                <small>
+                                  {shouldShowProductPrice(variant) &&
+                                  variant.price != null
+                                    ? formatPrice(variant.price)
+                                    : t("products.priceOnRequest")}
+                                </small>
+                              </button>
+                            );
+                          })}
+                        </div>
+                      )}
+                    </>
+                  )}
+
+                  {detailColorVariants.length > 0 && (
+                    <>
+                      <p>
+                        <strong>Autres couleurs</strong>
+                      </p>
+
+                      <div className="products-detail-variants-list">
+                        {detailColorVariants.map((variant) => {
+                          const variantImage = getProductImages(variant)[0];
+
+                          return (
+                            <button
+                              key={variant.id}
+                              type="button"
+                              className="products-detail-variant-card"
+                              onClick={() => openDetailProduct(variant)}
+                            >
+                              {variantImage ? (
+                                <img src={variantImage} alt={variant.name} />
+                              ) : (
+                                <div className="products-detail-variant-placeholder" />
+                              )}
+
+                              <span>
+                                {variant.colors ||
+                                  variant.name ||
+                                  t("products.color")}
+                              </span>
+
+                              <small>
+                                {shouldShowProductPrice(variant) &&
+                                variant.price != null
+                                  ? formatPrice(variant.price)
+                                  : t("products.priceOnRequest")}
+                              </small>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </>
                   )}
                 </div>
               )}
