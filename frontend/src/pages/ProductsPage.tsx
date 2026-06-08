@@ -718,10 +718,7 @@ export default function ProductsPage() {
           label: "Pièce unique",
           value: detailProduct.isUniquePiece ? "Oui" : undefined,
         },
-        {
-          label: "Fait main",
-          value: detailProduct.isHandmade ? "Oui" : undefined,
-        },
+       
       ].filter((item) => item.value && item.value !== "-")
     : [];
 
