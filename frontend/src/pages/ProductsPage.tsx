@@ -154,6 +154,25 @@ export default function ProductsPage() {
     multicolore: { fr: "Multicolore", en: "Multicolor" },
   };
 
+  const colorTranslations: Record<string, { fr: string; en: string }> = {
+    blue: { fr: "Bleu", en: "Blue" },
+    bleu: { fr: "Bleu", en: "Blue" },
+    red: { fr: "Rouge", en: "Red" },
+    rouge: { fr: "Rouge", en: "Red" },
+    green: { fr: "Vert", en: "Green" },
+    vert: { fr: "Vert", en: "Green" },
+    beige: { fr: "Beige", en: "Beige" },
+    black: { fr: "Noir", en: "Black" },
+    noir: { fr: "Noir", en: "Black" },
+    white: { fr: "Blanc", en: "White" },
+    blanc: { fr: "Blanc", en: "White" },
+    brown: { fr: "Marron", en: "Brown" },
+    marron: { fr: "Marron", en: "Brown" },
+    grey: { fr: "Gris", en: "Grey" },
+    gray: { fr: "Gris", en: "Grey" },
+    gris: { fr: "Gris", en: "Grey" },
+  };
+
   const spaceLabels: Record<string, { fr: string; en: string }> = {
     salon: { fr: "Salon", en: "Living room" },
     livingroom: { fr: "Salon", en: "Living room" },
@@ -197,6 +216,18 @@ export default function ProductsPage() {
   function getColorLabel(value: string, lang: "fr" | "en") {
     const canonical = canonicalColor(value);
     return colorLabels[canonical]?.[lang] || value;
+  }
+
+  function getTranslatedColor(color?: string) {
+    const lang = language === "FR" ? "fr" : "en";
+    const raw = splitValues(color)[0] || color || "";
+    const key = canonicalColor(raw) || normalizeText(raw);
+    return (
+      colorTranslations[key]?.[lang] ||
+      colorLabels[key]?.[lang] ||
+      raw ||
+      ""
+    );
   }
 
   function getSpaceLabel(value: string, lang: "fr" | "en") {
@@ -1105,8 +1136,6 @@ export default function ProductsPage() {
                 detailColorVariants.length > 0) && (
                 <section className="product-variants-premium">
                   {(() => {
-                    const lang = language === "FR" ? "fr" : "en";
-
                     const dimensionVariants = [detailProduct, ...detailVariants]
                       .filter(
                         (product, index, array) =>
@@ -1182,6 +1211,7 @@ export default function ProductsPage() {
                             <div className="product-variants-premium-options">
                               {dimensionVariants.map((variant) => {
                                 const isActive = variant.id === detailProduct.id;
+                                const variantImage = getProductImages(variant)[0];
                                 const label =
                                   variant.lengthCm && variant.widthCm
                                     ? `${variant.lengthCm} x ${variant.widthCm}`
@@ -1192,15 +1222,16 @@ export default function ProductsPage() {
                                   <button
                                     key={variant.id}
                                     type="button"
-                                    className={`product-variant-option ${
-                                      isActive
-                                        ? "product-variant-option--active"
-                                        : ""
+                                    className={`variant-size-button ${
+                                      isActive ? "active" : ""
                                     }`}
                                     onClick={() => openDetailProduct(variant)}
                                     disabled={isActive}
                                   >
-                                    {label}
+                                    {variantImage && (
+                                      <img src={variantImage} alt={variant.name} />
+                                    )}
+                                    <span>{label}</span>
                                   </button>
                                 );
                               })}
@@ -1221,18 +1252,24 @@ export default function ProductsPage() {
                               {colorVariants.map((variant) => {
                                 const colorKey = getVariantColorKey(variant);
                                 const isActive = variant.id === detailProduct.id;
+                                const variantImage = getProductImages(variant)[0];
 
                                 return (
                                   <button
                                     key={variant.id}
                                     type="button"
-                                    className={`product-variant-option ${
-                                      isActive ? "product-variant-option--active" : ""
+                                    className={`variant-color-button ${
+                                      isActive ? "active" : ""
                                     }`}
                                     onClick={() => openDetailProduct(variant)}
                                     disabled={isActive}
                                   >
-                                    {getColorLabel(colorKey, lang)}
+                                    {variantImage && (
+                                      <img src={variantImage} alt={variant.name} />
+                                    )}
+                                    <span>
+                                      {getTranslatedColor(colorKey || variant.colors)}
+                                    </span>
                                   </button>
                                 );
                               })}

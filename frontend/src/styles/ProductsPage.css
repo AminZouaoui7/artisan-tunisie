@@ -2046,6 +2046,52 @@
   overflow-y: auto !important;
 }
 
+.variant-size-button,
+.variant-color-button {
+  min-width: 120px;
+  height: 74px;
+  padding: 8px 12px;
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid rgba(60, 35, 20, 0.12);
+  box-shadow: 0 10px 25px rgba(45, 27, 19, 0.06);
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.variant-size-button:hover,
+.variant-color-button:hover {
+  transform: translateY(-2px);
+  border-color: rgba(110, 65, 35, 0.35);
+  box-shadow: 0 16px 35px rgba(45, 27, 19, 0.12);
+}
+
+.variant-size-button img,
+.variant-color-button img {
+  width: 42px;
+  height: 54px;
+  object-fit: contain;
+  border-radius: 10px;
+  background: #fff;
+}
+
+.variant-size-button.active,
+.variant-color-button.active {
+  background: #2f2a28;
+  color: white;
+  border-color: #2f2a28;
+}
+
+.variant-size-button span,
+.variant-color-button span {
+  font-weight: 900;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
 .product-variants-premium {
   margin-top: 18px;
   padding: 18px;
