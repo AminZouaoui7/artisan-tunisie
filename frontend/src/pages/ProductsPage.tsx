@@ -1103,7 +1103,7 @@ export default function ProductsPage() {
               {(detailVariantsLoading ||
                 detailVariants.length > 0 ||
                 detailColorVariants.length > 0) && (
-                <section className="product-variants-luxe">
+                <section className="product-variants-premium">
                   {(() => {
                     const lang = language === "FR" ? "fr" : "en";
 
@@ -1168,8 +1168,8 @@ export default function ProductsPage() {
 
                     return (
                       <>
-                        <div className="product-variants-luxe-row">
-                          <div className="product-variants-luxe-head">
+                        <div className="product-variants-premium-section">
+                          <div className="product-variants-premium-title">
                             <h3>
                               Dimensions disponibles{" "}
                               <span>({dimensionVariants.length})</span>
@@ -1177,11 +1177,9 @@ export default function ProductsPage() {
                           </div>
 
                           {detailVariantsLoading && detailVariants.length === 0 ? (
-                            <p className="product-variants-luxe-loading">
-                              Chargement...
-                            </p>
+                            <p className="product-variants-premium-loading">Chargement...</p>
                           ) : (
-                            <div className="product-variants-luxe-list">
+                            <div className="product-variants-premium-options">
                               {dimensionVariants.map((variant) => {
                                 const isActive = variant.id === detailProduct.id;
                                 const label =
@@ -1194,9 +1192,9 @@ export default function ProductsPage() {
                                   <button
                                     key={variant.id}
                                     type="button"
-                                    className={`product-variant-dimension ${
+                                    className={`product-variant-option ${
                                       isActive
-                                        ? "product-variant-dimension--active"
+                                        ? "product-variant-option--active"
                                         : ""
                                     }`}
                                     onClick={() => openDetailProduct(variant)}
@@ -1210,16 +1208,16 @@ export default function ProductsPage() {
                           )}
                         </div>
 
-                        {colorVariants.length > 1 && (
-                          <div className="product-variants-luxe-row">
-                            <div className="product-variants-luxe-head">
+                        {colorVariants.length > 0 && (
+                          <div className="product-variants-premium-section">
+                            <div className="product-variants-premium-title">
                               <h3>
                                 Couleurs disponibles{" "}
                                 <span>({colorVariants.length})</span>
                               </h3>
                             </div>
 
-                            <div className="product-variants-luxe-list">
+                            <div className="product-variants-premium-options">
                               {colorVariants.map((variant) => {
                                 const colorKey = getVariantColorKey(variant);
                                 const isActive = variant.id === detailProduct.id;
@@ -1228,19 +1226,13 @@ export default function ProductsPage() {
                                   <button
                                     key={variant.id}
                                     type="button"
-                                    className={`product-variant-color ${
-                                      isActive ? "product-variant-color--active" : ""
+                                    className={`product-variant-option ${
+                                      isActive ? "product-variant-option--active" : ""
                                     }`}
                                     onClick={() => openDetailProduct(variant)}
                                     disabled={isActive}
                                   >
-                                    <span
-                                      className="variant-color-dot"
-                                      data-color={colorKey}
-                                    />
-                                    <span className="product-variant-color-label">
-                                      {getColorLabel(colorKey, lang)}
-                                    </span>
+                                    {getColorLabel(colorKey, lang)}
                                   </button>
                                 );
                               })}
