@@ -1103,89 +1103,153 @@ export default function ProductsPage() {
               {(detailVariantsLoading ||
                 detailVariants.length > 0 ||
                 detailColorVariants.length > 0) && (
-                <section className="product-detail-variants-panel">
-                  <div className="product-detail-variants-head">
-                    <h3>Variantes disponibles</h3>
-                    <span>Choisissez une autre taille ou couleur</span>
-                  </div>
+                <section className="product-variants-luxe">
+                  {(() => {
+                    const lang = language === "FR" ? "fr" : "en";
 
-                  {detailVariantsLoading && detailVariants.length === 0 && (
-                    <p className="products-detail-variants-loading">
-                      Chargement des variantes...
-                    </p>
-                  )}
+                    const dimensionVariants = [detailProduct, ...detailVariants]
+                      .filter(
+                        (product, index, array) =>
+                          array.findIndex((item) => item.id === product.id) ===
+                          index
+                      )
+                      .sort((a, b) => getSurfaceM2(a) - getSurfaceM2(b));
 
-                  {detailVariants.length > 0 && (
-                    <div className="product-detail-variant-row">
-                      <p>Autres dimensions</p>
-                      <div className="product-detail-variant-chips">
-                        {detailVariants.map((variant) => {
-                          const variantImage = getProductImages(variant)[0];
-                          const variantLabel =
-                            variant.lengthCm && variant.widthCm
-                              ? `${variant.lengthCm} x ${variant.widthCm} cm`
-                              : variant.dimensions || variant.name;
+                    function getVariantColorKey(product: ProductViewDto) {
+                      const declared = splitValues(product.colors);
+                      if (declared.length) return canonicalColor(declared[0]);
 
-                          const variantPriceLabel =
-                            shouldShowProductPrice(variant) &&
-                            variant.price != null
-                              ? formatPrice(variant.price)
-                              : t("products.priceOnRequest");
+                      const raw = normalizeText(
+                        `${product.slug || ""} ${product.name || ""} ${
+                          product.variantGroupKey || ""
+                        }`
+                      );
 
-                          return (
-                            <button
-                              key={variant.id}
-                              type="button"
-                              className="product-detail-variant-chip"
-                              onClick={() => openDetailProduct(variant)}
-                            >
-                              {variantImage ? (
-                                <img src={variantImage} alt={variant.name} />
-                              ) : (
-                                <div className="products-detail-variant-placeholder" />
-                              )}
-                              <span>{variantLabel}</span>
-                              <strong>{variantPriceLabel}</strong>
-                            </button>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  )}
+                      const match = raw.match(
+                        /(rouge|red|bleu|blue|noir|black|blanc|white|beige|vert|green|jaune|yellow|gris|gray|grey)/
+                      );
 
-                  {detailColorVariants.length > 0 && (
-                    <div className="product-detail-variant-row">
-                      <p>Autres couleurs</p>
-                      <div className="product-detail-variant-chips">
-                        {detailColorVariants.map((variant) => {
-                          const variantImage = getProductImages(variant)[0];
-                          const variantLabel = variant.colors || variant.name;
-                          const variantPriceLabel =
-                            shouldShowProductPrice(variant) &&
-                            variant.price != null
-                              ? formatPrice(variant.price)
-                              : t("products.priceOnRequest");
+                      return match ? canonicalColor(match[1]) : "";
+                    }
 
-                          return (
-                            <button
-                              key={variant.id}
-                              type="button"
-                              className="product-detail-variant-chip color"
-                              onClick={() => openDetailProduct(variant)}
-                            >
-                              {variantImage ? (
-                                <img src={variantImage} alt={variant.name} />
-                              ) : (
-                                <div className="products-detail-variant-placeholder" />
-                              )}
-                              <span>{variantLabel}</span>
-                              <strong>{variantPriceLabel}</strong>
-                            </button>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  )}
+                    const colorVariantMap = new Map<string, ProductViewDto>();
+                    [detailProduct, ...detailColorVariants].forEach((variant) => {
+                      const key = getVariantColorKey(variant);
+                      if (!key) return;
+
+                      const existing = colorVariantMap.get(key);
+                      if (!existing || getSurfaceM2(variant) > getSurfaceM2(existing)) {
+                        colorVariantMap.set(key, variant);
+                      }
+                    });
+
+                    const colorOrder = [
+                      "beige",
+                      "blue",
+                      "red",
+                      "green",
+                      "black",
+                      "white",
+                      "multicolore",
+                    ];
+
+                    const colorVariants = Array.from(colorVariantMap.entries())
+                      .sort((a, b) => {
+                        const aIndex = colorOrder.indexOf(a[0]);
+                        const bIndex = colorOrder.indexOf(b[0]);
+
+                        if (aIndex !== -1 || bIndex !== -1) {
+                          return (aIndex === -1 ? 999 : aIndex) - (bIndex === -1 ? 999 : bIndex);
+                        }
+
+                        return a[0].localeCompare(b[0]);
+                      })
+                      .map(([, variant]) => variant);
+
+                    return (
+                      <>
+                        <div className="product-variants-luxe-row">
+                          <div className="product-variants-luxe-head">
+                            <h3>
+                              Dimensions disponibles{" "}
+                              <span>({dimensionVariants.length})</span>
+                            </h3>
+                          </div>
+
+                          {detailVariantsLoading && detailVariants.length === 0 ? (
+                            <p className="product-variants-luxe-loading">
+                              Chargement...
+                            </p>
+                          ) : (
+                            <div className="product-variants-luxe-list">
+                              {dimensionVariants.map((variant) => {
+                                const isActive = variant.id === detailProduct.id;
+                                const label =
+                                  variant.lengthCm && variant.widthCm
+                                    ? `${variant.lengthCm} x ${variant.widthCm}`
+                                    : variant.dimensions ||
+                                      `${variant.name || ""}`.trim();
+
+                                return (
+                                  <button
+                                    key={variant.id}
+                                    type="button"
+                                    className={`product-variant-dimension ${
+                                      isActive
+                                        ? "product-variant-dimension--active"
+                                        : ""
+                                    }`}
+                                    onClick={() => openDetailProduct(variant)}
+                                    disabled={isActive}
+                                  >
+                                    {label}
+                                  </button>
+                                );
+                              })}
+                            </div>
+                          )}
+                        </div>
+
+                        {colorVariants.length > 1 && (
+                          <div className="product-variants-luxe-row">
+                            <div className="product-variants-luxe-head">
+                              <h3>
+                                Couleurs disponibles{" "}
+                                <span>({colorVariants.length})</span>
+                              </h3>
+                            </div>
+
+                            <div className="product-variants-luxe-list">
+                              {colorVariants.map((variant) => {
+                                const colorKey = getVariantColorKey(variant);
+                                const isActive = variant.id === detailProduct.id;
+
+                                return (
+                                  <button
+                                    key={variant.id}
+                                    type="button"
+                                    className={`product-variant-color ${
+                                      isActive ? "product-variant-color--active" : ""
+                                    }`}
+                                    onClick={() => openDetailProduct(variant)}
+                                    disabled={isActive}
+                                  >
+                                    <span
+                                      className="variant-color-dot"
+                                      data-color={colorKey}
+                                    />
+                                    <span className="product-variant-color-label">
+                                      {getColorLabel(colorKey, lang)}
+                                    </span>
+                                  </button>
+                                );
+                              })}
+                            </div>
+                          </div>
+                        )}
+                      </>
+                    );
+                  })()}
                 </section>
               )}
 
