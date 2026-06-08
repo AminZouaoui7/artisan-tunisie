@@ -1103,73 +1103,40 @@ export default function ProductsPage() {
               {(detailVariantsLoading ||
                 detailVariants.length > 0 ||
                 detailColorVariants.length > 0) && (
-                <div className="products-detail-variants">
-                  <strong>Variantes disponibles</strong>
+                <section className="product-detail-variants-panel">
+                  <div className="product-detail-variants-head">
+                    <h3>Variantes disponibles</h3>
+                    <span>Choisissez une autre taille ou couleur</span>
+                  </div>
 
-                  {(detailVariantsLoading || detailVariants.length > 0) && (
-                    <>
-                      <p>
-                        <strong>Autres dimensions</strong>
-                      </p>
-
-                      {detailVariantsLoading ? (
-                        <p className="products-detail-variants-loading">
-                          Chargement des dimensions...
-                        </p>
-                      ) : (
-                        <div className="products-detail-variants-list">
-                          {detailVariants.map((variant) => {
-                            const variantImage = getProductImages(variant)[0];
-
-                            return (
-                              <button
-                                key={variant.id}
-                                type="button"
-                                className="products-detail-variant-card"
-                                onClick={() => openDetailProduct(variant)}
-                              >
-                                {variantImage ? (
-                                  <img src={variantImage} alt={variant.name} />
-                                ) : (
-                                  <div className="products-detail-variant-placeholder" />
-                                )}
-
-                                <span>
-                                  {variant.dimensions ||
-                                    `${variant.lengthCm || "-"} × ${
-                                      variant.widthCm || "-"
-                                    } cm`}
-                                </span>
-
-                                <small>
-                                  {shouldShowProductPrice(variant) &&
-                                  variant.price != null
-                                    ? formatPrice(variant.price)
-                                    : t("products.priceOnRequest")}
-                                </small>
-                              </button>
-                            );
-                          })}
-                        </div>
-                      )}
-                    </>
+                  {detailVariantsLoading && detailVariants.length === 0 && (
+                    <p className="products-detail-variants-loading">
+                      Chargement des variantes...
+                    </p>
                   )}
 
-                  {detailColorVariants.length > 0 && (
-                    <>
-                      <p>
-                        <strong>Autres couleurs</strong>
-                      </p>
-
-                      <div className="products-detail-variants-list">
-                        {detailColorVariants.map((variant) => {
+                  {detailVariants.length > 0 && (
+                    <div className="product-detail-variant-row">
+                      <p>Autres dimensions</p>
+                      <div className="product-detail-variant-chips">
+                        {detailVariants.map((variant) => {
                           const variantImage = getProductImages(variant)[0];
+                          const variantLabel =
+                            variant.lengthCm && variant.widthCm
+                              ? `${variant.lengthCm} x ${variant.widthCm} cm`
+                              : variant.dimensions || variant.name;
+
+                          const variantPriceLabel =
+                            shouldShowProductPrice(variant) &&
+                            variant.price != null
+                              ? formatPrice(variant.price)
+                              : t("products.priceOnRequest");
 
                           return (
                             <button
                               key={variant.id}
                               type="button"
-                              className="products-detail-variant-card"
+                              className="product-detail-variant-chip"
                               onClick={() => openDetailProduct(variant)}
                             >
                               {variantImage ? (
@@ -1177,26 +1144,49 @@ export default function ProductsPage() {
                               ) : (
                                 <div className="products-detail-variant-placeholder" />
                               )}
-
-                              <span>
-                                {variant.colors ||
-                                  variant.name ||
-                                  t("products.color")}
-                              </span>
-
-                              <small>
-                                {shouldShowProductPrice(variant) &&
-                                variant.price != null
-                                  ? formatPrice(variant.price)
-                                  : t("products.priceOnRequest")}
-                              </small>
+                              <span>{variantLabel}</span>
+                              <strong>{variantPriceLabel}</strong>
                             </button>
                           );
                         })}
                       </div>
-                    </>
+                    </div>
                   )}
-                </div>
+
+                  {detailColorVariants.length > 0 && (
+                    <div className="product-detail-variant-row">
+                      <p>Autres couleurs</p>
+                      <div className="product-detail-variant-chips">
+                        {detailColorVariants.map((variant) => {
+                          const variantImage = getProductImages(variant)[0];
+                          const variantLabel = variant.colors || variant.name;
+                          const variantPriceLabel =
+                            shouldShowProductPrice(variant) &&
+                            variant.price != null
+                              ? formatPrice(variant.price)
+                              : t("products.priceOnRequest");
+
+                          return (
+                            <button
+                              key={variant.id}
+                              type="button"
+                              className="product-detail-variant-chip color"
+                              onClick={() => openDetailProduct(variant)}
+                            >
+                              {variantImage ? (
+                                <img src={variantImage} alt={variant.name} />
+                              ) : (
+                                <div className="products-detail-variant-placeholder" />
+                              )}
+                              <span>{variantLabel}</span>
+                              <strong>{variantPriceLabel}</strong>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
+                </section>
               )}
 
               {productDetailHighlights.length > 0 && (
