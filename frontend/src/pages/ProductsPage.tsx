@@ -127,16 +127,121 @@ export default function ProductsPage() {
 
   function getVariantFamilyKey(product: ProductViewDto) {
     const rawKey = product.variantGroupKey || product.slug || product.name || "";
+    const normalized = normalizeText(rawKey);
+    let key = normalized.replace(/[\s\-_]+/g, "").replace(/[^a-z0-9]/g, "");
 
-    return normalizeText(rawKey)
-      .replace(
-        /rouge|red|bleu|blue|noir|black|blanc|white|beige|vert|green|jaune|yellow|gris|gray|grey/g,
-        ""
-      )
-      .replace(/\b(xs|s|m|l|xl|xxl)\b/g, "")
-      .replace(/sb|sm|md|lg|xl/g, "")
-      .replace(/[^a-z0-9]/g, "")
-      .trim();
+    const colorSuffixes = [
+      "bleuclair",
+      "lightblue",
+      "bleufoncee",
+      "bleufonce",
+      "darkblue",
+      "multicolore",
+      "multicolor",
+      "multicouleur",
+      "multicolour",
+      "rosebleu",
+      "bleurose",
+      "rougebleu",
+      "bleurouge",
+      "vertbleu",
+      "bleuvert",
+      "noirblanc",
+      "blancnoir",
+      "beigebleu",
+      "bleubeige",
+      "rougevert",
+      "vertrouge",
+      "terracotta",
+      "turquoise",
+      "bordeaux",
+      "burgundy",
+      "saumon",
+      "salmon",
+      "argenté",
+      "argente",
+      "silver",
+      "doré",
+      "dore",
+      "golden",
+      "gold",
+      "crème",
+      "creme",
+      "cream",
+      "ivoire",
+      "ivory",
+      "naturelle",
+      "naturel",
+      "natural",
+      "kaki",
+      "khaki",
+      "violette",
+      "violet",
+      "purple",
+      "orange",
+      "jaune",
+      "yellow",
+      "gris",
+      "grise",
+      "gray",
+      "grey",
+      "rose",
+      "pink",
+      "marron",
+      "brown",
+      "beige",
+      "blanche",
+      "blanc",
+      "white",
+      "noire",
+      "noir",
+      "black",
+      "verte",
+      "vert",
+      "green",
+      "rouge",
+      "red",
+      "bleu",
+      "blue",
+      "ocre",
+      "ochre",
+      "camel",
+    ]
+      .map((item) => normalizeText(item).replace(/\s+/g, ""))
+      .filter(Boolean)
+      .sort((a, b) => b.length - a.length);
+
+    const sizeSuffixes = ["xxl", "xl", "xs", "sm", "md", "lg", "s", "m", "l", "sb"]
+      .map((item) => normalizeText(item))
+      .sort((a, b) => b.length - a.length);
+
+    const stripSuffixes = (suffixes: string[]) => {
+      let changed = false;
+      do {
+        changed = false;
+        for (const suffix of suffixes) {
+          if (!suffix) continue;
+          if (key.endsWith(suffix) && key.length > suffix.length + 2) {
+            key = key.slice(0, -suffix.length);
+            changed = true;
+            break;
+          }
+        }
+      } while (changed);
+    };
+
+    stripSuffixes(colorSuffixes);
+    stripSuffixes(sizeSuffixes);
+
+    if (key.length > 6) {
+      if (key.endsWith("b")) key = key.slice(0, -1);
+      if (key.endsWith("r")) key = key.slice(0, -1);
+      if (key.endsWith("v")) key = key.slice(0, -1);
+      if (key.endsWith("n")) key = key.slice(0, -1);
+      if (key.endsWith("w")) key = key.slice(0, -1);
+    }
+
+    return key.trim();
   }
 
   const colorLabels: Record<string, { fr: string; en: string }> = {
@@ -726,29 +831,30 @@ export default function ProductsPage() {
     if (!detailProduct) return [];
 
     const currentFamilyKey = getVariantFamilyKey(detailProduct);
-    const currentGroupKey = normalizeText(detailProduct.variantGroupKey);
-
     if (!currentFamilyKey) return [];
 
-    const alreadyDisplayedIds = new Set([
-      detailProduct.id,
-      ...detailVariants.map((variant) => variant.id),
-    ]);
+    const excludedIds = new Set([detailProduct.id]);
+    const uniqueById = new Map<number, ProductViewDto>();
 
-    return products
-      .filter((product) => {
-        if (alreadyDisplayedIds.has(product.id)) return false;
+    products.forEach((product) => {
+      if (excludedIds.has(product.id)) return;
+      if (getVariantFamilyKey(product) !== currentFamilyKey) return;
 
-        const productFamilyKey = getVariantFamilyKey(product);
-        const productGroupKey = normalizeText(product.variantGroupKey);
+      uniqueById.set(product.id, product);
+    });
 
-        return (
-          productFamilyKey === currentFamilyKey &&
-          productGroupKey !== currentGroupKey
-        );
-      })
-      .sort((a, b) => getSurfaceM2(b) - getSurfaceM2(a));
-  }, [detailProduct, detailVariants, products]);
+    return Array.from(uniqueById.values()).sort((a, b) => {
+      const groupA = String(a.variantGroupKey || "");
+      const groupB = String(b.variantGroupKey || "");
+      const groupDiff = groupA.localeCompare(groupB);
+      if (groupDiff !== 0) return groupDiff;
+
+      const surfaceDiff = getSurfaceM2(b) - getSurfaceM2(a);
+      if (surfaceDiff !== 0) return surfaceDiff;
+
+      return String(a.name || "").localeCompare(String(b.name || ""));
+    });
+  }, [detailProduct, products]);
 
   return (
     <section className="products-page">
@@ -1141,57 +1247,6 @@ export default function ProductsPage() {
                       )
                       .sort((a, b) => getSurfaceM2(a) - getSurfaceM2(b));
 
-                    function getVariantColorKey(product: ProductViewDto) {
-                      const declared = splitValues(product.colors);
-                      if (declared.length) return canonicalColor(declared[0]);
-
-                      const raw = normalizeText(
-                        `${product.slug || ""} ${product.name || ""} ${
-                          product.variantGroupKey || ""
-                        }`
-                      );
-
-                      const match = raw.match(
-                        /(rouge|red|bleu|blue|noir|black|blanc|white|beige|vert|green|jaune|yellow|gris|gray|grey)/
-                      );
-
-                      return match ? canonicalColor(match[1]) : "";
-                    }
-
-                    const colorVariantMap = new Map<string, ProductViewDto>();
-                    [detailProduct, ...detailColorVariants].forEach((variant) => {
-                      const key = getVariantColorKey(variant);
-                      if (!key) return;
-
-                      const existing = colorVariantMap.get(key);
-                      if (!existing || getSurfaceM2(variant) > getSurfaceM2(existing)) {
-                        colorVariantMap.set(key, variant);
-                      }
-                    });
-
-                    const colorOrder = [
-                      "beige",
-                      "blue",
-                      "red",
-                      "green",
-                      "black",
-                      "white",
-                      "multicolore",
-                    ];
-
-                    const colorVariants = Array.from(colorVariantMap.entries())
-                      .sort((a, b) => {
-                        const aIndex = colorOrder.indexOf(a[0]);
-                        const bIndex = colorOrder.indexOf(b[0]);
-
-                        if (aIndex !== -1 || bIndex !== -1) {
-                          return (aIndex === -1 ? 999 : aIndex) - (bIndex === -1 ? 999 : bIndex);
-                        }
-
-                        return a[0].localeCompare(b[0]);
-                      })
-                      .map(([, variant]) => variant);
-
                     return (
                       <>
                         <div className="product-variants-premium-section">
@@ -1236,37 +1291,60 @@ export default function ProductsPage() {
                           )}
                         </div>
 
-                        {colorVariants.length > 0 && (
+                        {detailColorVariants.length > 0 && (
                           <div className="product-variants-premium-section">
                             <div className="product-variants-premium-title">
                               <h3>
-                                Couleurs disponibles{" "}
-                                <span>({colorVariants.length})</span>
+                                Autres tapis de la même collection{" "}
+                                <span>({detailColorVariants.length})</span>
                               </h3>
                             </div>
 
-                            <div className="product-variants-premium-options">
-                              {colorVariants.map((variant) => {
-                                const colorKey = getVariantColorKey(variant);
-                                const isActive = variant.id === detailProduct.id;
+                            <div className="product-collection-grid">
+                              {detailColorVariants.map((variant) => {
                                 const variantImage = getProductImages(variant)[0];
+                                const dimensions =
+                                  variant.lengthCm && variant.widthCm
+                                    ? `${variant.lengthCm} x ${variant.widthCm} cm`
+                                    : variant.dimensions || "-";
+
+                                const priceLabel =
+                                  shouldShowProductPrice(variant) &&
+                                  variant.price != null
+                                    ? formatPrice(variant.price)
+                                    : t("products.priceOnRequest");
 
                                 return (
                                   <button
                                     key={variant.id}
                                     type="button"
-                                    className={`variant-color-button ${
-                                      isActive ? "active" : ""
-                                    }`}
+                                    className="product-collection-card"
                                     onClick={() => openDetailProduct(variant)}
-                                    disabled={isActive}
                                   >
-                                    {variantImage && (
-                                      <img src={variantImage} alt={variant.name} />
+                                    {variantImage ? (
+                                      <img
+                                        src={variantImage}
+                                        alt={variant.name}
+                                        className="product-collection-thumb"
+                                      />
+                                    ) : (
+                                      <div className="product-collection-thumb product-collection-thumb--empty" />
                                     )}
-                                    <span>
-                                      {getTranslatedColor(colorKey || variant.colors)}
-                                    </span>
+
+                                    <div className="product-collection-content">
+                                      <strong className="product-collection-name">
+                                        {variant.name}
+                                      </strong>
+                                      <span className="product-collection-color">
+                                        {getTranslatedColor(variant.colors)}
+                                      </span>
+                                      <span className="product-collection-dimensions">
+                                        {dimensions}
+                                      </span>
+                                      <span className="product-collection-price">
+                                        {priceLabel}
+                                      </span>
+                                    </div>
                                   </button>
                                 );
                               })}
