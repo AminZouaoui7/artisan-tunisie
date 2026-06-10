@@ -2046,6 +2046,164 @@
   overflow-y: auto !important;
 }
 
+@media (max-width: 768px) {
+  .products-detail-modal {
+    width: 100vw !important;
+    max-width: 100vw !important;
+    height: 100dvh !important;
+    max-height: 100dvh !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    box-sizing: border-box !important;
+  }
+
+  .products-detail-card {
+    width: 100vw !important;
+    max-width: 100vw !important;
+    height: 100dvh !important;
+    max-height: 100dvh !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+    grid-template-columns: 1fr !important;
+    padding: 16px !important;
+    gap: 18px !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    box-sizing: border-box !important;
+    min-width: 0 !important;
+  }
+
+  .products-detail-gallery {
+    width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+    grid-template-rows: auto 82px !important;
+    overflow: hidden !important;
+  }
+
+  .products-detail-image {
+    width: 100% !important;
+    height: auto !important;
+    max-height: 360px !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+    border-radius: 18px !important;
+    background: #fff !important;
+    box-sizing: border-box !important;
+  }
+
+  .products-detail-image-button {
+    width: 100% !important;
+    height: auto !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  .products-detail-image img {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    max-height: 360px !important;
+    object-fit: contain !important;
+    padding: 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  .products-detail-info {
+    width: 100% !important;
+    min-width: 0 !important;
+    overflow-x: hidden !important;
+    box-sizing: border-box !important;
+  }
+
+  .products-detail-close {
+    position: fixed !important;
+    top: 12px !important;
+    right: 12px !important;
+    z-index: 100002 !important;
+    box-sizing: border-box !important;
+  }
+
+  .products-detail-gallery-btn {
+    width: 38px !important;
+    height: 38px !important;
+  }
+
+  .products-detail-gallery-btn--left {
+    left: 10px !important;
+  }
+
+  .products-detail-gallery-btn--right {
+    right: 10px !important;
+  }
+
+  .product-variants-premium {
+    width: 100% !important;
+    min-width: 0 !important;
+    overflow-x: hidden !important;
+    box-sizing: border-box !important;
+  }
+
+  .product-variants-premium-section:first-child .product-variants-premium-options {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 12px !important;
+  }
+
+  .variant-size-button {
+    width: 100% !important;
+    min-width: 0 !important;
+    height: 74px !important;
+    transform: none !important;
+    box-sizing: border-box !important;
+  }
+
+  .variant-size-button img {
+    width: 46px !important;
+    height: 46px !important;
+  }
+
+  .variant-size-button span {
+    font-size: 12px !important;
+  }
+
+  .product-collection-grid {
+    width: 100% !important;
+    min-width: 0 !important;
+    grid-template-columns: 1fr !important;
+    box-sizing: border-box !important;
+  }
+
+  .product-collection-card {
+    width: 100% !important;
+    min-width: 0 !important;
+    display: grid !important;
+    grid-template-columns: 76px 1fr !important;
+    align-items: center !important;
+    box-sizing: border-box !important;
+  }
+
+  .product-collection-thumb {
+    width: 64px !important;
+    height: 64px !important;
+    border-radius: 14px !important;
+    justify-self: center !important;
+  }
+
+  .product-collection-content {
+    min-width: 0 !important;
+  }
+
+  .product-collection-name,
+  .product-collection-color,
+  .product-collection-dimensions,
+  .product-collection-price {
+    min-width: 0 !important;
+  }
+}
+
 .variant-size-button,
 .variant-color-button {
   min-width: 120px;
