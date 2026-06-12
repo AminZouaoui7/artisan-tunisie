@@ -66,11 +66,11 @@ export default function ProductsPage() {
       .trim();
 
   const categoryFilters = [
-   {
-  key: "tapis noué",
-  label: "Tapis noué",
-  subtitle: "Fait main",
-},
+    {
+      key: "tapis",
+      label: "Tous les tapis",
+      subtitle: "Tapis noué",
+    },
     {
       key: "margoum tisser berber",
       label: "Margoum tissé",
@@ -858,8 +858,7 @@ export default function ProductsPage() {
 
       const matchCategory =
         normalizeValue(
-          product.category ??
-            (product as ProductViewDto & { categorie?: string | null }).categorie
+          product.category ?? (product as ProductViewDto & { categorie?: string | null }).categorie
         ) === normalizeValue(selectedCategory);
 
       const productColors = splitValues(product.colors).map(canonicalColor);
