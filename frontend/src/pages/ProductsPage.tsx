@@ -2,6 +2,7 @@ import {
   useCallback,
   useEffect,
   useMemo,
+  useRef,
   useState,
   type FormEvent,
 } from "react";
@@ -11,8 +12,6 @@ import {
   X,
   ShoppingCart,
   CheckCircle2,
-  Search,
-  SlidersHorizontal,
   HeartHandshake,
   Eye,
   ChevronLeft,
@@ -38,6 +37,7 @@ import "../styles/ProductsPage.css";
 import { useI18n } from "../i18n/i18n";
 
 type SizeFilter = "all" | "small" | "medium" | "large" | "xl";
+type SizeBucket = Exclude<SizeFilter, "all">;
 
 export default function ProductsPage() {
   const { t, language } = useI18n();
@@ -52,10 +52,13 @@ export default function ProductsPage() {
   const [errorKey, setErrorKey] = useState<string | null>(null);
 
   const [search, setSearch] = useState("");
-  const [type, setType] = useState("all");
   const [color, setColor] = useState("all");
-  const [size, setSize] = useState<SizeFilter>("all");
-  const [space, setSpace] = useState("all");
+  const [selectedSizes, setSelectedSizes] = useState<SizeBucket[]>([]);
+  const [selectedMaterials, setSelectedMaterials] = useState<string[]>([]);
+  const [selectedTechniques, setSelectedTechniques] = useState<string[]>([]);
+  const [priceRange, setPriceRange] = useState<{ min: number; max: number } | null>(
+    null
+  );
   const [selectedCategory, setSelectedCategory] = useState("all");
 
   const normalizeValue = (value?: string | null) =>
@@ -102,6 +105,19 @@ export default function ProductsPage() {
       subtitle: "Finesse & élégance",
     },
   ];
+
+  const productsCatalogRef = useRef<HTMLDivElement | null>(null);
+
+  const handleCategoryClick = useCallback((categoryKey: string) => {
+    setSelectedCategory(categoryKey);
+
+    window.setTimeout(() => {
+      productsCatalogRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }, 80);
+  }, []);
 
   const [selectedProduct, setSelectedProduct] =
     useState<ProductViewDto | null>(null);
@@ -162,6 +178,15 @@ export default function ProductsPage() {
   function getSurfaceM2(product: ProductViewDto) {
     if (!product.lengthCm || !product.widthCm) return 0;
     return (product.lengthCm * product.widthCm) / 10000;
+  }
+
+  function getSizeBucket(product: ProductViewDto): SizeBucket | null {
+    const surface = getSurfaceM2(product);
+    if (!surface) return null;
+    if (surface < 2) return "small";
+    if (surface < 4) return "medium";
+    if (surface < 6) return "large";
+    return "xl";
   }
 
   function normalizeText(value?: string | null) {
@@ -332,21 +357,6 @@ export default function ProductsPage() {
     gris: { fr: "Gris", en: "Grey" },
   };
 
-  const spaceLabels: Record<string, { fr: string; en: string }> = {
-    salon: { fr: "Salon", en: "Living room" },
-    livingroom: { fr: "Salon", en: "Living room" },
-    "living room": { fr: "Salon", en: "Living room" },
-    chambre: { fr: "Chambre à coucher", en: "Bedroom" },
-    bedroom: { fr: "Chambre à coucher", en: "Bedroom" },
-    couloir: { fr: "Couloir", en: "Hallway" },
-    hallway: { fr: "Couloir", en: "Hallway" },
-    entree: { fr: "Entrée", en: "Entrance" },
-    entrée: { fr: "Entrée", en: "Entrance" },
-    entrance: { fr: "Entrée", en: "Entrance" },
-    bureau: { fr: "Bureau", en: "Office" },
-    office: { fr: "Bureau", en: "Office" },
-  };
-
   function canonicalColor(value?: string | null) {
     const key = normalizeText(value);
     if (["bleu", "blue"].includes(key)) return "blue";
@@ -356,19 +366,6 @@ export default function ProductsPage() {
     if (["blanc", "white"].includes(key)) return "white";
     if (["beige"].includes(key)) return "beige";
     if (["multicolore", "multicolor"].includes(key)) return "multicolore";
-    return key;
-  }
-
-  function canonicalSpace(value?: string | null) {
-    const key = normalizeText(value).replace(/\s+/g, " ");
-
-    if (["salon", "living room", "livingroom"].includes(key)) return "salon";
-    if (["chambre", "chambre a coucher", "bedroom"].includes(key))
-      return "chambre";
-    if (["couloir", "hallway"].includes(key)) return "couloir";
-    if (["entree", "entrance"].includes(key)) return "entree";
-    if (["bureau", "office"].includes(key)) return "bureau";
-
     return key;
   }
 
@@ -387,22 +384,6 @@ export default function ProductsPage() {
       raw ||
       ""
     );
-  }
-
-  function getSpaceLabel(value: string, lang: "fr" | "en") {
-    const canonical = canonicalSpace(value);
-    return spaceLabels[canonical]?.[lang] || value;
-  }
-
-  function getSuggestedSpacesBySize(product: ProductViewDto) {
-    const surface = getSurfaceM2(product);
-
-    if (!surface) return [];
-
-    if (surface < 2) return ["couloir", "entree"];
-    if (surface < 4) return ["chambre", "bureau", "couloir"];
-    if (surface < 6) return ["salon", "chambre"];
-    return ["salon"];
   }
 
   function getProductVarietyKey(product: ProductViewDto) {
@@ -774,33 +755,12 @@ export default function ProductsPage() {
     }
   }
 
-  const types = useMemo(() => {
-    const uniqueTypes = visibleCatalogProducts
-      .map((product) => product.type?.trim())
-      .filter((item): item is string => Boolean(item));
-
-    return [
-      "all",
-      ...Array.from(new Set(uniqueTypes)).sort((a, b) => a.localeCompare(b)),
-    ];
-  }, [visibleCatalogProducts]);
-
   const colors = useMemo(() => {
     const allColors = visibleCatalogProducts.flatMap((product) =>
       splitValues(product.colors).map(canonicalColor)
     );
 
     return ["all", ...Array.from(new Set(allColors)).filter(Boolean).sort()];
-  }, [visibleCatalogProducts]);
-
-  const spaces = useMemo(() => {
-    const values = visibleCatalogProducts.flatMap((product) => {
-      const declaredSpaces = splitValues(product.usageSpace).map(canonicalSpace);
-      const suggestedSpaces = getSuggestedSpacesBySize(product);
-      return [...declaredSpaces, ...suggestedSpaces];
-    });
-
-    return ["all", ...Array.from(new Set(values)).filter(Boolean).sort()];
   }, [visibleCatalogProducts]);
 
   function getSizeLabel(product: ProductViewDto) {
@@ -814,29 +774,73 @@ export default function ProductsPage() {
     return t("products.sizeLabels.xl");
   }
 
-  const matchSizeFilter = useCallback(
-    (product: ProductViewDto) => {
-      const surface = getSurfaceM2(product);
-
-      if (size === "all") return true;
-      if (!surface) return false;
-      if (size === "small") return surface < 2;
-      if (size === "medium") return surface >= 2 && surface < 4;
-      if (size === "large") return surface >= 4 && surface < 6;
-      if (size === "xl") return surface >= 6;
-
-      return true;
-    },
-    [size]
+  const sizeOptions: Array<{ key: SizeBucket; label: string }> = useMemo(
+    () => [
+      { key: "small", label: t("products.sizeFilter.small") },
+      { key: "medium", label: t("products.sizeFilter.medium") },
+      { key: "large", label: t("products.sizeFilter.large") },
+      { key: "xl", label: t("products.sizeFilter.xl") },
+    ],
+    [t]
   );
+
+  const materialOptions = useMemo(() => {
+    const byKey = new Map<string, string>();
+    visibleCatalogProducts.forEach((product) => {
+      splitValues(product.material).forEach((raw) => {
+        const key = normalizeText(raw);
+        if (!key) return;
+        if (!byKey.has(key)) byKey.set(key, raw);
+      });
+    });
+    return Array.from(byKey.entries())
+      .map(([key, label]) => ({ key, label }))
+      .sort((a, b) => a.label.localeCompare(b.label));
+  }, [visibleCatalogProducts]);
+
+  const techniqueOptions = useMemo(() => {
+    const byKey = new Map<string, string>();
+    visibleCatalogProducts.forEach((product) => {
+      splitValues(product.technique).forEach((raw) => {
+        const key = normalizeText(raw);
+        if (!key) return;
+        if (!byKey.has(key)) byKey.set(key, raw);
+      });
+    });
+    return Array.from(byKey.entries())
+      .map(([key, label]) => ({ key, label }))
+      .sort((a, b) => a.label.localeCompare(b.label));
+  }, [visibleCatalogProducts]);
+
+  const catalogPriceBounds = useMemo(() => {
+    const prices = visibleCatalogProducts
+      .map((product) => product.price)
+      .filter((value): value is number => typeof value === "number" && Number.isFinite(value));
+
+    if (!prices.length) return { min: 0, max: 0 };
+
+    return {
+      min: Math.floor(Math.min(...prices)),
+      max: Math.ceil(Math.max(...prices)),
+    };
+  }, [visibleCatalogProducts]);
+
+  const effectivePriceRange = priceRange ?? catalogPriceBounds;
+
+  useEffect(() => {
+    if (priceRange) return;
+    setPriceRange(catalogPriceBounds);
+  }, [catalogPriceBounds, priceRange]);
 
   const hasActiveFilters = Boolean(
     search.trim() ||
       selectedCategory !== "all" ||
-      type !== "all" ||
       color !== "all" ||
-      size !== "all" ||
-      space !== "all"
+      selectedSizes.length > 0 ||
+      selectedMaterials.length > 0 ||
+      selectedTechniques.length > 0 ||
+      effectivePriceRange.min !== catalogPriceBounds.min ||
+      effectivePriceRange.max !== catalogPriceBounds.max
   );
 
   const filteredProducts = useMemo(() => {
@@ -858,9 +862,6 @@ export default function ProductsPage() {
       `);
 
       const matchSearch = !normalizedSearch || text.includes(normalizedSearch);
-      const matchType =
-        type === "all" || normalizeText(product.type) === normalizeText(type);
-
       const productCategory = normalizeValue(
         product.category ??
           (product as ProductViewDto & { categorie?: string | null }).categorie
@@ -874,21 +875,35 @@ export default function ProductsPage() {
       const matchColor =
         color === "all" || productColors.includes(canonicalColor(color));
 
-      const productSpaces = [
-        ...splitValues(product.usageSpace).map(canonicalSpace),
-        ...getSuggestedSpacesBySize(product),
-      ];
+      const sizeBucket = getSizeBucket(product);
+      const matchSize =
+        selectedSizes.length === 0 ||
+        (sizeBucket ? selectedSizes.includes(sizeBucket) : false);
 
-      const matchSpace =
-        space === "all" || productSpaces.includes(canonicalSpace(space));
+      const productMaterials = splitValues(product.material).map(normalizeText);
+      const matchMaterial =
+        selectedMaterials.length === 0 ||
+        productMaterials.some((m) => selectedMaterials.includes(m));
+
+      const productTechniques = splitValues(product.technique).map(normalizeText);
+      const matchTechnique =
+        selectedTechniques.length === 0 ||
+        productTechniques.some((k) => selectedTechniques.includes(k));
+
+      const matchPrice =
+        typeof product.price !== "number" ||
+        !Number.isFinite(product.price) ||
+        (product.price >= effectivePriceRange.min &&
+          product.price <= effectivePriceRange.max);
 
       return (
         matchSearch &&
         matchCategory &&
-        matchType &&
         matchColor &&
-        matchSizeFilter(product) &&
-        matchSpace
+        matchSize &&
+        matchMaterial &&
+        matchTechnique &&
+        matchPrice
       );
     });
 
@@ -897,20 +912,23 @@ export default function ProductsPage() {
     visibleCatalogProducts,
     search,
     selectedCategory,
-    type,
     color,
-    space,
-    matchSizeFilter,
+    selectedSizes,
+    selectedMaterials,
+    selectedTechniques,
+    effectivePriceRange.min,
+    effectivePriceRange.max,
     hasActiveFilters,
   ]);
 
   function resetFilters() {
     setSearch("");
     setSelectedCategory("all");
-    setType("all");
     setColor("all");
-    setSize("all");
-    setSpace("all");
+    setSelectedSizes([]);
+    setSelectedMaterials([]);
+    setSelectedTechniques([]);
+    setPriceRange(catalogPriceBounds);
   }
 
   const productDetailHighlights = detailProduct
@@ -990,7 +1008,7 @@ export default function ProductsPage() {
                   ? "products-category-card--active"
                   : ""
               }`}
-              onClick={() => setSelectedCategory(category.key)}
+              onClick={() => handleCategoryClick(category.key)}
             >
               <div className="products-category-thumb">
                 {category.key === "all" ? (
@@ -1011,80 +1029,198 @@ export default function ProductsPage() {
 
       <div className="products-layout">
         <aside className="products-sidebar-filters">
-          <div className="products-toolbar-title">
-            <SlidersHorizontal size={18} />
-            <span>{t("products.filterTitle")}</span>
+          <h3>AFFINER VOTRE RECHERCHE</h3>
+
+          <div className="sidebar-search">
+            <input
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Rechercher un tapis..."
+            />
           </div>
 
-          <div className="products-filter-bar">
-            <div className="products-filter-search">
-              <Search size={17} />
+          <div className="filter-section">
+            <h4>TAILLE</h4>
+            {sizeOptions.map((option) => (
+              <label key={option.key} className="filter-option">
+                <span>{option.label}</span>
+                <input
+                  type="checkbox"
+                  checked={selectedSizes.includes(option.key)}
+                  onChange={() =>
+                    setSelectedSizes((prev) =>
+                      prev.includes(option.key)
+                        ? prev.filter((item) => item !== option.key)
+                        : [...prev, option.key]
+                    )
+                  }
+                />
+              </label>
+            ))}
+          </div>
+
+          <div className="filter-section">
+            <h4>COULEUR</h4>
+            <div className="color-filter-list">
+              {colors
+                .filter((item) => item !== "all")
+                .map((item) => {
+                  const canonical = canonicalColor(item);
+                  const isActive = canonicalColor(color) === canonical;
+                  const label = getColorLabel(item, language === "FR" ? "fr" : "en");
+                  const background =
+                    canonical === "multicolore"
+                      ? "linear-gradient(135deg, #b45309, #2563eb, #16a34a, #db2777)"
+                      : canonical === "blue"
+                        ? "#2563eb"
+                        : canonical === "red"
+                          ? "#dc2626"
+                          : canonical === "green"
+                            ? "#16a34a"
+                            : canonical === "black"
+                              ? "#111827"
+                              : canonical === "white"
+                                ? "#f8fafc"
+                                : canonical === "grey"
+                                  ? "#9ca3af"
+                                  : canonical === "gray"
+                                    ? "#9ca3af"
+                                    : canonical === "brown"
+                                      ? "#7c3f2a"
+                                      : canonical === "beige"
+                                        ? "#e7d3b1"
+                                        : "#d1b38a";
+
+                  return (
+                    <button
+                      key={item}
+                      type="button"
+                      aria-label={label}
+                      title={label}
+                      className={`color-dot ${isActive ? "color-dot--active" : ""}`}
+                      style={{ background }}
+                      onClick={() =>
+                        setColor((prev) =>
+                          canonicalColor(prev) === canonical ? "all" : canonical
+                        )
+                      }
+                    />
+                  );
+                })}
+            </div>
+          </div>
+
+          <div className="filter-section">
+            <h4>MATIÈRE</h4>
+            {materialOptions.map((option) => (
+              <label key={option.key} className="filter-option">
+                <span>{option.label}</span>
+                <input
+                  type="checkbox"
+                  checked={selectedMaterials.includes(option.key)}
+                  onChange={() =>
+                    setSelectedMaterials((prev) =>
+                      prev.includes(option.key)
+                        ? prev.filter((item) => item !== option.key)
+                        : [...prev, option.key]
+                    )
+                  }
+                />
+              </label>
+            ))}
+          </div>
+
+          <div className="filter-section">
+            <h4>TECHNIQUE</h4>
+            {techniqueOptions.map((option) => (
+              <label key={option.key} className="filter-option">
+                <span>{option.label}</span>
+                <input
+                  type="checkbox"
+                  checked={selectedTechniques.includes(option.key)}
+                  onChange={() =>
+                    setSelectedTechniques((prev) =>
+                      prev.includes(option.key)
+                        ? prev.filter((item) => item !== option.key)
+                        : [...prev, option.key]
+                    )
+                  }
+                />
+              </label>
+            ))}
+          </div>
+
+          <div className="filter-section">
+            <h4>PRIX</h4>
+            <div className="filter-option">
+              <span>
+                {effectivePriceRange.min} € – {effectivePriceRange.max} €
+              </span>
+            </div>
+            <div className="filter-option">
+              <span>Min</span>
               <input
-                type="text"
-                placeholder={
-                  language === "FR"
-                    ? "Rechercher un tapis..."
-                    : "Search for a rug..."
-                }
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
+                type="range"
+                min={catalogPriceBounds.min}
+                max={catalogPriceBounds.max}
+                value={Math.min(effectivePriceRange.min, effectivePriceRange.max)}
+                onChange={(e) => {
+                  const nextMin = Number(e.target.value);
+                  setPriceRange((prev) => {
+                    const base = prev ?? catalogPriceBounds;
+                    return {
+                      min: nextMin,
+                      max: Math.max(nextMin, base.max),
+                    };
+                  });
+                }}
               />
             </div>
+            <div className="filter-option">
+              <span>Max</span>
+              <input
+                type="range"
+                min={catalogPriceBounds.min}
+                max={catalogPriceBounds.max}
+                value={Math.max(effectivePriceRange.max, effectivePriceRange.min)}
+                onChange={(e) => {
+                  const nextMax = Number(e.target.value);
+                  setPriceRange((prev) => {
+                    const base = prev ?? catalogPriceBounds;
+                    return {
+                      min: Math.min(base.min, nextMax),
+                      max: nextMax,
+                    };
+                  });
+                }}
+              />
+            </div>
+          </div>
 
-            <select value={type} onChange={(e) => setType(e.target.value)}>
-              {types.map((item) => (
-                <option key={item} value={item}>
-                  {item === "all" ? "Type" : item}
-                </option>
-              ))}
-            </select>
+          <button type="button" className="reset-filters-btn" onClick={resetFilters}>
+            RÉINITIALISER LES FILTRES
+          </button>
 
-            <select
-              value={size}
-              onChange={(e) => setSize(e.target.value as SizeFilter)}
-            >
-              <option value="all">
-                {language === "FR" ? "Taille" : "Size"}
-              </option>
-              <option value="small">{t("products.sizeFilter.small")}</option>
-              <option value="medium">{t("products.sizeFilter.medium")}</option>
-              <option value="large">{t("products.sizeFilter.large")}</option>
-              <option value="xl">{t("products.sizeFilter.xl")}</option>
-            </select>
-
-            <select value={color} onChange={(e) => setColor(e.target.value)}>
-              {colors.map((item) => (
-                <option key={item} value={item}>
-                  {item === "all"
-                    ? language === "FR"
-                      ? "Couleur"
-                      : "Color"
-                    : getColorLabel(item, language === "FR" ? "fr" : "en")}
-                </option>
-              ))}
-            </select>
-
-            <select value={space} onChange={(e) => setSpace(e.target.value)}>
-              {spaces.map((item) => (
-                <option key={item} value={item}>
-                  {item === "all"
-                    ? language === "FR"
-                      ? "Pièce"
-                      : "Space"
-                    : getSpaceLabel(item, language === "FR" ? "fr" : "en")}
-                </option>
-              ))}
-            </select>
-
-            {hasActiveFilters && (
-              <button type="button" onClick={resetFilters}>
-                {language === "FR" ? "Réinitialiser" : "Reset"}
-              </button>
-            )}
+          <div className="products-filter-benefits">
+            <div>
+              Livraison offerte
+              <br />
+              <span>À partir de 300 € d’achat</span>
+            </div>
+            <div>
+              Paiement sécurisé
+              <br />
+              <span>Carte bancaire, PayPal...</span>
+            </div>
+            <div>
+              Pièces uniques
+              <br />
+              <span>Chaque tapis est unique</span>
+            </div>
           </div>
         </aside>
 
-        <main className="products-catalog">
+        <main className="products-catalog" ref={productsCatalogRef}>
           <div className="products-catalog-header">
             <p className="products-count-line">
               {language === "FR"
