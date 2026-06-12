@@ -1129,6 +1129,7 @@ export default function ProductsPage() {
 
                 const productImages = getProductImages(product);
                 const coverImage = productImages[0];
+                const hoverImage = productImages[1] || productImages[0];
 
                 return (
                   <article key={product.id} className="product-card">
@@ -1139,11 +1140,21 @@ export default function ProductsPage() {
                         onClick={() => openDetailProduct(product)}
                       >
                         {coverImage ? (
-                          <img
-                            src={coverImage}
-                            alt={product.name}
-                            className="product-image"
-                          />
+                          <div className="product-card-image-hover-wrap">
+                            <img
+                              src={coverImage}
+                              alt={product.name}
+                              className="product-image product-image--primary"
+                            />
+
+                            {hoverImage && hoverImage !== coverImage && (
+                              <img
+                                src={hoverImage}
+                                alt={`${product.name} aperçu`}
+                                className="product-image product-image--hover"
+                              />
+                            )}
+                          </div>
                         ) : (
                           <div className="product-image-placeholder">
                             {t("products.imageUnavailable")}
