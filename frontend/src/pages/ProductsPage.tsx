@@ -56,7 +56,7 @@ export default function ProductsPage() {
   const [color, setColor] = useState("all");
   const [size, setSize] = useState<SizeFilter>("all");
   const [space, setSpace] = useState("all");
-  const [selectedCategory, setSelectedCategory] = useState("tapis");
+  const [selectedCategory, setSelectedCategory] = useState("all");
 
   const normalizeValue = (value?: string | null) =>
     (value ?? "")
@@ -67,9 +67,14 @@ export default function ProductsPage() {
 
   const categoryFilters = [
     {
-      key: "tapis",
+      key: "all",
       label: "Tous les tapis",
-      subtitle: "Tapis noué",
+      subtitle: "Voir tout",
+    },
+    {
+      key: "tapis",
+      label: "Tapis noué",
+      subtitle: "Fait main",
     },
     {
       key: "margoum tisser berber",
@@ -827,7 +832,7 @@ export default function ProductsPage() {
 
   const hasActiveFilters = Boolean(
     search.trim() ||
-      selectedCategory !== "tapis" ||
+      selectedCategory !== "all" ||
       type !== "all" ||
       color !== "all" ||
       size !== "all" ||
@@ -856,10 +861,14 @@ export default function ProductsPage() {
       const matchType =
         type === "all" || normalizeText(product.type) === normalizeText(type);
 
+      const productCategory = normalizeValue(
+        product.category ??
+          (product as ProductViewDto & { categorie?: string | null }).categorie
+      );
+
       const matchCategory =
-        normalizeValue(
-          product.category ?? (product as ProductViewDto & { categorie?: string | null }).categorie
-        ) === normalizeValue(selectedCategory);
+        selectedCategory === "all" ||
+        productCategory === normalizeValue(selectedCategory);
 
       const productColors = splitValues(product.colors).map(canonicalColor);
       const matchColor =
@@ -897,7 +906,7 @@ export default function ProductsPage() {
 
   function resetFilters() {
     setSearch("");
-    setSelectedCategory("tapis");
+    setSelectedCategory("all");
     setType("all");
     setColor("all");
     setSize("all");
@@ -984,14 +993,14 @@ export default function ProductsPage() {
               onClick={() => setSelectedCategory(category.key)}
             >
               <div className="products-category-thumb">
-                {category.key === "tapis" ? (
+                {category.key === "all" ? (
                   <span className="products-category-grid-icon">▦</span>
                 ) : (
                   <img src={getCategoryImage(category.key)} alt={category.label} />
                 )}
               </div>
 
-              <div>
+              <div className="products-category-card-content">
                 <strong>{category.label}</strong>
                 <span>{category.subtitle}</span>
               </div>
