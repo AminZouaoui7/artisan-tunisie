@@ -56,7 +56,7 @@ export default function ProductsPage() {
   const [color, setColor] = useState("all");
   const [size, setSize] = useState<SizeFilter>("all");
   const [space, setSpace] = useState("all");
-  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [selectedCategory, setSelectedCategory] = useState("tapis");
 
   const normalizeValue = (value?: string | null) =>
     (value ?? "")
@@ -67,19 +67,14 @@ export default function ProductsPage() {
 
   const categoryFilters = [
     {
-      key: "all",
+      key: "tapis",
       label: "Tous les tapis",
       subtitle: "Voir tout",
     },
     {
       key: "margoum tisser berber",
-      label: "Margoum",
-      subtitle: "Tissé berbère",
-    },
-    {
-      key: "kilim berber",
-      label: "Kilim berbère",
-      subtitle: "Tissé à plat",
+      label: "Margoum tissé",
+      subtitle: "Berbère",
     },
     {
       key: "margoum berber",
@@ -87,12 +82,17 @@ export default function ProductsPage() {
       subtitle: "Tissé épais",
     },
     {
-      key: "killim toujen",
+      key: "kilim berber",
+      label: "Kilim berbère",
+      subtitle: "Tissé à plat",
+    },
+    {
+      key: "kilim toujen",
       label: "Kilim Toujen",
       subtitle: "Motifs traditionnels",
     },
     {
-      key: "killim extra fin",
+      key: "kilim extra fin",
       label: "Kilim extra fin",
       subtitle: "Finesse & élégance",
     },
@@ -820,7 +820,7 @@ export default function ProductsPage() {
 
   const hasActiveFilters = Boolean(
     search.trim() ||
-      selectedCategory !== "all" ||
+      selectedCategory !== "tapis" ||
       type !== "all" ||
       color !== "all" ||
       size !== "all" ||
@@ -853,7 +853,7 @@ export default function ProductsPage() {
         getProductCategoryValue(product)
       );
       const matchCategory =
-        selectedCategory === "all" ||
+        selectedCategory === "tapis" ||
         productCategory === normalizeValue(selectedCategory);
 
       const productColors = splitValues(product.colors).map(canonicalColor);
@@ -892,7 +892,7 @@ export default function ProductsPage() {
 
   function resetFilters() {
     setSearch("");
-    setSelectedCategory("all");
+    setSelectedCategory("tapis");
     setType("all");
     setColor("all");
     setSize("all");
@@ -979,7 +979,7 @@ export default function ProductsPage() {
               onClick={() => setSelectedCategory(category.key)}
             >
               <div className="products-category-thumb">
-                {category.key === "all" ? (
+                {category.key === "tapis" ? (
                   <span className="products-category-grid-icon">▦</span>
                 ) : (
                   <img src={getCategoryImage(category.key)} alt={category.label} />
