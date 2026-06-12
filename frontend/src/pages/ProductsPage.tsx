@@ -540,39 +540,6 @@ export default function ProductsPage() {
     return [];
   }
 
-  function getProductCategoryValue(product: ProductViewDto) {
-    const fallbackCategory = (product as ProductViewDto & { categorie?: string | null })
-      .categorie;
-    return product.category ?? fallbackCategory ?? "";
-  }
-
-  function getCategoryImage(categoryKey: string) {
-    const normalizedKey = normalizeValue(categoryKey);
-
-    const fallbackProduct = products[0];
-    const fallbackImage =
-      fallbackProduct?.fullMainImageUrl ||
-      fallbackProduct?.mainImageUrl ||
-      fallbackProduct?.fullImages?.[0] ||
-      getProductImages(fallbackProduct || null)[0] ||
-      "";
-
-    const productForCategory = products.find((product) => {
-      const productCategory = normalizeValue(getProductCategoryValue(product));
-      return productCategory === normalizedKey;
-    });
-
-    if (!productForCategory) return fallbackImage;
-
-    return (
-      productForCategory.fullMainImageUrl ||
-      productForCategory.mainImageUrl ||
-      productForCategory.fullImages?.[0] ||
-      getProductImages(productForCategory)[0] ||
-      fallbackImage
-    );
-  }
-
   const visibleCatalogProducts = useMemo(() => {
     return diversifyProducts(getVisibleVariantProducts(products));
   }, [products]);
@@ -1013,15 +980,7 @@ export default function ProductsPage() {
               }`}
               onClick={() => handleCategoryClick(category.key)}
             >
-              <div className="products-category-thumb">
-                {category.key === "all" ? (
-                  <span className="products-category-grid-icon">▦</span>
-                ) : (
-                  <img src={getCategoryImage(category.key)} alt={category.label} />
-                )}
-              </div>
-
-              <div className="products-category-card-content">
+              <div className="products-category-content">
                 <strong>{category.label}</strong>
                 <span>{category.subtitle}</span>
               </div>
