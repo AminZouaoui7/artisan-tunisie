@@ -54,8 +54,6 @@ export default function ProductsPage() {
   const [search, setSearch] = useState("");
   const [color, setColor] = useState("all");
   const [selectedSizes, setSelectedSizes] = useState<SizeBucket[]>([]);
-  const [selectedMaterials, setSelectedMaterials] = useState<string[]>([]);
-  const [selectedTechniques, setSelectedTechniques] = useState<string[]>([]);
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [selectedPrice, setSelectedPrice] = useState("all");
 
@@ -373,6 +371,29 @@ export default function ProductsPage() {
     if (["beige"].includes(key)) return "beige";
     if (["multicolore", "multicolor"].includes(key)) return "multicolore";
     return key;
+  }
+
+  function getColorBackground(key: string) {
+    const normalizedKey = canonicalColor(key);
+    if (normalizedKey === "multicolore") {
+      return "linear-gradient(135deg, #b45309, #2563eb, #16a34a, #db2777)";
+    }
+
+    const colorsMap: Record<string, string> = {
+      blue: "#1f4f9a",
+      red: "#b91c1c",
+      green: "#2f7d4f",
+      black: "#111827",
+      white: "#f8fafc",
+      grey: "#9ca3af",
+      gray: "#9ca3af",
+      brown: "#7c3f2a",
+      beige: "#d9c19b",
+      cream: "#efe2c5",
+      marron: "#7c3f2a",
+    };
+
+    return colorsMap[normalizedKey] || "#d1b38a";
   }
 
   function getColorLabel(value: string, lang: "fr" | "en") {
@@ -808,41 +829,11 @@ export default function ProductsPage() {
     [t]
   );
 
-  const materialOptions = useMemo(() => {
-    const byKey = new Map<string, string>();
-    visibleCatalogProducts.forEach((product) => {
-      splitValues(product.material).forEach((raw) => {
-        const key = normalizeText(raw);
-        if (!key) return;
-        if (!byKey.has(key)) byKey.set(key, raw);
-      });
-    });
-    return Array.from(byKey.entries())
-      .map(([key, label]) => ({ key, label }))
-      .sort((a, b) => a.label.localeCompare(b.label));
-  }, [visibleCatalogProducts]);
-
-  const techniqueOptions = useMemo(() => {
-    const byKey = new Map<string, string>();
-    visibleCatalogProducts.forEach((product) => {
-      splitValues(product.technique).forEach((raw) => {
-        const key = normalizeText(raw);
-        if (!key) return;
-        if (!byKey.has(key)) byKey.set(key, raw);
-      });
-    });
-    return Array.from(byKey.entries())
-      .map(([key, label]) => ({ key, label }))
-      .sort((a, b) => a.label.localeCompare(b.label));
-  }, [visibleCatalogProducts]);
-
   const hasActiveFilters = Boolean(
     search.trim() ||
       selectedCategory !== "all" ||
       color !== "all" ||
       selectedSizes.length > 0 ||
-      selectedMaterials.length > 0 ||
-      selectedTechniques.length > 0 ||
       selectedPrice !== "all"
   );
 
@@ -883,16 +874,6 @@ export default function ProductsPage() {
         selectedSizes.length === 0 ||
         (sizeBucket ? selectedSizes.includes(sizeBucket) : false);
 
-      const productMaterials = splitValues(product.material).map(normalizeText);
-      const matchMaterial =
-        selectedMaterials.length === 0 ||
-        productMaterials.some((m) => selectedMaterials.includes(m));
-
-      const productTechniques = splitValues(product.technique).map(normalizeText);
-      const matchTechnique =
-        selectedTechniques.length === 0 ||
-        productTechniques.some((k) => selectedTechniques.includes(k));
-
       const selectedPriceOption = priceOptions.find(
         (item) => item.key === selectedPrice
       );
@@ -909,8 +890,6 @@ export default function ProductsPage() {
         matchCategory &&
         matchColor &&
         matchSize &&
-        matchMaterial &&
-        matchTechnique &&
         matchPrice
       );
     });
@@ -922,8 +901,6 @@ export default function ProductsPage() {
     selectedCategory,
     color,
     selectedSizes,
-    selectedMaterials,
-    selectedTechniques,
     selectedPrice,
     hasActiveFilters,
   ]);
@@ -933,8 +910,6 @@ export default function ProductsPage() {
     setSelectedCategory("all");
     setColor("all");
     setSelectedSizes([]);
-    setSelectedMaterials([]);
-    setSelectedTechniques([]);
     setSelectedPrice("all");
   }
 
@@ -1068,90 +1043,30 @@ export default function ProductsPage() {
 
           <div className="filter-section">
             <h4>COULEUR</h4>
-            <div className="color-filter-list">
-              {colorOptions.map((option) => {
-                const canonical = canonicalColor(option.key);
-                const isActive = canonicalColor(color) === canonical;
-                const background =
-                  canonical === "multicolore"
-                    ? "linear-gradient(135deg, #b45309, #2563eb, #16a34a, #db2777)"
-                    : canonical === "blue"
-                      ? "#2563eb"
-                      : canonical === "red"
-                        ? "#dc2626"
-                        : canonical === "green"
-                          ? "#16a34a"
-                          : canonical === "black"
-                            ? "#111827"
-                            : canonical === "white"
-                              ? "#f8fafc"
-                              : canonical === "grey"
-                                ? "#9ca3af"
-                                : canonical === "gray"
-                                  ? "#9ca3af"
-                                  : canonical === "brown"
-                                    ? "#7c3f2a"
-                                    : canonical === "beige"
-                                      ? "#e7d3b1"
-                                      : "#d1b38a";
-
-                return (
-                  <button
-                    key={option.key}
-                    type="button"
-                    aria-label={option.label}
-                    title={option.label}
-                    className={`color-dot ${isActive ? "color-dot--active" : ""}`}
-                    style={{ background }}
-                    onClick={() =>
-                      setColor((prev) =>
-                        canonicalColor(prev) === canonical ? "all" : canonical
-                      )
-                    }
+            <div className="color-filter-list color-filter-list--premium">
+              {colorOptions.map((item) => (
+                <button
+                  key={item.key}
+                  type="button"
+                  className={`color-choice ${
+                    canonicalColor(color) === item.key
+                      ? "color-choice--active"
+                      : ""
+                  }`}
+                  onClick={() =>
+                    setColor((prev) =>
+                      canonicalColor(prev) === item.key ? "all" : item.key
+                    )
+                  }
+                >
+                  <span
+                    className="color-choice-dot"
+                    style={{ background: getColorBackground(item.key) }}
                   />
-                );
-              })}
+                  <span className="color-choice-label">{item.label}</span>
+                </button>
+              ))}
             </div>
-          </div>
-
-          <div className="filter-section">
-            <h4>MATIÈRE</h4>
-            {materialOptions.map((option) => (
-              <label key={option.key} className="filter-option">
-                <span>{option.label}</span>
-                <input
-                  type="checkbox"
-                  checked={selectedMaterials.includes(option.key)}
-                  onChange={() =>
-                    setSelectedMaterials((prev) =>
-                      prev.includes(option.key)
-                        ? prev.filter((item) => item !== option.key)
-                        : [...prev, option.key]
-                    )
-                  }
-                />
-              </label>
-            ))}
-          </div>
-
-          <div className="filter-section">
-            <h4>TECHNIQUE</h4>
-            {techniqueOptions.map((option) => (
-              <label key={option.key} className="filter-option">
-                <span>{option.label}</span>
-                <input
-                  type="checkbox"
-                  checked={selectedTechniques.includes(option.key)}
-                  onChange={() =>
-                    setSelectedTechniques((prev) =>
-                      prev.includes(option.key)
-                        ? prev.filter((item) => item !== option.key)
-                        : [...prev, option.key]
-                    )
-                  }
-                />
-              </label>
-            ))}
           </div>
 
           <div className="filter-section">
