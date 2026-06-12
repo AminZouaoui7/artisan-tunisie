@@ -66,11 +66,11 @@ export default function ProductsPage() {
       .trim();
 
   const categoryFilters = [
-    {
-      key: "tapis",
-      label: "Tous les tapis",
-      subtitle: "Voir tout",
-    },
+   {
+  key: "tapis noué",
+  label: "Tapis noué",
+  subtitle: "Fait main",
+},
     {
       key: "margoum tisser berber",
       label: "Margoum tissé",
