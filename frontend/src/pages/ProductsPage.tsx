@@ -825,12 +825,8 @@ export default function ProductsPage() {
     };
   }, [visibleCatalogProducts]);
 
-  const effectivePriceRange = priceRange ?? catalogPriceBounds;
-
-  useEffect(() => {
-    if (priceRange) return;
-    setPriceRange(catalogPriceBounds);
-  }, [catalogPriceBounds, priceRange]);
+  const effectivePriceRange = priceRange;
+  const displayedPriceRange = priceRange ?? catalogPriceBounds;
 
   const hasActiveFilters = Boolean(
     search.trim() ||
@@ -839,8 +835,7 @@ export default function ProductsPage() {
       selectedSizes.length > 0 ||
       selectedMaterials.length > 0 ||
       selectedTechniques.length > 0 ||
-      effectivePriceRange.min !== catalogPriceBounds.min ||
-      effectivePriceRange.max !== catalogPriceBounds.max
+      priceRange !== null
   );
 
   const filteredProducts = useMemo(() => {
@@ -891,6 +886,7 @@ export default function ProductsPage() {
         productTechniques.some((k) => selectedTechniques.includes(k));
 
       const matchPrice =
+        !effectivePriceRange ||
         typeof product.price !== "number" ||
         !Number.isFinite(product.price) ||
         (product.price >= effectivePriceRange.min &&
@@ -916,8 +912,7 @@ export default function ProductsPage() {
     selectedSizes,
     selectedMaterials,
     selectedTechniques,
-    effectivePriceRange.min,
-    effectivePriceRange.max,
+    effectivePriceRange,
     hasActiveFilters,
   ]);
 
@@ -928,7 +923,7 @@ export default function ProductsPage() {
     setSelectedSizes([]);
     setSelectedMaterials([]);
     setSelectedTechniques([]);
-    setPriceRange(catalogPriceBounds);
+    setPriceRange(null);
   }
 
   const productDetailHighlights = detailProduct
@@ -1154,7 +1149,7 @@ export default function ProductsPage() {
             <h4>PRIX</h4>
             <div className="filter-option">
               <span>
-                {effectivePriceRange.min} € – {effectivePriceRange.max} €
+                {displayedPriceRange.min} € – {displayedPriceRange.max} €
               </span>
             </div>
             <div className="filter-option">
@@ -1163,15 +1158,12 @@ export default function ProductsPage() {
                 type="range"
                 min={catalogPriceBounds.min}
                 max={catalogPriceBounds.max}
-                value={Math.min(effectivePriceRange.min, effectivePriceRange.max)}
+                value={Math.min(displayedPriceRange.min, displayedPriceRange.max)}
                 onChange={(e) => {
                   const nextMin = Number(e.target.value);
-                  setPriceRange((prev) => {
-                    const base = prev ?? catalogPriceBounds;
-                    return {
-                      min: nextMin,
-                      max: Math.max(nextMin, base.max),
-                    };
+                  setPriceRange({
+                    min: nextMin,
+                    max: Math.max(nextMin, displayedPriceRange.max),
                   });
                 }}
               />
@@ -1182,15 +1174,12 @@ export default function ProductsPage() {
                 type="range"
                 min={catalogPriceBounds.min}
                 max={catalogPriceBounds.max}
-                value={Math.max(effectivePriceRange.max, effectivePriceRange.min)}
+                value={Math.max(displayedPriceRange.max, displayedPriceRange.min)}
                 onChange={(e) => {
                   const nextMax = Number(e.target.value);
-                  setPriceRange((prev) => {
-                    const base = prev ?? catalogPriceBounds;
-                    return {
-                      min: Math.min(base.min, nextMax),
-                      max: nextMax,
-                    };
+                  setPriceRange({
+                    min: Math.min(displayedPriceRange.min, nextMax),
+                    max: nextMax,
                   });
                 }}
               />
