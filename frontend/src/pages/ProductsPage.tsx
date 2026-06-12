@@ -147,6 +147,13 @@ export default function ProductsPage() {
     loadProducts();
   }, []);
 
+  useEffect(() => {
+    document.body.classList.add("products-page-body");
+    return () => {
+      document.body.classList.remove("products-page-body");
+    };
+  }, []);
+
   function getSurfaceM2(product: ProductViewDto) {
     if (!product.lengthCm || !product.widthCm) return 0;
     return (product.lengthCm * product.widthCm) / 10000;
@@ -849,11 +856,11 @@ export default function ProductsPage() {
       const matchType =
         type === "all" || normalizeText(product.type) === normalizeText(type);
 
-      const productCategory = normalizeValue(
-        getProductCategoryValue(product)
-      );
       const matchCategory =
-        productCategory === normalizeValue(selectedCategory);
+        normalizeValue(
+          product.category ??
+            (product as ProductViewDto & { categorie?: string | null }).categorie
+        ) === normalizeValue(selectedCategory);
 
       const productColors = splitValues(product.colors).map(canonicalColor);
       const matchColor =
