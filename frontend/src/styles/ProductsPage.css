@@ -3817,49 +3817,44 @@ body.products-page-body {
   background: #f2dfc1 !important;
 }
 
-.color-filter-list--premium {
-  display: grid !important;
-  grid-template-columns: 1fr 1fr !important;
-  gap: 10px !important;
-}
-
-.color-choice {
-  height: 38px !important;
-  padding: 0 10px !important;
-  border-radius: 999px !important;
-  border: 1px solid rgba(92, 62, 32, 0.12) !important;
-  background: rgba(255, 253, 247, 0.9) !important;
+.color-filter-dots {
   display: flex !important;
-  align-items: center !important;
-  gap: 8px !important;
-  cursor: pointer !important;
+  flex-wrap: wrap !important;
+  gap: 14px !important;
 }
 
-.color-choice-dot {
-  width: 18px !important;
-  height: 18px !important;
+.color-dot-premium {
+  width: 34px !important;
+  height: 34px !important;
+  padding: 0 !important;
   border-radius: 999px !important;
-  border: 2px solid white !important;
-  box-shadow: 0 0 0 1px rgba(92, 62, 32, 0.18) !important;
-  flex: 0 0 18px !important;
+  border: 1px solid rgba(92, 62, 32, 0.16) !important;
+  background: #fffaf0 !important;
+  display: grid !important;
+  place-items: center !important;
+  cursor: pointer !important;
+  transition: 0.22s ease !important;
 }
 
-.color-choice-label {
-  min-width: 0 !important;
-  color: #3a2418 !important;
-  font-size: 0.74rem !important;
-  font-weight: 850 !important;
-  white-space: nowrap !important;
-  overflow: hidden !important;
-  text-overflow: ellipsis !important;
+.color-dot-premium span {
+  width: 23px !important;
+  height: 23px !important;
+  border-radius: 999px !important;
+  border: 2px solid #fff !important;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.08) !important;
 }
 
-.color-choice--active {
+.color-dot-premium:hover {
+  transform: translateY(-2px) scale(1.05) !important;
+  box-shadow: 0 10px 22px rgba(55, 33, 13, 0.12) !important;
+}
+
+.color-dot-premium--active {
   border-color: #a9653b !important;
-  background: #fff2dc !important;
-  box-shadow: 0 8px 20px rgba(169, 101, 59, 0.14) !important;
+  background: #fff1dc !important;
+  box-shadow: 0 0 0 4px rgba(169, 101, 59, 0.14) !important;
 }
 
-.color-choice--active .color-choice-dot {
-  box-shadow: 0 0 0 1px white, 0 0 0 4px rgba(169, 101, 59, 0.32) !important;
+.color-dot-premium--active span {
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.08), 0 0 0 2px #fff !important;
 }

@@ -339,6 +339,13 @@ export default function ProductsPage() {
     black: { fr: "Noir", en: "Black" },
     blanc: { fr: "Blanc", en: "White" },
     white: { fr: "Blanc", en: "White" },
+    grey: { fr: "Gris", en: "Grey" },
+    gray: { fr: "Gris", en: "Grey" },
+    brown: { fr: "Marron", en: "Brown" },
+    marron: { fr: "Marron", en: "Brown" },
+    orange: { fr: "Orange", en: "Orange" },
+    mustard: { fr: "Moutarde", en: "Mustard" },
+    pink: { fr: "Rose", en: "Pink" },
     multicolore: { fr: "Multicolore", en: "Multicolor" },
   };
 
@@ -359,6 +366,11 @@ export default function ProductsPage() {
     grey: { fr: "Gris", en: "Grey" },
     gray: { fr: "Gris", en: "Grey" },
     gris: { fr: "Gris", en: "Grey" },
+    orange: { fr: "Orange", en: "Orange" },
+    mustard: { fr: "Moutarde", en: "Mustard" },
+    moutarde: { fr: "Moutarde", en: "Mustard" },
+    pink: { fr: "Rose", en: "Pink" },
+    rose: { fr: "Rose", en: "Pink" },
   };
 
   function canonicalColor(value?: string | null) {
@@ -368,32 +380,41 @@ export default function ProductsPage() {
     if (["vert", "green"].includes(key)) return "green";
     if (["noir", "black"].includes(key)) return "black";
     if (["blanc", "white"].includes(key)) return "white";
-    if (["beige"].includes(key)) return "beige";
+    if (["beige", "cream", "creme", "crème", "ivoire", "ivory"].includes(key))
+      return "beige";
+    if (["gris", "grise", "grey", "gray"].includes(key)) return "grey";
+    if (["marron", "brown"].includes(key)) return "brown";
+    if (["rose", "pink"].includes(key)) return "pink";
+    if (["moutarde", "mustard", "jaune", "yellow", "ocre", "ochre"].includes(key))
+      return "mustard";
+    if (["orange"].includes(key)) return "orange";
     if (["multicolore", "multicolor"].includes(key)) return "multicolore";
     return key;
   }
 
   function getColorBackground(key: string) {
-    const normalizedKey = canonicalColor(key);
-    if (normalizedKey === "multicolore") {
-      return "linear-gradient(135deg, #b45309, #2563eb, #16a34a, #db2777)";
-    }
-
-    const colorsMap: Record<string, string> = {
-      blue: "#1f4f9a",
-      red: "#b91c1c",
+    const map: Record<string, string> = {
+      blue: "#163f7a",
+      red: "#b31b1b",
       green: "#2f7d4f",
-      black: "#111827",
-      white: "#f8fafc",
-      grey: "#9ca3af",
-      gray: "#9ca3af",
-      brown: "#7c3f2a",
-      beige: "#d9c19b",
-      cream: "#efe2c5",
-      marron: "#7c3f2a",
+      black: "#171717",
+      white: "#f7f3ea",
+      grey: "#9b9b91",
+      gray: "#9b9b91",
+      beige: "#d7bc8f",
+      brown: "#7a432b",
+      marron: "#7a432b",
+      orange: "#c46a2b",
+      mustard: "#b98532",
+      moutarde: "#b98532",
+      pink: "#d8a39a",
+      rose: "#d8a39a",
+      multicolore:
+        "linear-gradient(135deg, #b31b1b 0%, #c46a2b 30%, #163f7a 60%, #2f7d4f 100%)",
     };
 
-    return colorsMap[normalizedKey] || "#d1b38a";
+    const normalizedKey = canonicalColor(key);
+    return map[normalizedKey] || "#d7bc8f";
   }
 
   function getColorLabel(value: string, lang: "fr" | "en") {
@@ -1043,14 +1064,16 @@ export default function ProductsPage() {
 
           <div className="filter-section">
             <h4>COULEUR</h4>
-            <div className="color-filter-list color-filter-list--premium">
+            <div className="color-filter-dots">
               {colorOptions.map((item) => (
                 <button
                   key={item.key}
                   type="button"
-                  className={`color-choice ${
+                  title={item.label}
+                  aria-label={item.label}
+                  className={`color-dot-premium ${
                     canonicalColor(color) === item.key
-                      ? "color-choice--active"
+                      ? "color-dot-premium--active"
                       : ""
                   }`}
                   onClick={() =>
@@ -1059,11 +1082,7 @@ export default function ProductsPage() {
                     )
                   }
                 >
-                  <span
-                    className="color-choice-dot"
-                    style={{ background: getColorBackground(item.key) }}
-                  />
-                  <span className="color-choice-label">{item.label}</span>
+                  <span style={{ background: getColorBackground(item.key) }} />
                 </button>
               ))}
             </div>
