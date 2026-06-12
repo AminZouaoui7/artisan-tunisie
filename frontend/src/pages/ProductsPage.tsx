@@ -12,6 +12,9 @@ import {
   X,
   ShoppingCart,
   CheckCircle2,
+  Leaf,
+  Ruler,
+  Hand,
   HeartHandshake,
   Eye,
   ChevronLeft,
@@ -1187,28 +1190,31 @@ export default function ProductsPage() {
                       <h2>{product.name}</h2>
 
                       <div className="product-card-specs">
-                        {product.material && (
-                          <div>
-                            <span>{t("home.fields.material")}</span>
-                            <strong>{product.material}</strong>
-                          </div>
-                        )}
+                        <div>
+                          <Leaf className="product-spec-icon" />
+                          <span>{language === "FR" ? "MATIÈRE" : "MATERIAL"}</span>
+                          <strong>{product.material || "-"}</strong>
+                        </div>
 
-                        {product.lengthCm && product.widthCm && (
-                          <div>
-                            <span>{t("home.fields.dimensions")}</span>
-                            <strong>
-                              {product.lengthCm} × {product.widthCm} cm
-                            </strong>
-                          </div>
-                        )}
+                        <div>
+                          <Ruler className="product-spec-icon" />
+                          <span>
+                            {language === "FR" ? "DIMENSIONS" : "DIMENSIONS"}
+                          </span>
+                          <strong>
+                            {product.lengthCm && product.widthCm
+                              ? `${product.lengthCm} × ${product.widthCm} cm`
+                              : product.dimensions || "-"}
+                          </strong>
+                        </div>
 
-                        {product.technique && (
-                          <div>
-                            <span>{t("home.fields.technique")}</span>
-                            <strong>{product.technique}</strong>
-                          </div>
-                        )}
+                        <div>
+                          <Hand className="product-spec-icon" />
+                          <span>
+                            {language === "FR" ? "TECHNIQUE" : "TECHNIQUE"}
+                          </span>
+                          <strong>{product.technique || "-"}</strong>
+                        </div>
                       </div>
 
                       <div
