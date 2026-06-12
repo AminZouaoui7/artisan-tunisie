@@ -3732,6 +3732,7 @@ body.products-page-body {
   display: flex !important;
   flex-direction: column !important;
   align-items: center !important;
+  justify-content: center !important;
   text-align: center !important;
   gap: 5px !important;
   padding: 0 12px !important;
@@ -3746,10 +3747,25 @@ body.products-page-body {
 }
 
 .product-spec-icon {
-  width: 24px !important;
-  height: 24px !important;
+  width: 32px !important;
+  height: 32px !important;
   color: rgba(92, 62, 32, 0.62) !important;
   margin-bottom: 6px !important;
+}
+
+.product-spec-icon--wool svg {
+  width: 32px;
+  height: 32px;
+  stroke: #9b7b62;
+  stroke-width: 1.8;
+  fill: none;
+}
+
+.product-spec-dimension {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
 }
 
 .product-card-specs span {
@@ -3764,8 +3780,12 @@ body.products-page-body {
 .product-card-specs strong {
   margin: 0 !important;
   color: #1f1712 !important;
-  font-size: 0.95rem !important;
+  font-size: 1rem !important;
   font-weight: 950 !important;
+  line-height: 1.2 !important;
+  text-align: center !important;
+  white-space: normal !important;
+  word-break: keep-all !important;
 }
 
 .product-buy-zone {
@@ -3774,10 +3794,10 @@ body.products-page-body {
   background: transparent !important;
   border: 0 !important;
   box-shadow: none !important;
-  display: flex !important;
-  align-items: flex-end !important;
-  justify-content: space-between !important;
-  gap: 16px !important;
+  display: grid !important;
+  grid-template-columns: auto 1fr !important;
+  align-items: center !important;
+  gap: 18px !important;
 }
 
 .product-price-label {
@@ -3807,13 +3827,15 @@ body.products-page-body {
   display: grid !important;
   grid-template-columns: 1fr 1fr !important;
   gap: 12px !important;
-  width: min(340px, 100%) !important;
+  min-width: 260px !important;
+  width: 260px !important;
 }
 
 .product-detail-btn,
 .product-cart-btn {
   min-width: 0 !important;
-  height: 52px !important;
+  height: 54px !important;
+  width: 100% !important;
   border-radius: 18px !important;
   font-size: 0.82rem !important;
   font-weight: 950 !important;
@@ -3840,6 +3862,7 @@ body.products-page-body {
 }
 
 .product-cart-btn {
+  min-width: 120px !important;
   border: 0 !important;
   background: linear-gradient(135deg, #9c4d2a, #4a1c0f) !important;
   color: #fff8e9 !important;
@@ -3869,12 +3892,12 @@ body.products-page-body {
   }
 
   .product-buy-zone {
-    align-items: stretch !important;
-    flex-direction: column !important;
+    grid-template-columns: 1fr !important;
   }
 
   .product-actions-row {
     width: 100% !important;
+    min-width: 0 !important;
     grid-template-columns: 1fr 1fr !important;
   }
 }

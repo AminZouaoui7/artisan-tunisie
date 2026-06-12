@@ -12,7 +12,6 @@ import {
   X,
   ShoppingCart,
   CheckCircle2,
-  Leaf,
   Ruler,
   Hand,
   HeartHandshake,
@@ -1191,12 +1190,23 @@ export default function ProductsPage() {
 
                       <div className="product-card-specs">
                         <div>
-                          <Leaf className="product-spec-icon" />
+                          <span
+                            className="product-spec-icon product-spec-icon--wool"
+                            aria-hidden="true"
+                          >
+                            <svg viewBox="0 0 48 48">
+                              <path d="M12 22c0-7 7-12 12-12s12 5 12 12c0 6-6 10-12 10S12 28 12 22Z" />
+                              <path d="M16 22c2-3 5-5 8-5s6 2 8 5" />
+                              <path d="M15 27c2-2 5-3 9-3s7 1 9 3" />
+                              <path d="M18 31c-2 2-3 4-3 6 0 4 4 7 9 7s9-3 9-7c0-2-1-4-3-6" />
+                              <path d="M22 44c-4 3-10 2-14 0" />
+                            </svg>
+                          </span>
                           <span>{language === "FR" ? "MATIÈRE" : "MATERIAL"}</span>
                           <strong>{product.material || "-"}</strong>
                         </div>
 
-                        <div>
+                        <div className="product-spec-dimension">
                           <Ruler className="product-spec-icon" />
                           <span>
                             {language === "FR" ? "DIMENSIONS" : "DIMENSIONS"}
