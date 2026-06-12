@@ -3948,3 +3948,99 @@ body.products-page-body {
     transform: none !important;
   }
 }
+
+.product-buy-zone {
+  margin-top: 16px !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  display: grid !important;
+  gap: 14px !important;
+}
+
+.product-price-box {
+  padding: 0 !important;
+  border: 0 !important;
+}
+
+.product-price-label {
+  margin: 0 0 4px !important;
+  font-size: 0.68rem !important;
+  letter-spacing: 0.14em !important;
+  color: rgba(45, 27, 19, 0.45) !important;
+}
+
+.product-price {
+  font-size: 1.35rem !important;
+  font-weight: 950 !important;
+  color: #2d1b13 !important;
+}
+
+.product-actions-row {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 10px !important;
+  width: 100% !important;
+}
+
+.product-detail-btn,
+.product-cart-btn {
+  width: 100% !important;
+  min-width: 0 !important;
+  height: 44px !important;
+  border-radius: 999px !important;
+  font-size: 0.82rem !important;
+  font-weight: 950 !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+}
+
+.product-detail-btn {
+  background: #fffaf0 !important;
+  border: 1px solid rgba(92, 62, 32, 0.16) !important;
+  color: #3a2418 !important;
+  box-shadow: none !important;
+}
+
+.product-cart-btn {
+  background: linear-gradient(135deg, #9c4d2a, #4a1c0f) !important;
+  color: #fff8e9 !important;
+  box-shadow: 0 10px 22px rgba(82, 38, 18, 0.18) !important;
+}
+
+.product-cart-icon {
+  display: none !important;
+}
+
+.product-detail-btn svg,
+.product-cart-btn svg {
+  display: none !important;
+}
+
+.product-buy-zone--request {
+  padding: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+}
+
+.product-buy-zone--request .product-actions-row {
+  grid-template-columns: 1fr 1.25fr !important;
+}
+
+.product-price-request {
+  font-size: 1rem !important;
+  color: #7b3b20 !important;
+  font-weight: 950 !important;
+}
+
+@media (max-width: 680px) {
+  .product-actions-row {
+    grid-template-columns: 1fr !important;
+  }
+
+  .product-detail-btn,
+  .product-cart-btn {
+    height: 46px !important;
+  }
+}
