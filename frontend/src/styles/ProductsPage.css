@@ -3901,7 +3901,6 @@ body.products-page-body {
   position: relative !important;
   width: 100% !important;
   height: 100% !important;
-  display: block !important;
   overflow: hidden !important;
 }
 
@@ -3912,30 +3911,56 @@ body.products-page-body {
   height: 100% !important;
   object-fit: contain !important;
   padding: 18px 24px !important;
+  will-change: opacity, transform, filter !important;
   transition:
-    opacity 0.45s ease,
-    transform 0.55s ease,
-    filter 0.55s ease !important;
+    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.85s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 0.85s cubic-bezier(0.22, 1, 0.36, 1) !important;
 }
 
 .product-image--primary {
   opacity: 1 !important;
-  transform: translateX(0) scale(1) !important;
+  transform: scale(1) translateY(0) !important;
+  filter: drop-shadow(0 16px 18px rgba(37, 22, 8, 0.14)) !important;
 }
 
 .product-image--hover {
   opacity: 0 !important;
-  transform: translateX(18px) scale(1.03) !important;
+  transform: scale(1.035) translateY(10px) !important;
+  filter: drop-shadow(0 22px 24px rgba(37, 22, 8, 0.18)) blur(1px) !important;
 }
 
 .product-card:hover .product-image--primary {
   opacity: 0 !important;
-  transform: translateX(-18px) scale(1.02) !important;
+  transform: scale(0.985) translateY(-10px) !important;
+  filter: drop-shadow(0 10px 12px rgba(37, 22, 8, 0.08)) blur(1px) !important;
 }
 
 .product-card:hover .product-image--hover {
   opacity: 1 !important;
-  transform: translateX(0) scale(1.04) !important;
+  transform: scale(1.015) translateY(0) !important;
+  filter: drop-shadow(0 24px 24px rgba(37, 22, 8, 0.2)) blur(0) !important;
+}
+
+.product-card-image-frame::before {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 1 !important;
+  opacity: 0 !important;
+  background:
+    radial-gradient(circle at 50% 55%, rgba(255, 255, 255, 0.42), transparent 42%),
+    linear-gradient(180deg, rgba(255, 250, 235, 0.18), rgba(234, 208, 166, 0.22)) !important;
+  transition: opacity 0.65s ease !important;
+  pointer-events: none !important;
+}
+
+.product-card:hover .product-card-image-frame::before {
+  opacity: 1 !important;
+}
+
+.product-card-image-hover-wrap .product-image {
+  z-index: 2 !important;
 }
 
 @media (hover: none) {
@@ -3946,6 +3971,7 @@ body.products-page-body {
   .product-card:hover .product-image--primary {
     opacity: 1 !important;
     transform: none !important;
+    filter: none !important;
   }
 }
 
