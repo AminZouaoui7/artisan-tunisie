@@ -56,10 +56,8 @@ export default function ProductsPage() {
   const [selectedSizes, setSelectedSizes] = useState<SizeBucket[]>([]);
   const [selectedMaterials, setSelectedMaterials] = useState<string[]>([]);
   const [selectedTechniques, setSelectedTechniques] = useState<string[]>([]);
-  const [priceRange, setPriceRange] = useState<{ min: number; max: number } | null>(
-    null
-  );
   const [selectedCategory, setSelectedCategory] = useState("all");
+  const [selectedPrice, setSelectedPrice] = useState("all");
 
   const normalizeValue = (value?: string | null) =>
     (value ?? "")
@@ -104,6 +102,14 @@ export default function ProductsPage() {
       label: "Kilim extra fin",
       subtitle: "Finesse & élégance",
     },
+  ];
+
+  const priceOptions = [
+    { key: "all", label: "Tous les prix", min: null as number | null, max: null as number | null },
+    { key: "under500", label: "Moins de 500 €", min: 0, max: 500 },
+    { key: "500to1000", label: "500 € – 1 000 €", min: 500, max: 1000 },
+    { key: "1000to1500", label: "1 000 € – 1 500 €", min: 1000, max: 1500 },
+    { key: "over1500", label: "Plus de 1 500 €", min: 1500, max: null },
   ];
 
   const productsCatalogRef = useRef<HTMLDivElement | null>(null);
@@ -755,13 +761,31 @@ export default function ProductsPage() {
     }
   }
 
-  const colors = useMemo(() => {
-    const allColors = visibleCatalogProducts.flatMap((product) =>
-      splitValues(product.colors).map(canonicalColor)
-    );
+  const colorOptions = useMemo(() => {
+    const map = new Map<
+      string,
+      {
+        key: string;
+        label: string;
+      }
+    >();
 
-    return ["all", ...Array.from(new Set(allColors)).filter(Boolean).sort()];
-  }, [visibleCatalogProducts]);
+    visibleCatalogProducts.forEach((product) => {
+      splitValues(product.colors).forEach((raw) => {
+        const key = canonicalColor(raw);
+        if (!key) return;
+
+        if (!map.has(key)) {
+          map.set(key, {
+            key,
+            label: getColorLabel(key, language === "FR" ? "fr" : "en"),
+          });
+        }
+      });
+    });
+
+    return Array.from(map.values());
+  }, [visibleCatalogProducts, language]);
 
   function getSizeLabel(product: ProductViewDto) {
     const surface = getSurfaceM2(product);
@@ -812,22 +836,6 @@ export default function ProductsPage() {
       .sort((a, b) => a.label.localeCompare(b.label));
   }, [visibleCatalogProducts]);
 
-  const catalogPriceBounds = useMemo(() => {
-    const prices = visibleCatalogProducts
-      .map((product) => product.price)
-      .filter((value): value is number => typeof value === "number" && Number.isFinite(value));
-
-    if (!prices.length) return { min: 0, max: 0 };
-
-    return {
-      min: Math.floor(Math.min(...prices)),
-      max: Math.ceil(Math.max(...prices)),
-    };
-  }, [visibleCatalogProducts]);
-
-  const effectivePriceRange = priceRange;
-  const displayedPriceRange = priceRange ?? catalogPriceBounds;
-
   const hasActiveFilters = Boolean(
     search.trim() ||
       selectedCategory !== "all" ||
@@ -835,7 +843,7 @@ export default function ProductsPage() {
       selectedSizes.length > 0 ||
       selectedMaterials.length > 0 ||
       selectedTechniques.length > 0 ||
-      priceRange !== null
+      selectedPrice !== "all"
   );
 
   const filteredProducts = useMemo(() => {
@@ -885,12 +893,16 @@ export default function ProductsPage() {
         selectedTechniques.length === 0 ||
         productTechniques.some((k) => selectedTechniques.includes(k));
 
+      const selectedPriceOption = priceOptions.find(
+        (item) => item.key === selectedPrice
+      );
+
       const matchPrice =
-        !effectivePriceRange ||
+        selectedPrice === "all" ||
         typeof product.price !== "number" ||
         !Number.isFinite(product.price) ||
-        (product.price >= effectivePriceRange.min &&
-          product.price <= effectivePriceRange.max);
+        ((selectedPriceOption?.min == null || product.price >= selectedPriceOption.min) &&
+          (selectedPriceOption?.max == null || product.price <= selectedPriceOption.max));
 
       return (
         matchSearch &&
@@ -912,7 +924,7 @@ export default function ProductsPage() {
     selectedSizes,
     selectedMaterials,
     selectedTechniques,
-    effectivePriceRange,
+    selectedPrice,
     hasActiveFilters,
   ]);
 
@@ -923,7 +935,7 @@ export default function ProductsPage() {
     setSelectedSizes([]);
     setSelectedMaterials([]);
     setSelectedTechniques([]);
-    setPriceRange(null);
+    setSelectedPrice("all");
   }
 
   const productDetailHighlights = detailProduct
@@ -1057,51 +1069,48 @@ export default function ProductsPage() {
           <div className="filter-section">
             <h4>COULEUR</h4>
             <div className="color-filter-list">
-              {colors
-                .filter((item) => item !== "all")
-                .map((item) => {
-                  const canonical = canonicalColor(item);
-                  const isActive = canonicalColor(color) === canonical;
-                  const label = getColorLabel(item, language === "FR" ? "fr" : "en");
-                  const background =
-                    canonical === "multicolore"
-                      ? "linear-gradient(135deg, #b45309, #2563eb, #16a34a, #db2777)"
-                      : canonical === "blue"
-                        ? "#2563eb"
-                        : canonical === "red"
-                          ? "#dc2626"
-                          : canonical === "green"
-                            ? "#16a34a"
-                            : canonical === "black"
-                              ? "#111827"
-                              : canonical === "white"
-                                ? "#f8fafc"
-                                : canonical === "grey"
+              {colorOptions.map((option) => {
+                const canonical = canonicalColor(option.key);
+                const isActive = canonicalColor(color) === canonical;
+                const background =
+                  canonical === "multicolore"
+                    ? "linear-gradient(135deg, #b45309, #2563eb, #16a34a, #db2777)"
+                    : canonical === "blue"
+                      ? "#2563eb"
+                      : canonical === "red"
+                        ? "#dc2626"
+                        : canonical === "green"
+                          ? "#16a34a"
+                          : canonical === "black"
+                            ? "#111827"
+                            : canonical === "white"
+                              ? "#f8fafc"
+                              : canonical === "grey"
+                                ? "#9ca3af"
+                                : canonical === "gray"
                                   ? "#9ca3af"
-                                  : canonical === "gray"
-                                    ? "#9ca3af"
-                                    : canonical === "brown"
-                                      ? "#7c3f2a"
-                                      : canonical === "beige"
-                                        ? "#e7d3b1"
-                                        : "#d1b38a";
+                                  : canonical === "brown"
+                                    ? "#7c3f2a"
+                                    : canonical === "beige"
+                                      ? "#e7d3b1"
+                                      : "#d1b38a";
 
-                  return (
-                    <button
-                      key={item}
-                      type="button"
-                      aria-label={label}
-                      title={label}
-                      className={`color-dot ${isActive ? "color-dot--active" : ""}`}
-                      style={{ background }}
-                      onClick={() =>
-                        setColor((prev) =>
-                          canonicalColor(prev) === canonical ? "all" : canonical
-                        )
-                      }
-                    />
-                  );
-                })}
+                return (
+                  <button
+                    key={option.key}
+                    type="button"
+                    aria-label={option.label}
+                    title={option.label}
+                    className={`color-dot ${isActive ? "color-dot--active" : ""}`}
+                    style={{ background }}
+                    onClick={() =>
+                      setColor((prev) =>
+                        canonicalColor(prev) === canonical ? "all" : canonical
+                      )
+                    }
+                  />
+                );
+              })}
             </div>
           </div>
 
@@ -1147,42 +1156,19 @@ export default function ProductsPage() {
 
           <div className="filter-section">
             <h4>PRIX</h4>
-            <div className="filter-option">
-              <span>
-                {displayedPriceRange.min} € – {displayedPriceRange.max} €
-              </span>
-            </div>
-            <div className="filter-option">
-              <span>Min</span>
-              <input
-                type="range"
-                min={catalogPriceBounds.min}
-                max={catalogPriceBounds.max}
-                value={Math.min(displayedPriceRange.min, displayedPriceRange.max)}
-                onChange={(e) => {
-                  const nextMin = Number(e.target.value);
-                  setPriceRange({
-                    min: nextMin,
-                    max: Math.max(nextMin, displayedPriceRange.max),
-                  });
-                }}
-              />
-            </div>
-            <div className="filter-option">
-              <span>Max</span>
-              <input
-                type="range"
-                min={catalogPriceBounds.min}
-                max={catalogPriceBounds.max}
-                value={Math.max(displayedPriceRange.max, displayedPriceRange.min)}
-                onChange={(e) => {
-                  const nextMax = Number(e.target.value);
-                  setPriceRange({
-                    min: Math.min(displayedPriceRange.min, nextMax),
-                    max: nextMax,
-                  });
-                }}
-              />
+            <div className="price-filter-list">
+              {priceOptions.map((option) => (
+                <button
+                  key={option.key}
+                  type="button"
+                  className={`price-filter-chip ${
+                    selectedPrice === option.key ? "price-filter-chip--active" : ""
+                  }`}
+                  onClick={() => setSelectedPrice(option.key)}
+                >
+                  {option.label}
+                </button>
+              ))}
             </div>
           </div>
 
