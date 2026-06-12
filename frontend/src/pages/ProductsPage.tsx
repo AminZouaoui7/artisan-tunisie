@@ -33,6 +33,7 @@ import {
 } from "../services/productService";
 import { createPriceRequest } from "../services/priceRequestService";
 import { useCurrency } from "../context/CurrencyContext";
+import productsHeroImage from "../assets/3e1db467-54fd-42b2-8d1e-69621087379f.png";
 import "../styles/ProductsPage.css";
 import { useI18n } from "../i18n/i18n";
 
@@ -55,6 +56,47 @@ export default function ProductsPage() {
   const [color, setColor] = useState("all");
   const [size, setSize] = useState<SizeFilter>("all");
   const [space, setSpace] = useState("all");
+  const [selectedCategory, setSelectedCategory] = useState("all");
+
+  const normalizeValue = (value?: string | null) =>
+    (value ?? "")
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/\p{Diacritic}/gu, "")
+      .trim();
+
+  const categoryFilters = [
+    {
+      key: "all",
+      label: "Tous les tapis",
+      subtitle: "Voir tout",
+    },
+    {
+      key: "margoum tisser berber",
+      label: "Margoum",
+      subtitle: "Tissé berbère",
+    },
+    {
+      key: "kilim berber",
+      label: "Kilim berbère",
+      subtitle: "Tissé à plat",
+    },
+    {
+      key: "margoum berber",
+      label: "Margoum berbère",
+      subtitle: "Tissé épais",
+    },
+    {
+      key: "killim toujen",
+      label: "Kilim Toujen",
+      subtitle: "Motifs traditionnels",
+    },
+    {
+      key: "killim extra fin",
+      label: "Kilim extra fin",
+      subtitle: "Finesse & élégance",
+    },
+  ];
 
   const [selectedProduct, setSelectedProduct] =
     useState<ProductViewDto | null>(null);
@@ -457,6 +499,39 @@ export default function ProductsPage() {
     return [];
   }
 
+  function getProductCategoryValue(product: ProductViewDto) {
+    const fallbackCategory = (product as ProductViewDto & { categorie?: string | null })
+      .categorie;
+    return product.category ?? fallbackCategory ?? "";
+  }
+
+  function getCategoryImage(categoryKey: string) {
+    const normalizedKey = normalizeValue(categoryKey);
+
+    const fallbackProduct = products[0];
+    const fallbackImage =
+      fallbackProduct?.fullMainImageUrl ||
+      fallbackProduct?.mainImageUrl ||
+      fallbackProduct?.fullImages?.[0] ||
+      getProductImages(fallbackProduct || null)[0] ||
+      "";
+
+    const productForCategory = products.find((product) => {
+      const productCategory = normalizeValue(getProductCategoryValue(product));
+      return productCategory === normalizedKey;
+    });
+
+    if (!productForCategory) return fallbackImage;
+
+    return (
+      productForCategory.fullMainImageUrl ||
+      productForCategory.mainImageUrl ||
+      productForCategory.fullImages?.[0] ||
+      getProductImages(productForCategory)[0] ||
+      fallbackImage
+    );
+  }
+
   const visibleCatalogProducts = useMemo(() => {
     return diversifyProducts(getVisibleVariantProducts(products));
   }, [products]);
@@ -744,7 +819,12 @@ export default function ProductsPage() {
   );
 
   const hasActiveFilters = Boolean(
-    search.trim() || type !== "all" || color !== "all" || size !== "all" || space !== "all"
+    search.trim() ||
+      selectedCategory !== "all" ||
+      type !== "all" ||
+      color !== "all" ||
+      size !== "all" ||
+      space !== "all"
   );
 
   const filteredProducts = useMemo(() => {
@@ -769,6 +849,13 @@ export default function ProductsPage() {
       const matchType =
         type === "all" || normalizeText(product.type) === normalizeText(type);
 
+      const productCategory = normalizeValue(
+        getProductCategoryValue(product)
+      );
+      const matchCategory =
+        selectedCategory === "all" ||
+        productCategory === normalizeValue(selectedCategory);
+
       const productColors = splitValues(product.colors).map(canonicalColor);
       const matchColor =
         color === "all" || productColors.includes(canonicalColor(color));
@@ -783,6 +870,7 @@ export default function ProductsPage() {
 
       return (
         matchSearch &&
+        matchCategory &&
         matchType &&
         matchColor &&
         matchSizeFilter(product) &&
@@ -794,6 +882,7 @@ export default function ProductsPage() {
   }, [
     visibleCatalogProducts,
     search,
+    selectedCategory,
     type,
     color,
     space,
@@ -803,6 +892,7 @@ export default function ProductsPage() {
 
   function resetFilters() {
     setSearch("");
+    setSelectedCategory("all");
     setType("all");
     setColor("all");
     setSize("all");
@@ -858,273 +948,324 @@ export default function ProductsPage() {
 
   return (
     <section className="products-page">
-      <div className="products-hero">
-        <p className="page-kicker">{t("products.kicker")}</p>
-        <h1 className="page-title">{t("products.title")}</h1>
-        <p className="page-description">{t("products.description")}</p>
-      </div>
-
-      <div className="products-toolbar">
-        <div className="products-toolbar-title">
-          <SlidersHorizontal size={18} />
-          <span>{t("products.filterTitle")}</span>
+      <section className="products-hero-premium">
+        <img src={productsHeroImage} alt="Nos tapis artisanaux" />
+        <div className="products-hero-overlay">
+          <div className="products-breadcrumb">
+            ACCUEIL <span>›</span> NOS TAPIS
+          </div>
+          <h1>Nos tapis</h1>
+          <div className="products-hero-separator"></div>
+          <p>
+            Découvrez notre sélection de tapis artisanaux tunisiens, façonnés à
+            la main avec héritage, matières nobles et savoir-faire.
+          </p>
         </div>
+      </section>
 
-        <div className="products-filter-bar">
-          <div className="products-filter-search">
-            <Search size={17} />
-            <input
-              type="text"
-              placeholder={
-                language === "FR" ? "Rechercher un tapis..." : "Search for a rug..."
-              }
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
+      <section className="products-category-panel">
+        <p className="products-category-title">PARCOURIR PAR CATÉGORIE</p>
+
+        <div className="products-category-list">
+          {categoryFilters.map((category) => (
+            <button
+              key={category.key}
+              type="button"
+              className={`products-category-card ${
+                selectedCategory === category.key
+                  ? "products-category-card--active"
+                  : ""
+              }`}
+              onClick={() => setSelectedCategory(category.key)}
+            >
+              <div className="products-category-thumb">
+                {category.key === "all" ? (
+                  <span className="products-category-grid-icon">▦</span>
+                ) : (
+                  <img src={getCategoryImage(category.key)} alt={category.label} />
+                )}
+              </div>
+
+              <div>
+                <strong>{category.label}</strong>
+                <span>{category.subtitle}</span>
+              </div>
+            </button>
+          ))}
+        </div>
+      </section>
+
+      <div className="products-layout">
+        <aside className="products-sidebar-filters">
+          <div className="products-toolbar-title">
+            <SlidersHorizontal size={18} />
+            <span>{t("products.filterTitle")}</span>
           </div>
 
-          <select value={type} onChange={(e) => setType(e.target.value)}>
-            {types.map((item) => (
-              <option key={item} value={item}>
-                {item === "all" ? "Type" : item}
+          <div className="products-filter-bar">
+            <div className="products-filter-search">
+              <Search size={17} />
+              <input
+                type="text"
+                placeholder={
+                  language === "FR"
+                    ? "Rechercher un tapis..."
+                    : "Search for a rug..."
+                }
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+            </div>
+
+            <select value={type} onChange={(e) => setType(e.target.value)}>
+              {types.map((item) => (
+                <option key={item} value={item}>
+                  {item === "all" ? "Type" : item}
+                </option>
+              ))}
+            </select>
+
+            <select
+              value={size}
+              onChange={(e) => setSize(e.target.value as SizeFilter)}
+            >
+              <option value="all">
+                {language === "FR" ? "Taille" : "Size"}
               </option>
-            ))}
-          </select>
+              <option value="small">{t("products.sizeFilter.small")}</option>
+              <option value="medium">{t("products.sizeFilter.medium")}</option>
+              <option value="large">{t("products.sizeFilter.large")}</option>
+              <option value="xl">{t("products.sizeFilter.xl")}</option>
+            </select>
 
-          <select
-            value={size}
-            onChange={(e) => setSize(e.target.value as SizeFilter)}
-          >
-            <option value="all">{language === "FR" ? "Taille" : "Size"}</option>
-            <option value="small">{t("products.sizeFilter.small")}</option>
-            <option value="medium">{t("products.sizeFilter.medium")}</option>
-            <option value="large">{t("products.sizeFilter.large")}</option>
-            <option value="xl">{t("products.sizeFilter.xl")}</option>
-          </select>
+            <select value={color} onChange={(e) => setColor(e.target.value)}>
+              {colors.map((item) => (
+                <option key={item} value={item}>
+                  {item === "all"
+                    ? language === "FR"
+                      ? "Couleur"
+                      : "Color"
+                    : getColorLabel(item, language === "FR" ? "fr" : "en")}
+                </option>
+              ))}
+            </select>
 
-          <select value={color} onChange={(e) => setColor(e.target.value)}>
-            {colors.map((item) => (
-              <option key={item} value={item}>
-                {item === "all"
-                  ? language === "FR"
-                    ? "Couleur"
-                    : "Color"
-                  : getColorLabel(item, language === "FR" ? "fr" : "en")}
-              </option>
-            ))}
-          </select>
+            <select value={space} onChange={(e) => setSpace(e.target.value)}>
+              {spaces.map((item) => (
+                <option key={item} value={item}>
+                  {item === "all"
+                    ? language === "FR"
+                      ? "Pièce"
+                      : "Space"
+                    : getSpaceLabel(item, language === "FR" ? "fr" : "en")}
+                </option>
+              ))}
+            </select>
 
-          <select value={space} onChange={(e) => setSpace(e.target.value)}>
-            {spaces.map((item) => (
-              <option key={item} value={item}>
-                {item === "all"
-                  ? language === "FR"
-                    ? "Pièce"
-                    : "Space"
-                  : getSpaceLabel(item, language === "FR" ? "fr" : "en")}
-              </option>
-            ))}
-          </select>
+            {hasActiveFilters && (
+              <button type="button" onClick={resetFilters}>
+                {language === "FR" ? "Réinitialiser" : "Reset"}
+              </button>
+            )}
+          </div>
+        </aside>
 
-          {hasActiveFilters && (
-            <button type="button" onClick={resetFilters}>
-              {language === "FR" ? "Réinitialiser" : "Reset"}
-            </button>
+        <main className="products-catalog">
+          <div className="products-catalog-header">
+            <p className="products-count-line">
+              {language === "FR"
+                ? `${filteredProducts.length} tapis ${
+                    filteredProducts.length === 1 ? "trouvé" : "trouvés"
+                  }`
+                : `${filteredProducts.length} rug${
+                    filteredProducts.length === 1 ? "" : "s"
+                  } found`}
+            </p>
+          </div>
+
+          {loading && (
+            <div className="products-state">
+              <div className="products-loader"></div>
+              <p>{t("products.loading")}</p>
+            </div>
           )}
-        </div>
-      </div>
 
-      <p className="products-count-line">
-        {language === "FR"
-          ? `${filteredProducts.length} tapis ${
-              filteredProducts.length === 1 ? "trouvé" : "trouvés"
-            }`
-          : `${filteredProducts.length} rug${
-              filteredProducts.length === 1 ? "" : "s"
-            } found`}
-      </p>
+          {!loading && errorKey && (
+            <div className="products-state products-error">
+              <p>{t(errorKey)}</p>
+            </div>
+          )}
 
-      {loading && (
-        <div className="products-state">
-          <div className="products-loader"></div>
-          <p>{t("products.loading")}</p>
-        </div>
-      )}
+          {!loading && !errorKey && filteredProducts.length === 0 && (
+            <div className="products-state">
+              <p>{t("products.empty")}</p>
+            </div>
+          )}
 
-      {!loading && errorKey && (
-        <div className="products-state products-error">
-          <p>{t(errorKey)}</p>
-        </div>
-      )}
+          {!loading && !errorKey && filteredProducts.length > 0 && (
+            <div className="products-grid">
+              {filteredProducts.map((product) => {
+                const isAdded = addedProductId === product.id;
+                const hasVisiblePrice = shouldShowProductPrice(product);
+                const showPriceOnRequest = shouldShowPriceOnRequest(product);
 
-      {!loading && !errorKey && filteredProducts.length === 0 && (
-        <div className="products-state">
-          <p>{t("products.empty")}</p>
-        </div>
-      )}
+                const productImages = getProductImages(product);
+                const coverImage = productImages[0];
 
-      {!loading && !errorKey && filteredProducts.length > 0 && (
-        <div className="products-grid">
-          {filteredProducts.map((product) => {
-            const isAdded = addedProductId === product.id;
-            const hasVisiblePrice = shouldShowProductPrice(product);
-            const showPriceOnRequest = shouldShowPriceOnRequest(product);
-
-            const productImages = getProductImages(product);
-            const coverImage = productImages[0];
-
-            return (
-              <article key={product.id} className="product-card">
-                <div className="product-card-media">
-                  <button
-                    type="button"
-                    className="product-card-image-frame"
-                    onClick={() => openDetailProduct(product)}
-                  >
-                    {coverImage ? (
-                      <img
-                        src={coverImage}
-                        alt={product.name}
-                        className="product-image"
-                      />
-                    ) : (
-                      <div className="product-image-placeholder">
-                        {t("products.imageUnavailable")}
-                      </div>
-                    )}
-                  </button>
-
-                  <div className="product-card-badges">
-                    {product.isFeatured && (
-                      <span className="product-badge product-badge-featured">
-                        {t("products.featured")}
-                      </span>
-                    )}
-
-                    {product.isUniquePiece && (
-                      <span className="product-badge product-badge-unique">
-                        {t("products.unique")}
-                      </span>
-                    )}
-                  </div>
-                </div>
-
-                <div className="product-content">
-                  <div className="product-meta product-meta--compact">
-                    {product.type && <span>{product.type}</span>}
-                    {product.region && <span>{product.region}</span>}
-                    <span>{getSizeLabel(product)}</span>
-                  </div>
-
-                  <h2>{product.name}</h2>
-
-                  <div className="product-card-specs">
-                    {product.material && (
-                      <div>
-                        <span>{t("home.fields.material")}</span>
-                        <strong>{product.material}</strong>
-                      </div>
-                    )}
-
-                    {product.lengthCm && product.widthCm && (
-                      <div>
-                        <span>{t("home.fields.dimensions")}</span>
-                        <strong>
-                          {product.lengthCm} × {product.widthCm} cm
-                        </strong>
-                      </div>
-                    )}
-
-                    {product.technique && (
-                      <div>
-                        <span>{t("home.fields.technique")}</span>
-                        <strong>{product.technique}</strong>
-                      </div>
-                    )}
-                  </div>
-
-                  <div
-                    className={`product-buy-zone ${
-                      showPriceOnRequest ? "product-buy-zone--request" : ""
-                    }`}
-                  >
-                    <div className="product-price-box">
-                      <p className="product-price-label">
-                        {hasVisiblePrice
-                          ? t("products.price")
-                          : showPriceOnRequest
-                          ? t("products.priceOnRequest")
-                          : t("products.price")}
-                      </p>
-
-                      <strong
-                        className={
-                          hasVisiblePrice
-                            ? "product-price"
-                            : "product-price-request"
-                        }
-                      >
-                        {hasVisiblePrice
-                          ? formatPrice(product.price)
-                          : showPriceOnRequest
-                          ? t("products.priceOnRequest")
-                          : "-"}
-                      </strong>
-                    </div>
-
-                    <div className="product-actions-row">
+                return (
+                  <article key={product.id} className="product-card">
+                    <div className="product-card-media">
                       <button
                         type="button"
-                        className="product-detail-btn"
+                        className="product-card-image-frame"
                         onClick={() => openDetailProduct(product)}
                       >
-                        <Eye size={16} />
-                        {t("products.viewDetails")}
+                        {coverImage ? (
+                          <img
+                            src={coverImage}
+                            alt={product.name}
+                            className="product-image"
+                          />
+                        ) : (
+                          <div className="product-image-placeholder">
+                            {t("products.imageUnavailable")}
+                          </div>
+                        )}
                       </button>
 
-                      {hasVisiblePrice ? (
-                        <button
-                          type="button"
-                          className={`product-cart-btn ${
-                            isAdded ? "product-cart-btn--added" : ""
-                          }`}
-                          onClick={() => handleAddToCart(product)}
-                          disabled={loadingAuth}
-                        >
-                          <span className="product-cart-icon">
-                            {isAdded ? (
-                              <CheckCircle2 size={17} />
-                            ) : (
-                              <ShoppingCart size={17} />
-                            )}
+                      <div className="product-card-badges">
+                        {product.isFeatured && (
+                          <span className="product-badge product-badge-featured">
+                            {t("products.featured")}
                           </span>
-                          <span>
-                            {isAdded ? t("products.added") : t("products.cart")}
+                        )}
+
+                        {product.isUniquePiece && (
+                          <span className="product-badge product-badge-unique">
+                            {t("products.unique")}
                           </span>
-                        </button>
-                      ) : (
-                        <button
-                          type="button"
-                          className="product-cart-btn product-cart-btn--request"
-                          onClick={() => openPriceRequest(product)}
-                          disabled={loadingAuth}
-                        >
-                          <HeartHandshake size={17} />
-                          <span>
-                            {loadingAuth
-                              ? t("products.loading")
-                              : t("products.requestPrice")}
-                          </span>
-                        </button>
-                      )}
+                        )}
+                      </div>
                     </div>
-                  </div>
-                </div>
-              </article>
-            );
-          })}
-        </div>
-      )}
+
+                    <div className="product-content">
+                      <div className="product-meta product-meta--compact">
+                        {product.type && <span>{product.type}</span>}
+                        {product.region && <span>{product.region}</span>}
+                        <span>{getSizeLabel(product)}</span>
+                      </div>
+
+                      <h2>{product.name}</h2>
+
+                      <div className="product-card-specs">
+                        {product.material && (
+                          <div>
+                            <span>{t("home.fields.material")}</span>
+                            <strong>{product.material}</strong>
+                          </div>
+                        )}
+
+                        {product.lengthCm && product.widthCm && (
+                          <div>
+                            <span>{t("home.fields.dimensions")}</span>
+                            <strong>
+                              {product.lengthCm} × {product.widthCm} cm
+                            </strong>
+                          </div>
+                        )}
+
+                        {product.technique && (
+                          <div>
+                            <span>{t("home.fields.technique")}</span>
+                            <strong>{product.technique}</strong>
+                          </div>
+                        )}
+                      </div>
+
+                      <div
+                        className={`product-buy-zone ${
+                          showPriceOnRequest ? "product-buy-zone--request" : ""
+                        }`}
+                      >
+                        <div className="product-price-box">
+                          <p className="product-price-label">
+                            {hasVisiblePrice
+                              ? t("products.price")
+                              : showPriceOnRequest
+                              ? t("products.priceOnRequest")
+                              : t("products.price")}
+                          </p>
+
+                          <strong
+                            className={
+                              hasVisiblePrice
+                                ? "product-price"
+                                : "product-price-request"
+                            }
+                          >
+                            {hasVisiblePrice
+                              ? formatPrice(product.price)
+                              : showPriceOnRequest
+                              ? t("products.priceOnRequest")
+                              : "-"}
+                          </strong>
+                        </div>
+
+                        <div className="product-actions-row">
+                          <button
+                            type="button"
+                            className="product-detail-btn"
+                            onClick={() => openDetailProduct(product)}
+                          >
+                            <Eye size={16} />
+                            {t("products.viewDetails")}
+                          </button>
+
+                          {hasVisiblePrice ? (
+                            <button
+                              type="button"
+                              className={`product-cart-btn ${
+                                isAdded ? "product-cart-btn--added" : ""
+                              }`}
+                              onClick={() => handleAddToCart(product)}
+                              disabled={loadingAuth}
+                            >
+                              <span className="product-cart-icon">
+                                {isAdded ? (
+                                  <CheckCircle2 size={17} />
+                                ) : (
+                                  <ShoppingCart size={17} />
+                                )}
+                              </span>
+                              <span>
+                                {isAdded ? t("products.added") : t("products.cart")}
+                              </span>
+                            </button>
+                          ) : (
+                            <button
+                              type="button"
+                              className="product-cart-btn product-cart-btn--request"
+                              onClick={() => openPriceRequest(product)}
+                              disabled={loadingAuth}
+                            >
+                              <HeartHandshake size={17} />
+                              <span>
+                                {loadingAuth
+                                  ? t("products.loading")
+                                  : t("products.requestPrice")}
+                              </span>
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </article>
+                );
+              })}
+            </div>
+          )}
+        </main>
+      </div>
 
       {detailProduct && (
         <div className="products-detail-modal" onClick={closeDetailProduct}>
