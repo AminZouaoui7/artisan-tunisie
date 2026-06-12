@@ -853,7 +853,6 @@ export default function ProductsPage() {
         getProductCategoryValue(product)
       );
       const matchCategory =
-        selectedCategory === "tapis" ||
         productCategory === normalizeValue(selectedCategory);
 
       const productColors = splitValues(product.colors).map(canonicalColor);
