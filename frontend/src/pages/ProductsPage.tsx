@@ -1194,12 +1194,19 @@ export default function ProductsPage() {
                             className="product-spec-icon product-spec-icon--wool"
                             aria-hidden="true"
                           >
-                            <svg viewBox="0 0 48 48">
-                              <path d="M12 22c0-7 7-12 12-12s12 5 12 12c0 6-6 10-12 10S12 28 12 22Z" />
-                              <path d="M16 22c2-3 5-5 8-5s6 2 8 5" />
-                              <path d="M15 27c2-2 5-3 9-3s7 1 9 3" />
-                              <path d="M18 31c-2 2-3 4-3 6 0 4 4 7 9 7s9-3 9-7c0-2-1-4-3-6" />
-                              <path d="M22 44c-4 3-10 2-14 0" />
+                            <svg
+                              viewBox="0 0 48 48"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            >
+                              <circle cx="22" cy="22" r="12" />
+                              <path d="M12.5 20.5c3.5-4 15.5-4 19 0" />
+                              <path d="M11.8 24.2c4.2-3.2 16.2-3.2 20.4 0" />
+                              <path d="M13.2 28.4c3.5-2.4 14.1-2.4 17.6 0" />
+                              <path d="M30.5 30.5c4.8 1.4 8.2 4.5 10 8.5" />
+                              <path d="M40.5 39c-5.3 2.3-10.5 2.8-15.5 1.5" />
                             </svg>
                           </span>
                           <span>{language === "FR" ? "MATIÈRE" : "MATERIAL"}</span>
