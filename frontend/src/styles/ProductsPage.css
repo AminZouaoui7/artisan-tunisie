@@ -4401,3 +4401,22 @@ body.products-page-body {
 .variant-size-meta small {
   white-space: nowrap !important;
 }
+.products-detail-left-info {
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.products-detail-actions {
+  margin-top: auto !important;
+  padding-top: 16px !important;
+}
+
+.products-detail-actions .product-cart-btn {
+  width: 100% !important;
+  height: 52px !important;
+  border-radius: 18px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+}
