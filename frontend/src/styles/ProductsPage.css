@@ -3839,7 +3839,8 @@ body.products-page-body {
 
 .products-detail-left-info,
 .products-detail-right-variants {
-  overflow-y: hidden !important;
+  overflow-y: auto !important;
+  scrollbar-width: none !important;
 }
 .products-detail-left-info,
 .products-detail-center-gallery,
