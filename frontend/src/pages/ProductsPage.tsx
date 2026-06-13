@@ -1334,7 +1334,7 @@ export default function ProductsPage() {
             </button>
 
             <div className="products-detail-top-layout">
-              <div className="products-detail-left-info">
+              <aside className="products-detail-left-info">
                 <p className="page-kicker">{t("home.productDetailKicker")}</p>
                 <h2>{detailProduct.name}</h2>
 
@@ -1417,9 +1417,9 @@ export default function ProductsPage() {
                     </button>
                   )}
                 </div>
-              </div>
+              </aside>
 
-              <div className="products-detail-center-gallery">
+              <section className="products-detail-center-gallery">
                 <div className="products-detail-image">
                   {detailImages[detailImageIndex] ? (
                     <button
@@ -1486,11 +1486,11 @@ export default function ProductsPage() {
                     ))}
                   </div>
                 )}
-              </div>
+              </section>
 
-              <div className="products-detail-right-variants">
+              <aside className="products-detail-right-variants">
                 {(detailVariantsLoading || detailVariants.length > 0) && (
-                  <div className="products-detail-variants-card">
+                  <div>
                     <h3>
                       Dimensions disponibles{" "}
                       <span>({[detailProduct, ...detailVariants].filter(
@@ -1522,6 +1522,29 @@ export default function ProductsPage() {
                                 : variant.dimensions ||
                                   `${variant.name || ""}`.trim();
 
+                            const priceLabel =
+                              shouldShowProductPrice(variant) &&
+                              variant.price != null
+                                ? formatPrice(variant.price)
+                                : t("products.priceOnRequest");
+
+                            const normalizedStatus = `${variant.status || ""}`.toLowerCase();
+                            const isVariantAvailable =
+                              variant.isAvailable !== false &&
+                              normalizedStatus !== "sold" &&
+                              normalizedStatus !== "hidden";
+
+                            const stockLabel =
+                              !isVariantAvailable
+                                ? normalizedStatus === "reserved"
+                                  ? "Réservé"
+                                  : normalizedStatus === "sold"
+                                  ? "Vendu"
+                                  : "Indisponible"
+                                : typeof variant.stock === "number" && variant.stock <= 0
+                                ? "Sur commande"
+                                : "En stock";
+
                             return (
                               <button
                                 key={variant.id}
@@ -1536,6 +1559,17 @@ export default function ProductsPage() {
                                   <img src={variantImage} alt={variant.name} />
                                 )}
                                 <span>{label}</span>
+                                <span>
+                                  <span>{priceLabel}</span>
+                                  {" · "}
+                                  <span>{stockLabel}</span>
+                                  {isActive && (
+                                    <>
+                                      {" · "}
+                                      <CheckCircle2 size={18} />
+                                    </>
+                                  )}
+                                </span>
                               </button>
                             );
                           });
@@ -1544,11 +1578,11 @@ export default function ProductsPage() {
                     )}
                   </div>
                 )}
-              </div>
+              </aside>
             </div>
 
             {detailColorVariants.length > 0 && (
-              <div className="products-detail-bottom-collection">
+              <section className="products-detail-bottom-collection">
                 <h3>
                   Autres tapis de la même collection{" "}
                   <span>({detailColorVariants.length})</span>
@@ -1602,7 +1636,7 @@ export default function ProductsPage() {
                     );
                   })}
                 </div>
-              </div>
+              </section>
             )}
           </div>
         </div>
