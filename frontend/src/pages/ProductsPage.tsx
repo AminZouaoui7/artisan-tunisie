@@ -18,6 +18,11 @@ import {
   Eye,
   ChevronLeft,
   ChevronRight,
+  Palette,
+  MapPin,
+  Gem,
+  Grid3X3,
+  Sparkles,
 } from "lucide-react";
 
 import { useAuth } from "../context/useAuth";
@@ -949,7 +954,35 @@ export default function ProductsPage() {
       return String(a.name || "").localeCompare(String(b.name || ""));
     });
   }, [detailProduct, products]);
+  const getDetailIcon = (label: string) => {
+  const value = label.toLowerCase();
 
+  if (value.includes("mati")) {
+    return <Gem size={16} />;
+  }
+
+  if (value.includes("technique")) {
+    return <Hand size={16} />;
+  }
+
+  if (value.includes("couleur")) {
+    return <Palette size={16} />;
+  }
+
+  if (value.includes("origine") || value.includes("région") || value.includes("region")) {
+    return <MapPin size={16} />;
+  }
+
+  if (value.includes("dens")) {
+    return <Grid3X3 size={16} />;
+  }
+
+  if (value.includes("dimension") || value.includes("épaisseur") || value.includes("epaisseur")) {
+    return <Ruler size={16} />;
+  }
+
+  return <Sparkles size={16} />;
+};
   return (
     <section className="products-page">
       <section className="products-hero-premium">
@@ -1334,7 +1367,8 @@ export default function ProductsPage() {
             </button>
 
             <div className="products-detail-top-layout">
-             <aside className="products-detail-left-info">
+
+  <aside className="products-detail-left-info">
   <span className="detail-kicker">DÉTAILS DU TAPIS</span>
 
   <h2>{detailProduct.name}</h2>
@@ -1371,7 +1405,9 @@ export default function ProductsPage() {
     <div className="detail-spec-list">
       {productDetailHighlights.map((item) => (
         <div className="detail-spec-row" key={item.label}>
-          <span className="detail-spec-icon">✧</span>
+          <span className="detail-spec-icon">
+            {getDetailIcon(item.label)}
+          </span>
           <strong>{item.label}</strong>
           <span>{item.value}</span>
         </div>
@@ -1381,7 +1417,9 @@ export default function ProductsPage() {
 
   {detailProduct.careInstructions && (
     <div className="detail-spec-row detail-spec-row--care">
-      <span className="detail-spec-icon">✦</span>
+      <span className="detail-spec-icon">
+        <Sparkles size={16} />
+      </span>
       <strong>{t("home.fields.carePrefix")}</strong>
       <span>{detailProduct.careInstructions}</span>
     </div>
@@ -1389,7 +1427,9 @@ export default function ProductsPage() {
 
   {detailProduct.shortStory && (
     <div className="detail-spec-row detail-spec-row--care">
-      <span className="detail-spec-icon">✦</span>
+      <span className="detail-spec-icon">
+        <Sparkles size={16} />
+      </span>
       <strong>{t("products.fields.storyTitle")}</strong>
       <span>{detailProduct.shortStory}</span>
     </div>
@@ -1425,167 +1465,168 @@ export default function ProductsPage() {
   </div>
 </aside>
 
-              <section className="products-detail-center-gallery">
-                <div className="products-detail-image">
-                  {detailImages[detailImageIndex] ? (
-                    <button
-                      type="button"
-                      className="products-detail-image-button"
-                      onClick={() => openLightbox(detailImageIndex)}
-                      aria-label={detailProduct.name}
-                    >
-                      <img
-                        src={detailImages[detailImageIndex]}
-                        alt={detailProduct.name}
-                      />
-                    </button>
+<section className="products-detail-center-gallery">
+  <div className="products-detail-image">
+    {detailImages[detailImageIndex] ? (
+      <button
+        type="button"
+        className="products-detail-image-button"
+        onClick={() => openLightbox(detailImageIndex)}
+        aria-label={detailProduct.name}
+      >
+        <img
+          src={detailImages[detailImageIndex]}
+          alt={detailProduct.name}
+        />
+      </button>
+    ) : (
+      <div className="product-image-placeholder">
+        {t("products.imageUnavailable")}
+      </div>
+    )}
+
+    {detailImages.length > 1 && (
+      <>
+        <button
+          type="button"
+          className="products-detail-gallery-btn products-detail-gallery-btn--left"
+          onClick={prevDetailImage}
+        >
+          <ChevronLeft size={22} />
+        </button>
+
+        <button
+          type="button"
+          className="products-detail-gallery-btn products-detail-gallery-btn--right"
+          onClick={nextDetailImage}
+        >
+          <ChevronRight size={22} />
+        </button>
+      </>
+    )}
+  </div>
+
+  {detailImages.length > 1 && (
+    <div className="products-detail-thumbs">
+      {detailImages.map((img, index) => (
+        <button
+          key={`${img}-${index}`}
+          type="button"
+          className={`products-detail-thumb ${
+            detailImageIndex === index
+              ? "products-detail-thumb--active"
+              : ""
+          }`}
+          onClick={() => setDetailImageIndex(index)}
+        >
+          <img
+            src={img}
+            alt={`${detailProduct.name} ${index + 1}`}
+            onClick={(e) => {
+              e.stopPropagation();
+              setDetailImageIndex(index);
+              openLightbox(index);
+            }}
+          />
+        </button>
+      ))}
+    </div>
+  )}
+</section>
+
+<aside className="products-detail-right-variants">
+  {(detailVariantsLoading || detailVariants.length > 0) && (
+    <div>
+      <h3>
+        Dimensions disponibles{" "}
+        <span>
+          (
+          {
+            [detailProduct, ...detailVariants].filter(
+              (product, index, array) =>
+                array.findIndex((item) => item.id === product.id) === index
+            ).length
+          }
+          )
+        </span>
+      </h3>
+
+      {detailVariantsLoading && detailVariants.length === 0 ? (
+        <p className="product-variants-premium-loading">Chargement...</p>
+      ) : (
+        <div className="product-variants-premium-options">
+          {(() => {
+            const dimensionVariants = [detailProduct, ...detailVariants]
+              .filter(
+                (product, index, array) =>
+                  array.findIndex((item) => item.id === product.id) === index
+              )
+              .sort((a, b) => getSurfaceM2(a) - getSurfaceM2(b));
+
+            return dimensionVariants.map((variant) => {
+              const isActive = variant.id === detailProduct.id;
+              const variantImage = getProductImages(variant)[0];
+
+              const label =
+                variant.lengthCm && variant.widthCm
+                  ? `${variant.lengthCm} x ${variant.widthCm}`
+                  : variant.dimensions || `${variant.name || ""}`.trim();
+
+              const priceLabel =
+                shouldShowProductPrice(variant) && variant.price != null
+                  ? formatPrice(variant.price)
+                  : t("products.priceOnRequest");
+
+              const normalizedStatus = `${variant.status || ""}`.toLowerCase();
+
+              const isVariantAvailable =
+                variant.isAvailable !== false &&
+                normalizedStatus !== "sold" &&
+                normalizedStatus !== "hidden";
+
+              const stockLabel = !isVariantAvailable
+                ? normalizedStatus === "reserved"
+                  ? "Réservé"
+                  : normalizedStatus === "sold"
+                  ? "Vendu"
+                  : "Indisponible"
+                : typeof variant.stock === "number" && variant.stock <= 0
+                ? "Sur commande"
+                : "En stock";
+
+              return (
+                <button
+                  key={variant.id}
+                  type="button"
+                  className={`variant-size-button ${
+                    isActive ? "active" : ""
+                  }`}
+                  onClick={() => openDetailProduct(variant)}
+                  disabled={isActive}
+                >
+                  {variantImage ? (
+                    <img src={variantImage} alt={variant.name} />
                   ) : (
-                    <div className="product-image-placeholder">
-                      {t("products.imageUnavailable")}
-                    </div>
+                    <span className="variant-size-placeholder" />
                   )}
 
-                  {detailImages.length > 1 && (
-                    <>
-                      <button
-                        type="button"
-                        className="products-detail-gallery-btn products-detail-gallery-btn--left"
-                        onClick={prevDetailImage}
-                      >
-                        <ChevronLeft size={22} />
-                      </button>
+                  <span className="variant-size-label">{label}</span>
 
-                      <button
-                        type="button"
-                        className="products-detail-gallery-btn products-detail-gallery-btn--right"
-                        onClick={nextDetailImage}
-                      >
-                        <ChevronRight size={22} />
-                      </button>
-                    </>
-                  )}
-                </div>
-
-                {detailImages.length > 1 && (
-                  <div className="products-detail-thumbs">
-                    {detailImages.map((img, index) => (
-                      <button
-                        key={`${img}-${index}`}
-                        type="button"
-                        className={`products-detail-thumb ${
-                          detailImageIndex === index
-                            ? "products-detail-thumb--active"
-                            : ""
-                        }`}
-                        onClick={() => setDetailImageIndex(index)}
-                      >
-                        <img
-                          src={img}
-                          alt={`${detailProduct.name} ${index + 1}`}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setDetailImageIndex(index);
-                            openLightbox(index);
-                          }}
-                        />
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </section>
-
-              <aside className="products-detail-right-variants">
-                {(detailVariantsLoading || detailVariants.length > 0) && (
-                  <div>
-                    <h3>
-                      Dimensions disponibles{" "}
-                      <span>({[detailProduct, ...detailVariants].filter(
-                        (product, index, array) =>
-                          array.findIndex((item) => item.id === product.id) ===
-                          index
-                      ).length})</span>
-                    </h3>
-
-                    {detailVariantsLoading && detailVariants.length === 0 ? (
-                      <p className="product-variants-premium-loading">Chargement...</p>
-                    ) : (
-                      <div className="product-variants-premium-options">
-                        {(() => {
-                          const dimensionVariants = [detailProduct, ...detailVariants]
-                            .filter(
-                              (product, index, array) =>
-                                array.findIndex((item) => item.id === product.id) ===
-                                index
-                            )
-                            .sort((a, b) => getSurfaceM2(a) - getSurfaceM2(b));
-
-                          return dimensionVariants.map((variant) => {
-                            const isActive = variant.id === detailProduct.id;
-                            const variantImage = getProductImages(variant)[0];
-                            const label =
-                              variant.lengthCm && variant.widthCm
-                                ? `${variant.lengthCm} x ${variant.widthCm}`
-                                : variant.dimensions ||
-                                  `${variant.name || ""}`.trim();
-
-                            const priceLabel =
-                              shouldShowProductPrice(variant) &&
-                              variant.price != null
-                                ? formatPrice(variant.price)
-                                : t("products.priceOnRequest");
-
-                            const normalizedStatus = `${variant.status || ""}`.toLowerCase();
-                            const isVariantAvailable =
-                              variant.isAvailable !== false &&
-                              normalizedStatus !== "sold" &&
-                              normalizedStatus !== "hidden";
-
-                            const stockLabel =
-                              !isVariantAvailable
-                                ? normalizedStatus === "reserved"
-                                  ? "Réservé"
-                                  : normalizedStatus === "sold"
-                                  ? "Vendu"
-                                  : "Indisponible"
-                                : typeof variant.stock === "number" && variant.stock <= 0
-                                ? "Sur commande"
-                                : "En stock";
-
-                            return (
-                              <button
-                                key={variant.id}
-                                type="button"
-                                className={`variant-size-button ${
-                                  isActive ? "active" : ""
-                                }`}
-                                onClick={() => openDetailProduct(variant)}
-                                disabled={isActive}
-                              >
-                                {variantImage && (
-                                  <img src={variantImage} alt={variant.name} />
-                                )}
-                                <span>{label}</span>
-                                <span>
-                                  <span>{priceLabel}</span>
-                                  {" · "}
-                                  <span>{stockLabel}</span>
-                                  {isActive && (
-                                    <>
-                                      {" · "}
-                                      <CheckCircle2 size={18} />
-                                    </>
-                                  )}
-                                </span>
-                              </button>
-                            );
-                          });
-                        })()}
-                      </div>
-                    )}
-                  </div>
-                )}
-              </aside>
-            </div>
+                  <span className="variant-size-meta">
+                    <strong>{priceLabel}</strong>
+                    <small>{stockLabel}</small>
+                    {isActive && <CheckCircle2 size={18} />}
+                  </span>
+                </button>
+              );
+            });
+          })()}
+        </div>
+      )}
+    </div>
+  )}
+</aside>
+</div>
 
             {detailColorVariants.length > 0 && (
               <section className="products-detail-bottom-collection">
