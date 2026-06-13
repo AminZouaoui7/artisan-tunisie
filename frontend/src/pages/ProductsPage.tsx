@@ -1334,90 +1334,96 @@ export default function ProductsPage() {
             </button>
 
             <div className="products-detail-top-layout">
-              <aside className="products-detail-left-info">
-                <p className="page-kicker">{t("home.productDetailKicker")}</p>
-                <h2>{detailProduct.name}</h2>
+             <aside className="products-detail-left-info">
+  <span className="detail-kicker">DÉTAILS DU TAPIS</span>
 
-                <p className="products-detail-desc">
-                  {detailProduct.description ||
-                    detailProduct.shortStory ||
-                    t("home.selectedFallbackDescription")}
-                </p>
+  <h2>{detailProduct.name}</h2>
 
-                <strong
-                  className={
-                    shouldShowProductPrice(detailProduct)
-                      ? "products-detail-price"
-                      : "products-detail-price products-detail-price--request"
-                  }
-                >
-                  {shouldShowProductPrice(detailProduct) &&
-                  detailProduct.price != null
-                    ? formatPrice(detailProduct.price)
-                    : shouldShowPriceOnRequest(detailProduct)
-                    ? t("products.priceOnRequest")
-                    : "-"}
-                </strong>
+  {detailProduct.variantGroupKey && (
+    <p className="detail-collection">
+      Collection <strong>{detailProduct.variantGroupKey}</strong>
+    </p>
+  )}
 
-                {productDetailHighlights.length > 0 && (
-                  <div className="products-detail-highlights">
-                    <div className="products-detail-highlight-grid">
-                      {productDetailHighlights.map((item) => (
-                        <div
-                          className="products-detail-highlight-card"
-                          key={item.label}
-                        >
-                          <span>{item.label}</span>
-                          <strong>{item.value}</strong>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
+  <strong
+    className={
+      shouldShowProductPrice(detailProduct)
+        ? "detail-price"
+        : "detail-price products-detail-price--request"
+    }
+  >
+    {shouldShowProductPrice(detailProduct) && detailProduct.price != null
+      ? formatPrice(detailProduct.price)
+      : shouldShowPriceOnRequest(detailProduct)
+      ? t("products.priceOnRequest")
+      : "-"}
+  </strong>
 
-                {detailProduct.careInstructions && (
-                  <div className="products-detail-care">
-                    <strong>{t("home.fields.carePrefix")}</strong>
-                    <p>{detailProduct.careInstructions}</p>
-                  </div>
-                )}
+  <div className="detail-divider" />
 
-                {detailProduct.shortStory && (
-                  <div className="products-detail-care">
-                    <strong>{t("products.fields.storyTitle")}</strong>
-                    <p>{detailProduct.shortStory}</p>
-                  </div>
-                )}
+  <p className="detail-description">
+    {detailProduct.description ||
+      detailProduct.shortStory ||
+      t("home.selectedFallbackDescription")}
+  </p>
 
-                <div className="products-detail-actions">
-                  {canProductBeAddedToCart(detailProduct) ? (
-                    <button
-                      type="button"
-                      className="product-cart-btn"
-                      onClick={() => {
-                        handleAddToCart(detailProduct);
-                        closeDetailProduct();
-                      }}
-                    >
-                      <ShoppingCart size={17} />
-                      {t("home.addToCart")}
-                    </button>
-                  ) : (
-                    <button
-                      type="button"
-                      className="product-cart-btn product-cart-btn--request"
-                      onClick={() => {
-                        const product = detailProduct;
-                        closeDetailProduct();
-                        openPriceRequest(product);
-                      }}
-                    >
-                      <HeartHandshake size={17} />
-                      {t("products.requestPrice")}
-                    </button>
-                  )}
-                </div>
-              </aside>
+  {productDetailHighlights.length > 0 && (
+    <div className="detail-spec-list">
+      {productDetailHighlights.map((item) => (
+        <div className="detail-spec-row" key={item.label}>
+          <span className="detail-spec-icon">✧</span>
+          <strong>{item.label}</strong>
+          <span>{item.value}</span>
+        </div>
+      ))}
+    </div>
+  )}
+
+  {detailProduct.careInstructions && (
+    <div className="detail-spec-row detail-spec-row--care">
+      <span className="detail-spec-icon">✦</span>
+      <strong>{t("home.fields.carePrefix")}</strong>
+      <span>{detailProduct.careInstructions}</span>
+    </div>
+  )}
+
+  {detailProduct.shortStory && (
+    <div className="detail-spec-row detail-spec-row--care">
+      <span className="detail-spec-icon">✦</span>
+      <strong>{t("products.fields.storyTitle")}</strong>
+      <span>{detailProduct.shortStory}</span>
+    </div>
+  )}
+
+  <div className="products-detail-actions">
+    {canProductBeAddedToCart(detailProduct) ? (
+      <button
+        type="button"
+        className="product-cart-btn"
+        onClick={() => {
+          handleAddToCart(detailProduct);
+          closeDetailProduct();
+        }}
+      >
+        <ShoppingCart size={17} />
+        {t("home.addToCart")}
+      </button>
+    ) : (
+      <button
+        type="button"
+        className="product-cart-btn product-cart-btn--request"
+        onClick={() => {
+          const product = detailProduct;
+          closeDetailProduct();
+          openPriceRequest(product);
+        }}
+      >
+        <HeartHandshake size={17} />
+        {t("products.requestPrice")}
+      </button>
+    )}
+  </div>
+</aside>
 
               <section className="products-detail-center-gallery">
                 <div className="products-detail-image">
