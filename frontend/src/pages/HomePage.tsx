@@ -564,6 +564,72 @@ if (isMounted) setProducts(homeProducts);
 </section>
     <div className="section-divider" />
 
+      <section className="home-story">
+        <div className="home-story-inner">
+          <motion.div
+            className="home-story-visual"
+            variants={fadeLeft}
+            initial={motionInitial}
+            animate={motionAnimate}
+            whileInView={motionWhileInView}
+            viewport={motionViewport}
+            transition={motionTransition}
+          >
+            <div className="home-story-image-card">
+              <img src={storyImage} alt={t("home.storyImageAlt")} className="home-story-image" />
+              <div className="home-story-image-badge">
+                <span>{t("home.since")}</span>
+                <strong>1982</strong>
+              </div>
+            </div>
+          </motion.div>
+
+          <motion.div
+            className="home-story-text"
+            variants={fadeRight}
+            initial={motionInitial}
+            animate={motionAnimate}
+            whileInView={motionWhileInView}
+            viewport={motionViewport}
+            transition={motionTransition}
+          >
+            <p className="page-kicker">{t("home.houseKicker")}</p>
+
+            <h2 className="home-section-title">
+              {t("home.storyTitleLine1")}
+              <br />
+              {t("home.storyTitleLine2")}
+            </h2>
+
+            <p className="home-story-body">{t("home.storyParagraph1")}</p>
+            <p className="home-story-body">{t("home.storyParagraph2")}</p>
+
+            <div className="home-story-stats">
+              <div className="home-stat">
+                <span className="home-stat-number">40+</span>
+                <span className="home-stat-label">{t("home.statYears")}</span>
+              </div>
+
+              <div className="home-stat">
+                <span className="home-stat-number">200+</span>
+                <span className="home-stat-label">{t("home.statArtisans")}</span>
+              </div>
+
+              <div className="home-stat">
+                <span className="home-stat-number">60+</span>
+                <span className="home-stat-label">{t("home.statCountries")}</span>
+              </div>
+            </div>
+
+            <Link to="/our-story" className="home-btn-primary">
+              {t("home.discoverOurStory")}
+            </Link>
+          </motion.div>
+        </div>
+      </section>
+
+      <div className="section-divider" />
+
       <section className="page-section home-categories-section">
         <div className="home-categories-inner">
           <motion.div
@@ -875,72 +941,6 @@ if (isMounted) setProducts(homeProducts);
               );
             })
           )}
-        </div>
-      </section>
-
-      <div className="section-divider" />
-
-      <section className="home-story">
-        <div className="home-story-inner">
-          <motion.div
-            className="home-story-visual"
-            variants={fadeLeft}
-            initial={motionInitial}
-            animate={motionAnimate}
-            whileInView={motionWhileInView}
-            viewport={motionViewport}
-            transition={motionTransition}
-          >
-            <div className="home-story-image-card">
-              <img src={storyImage} alt={t("home.storyImageAlt")} className="home-story-image" />
-              <div className="home-story-image-badge">
-                <span>{t("home.since")}</span>
-                <strong>1982</strong>
-              </div>
-            </div>
-          </motion.div>
-
-          <motion.div
-            className="home-story-text"
-            variants={fadeRight}
-            initial={motionInitial}
-            animate={motionAnimate}
-            whileInView={motionWhileInView}
-            viewport={motionViewport}
-            transition={motionTransition}
-          >
-            <p className="page-kicker">{t("home.houseKicker")}</p>
-
-            <h2 className="home-section-title">
-              {t("home.storyTitleLine1")}
-              <br />
-              {t("home.storyTitleLine2")}
-            </h2>
-
-            <p className="home-story-body">{t("home.storyParagraph1")}</p>
-            <p className="home-story-body">{t("home.storyParagraph2")}</p>
-
-            <div className="home-story-stats">
-              <div className="home-stat">
-                <span className="home-stat-number">40+</span>
-                <span className="home-stat-label">{t("home.statYears")}</span>
-              </div>
-
-              <div className="home-stat">
-                <span className="home-stat-number">200+</span>
-                <span className="home-stat-label">{t("home.statArtisans")}</span>
-              </div>
-
-              <div className="home-stat">
-                <span className="home-stat-number">60+</span>
-                <span className="home-stat-label">{t("home.statCountries")}</span>
-              </div>
-            </div>
-
-            <Link to="/our-story" className="home-btn-primary">
-              {t("home.discoverOurStory")}
-            </Link>
-          </motion.div>
         </div>
       </section>
 
