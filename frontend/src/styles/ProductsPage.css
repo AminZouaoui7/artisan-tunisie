@@ -4421,3 +4421,30 @@ body.products-page-body {
   justify-content: center !important;
   gap: 8px !important;
 }
+.products-detail-left-info {
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.products-detail-left-content {
+  min-height: 0 !important;
+  overflow: hidden !important;
+}
+
+.products-detail-actions {
+  margin-top: auto !important;
+  flex: 0 0 auto !important;
+  padding-top: 14px !important;
+}
+
+.products-detail-actions .product-cart-btn {
+  width: 100% !important;
+  height: 54px !important;
+  border-radius: 18px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  background: linear-gradient(135deg, #b75b31, #7b2e16) !important;
+  color: #fff7ec !important;
+}
