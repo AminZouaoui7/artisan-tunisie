@@ -1368,72 +1368,54 @@ export default function ProductsPage() {
 
             <div className="products-detail-top-layout">
 
-  <aside className="products-detail-left-info">
-  <span className="detail-kicker">DÉTAILS DU TAPIS</span>
+<aside className="products-detail-left-info">
+  <div className="products-detail-left-content">
+    <span className="detail-kicker">DÉTAILS DU TAPIS</span>
 
-  <h2>{detailProduct.name}</h2>
+    <h2>{detailProduct.name}</h2>
 
-  {detailProduct.variantGroupKey && (
-    <p className="detail-collection">
-      Collection <strong>{detailProduct.variantGroupKey}</strong>
+    {detailProduct.variantGroupKey && (
+      <p className="detail-collection">
+        Collection <strong>{detailProduct.variantGroupKey}</strong>
+      </p>
+    )}
+
+    <strong
+      className={
+        shouldShowProductPrice(detailProduct)
+          ? "detail-price"
+          : "detail-price products-detail-price--request"
+      }
+    >
+      {shouldShowProductPrice(detailProduct) && detailProduct.price != null
+        ? formatPrice(detailProduct.price)
+        : shouldShowPriceOnRequest(detailProduct)
+        ? t("products.priceOnRequest")
+        : "-"}
+    </strong>
+
+    <div className="detail-divider" />
+
+    <p className="detail-description">
+      {detailProduct.description ||
+        detailProduct.shortStory ||
+        t("home.selectedFallbackDescription")}
     </p>
-  )}
 
-  <strong
-    className={
-      shouldShowProductPrice(detailProduct)
-        ? "detail-price"
-        : "detail-price products-detail-price--request"
-    }
-  >
-    {shouldShowProductPrice(detailProduct) && detailProduct.price != null
-      ? formatPrice(detailProduct.price)
-      : shouldShowPriceOnRequest(detailProduct)
-      ? t("products.priceOnRequest")
-      : "-"}
-  </strong>
-
-  <div className="detail-divider" />
-
-  <p className="detail-description">
-    {detailProduct.description ||
-      detailProduct.shortStory ||
-      t("home.selectedFallbackDescription")}
-  </p>
-
-  {productDetailHighlights.length > 0 && (
-    <div className="detail-spec-list">
-      {productDetailHighlights.map((item) => (
-        <div className="detail-spec-row" key={item.label}>
-          <span className="detail-spec-icon">
-            {getDetailIcon(item.label)}
-          </span>
-          <strong>{item.label}</strong>
-          <span>{item.value}</span>
-        </div>
-      ))}
-    </div>
-  )}
-
-  {detailProduct.careInstructions && (
-    <div className="detail-spec-row detail-spec-row--care">
-      <span className="detail-spec-icon">
-        <Sparkles size={16} />
-      </span>
-      <strong>{t("home.fields.carePrefix")}</strong>
-      <span>{detailProduct.careInstructions}</span>
-    </div>
-  )}
-
-  {detailProduct.shortStory && (
-    <div className="detail-spec-row detail-spec-row--care">
-      <span className="detail-spec-icon">
-        <Sparkles size={16} />
-      </span>
-      <strong>{t("products.fields.storyTitle")}</strong>
-      <span>{detailProduct.shortStory}</span>
-    </div>
-  )}
+    {productDetailHighlights.length > 0 && (
+      <div className="detail-spec-list">
+        {productDetailHighlights.map((item) => (
+          <div className="detail-spec-row" key={item.label}>
+            <span className="detail-spec-icon">
+              {getDetailIcon(item.label)}
+            </span>
+            <strong>{item.label}</strong>
+            <span>{item.value}</span>
+          </div>
+        ))}
+      </div>
+    )}
+  </div>
 
   <div className="products-detail-actions">
     {canProductBeAddedToCart(detailProduct) ? (
