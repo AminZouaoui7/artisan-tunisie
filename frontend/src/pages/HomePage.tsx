@@ -1,6 +1,6 @@
 import { useCart } from "../context/useCart";
 import { Link, useNavigate } from "react-router-dom";
-import { X, ChevronLeft, ChevronRight, Eye, ShoppingCart } from "lucide-react";
+import { X, ChevronLeft, ChevronRight, Eye, ShoppingCart, Ruler, Hand, CheckCircle2, HeartHandshake } from "lucide-react";
 import { useEffect, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import PhoneInput from "../components/PhoneInput";
@@ -60,7 +60,7 @@ const boutiqueImages = [
 ];
 
 export default function HomePage() {
-  const { t } = useI18n();
+  const { t, language } = useI18n();
   const { formatPrice } = useCurrency();
   const navigate = useNavigate();
   const { isAuthenticated, loadingAuth } = useAuth();
@@ -69,7 +69,7 @@ export default function HomePage() {
     if (typeof window === "undefined") return false;
     return window.matchMedia("(max-width: 820px)").matches;
   });
-  const { addToCart } = useCart();
+  const { addToCart, isInCart } = useCart();
   const visitorLocation = getStoredUserLocation();
 
   const [products, setProducts] = useState<ProductViewDto[]>([]);
@@ -677,9 +677,10 @@ if (isMounted) setProducts(homeProducts);
             products.map((product, i) => {
               const productImages = getProductImages(product);
               const coverImage = productImages[0];
-              const isNewProduct = i < 2;
+              const hoverImage = productImages[1] || coverImage;
               const showVisiblePrice = shouldShowProductPrice(product);
               const showPriceOnRequest = shouldShowPriceOnRequest(product);
+              const isAdded = isInCart(product.id);
 
               return (
                 <motion.article
@@ -704,7 +705,20 @@ if (isMounted) setProducts(homeProducts);
                       aria-label={t("home.viewDetailsOf", { name: product.name })}
                     >
                       {coverImage ? (
-                        <img src={coverImage} alt={product.name} className="product-image" />
+                        <div className="product-card-image-hover-wrap">
+                          <img
+                            src={coverImage}
+                            alt={product.name}
+                            className="product-image product-image--primary"
+                          />
+                          {hoverImage && hoverImage !== coverImage && (
+                            <img
+                              src={hoverImage}
+                              alt={`${product.name} aperçu`}
+                              className="product-image product-image--hover"
+                            />
+                          )}
+                        </div>
                       ) : (
                         <div className="product-image-placeholder">
                           {t("products.imageUnavailable")}
@@ -713,20 +727,22 @@ if (isMounted) setProducts(homeProducts);
                     </button>
 
                     <div className="product-card-badges">
-                      {isNewProduct && (
+                      {product.isFeatured && (
                         <span className="product-badge product-badge-featured">
-                          {t("home.newBadge")}
+                          {t("products.featured")}
                         </span>
                       )}
 
                       {product.isUniquePiece && (
-                        <span className="product-badge product-badge-unique">Pièce unique</span>
+                        <span className="product-badge product-badge-unique">
+                          {t("products.unique")}
+                        </span>
                       )}
                     </div>
                   </div>
 
                   <div className="product-content">
-                    <div className="product-meta">
+                    <div className="product-meta product-meta--compact">
                       {product.type && <span>{product.type}</span>}
                       {product.region && <span>{product.region}</span>}
                       {product.usageSpace && <span>{product.usageSpace}</span>}
@@ -736,17 +752,42 @@ if (isMounted) setProducts(homeProducts);
 
                     <div className="product-card-specs">
                       <div>
-                        <span>Matière</span>
+                        <span
+                          className="product-spec-icon product-spec-icon--wool"
+                          aria-hidden="true"
+                        >
+                          <svg
+                            viewBox="0 0 48 48"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          >
+                            <circle cx="22" cy="22" r="12" />
+                            <path d="M12.5 20.5c3.5-4 15.5-4 19 0" />
+                            <path d="M11.8 24.2c4.2-3.2 16.2-3.2 20.4 0" />
+                            <path d="M13.2 28.4c3.5-2.4 14.1-2.4 17.6 0" />
+                            <path d="M30.5 30.5c4.8 1.4 8.2 4.5 10 8.5" />
+                            <path d="M40.5 39c-5.3 2.3-10.5 2.8-15.5 1.5" />
+                          </svg>
+                        </span>
+                        <span>{language === "FR" ? "MATIÈRE" : "MATERIAL"}</span>
                         <strong>{product.material || "-"}</strong>
                       </div>
 
-                      <div>
-                        <span>Dimensions</span>
-                        <strong>{product.dimensions || "-"}</strong>
+                      <div className="product-spec-dimension">
+                        <Ruler className="product-spec-icon" />
+                        <span>{language === "FR" ? "DIMENSIONS" : "DIMENSIONS"}</span>
+                        <strong>
+                          {product.lengthCm && product.widthCm
+                            ? `${product.lengthCm} × ${product.widthCm} cm`
+                            : product.dimensions || "-"}
+                        </strong>
                       </div>
 
                       <div>
-                        <span>Technique</span>
+                        <Hand className="product-spec-icon" />
+                        <span>{language === "FR" ? "TECHNIQUE" : "TECHNIQUE"}</span>
                         <strong>{product.technique || "-"}</strong>
                       </div>
                     </div>
@@ -757,15 +798,25 @@ if (isMounted) setProducts(homeProducts);
                       }`}
                     >
                       <div className="product-price-box">
-                        <p className="product-price-label">{showPriceOnRequest ? "Prix" : "Prix"}</p>
+                        <p className="product-price-label">
+                          {showVisiblePrice
+                            ? t("products.price")
+                            : showPriceOnRequest
+                            ? t("products.priceOnRequest")
+                            : t("products.price")}
+                        </p>
 
                         <strong
-                          className={showPriceOnRequest ? "product-price-request" : "product-price"}
+                          className={
+                            showVisiblePrice
+                              ? "product-price"
+                              : "product-price-request"
+                          }
                         >
-                          {showVisiblePrice && product.price != null
+                          {showVisiblePrice
                             ? formatPrice(product.price)
                             : showPriceOnRequest
-                            ? t("home.priceOnRequest")
+                            ? t("products.priceOnRequest")
                             : "-"}
                         </strong>
                       </div>
@@ -777,22 +828,46 @@ if (isMounted) setProducts(homeProducts);
                           onClick={() => openProductModal(product)}
                         >
                           <Eye size={16} />
-                          Détails
+                          {t("products.viewDetails")}
                         </button>
 
-                        <button
-                          type="button"
-                          className={`product-cart-btn ${
-                            showPriceOnRequest ? "product-cart-btn--request" : ""
-                          }`}
-                          onClick={() =>
-                            showPriceOnRequest ? openProductModal(product) : handleAddToCart(product)
-                          }
-                          disabled={!showPriceOnRequest && !canProductBeAddedToCart(product)}
-                        >
-                          <ShoppingCart size={16} />
-                          <span>{showPriceOnRequest ? t("home.requestPrice") : "Ajouter"}</span>
-                        </button>
+                        {showVisiblePrice ? (
+                          <button
+                            type="button"
+                            className={`product-cart-btn ${
+                              isAdded ? "product-cart-btn--added" : ""
+                            }`}
+                            onClick={() => handleAddToCart(product)}
+                            disabled={loadingAuth}
+                          >
+                            <span className="product-cart-icon">
+                              {isAdded ? (
+                                <CheckCircle2 size={17} />
+                              ) : (
+                                <ShoppingCart size={17} />
+                              )}
+                            </span>
+                            <span>
+                              {isAdded
+                                ? t("products.added")
+                                : t("products.cart")}
+                            </span>
+                          </button>
+                        ) : (
+                          <button
+                            type="button"
+                            className="product-cart-btn product-cart-btn--request"
+                            onClick={() => openProductModal(product)}
+                            disabled={loadingAuth}
+                          >
+                            <HeartHandshake size={17} />
+                            <span>
+                              {loadingAuth
+                                ? t("products.loading")
+                                : t("products.requestPrice")}
+                            </span>
+                          </button>
+                        )}
                       </div>
                     </div>
                   </div>
