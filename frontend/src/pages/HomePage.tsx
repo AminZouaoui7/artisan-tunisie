@@ -3,7 +3,8 @@ import {
   MapPin,
   Gem,
   Palette,
-  ShoppingBag,
+  PackageCheck,
+  ShieldCheck,
 } from "lucide-react";
 import { useCart } from "../context/useCart";
 import "../styles/ProductsPage.css";
