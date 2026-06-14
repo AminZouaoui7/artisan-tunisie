@@ -1076,8 +1076,7 @@ if (isMounted) setProducts(homeProducts);
           </div>
         </motion.div>
       </section>
-
-      {selectedProduct && (
+{selectedProduct && (
   <div
     className="products-detail-modal"
     role="dialog"
@@ -1097,83 +1096,91 @@ if (isMounted) setProducts(homeProducts);
       <div className="products-detail-top-layout">
         <aside className="products-detail-left-info">
           <div className="products-detail-left-content">
-            <p className="page-kicker">Détail du produit</p>
+            <span className="detail-kicker">Détails du tapis</span>
 
             <h2>{selectedProduct.name}</h2>
 
-            {selectedProduct.description && (
-              <p className="products-detail-desc">{selectedProduct.description}</p>
+            {selectedProduct.variantGroupKey && (
+              <p className="detail-collection">
+                Collection <strong>{selectedProduct.variantGroupKey}</strong>
+              </p>
             )}
 
             <strong
-              className={`products-detail-price ${
-                shouldShowPriceOnRequest(selectedProduct)
-                  ? "products-detail-price--request"
-                  : ""
-              }`}
+              className={
+                shouldShowProductPrice(selectedProduct)
+                  ? "detail-price"
+                  : "detail-price products-detail-price--request"
+              }
             >
               {shouldShowProductPrice(selectedProduct) && selectedProduct.price != null
                 ? formatPrice(selectedProduct.price)
                 : t("products.priceOnRequest")}
             </strong>
 
-            <div className="products-detail-highlights">
-              <div className="products-detail-section-title">
-                <span>Caractéristiques</span>
-                <small>Pièce artisanale</small>
-              </div>
+            <div className="detail-divider" />
 
-              <div className="products-detail-highlight-grid">
-                <div className="products-detail-highlight-card">
-                  <span>Catégorie</span>
-                  <strong>{selectedProduct.category || "-"}</strong>
-                </div>
-
-                <div className="products-detail-highlight-card">
-                  <span>Type</span>
-                  <strong>{selectedProduct.type || "-"}</strong>
-                </div>
-
-                <div className="products-detail-highlight-card">
-                  <span>Matière</span>
-                  <strong>{selectedProduct.material || "-"}</strong>
-                </div>
-
-                <div className="products-detail-highlight-card">
-                  <span>Couleurs</span>
-                  <strong>{selectedProduct.colors || "-"}</strong>
-                </div>
-
-                <div className="products-detail-highlight-card">
-                  <span>Dimensions</span>
-                  <strong>{selectedProduct.dimensions || "-"}</strong>
-                </div>
-
-                <div className="products-detail-highlight-card">
-                  <span>Région</span>
-                  <strong>{selectedProduct.region || "-"}</strong>
-                </div>
-
-                <div className="products-detail-highlight-card">
-                  <span>Technique</span>
-                  <strong>{selectedProduct.technique || "-"}</strong>
-                </div>
-
-                <div className="products-detail-highlight-card">
-                  <span>Stock</span>
-                  <strong>
-                    {selectedProduct.isAvailable ? "Disponible" : "Indisponible"}
-                  </strong>
-                </div>
-              </div>
-            </div>
-
-            {selectedProduct.careInstructions && (
-              <div className="products-detail-care">
-                <strong>Entretien</strong>
-                <p>{selectedProduct.careInstructions}</p>
-              </div>
+            {selectedProduct.description ? (
+              <p className="detail-description">{selectedProduct.description}</p>
+            ) : (
+              <p className="detail-description">
+                Pièce artisanale sélectionnée avec soin.
+              </p>
             )}
+
+            <div className="detail-spec-list">
+              <div className="detail-spec-row">
+                <span className="detail-spec-icon">✣</span>
+                <strong>Type</strong>
+                <span>{selectedProduct.type || "-"}</span>
+              </div>
+
+              <div className="detail-spec-row">
+                <span className="detail-spec-icon">♜</span>
+                <strong>Technique</strong>
+                <span>{selectedProduct.technique || "-"}</span>
+              </div>
+
+              <div className="detail-spec-row">
+                <span className="detail-spec-icon">⌖</span>
+                <strong>Région</strong>
+                <span>{selectedProduct.region || "-"}</span>
+              </div>
+
+              <div className="detail-spec-row">
+                <span className="detail-spec-icon">◈</span>
+                <strong>Matière</strong>
+                <span>{selectedProduct.material || "-"}</span>
+              </div>
+
+              <div className="detail-spec-row">
+                <span className="detail-spec-icon">●</span>
+                <strong>Couleurs</strong>
+                <span>{selectedProduct.colors || "-"}</span>
+              </div>
+
+              <div className="detail-spec-row">
+                <span className="detail-spec-icon">↔</span>
+                <strong>Dimensions</strong>
+                <span>{selectedProduct.dimensions || "-"}</span>
+              </div>
+
+              <div className="detail-spec-row">
+                <span className="detail-spec-icon">✓</span>
+                <strong>Stock</strong>
+                <span>
+                  {selectedProduct.isAvailable ? "Disponible" : "Indisponible"}
+                </span>
+              </div>
+
+              {selectedProduct.careInstructions && (
+                <div className="detail-spec-row detail-spec-row--care">
+                  <span className="detail-spec-icon">✦</span>
+                  <strong>Entretien</strong>
+                  <span>{selectedProduct.careInstructions}</span>
+                </div>
+              )}
+            </div>
           </div>
 
           <div className="products-detail-actions">
@@ -1248,7 +1255,9 @@ if (isMounted) setProducts(homeProducts);
                   key={`${image}-${index}`}
                   type="button"
                   className={`products-detail-thumb ${
-                    index === selectedImageIndex ? "products-detail-thumb--active" : ""
+                    index === selectedImageIndex
+                      ? "products-detail-thumb--active"
+                      : ""
                   }`}
                   onClick={() => setSelectedImageIndex(index)}
                 >
@@ -1260,47 +1269,109 @@ if (isMounted) setProducts(homeProducts);
         </section>
 
         <aside className="products-detail-right-variants">
-          <div className="products-detail-section-title">
-            <span>Autres variantes</span>
-            <small>Dimensions disponibles</small>
+          <div className="product-variants-premium-title">
+            <h3>
+              Dimensions disponibles{" "}
+              <span>
+                ({selectedVariantsLoading ? "..." : selectedVariants.length})
+              </span>
+            </h3>
           </div>
 
           {selectedVariantsLoading ? (
-            <p className="products-detail-variants-loading">
+            <p className="product-variants-premium-loading">
               Chargement des variantes...
             </p>
           ) : selectedVariants.length > 0 ? (
-            <div className="products-detail-variants-list">
+            <div className="product-variants-premium-options">
               {selectedVariants.map((variant) => (
                 <button
                   key={variant.id}
                   type="button"
-                  className="products-detail-variant-card"
+                  className="variant-size-button"
                   onClick={() => openProductModal(variant)}
                 >
                   {variant.fullMainImageUrl ? (
                     <img src={variant.fullMainImageUrl} alt={variant.name} />
                   ) : (
-                    <div className="products-detail-variant-placeholder" />
+                    <span className="product-collection-thumb--empty" />
                   )}
 
                   <span>{variant.dimensions || "Dimensions non précisées"}</span>
 
-                  <small>
-                    {shouldShowProductPrice(variant) && variant.price != null
-                      ? formatPrice(variant.price)
-                      : t("products.priceOnRequest")}
-                  </small>
+                  <div className="variant-size-meta">
+                    <strong>
+                      {shouldShowProductPrice(variant) && variant.price != null
+                        ? formatPrice(variant.price)
+                        : t("products.priceOnRequest")}
+                    </strong>
+
+                    <small>
+                      {variant.isAvailable ? "En stock" : "Indisponible"}
+                    </small>
+                  </div>
                 </button>
               ))}
             </div>
           ) : (
-            <p className="products-detail-variants-loading">
-              Aucune autre variante disponible.
+            <p className="product-variants-premium-loading">
+              Aucune autre dimension disponible.
             </p>
           )}
         </aside>
       </div>
+
+      {selectedVariants.length > 0 && (
+        <div className="products-detail-bottom-collection">
+          <h3>
+            Autres tapis de la même collection{" "}
+            <span>({selectedVariants.length})</span>
+          </h3>
+
+          <div className="product-collection-scroll">
+            {selectedVariants.map((variant) => (
+              <button
+                key={`collection-${variant.id}`}
+                type="button"
+                className="product-collection-card"
+                onClick={() => openProductModal(variant)}
+              >
+                {variant.fullMainImageUrl ? (
+                  <img
+                    className="product-collection-thumb"
+                    src={variant.fullMainImageUrl}
+                    alt={variant.name}
+                  />
+                ) : (
+                  <span className="product-collection-thumb product-collection-thumb--empty" />
+                )}
+
+                <div className="product-collection-content">
+                  <strong className="product-collection-name">
+                    {variant.name}
+                  </strong>
+
+                  {variant.colors && (
+                    <span className="product-collection-color">
+                      {variant.colors}
+                    </span>
+                  )}
+
+                  <span className="product-collection-dimensions">
+                    {variant.dimensions || "Dimensions non précisées"}
+                  </span>
+
+                  <span className="product-collection-price">
+                    {shouldShowProductPrice(variant) && variant.price != null
+                      ? formatPrice(variant.price)
+                      : t("products.priceOnRequest")}
+                  </span>
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   </div>
 )}
