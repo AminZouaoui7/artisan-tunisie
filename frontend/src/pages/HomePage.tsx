@@ -1,4 +1,5 @@
 import { useCart } from "../context/useCart";
+import "../styles/ProductsPage.css";
 import { Link, useNavigate } from "react-router-dom";
 import { X, ChevronLeft, ChevronRight, Eye, ShoppingCart, Ruler, Hand, CheckCircle2, HeartHandshake } from "lucide-react";
 import { useEffect, useState } from "react";

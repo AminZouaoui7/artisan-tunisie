@@ -5218,3 +5218,18 @@
     grid-template-columns: 1fr !important;
   }
 }
+/* FIX: laisser ProductsPage.css contrôler le popup utilisé dans Home */
+.home-product-modal,
+.home-product-modal-card,
+.home-product-modal-gallery,
+.home-product-modal-main-img,
+.home-product-modal-info,
+.home-product-details-grid,
+.home-product-modal-actions {
+  display: none;
+}
+
+/* priorité au popup ProductsPage dans Home */
+.home .products-detail-modal {
+  z-index: 99999 !important;
+}
