@@ -4854,3 +4854,18 @@
 .home .products-detail-modal {
   z-index: 99999 !important;
 }
+.detail-spec-icon {
+  width: 20px;
+  min-width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #b45e32;
+}
+
+.detail-spec-icon svg {
+  width: 16px;
+  height: 16px;
+  stroke-width: 2;
+}
