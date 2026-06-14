@@ -1,3 +1,10 @@
+import {
+  Sparkles,
+  MapPin,
+  Gem,
+  Palette,
+  ShoppingBag,
+} from "lucide-react";
 import { useCart } from "../context/useCart";
 import "../styles/ProductsPage.css";
 import { Link, useNavigate } from "react-router-dom";
@@ -1076,6 +1083,7 @@ if (isMounted) setProducts(homeProducts);
           </div>
         </motion.div>
       </section>
+
 {selectedProduct && (
   <div
     className="products-detail-modal"
@@ -1129,58 +1137,72 @@ if (isMounted) setProducts(homeProducts);
             )}
 
             <div className="detail-spec-list">
-              <div className="detail-spec-row">
-                <span className="detail-spec-icon">✣</span>
-                <strong>Type</strong>
-                <span>{selectedProduct.type || "-"}</span>
-              </div>
+  <div className="detail-spec-row">
+    <span className="detail-spec-icon">
+      <Sparkles size={16} />
+    </span>
+    <strong>Type</strong>
+    <span>{selectedProduct.type || "-"}</span>
+  </div>
 
-              <div className="detail-spec-row">
-                <span className="detail-spec-icon">♜</span>
-                <strong>Technique</strong>
-                <span>{selectedProduct.technique || "-"}</span>
-              </div>
+  <div className="detail-spec-row">
+    <span className="detail-spec-icon">
+      <Hand size={16} />
+    </span>
+    <strong>Technique</strong>
+    <span>{selectedProduct.technique || "-"}</span>
+  </div>
 
-              <div className="detail-spec-row">
-                <span className="detail-spec-icon">⌖</span>
-                <strong>Région</strong>
-                <span>{selectedProduct.region || "-"}</span>
-              </div>
+  <div className="detail-spec-row">
+    <span className="detail-spec-icon">
+      <MapPin size={16} />
+    </span>
+    <strong>Région</strong>
+    <span>{selectedProduct.region || "-"}</span>
+  </div>
 
-              <div className="detail-spec-row">
-                <span className="detail-spec-icon">◈</span>
-                <strong>Matière</strong>
-                <span>{selectedProduct.material || "-"}</span>
-              </div>
+  <div className="detail-spec-row">
+    <span className="detail-spec-icon">
+      <Gem size={16} />
+    </span>
+    <strong>Matière</strong>
+    <span>{selectedProduct.material || "-"}</span>
+  </div>
 
-              <div className="detail-spec-row">
-                <span className="detail-spec-icon">●</span>
-                <strong>Couleurs</strong>
-                <span>{selectedProduct.colors || "-"}</span>
-              </div>
+  <div className="detail-spec-row">
+    <span className="detail-spec-icon">
+      <Palette size={16} />
+    </span>
+    <strong>Couleurs</strong>
+    <span>{selectedProduct.colors || "-"}</span>
+  </div>
 
-              <div className="detail-spec-row">
-                <span className="detail-spec-icon">↔</span>
-                <strong>Dimensions</strong>
-                <span>{selectedProduct.dimensions || "-"}</span>
-              </div>
+  <div className="detail-spec-row">
+    <span className="detail-spec-icon">
+      <Ruler size={16} />
+    </span>
+    <strong>Dimensions</strong>
+    <span>{selectedProduct.dimensions || "-"}</span>
+  </div>
 
-              <div className="detail-spec-row">
-                <span className="detail-spec-icon">✓</span>
-                <strong>Stock</strong>
-                <span>
-                  {selectedProduct.isAvailable ? "Disponible" : "Indisponible"}
-                </span>
-              </div>
+  <div className="detail-spec-row">
+    <span className="detail-spec-icon">
+      <PackageCheck size={16} />
+    </span>
+    <strong>Pièce unique</strong>
+    <span>Oui</span>
+  </div>
 
-              {selectedProduct.careInstructions && (
-                <div className="detail-spec-row detail-spec-row--care">
-                  <span className="detail-spec-icon">✦</span>
-                  <strong>Entretien</strong>
-                  <span>{selectedProduct.careInstructions}</span>
-                </div>
-              )}
-            </div>
+  {selectedProduct.careInstructions && (
+    <div className="detail-spec-row detail-spec-row--care">
+      <span className="detail-spec-icon">
+        <ShieldCheck size={16} />
+      </span>
+      <strong>Entretien</strong>
+      <span>{selectedProduct.careInstructions}</span>
+    </div>
+  )}
+</div>
           </div>
 
           <div className="products-detail-actions">
