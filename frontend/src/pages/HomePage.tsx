@@ -1077,211 +1077,232 @@ if (isMounted) setProducts(homeProducts);
       </section>
 
       {selectedProduct && (
-        <div
-          className="products-detail-modal"
-          role="dialog"
-          aria-modal="true"
-          onClick={closeProductModal}
-        >
-          <div className="products-detail-card" onClick={(e) => e.stopPropagation()}>
-            <button
-              type="button"
-              className="products-detail-close"
-              onClick={closeProductModal}
-              aria-label="Fermer"
+  <div
+    className="products-detail-modal"
+    role="dialog"
+    aria-modal="true"
+    onClick={closeProductModal}
+  >
+    <div className="products-detail-card" onClick={(e) => e.stopPropagation()}>
+      <button
+        type="button"
+        className="products-detail-close"
+        onClick={closeProductModal}
+        aria-label="Fermer"
+      >
+        <X size={20} />
+      </button>
+
+      <div className="products-detail-top-layout">
+        <aside className="products-detail-left-info">
+          <div className="products-detail-left-content">
+            <p className="page-kicker">Détail du produit</p>
+
+            <h2>{selectedProduct.name}</h2>
+
+            {selectedProduct.description && (
+              <p className="products-detail-desc">{selectedProduct.description}</p>
+            )}
+
+            <strong
+              className={`products-detail-price ${
+                shouldShowPriceOnRequest(selectedProduct)
+                  ? "products-detail-price--request"
+                  : ""
+              }`}
             >
-              <X size={20} />
-            </button>
+              {shouldShowProductPrice(selectedProduct) && selectedProduct.price != null
+                ? formatPrice(selectedProduct.price)
+                : t("products.priceOnRequest")}
+            </strong>
 
-            <div className="products-detail-gallery">
-              <div className="products-detail-image">
-                {selectedProductImages.length > 1 && (
-                  <>
-                    <button
-                      type="button"
-                      className="products-detail-gallery-btn products-detail-gallery-btn--left"
-                      onClick={prevSelectedImage}
-                      aria-label="Image précédente"
-                    >
-                      <ChevronLeft size={22} />
-                    </button>
+            <div className="products-detail-highlights">
+              <div className="products-detail-section-title">
+                <span>Caractéristiques</span>
+                <small>Pièce artisanale</small>
+              </div>
 
-                    <button
-                      type="button"
-                      className="products-detail-gallery-btn products-detail-gallery-btn--right"
-                      onClick={nextSelectedImage}
-                      aria-label="Image suivante"
-                    >
-                      <ChevronRight size={22} />
-                    </button>
-                  </>
-                )}
+              <div className="products-detail-highlight-grid">
+                <div className="products-detail-highlight-card">
+                  <span>Catégorie</span>
+                  <strong>{selectedProduct.category || "-"}</strong>
+                </div>
+
+                <div className="products-detail-highlight-card">
+                  <span>Type</span>
+                  <strong>{selectedProduct.type || "-"}</strong>
+                </div>
+
+                <div className="products-detail-highlight-card">
+                  <span>Matière</span>
+                  <strong>{selectedProduct.material || "-"}</strong>
+                </div>
+
+                <div className="products-detail-highlight-card">
+                  <span>Couleurs</span>
+                  <strong>{selectedProduct.colors || "-"}</strong>
+                </div>
+
+                <div className="products-detail-highlight-card">
+                  <span>Dimensions</span>
+                  <strong>{selectedProduct.dimensions || "-"}</strong>
+                </div>
+
+                <div className="products-detail-highlight-card">
+                  <span>Région</span>
+                  <strong>{selectedProduct.region || "-"}</strong>
+                </div>
+
+                <div className="products-detail-highlight-card">
+                  <span>Technique</span>
+                  <strong>{selectedProduct.technique || "-"}</strong>
+                </div>
+
+                <div className="products-detail-highlight-card">
+                  <span>Stock</span>
+                  <strong>
+                    {selectedProduct.isAvailable ? "Disponible" : "Indisponible"}
+                  </strong>
+                </div>
+              </div>
+            </div>
+
+            {selectedProduct.careInstructions && (
+              <div className="products-detail-care">
+                <strong>Entretien</strong>
+                <p>{selectedProduct.careInstructions}</p>
+              </div>
+            )}
+          </div>
+
+          <div className="products-detail-actions">
+            {shouldShowPriceOnRequest(selectedProduct) ? (
+              <button
+                type="button"
+                className="product-cart-btn product-cart-btn--request"
+                onClick={openPriceRequestForm}
+                disabled={loadingAuth}
+              >
+                Demander le prix
+              </button>
+            ) : (
+              <button
+                type="button"
+                className="product-cart-btn"
+                onClick={() => handleAddToCart(selectedProduct)}
+                disabled={loadingAuth || !canProductBeAddedToCart(selectedProduct)}
+              >
+                Ajouter au panier
+              </button>
+            )}
+          </div>
+        </aside>
+
+        <section className="products-detail-center-gallery">
+          <div className="products-detail-image">
+            {selectedProductImages.length > 1 && (
+              <>
+                <button
+                  type="button"
+                  className="products-detail-gallery-btn products-detail-gallery-btn--left"
+                  onClick={prevSelectedImage}
+                  aria-label="Image précédente"
+                >
+                  <ChevronLeft size={22} />
+                </button>
 
                 <button
                   type="button"
-                  className="products-detail-image-button"
-                  onClick={() => setLightboxOpen(true)}
+                  className="products-detail-gallery-btn products-detail-gallery-btn--right"
+                  onClick={nextSelectedImage}
+                  aria-label="Image suivante"
                 >
-                  {selectedProductImages[selectedImageIndex] ? (
-                    <img
-                      src={selectedProductImages[selectedImageIndex]}
-                      alt={selectedProduct.name}
-                    />
-                  ) : (
-                    <div className="product-image-placeholder">
-                      {t("products.imageUnavailable")}
-                    </div>
-                  )}
+                  <ChevronRight size={22} />
                 </button>
-              </div>
+              </>
+            )}
 
-              {selectedProductImages.length > 1 && (
-                <div className="products-detail-thumbs">
-                  {selectedProductImages.map((image, index) => (
-                    <button
-                      key={`${image}-${index}`}
-                      type="button"
-                      className={`products-detail-thumb ${
-                        index === selectedImageIndex ? "products-detail-thumb--active" : ""
-                      }`}
-                      onClick={() => setSelectedImageIndex(index)}
-                    >
-                      <img src={image} alt={`${selectedProduct.name} ${index + 1}`} />
-                    </button>
-                  ))}
+            <button
+              type="button"
+              className="products-detail-image-button"
+              onClick={() => setLightboxOpen(true)}
+            >
+              {selectedProductImages[selectedImageIndex] ? (
+                <img
+                  src={selectedProductImages[selectedImageIndex]}
+                  alt={selectedProduct.name}
+                />
+              ) : (
+                <div className="product-image-placeholder">
+                  {t("products.imageUnavailable")}
                 </div>
               )}
-            </div>
-
-            <div className="products-detail-info">
-              <p className="page-kicker">Détail du produit</p>
-              <h2>{selectedProduct.name}</h2>
-
-              {selectedProduct.description && (
-                <p className="products-detail-desc">{selectedProduct.description}</p>
-              )}
-
-              <strong
-                className={`products-detail-price ${
-                  shouldShowPriceOnRequest(selectedProduct)
-                    ? "products-detail-price--request"
-                    : ""
-                }`}
-              >
-                {shouldShowProductPrice(selectedProduct) && selectedProduct.price != null
-                  ? formatPrice(selectedProduct.price)
-                  : t("products.priceOnRequest")}
-              </strong>
-
-              {(selectedVariantsLoading || selectedVariants.length > 0) && (
-                <div className="products-detail-variants">
-                  <strong>Autres dimensions disponibles</strong>
-
-                  {selectedVariantsLoading ? (
-                    <p className="products-detail-variants-loading">
-                      Chargement des variantes...
-                    </p>
-                  ) : (
-                    <div className="products-detail-variants-list">
-                      {selectedVariants.map((variant) => (
-                        <button
-                          key={variant.id}
-                          type="button"
-                          className="products-detail-variant-card"
-                          onClick={() => openProductModal(variant)}
-                        >
-                          {variant.fullMainImageUrl ? (
-                            <img src={variant.fullMainImageUrl} alt={variant.name} />
-                          ) : (
-                            <div className="products-detail-variant-placeholder" />
-                          )}
-
-                          <span>{variant.dimensions || "Dimensions non précisées"}</span>
-
-                          <small>
-                            {shouldShowProductPrice(variant) && variant.price != null
-                              ? formatPrice(variant.price)
-                              : t("products.priceOnRequest")}
-                          </small>
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              )}
-
-              <div className="products-detail-grid">
-                <span>Catégorie</span>
-                <strong>{selectedProduct.category || "-"}</strong>
-
-                <span>Type</span>
-                <strong>{selectedProduct.type || "-"}</strong>
-
-                <span>Technique</span>
-                <strong>{selectedProduct.technique || "-"}</strong>
-
-                <span>Région</span>
-                <strong>{selectedProduct.region || "-"}</strong>
-
-                <span>Matière</span>
-                <strong>{selectedProduct.material || "-"}</strong>
-
-                <span>Couleurs</span>
-                <strong>{selectedProduct.colors || "-"}</strong>
-
-                <span>Dimensions</span>
-                <strong>{selectedProduct.dimensions || "-"}</strong>
-
-                <span>Poids</span>
-                <strong>
-                  {selectedProduct.weightKg ? `${selectedProduct.weightKg} kg` : "-"}
-                </strong>
-
-                <span>État</span>
-                <strong>{selectedProduct.condition || "-"}</strong>
-
-                <span>Style</span>
-                <strong>{selectedProduct.style || "-"}</strong>
-
-                <span>Usage</span>
-                <strong>{selectedProduct.usageSpace || "-"}</strong>
-
-                <span>Stock</span>
-                <strong>{selectedProduct.isAvailable ? "Disponible" : "Indisponible"}</strong>
-              </div>
-
-              {selectedProduct.careInstructions && (
-                <div className="products-detail-care">
-                  <strong>Entretien</strong>
-                  <p>{selectedProduct.careInstructions}</p>
-                </div>
-              )}
-
-              <div className="products-detail-actions">
-                {shouldShowPriceOnRequest(selectedProduct) ? (
-                  <button
-                    type="button"
-                    className="product-cart-btn product-cart-btn--request"
-                    onClick={openPriceRequestForm}
-                    disabled={loadingAuth}
-                  >
-                    Demander le prix
-                  </button>
-                ) : (
-                  <button
-                    type="button"
-                    className="product-cart-btn"
-                    onClick={() => handleAddToCart(selectedProduct)}
-                    disabled={loadingAuth || !canProductBeAddedToCart(selectedProduct)}
-                  >
-                    Ajouter au panier
-                  </button>
-                )}
-              </div>
-            </div>
+            </button>
           </div>
-        </div>
-      )}
+
+          {selectedProductImages.length > 1 && (
+            <div className="products-detail-thumbs">
+              {selectedProductImages.map((image, index) => (
+                <button
+                  key={`${image}-${index}`}
+                  type="button"
+                  className={`products-detail-thumb ${
+                    index === selectedImageIndex ? "products-detail-thumb--active" : ""
+                  }`}
+                  onClick={() => setSelectedImageIndex(index)}
+                >
+                  <img src={image} alt={`${selectedProduct.name} ${index + 1}`} />
+                </button>
+              ))}
+            </div>
+          )}
+        </section>
+
+        <aside className="products-detail-right-variants">
+          <div className="products-detail-section-title">
+            <span>Autres variantes</span>
+            <small>Dimensions disponibles</small>
+          </div>
+
+          {selectedVariantsLoading ? (
+            <p className="products-detail-variants-loading">
+              Chargement des variantes...
+            </p>
+          ) : selectedVariants.length > 0 ? (
+            <div className="products-detail-variants-list">
+              {selectedVariants.map((variant) => (
+                <button
+                  key={variant.id}
+                  type="button"
+                  className="products-detail-variant-card"
+                  onClick={() => openProductModal(variant)}
+                >
+                  {variant.fullMainImageUrl ? (
+                    <img src={variant.fullMainImageUrl} alt={variant.name} />
+                  ) : (
+                    <div className="products-detail-variant-placeholder" />
+                  )}
+
+                  <span>{variant.dimensions || "Dimensions non précisées"}</span>
+
+                  <small>
+                    {shouldShowProductPrice(variant) && variant.price != null
+                      ? formatPrice(variant.price)
+                      : t("products.priceOnRequest")}
+                  </small>
+                </button>
+              ))}
+            </div>
+          ) : (
+            <p className="products-detail-variants-loading">
+              Aucune autre variante disponible.
+            </p>
+          )}
+        </aside>
+      </div>
+    </div>
+  </div>
+)}
 
       {lightboxOpen && (
         <div
