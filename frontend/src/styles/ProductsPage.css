@@ -1653,12 +1653,13 @@ body.products-page-body {
 .products-hero-premium {
   position: relative;
   max-width: 1580px;
-  height: 330px;
+
+  height: 260px; /* avant 330px */
+
   margin: 0 auto;
   overflow: hidden;
   border-radius: 0 0 34px 34px;
 }
-
 .products-hero-premium img {
   width: 100%;
   height: 100%;
@@ -1687,7 +1688,7 @@ body.products-page-body {
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: 32px;
+  padding: 20px;
 }
 
 .products-breadcrumb {
@@ -1706,7 +1707,7 @@ body.products-page-body {
   margin: 0;
   color: #3a2418;
   font-family: Georgia, "Times New Roman", serif;
-  font-size: clamp(3rem, 6vw, 5.2rem);
+  font-size: clamp(2.4rem, 4vw, 4rem);
   line-height: 0.92;
   font-weight: 500;
 }
