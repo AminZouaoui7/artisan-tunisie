@@ -505,30 +505,6 @@ export default function ProductsPage() {
     return result;
   }
 
-  function getVisibleVariantProducts(productsList: ProductViewDto[]) {
-    const bestByGroup = new Map<string, ProductViewDto>();
-    const productsWithoutGroup: ProductViewDto[] = [];
-
-    productsList.forEach((product) => {
-      const groupKey = product.variantGroupKey?.trim();
-
-      if (!groupKey) {
-        productsWithoutGroup.push(product);
-        return;
-      }
-
-      const currentBest = bestByGroup.get(groupKey);
-      const productSurface = getSurfaceM2(product);
-      const currentSurface = currentBest ? getSurfaceM2(currentBest) : 0;
-
-      if (!currentBest || productSurface > currentSurface) {
-        bestByGroup.set(groupKey, product);
-      }
-    });
-
-    return [...productsWithoutGroup, ...Array.from(bestByGroup.values())];
-  }
-
   function getProductImages(product: ProductViewDto | null) {
     if (!product) return [];
 
@@ -548,7 +524,7 @@ export default function ProductsPage() {
   }
 
   const visibleCatalogProducts = useMemo(() => {
-    return diversifyProducts(getVisibleVariantProducts(products));
+    return diversifyProducts(products);
   }, [products]);
 
   const detailImages = getProductImages(detailProduct);
