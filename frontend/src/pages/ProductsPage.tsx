@@ -85,7 +85,7 @@ export default function ProductsPage() {
     {
       key: "margoum tisser berber",
       label: "Margoum tissé",
-      subtitle: "Brodée en petit",
+      subtitle: "Brodée ",
     },
     {
       key: "margoum berber",
@@ -824,8 +824,22 @@ export default function ProductsPage() {
 
     const family = getProductCategoryFamily(product);
 
+    // For the margoum/berber distinction, only check category fields — not the product name,
+    // because a product named "margoum berber" can have category="margoum" (tissé, not berbère).
+    const categoryFields = normalizeText(
+      [
+        product.category,
+        (product as ProductViewDto & { categorie?: string | null }).categorie,
+        product.type,
+        product.technique,
+      ]
+        .filter(Boolean)
+        .join(" ")
+    );
+
     const hasMargoum = family.includes("margoum");
-    const hasBerber = family.includes("berber") || family.includes("berbere");
+    const hasBerberInCategory =
+      categoryFields.includes("berber") || categoryFields.includes("berbere");
     const hasKilim = family.includes("kilim");
     const hasToujen = family.includes("toujen") || family.includes("toujane");
     const hasExtraFin =
@@ -845,11 +859,11 @@ export default function ProductsPage() {
         );
       }
       case "margoum tisser berber":
-        return hasMargoum && !hasBerber;
+        return hasMargoum && !hasBerberInCategory;
       case "margoum berber":
-        return hasMargoum && hasBerber;
+        return hasMargoum && hasBerberInCategory;
       case "kilim berber":
-        return hasKilim && hasBerber && !hasToujen && !hasExtraFin;
+        return hasKilim && hasBerberInCategory && !hasToujen && !hasExtraFin;
       case "kilim toujen":
         return hasKilim && hasToujen;
       case "kilim extra fin":
