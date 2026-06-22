@@ -5204,74 +5204,144 @@
 }
 
 /* ================================================================
-   HERO DEFINITIF — UNIQUE SOURCE DE VERITE
-   Ce bloc est le seul qui fixe hauteur, espacement et typographie
-   du hero. Tous les anciens blocs hero ont été supprimés ci-dessus.
+   HERO DESIGN — EDITORIAL LEFT
+   Gradient sombre gauche → transparent droite.
+   Texte aligné à gauche, titre grand serif blanc, accent cuivré.
 ================================================================ */
 
 .products-page {
-  padding-top: 35px !important;
+  padding-top: 0 !important;
 }
 
+/* Hauteur du hero */
 .products-hero-premium {
-  height: 170px !important;
-  min-height: 170px !important;
-  max-height: 170px !important;
+  height: 260px !important;
+  min-height: 260px !important;
+  max-height: 260px !important;
   margin-top: 0 !important;
   margin-bottom: 0 !important;
+  border-radius: 0 !important;
 }
 
+/* Gradient éditorial : sombre à gauche → transparent à droite */
+.products-hero-premium::after {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 1 !important;
+  background:
+    linear-gradient(
+      100deg,
+      rgba(15, 8, 3, 0.92) 0%,
+      rgba(15, 8, 3, 0.78) 28%,
+      rgba(15, 8, 3, 0.42) 52%,
+      transparent 72%
+    ) !important;
+}
+
+/* Overlay : texte aligné à gauche */
 .products-hero-overlay {
-  padding: 10px 20px !important;
+  align-items: flex-start !important;
+  justify-content: center !important;
+  text-align: left !important;
+  padding: 0 clamp(28px, 5vw, 72px) !important;
+  z-index: 2 !important;
 }
 
+/* Breadcrumb cuivré raffiné */
 .products-breadcrumb {
-  margin-bottom: 4px !important;
-  font-size: 0.68rem !important;
+  margin-bottom: 12px !important;
+  color: rgba(210, 163, 106, 0.9) !important;
+  font-size: 0.6rem !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.28em !important;
 }
 
+.products-breadcrumb span {
+  margin: 0 6px !important;
+  opacity: 0.65 !important;
+}
+
+/* Titre grand, blanc, italic serif */
 .products-hero-overlay h1 {
-  font-size: clamp(1.8rem, 3vw, 2.7rem) !important;
-  line-height: 1 !important;
+  margin: 0 !important;
+  color: #fff8f0 !important;
+  font-family: Georgia, "Times New Roman", serif !important;
+  font-size: clamp(2.6rem, 5.5vw, 4.2rem) !important;
+  font-weight: 400 !important;
+  font-style: italic !important;
+  line-height: 0.92 !important;
+  letter-spacing: -0.02em !important;
+  text-shadow: 0 3px 28px rgba(0, 0, 0, 0.35) !important;
 }
 
+/* Séparateur cuivré court */
 .products-hero-separator {
-  width: 55px !important;
-  margin: 6px 0 !important;
+  width: 52px !important;
+  height: 2px !important;
+  margin: 16px 0 !important;
+  background: linear-gradient(90deg, #c9a373, rgba(201, 163, 115, 0.15)) !important;
 }
 
+/* Description : petite, crème atténuée */
 .products-hero-overlay p {
-  max-width: 460px !important;
-  font-size: 0.82rem !important;
-  line-height: 1.35 !important;
+  margin: 0 !important;
+  max-width: 380px !important;
+  color: rgba(255, 238, 210, 0.72) !important;
+  font-size: 0.8rem !important;
+  line-height: 1.55 !important;
+  font-weight: 500 !important;
 }
 
+/* Panel catégories : chevauchement léger */
 .products-category-panel {
-  margin-top: -12px !important;
-  margin-bottom: 18px !important;
+  margin-top: -16px !important;
+  margin-bottom: 20px !important;
 }
 
+/* ── Mobile ── */
 @media (max-width: 680px) {
-  .products-page {
-    padding-top: 20px !important;
+  .products-hero-premium {
+    height: 200px !important;
+    min-height: 200px !important;
+    max-height: 200px !important;
   }
 
-  .products-hero-premium {
-    height: 125px !important;
-    min-height: 125px !important;
-    max-height: 125px !important;
+  /* Sur mobile : gradient couvre toute la largeur */
+  .products-hero-premium::after {
+    background:
+      linear-gradient(
+        180deg,
+        rgba(15, 8, 3, 0.70) 0%,
+        rgba(15, 8, 3, 0.82) 60%,
+        rgba(15, 8, 3, 0.55) 100%
+      ) !important;
+  }
+
+  /* Sur mobile : recentre le texte */
+  .products-hero-overlay {
+    align-items: center !important;
+    text-align: center !important;
+    padding: 0 20px !important;
   }
 
   .products-hero-overlay h1 {
-    font-size: 1.45rem !important;
+    font-size: clamp(1.9rem, 7vw, 2.6rem) !important;
+  }
+
+  .products-hero-separator {
+    width: 40px !important;
+    margin: 10px auto !important;
+    background: linear-gradient(90deg, transparent, #c9a373, transparent) !important;
   }
 
   .products-hero-overlay p {
-    font-size: 0.68rem !important;
+    font-size: 0.72rem !important;
+    max-width: 280px !important;
   }
 
   .products-category-panel {
-    margin-top: -8px !important;
+    margin-top: -10px !important;
   }
 }
 
