@@ -85,7 +85,7 @@ export default function ProductsPage() {
     {
       key: "margoum tisser berber",
       label: "Margoum tissé",
-      subtitle: "Berbère",
+      subtitle: "Brodée en petit",
     },
     {
       key: "margoum berber",
