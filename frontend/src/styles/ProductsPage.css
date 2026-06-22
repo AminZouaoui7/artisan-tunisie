@@ -4757,3 +4757,252 @@
     width: 100% !important;
   }
 }
+
+
+/* =========================
+   COMPACT PREMIUM REFRESH — HERO + CARD MOBILE
+   Overrides finaux (cascade gagne car derniers)
+========================= */
+
+/* ===== 1. HERO — hauteur réduite de ~30%, espacements resserrés ===== */
+.products-hero-premium {
+  height: 188px !important;
+  min-height: 188px !important;
+}
+
+.products-breadcrumb {
+  margin-bottom: 6px !important;
+}
+
+.products-hero-overlay h1 {
+  font-size: clamp(1.85rem, 3.4vw, 2.85rem) !important;
+  margin: 0 !important;
+}
+
+.products-hero-separator {
+  width: 76px !important;
+  margin: 8px 0 !important;
+}
+
+.products-hero-overlay p {
+  font-size: 0.86rem !important;
+  max-width: 470px !important;
+  line-height: 1.46 !important;
+}
+
+.products-category-panel {
+  margin-top: -14px !important;
+  margin-bottom: 18px !important;
+  padding: 16px 18px 18px !important;
+}
+
+@media (max-width: 680px) {
+  .products-hero-premium {
+    height: 144px !important;
+    min-height: 144px !important;
+  }
+
+  .products-hero-overlay h1 {
+    font-size: 1.6rem !important;
+  }
+
+  .products-hero-separator {
+    width: 52px !important;
+    margin: 5px 0 !important;
+  }
+
+  .products-hero-overlay p {
+    font-size: 0.74rem !important;
+    line-height: 1.38 !important;
+  }
+
+  .products-category-panel {
+    margin-top: -10px !important;
+    margin-bottom: 14px !important;
+    padding: 12px 14px 14px !important;
+  }
+}
+
+/* ===== 2. IMAGE CARD — hauteur légèrement augmentée ===== */
+.product-card-image-frame {
+  height: 298px !important;
+}
+
+@media (max-width: 700px) {
+  .product-card-image-frame {
+    height: 255px !important;
+  }
+}
+
+@media (max-width: 420px) {
+  .product-card-image-frame {
+    height: 228px !important;
+  }
+}
+
+/* ===== 3. SPECS MOBILE — 3 lignes horizontales (option A) ===== */
+@media (max-width: 640px) {
+  .product-card-specs {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 0 !important;
+    padding: 5px 12px !important;
+    margin: 11px 0 !important;
+    border-radius: 14px !important;
+    border: 1px solid rgba(92, 62, 32, 0.12) !important;
+    background: rgba(255, 250, 240, 0.84) !important;
+    overflow: hidden !important;
+    min-height: 0 !important;
+  }
+
+  .product-card-specs div {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    text-align: left !important;
+    gap: 8px !important;
+    min-height: 36px !important;
+    max-height: 38px !important;
+    padding: 0 3px !important;
+    background: transparent !important;
+    border-radius: 0 !important;
+    border-left: 0 !important;
+    border-top: 0 !important;
+  }
+
+  .product-card-specs div:not(:first-child) {
+    border-left: 0 !important;
+    border-top: 1px solid rgba(92, 62, 32, 0.09) !important;
+  }
+
+  .product-card-specs svg,
+  .product-spec-icon {
+    width: 14px !important;
+    height: 14px !important;
+    min-width: 14px !important;
+    flex-shrink: 0 !important;
+    margin-bottom: 0 !important;
+    color: rgba(92, 62, 32, 0.62) !important;
+  }
+
+  .product-spec-icon--wool svg {
+    width: 14px !important;
+    height: 14px !important;
+  }
+
+  .product-card-specs span {
+    display: inline !important;
+    flex: 0 0 60px !important;
+    font-size: 0.59rem !important;
+    letter-spacing: 0.08em !important;
+    text-transform: uppercase !important;
+    white-space: nowrap !important;
+    margin: 0 !important;
+    color: rgba(45, 27, 19, 0.52) !important;
+  }
+
+  .product-card-specs strong {
+    flex: 1 !important;
+    font-size: 0.82rem !important;
+    font-weight: 900 !important;
+    text-align: left !important;
+    white-space: normal !important;
+    margin-top: 0 !important;
+    color: #1f1712 !important;
+    line-height: 1.18 !important;
+  }
+}
+
+/* ===== 4. BUY ZONE — prix gauche / boutons droite, compact ===== */
+.product-buy-zone {
+  display: grid !important;
+  grid-template-columns: auto 1fr !important;
+  align-items: center !important;
+  gap: 11px !important;
+  padding: 10px 13px !important;
+  border-radius: 16px !important;
+  background: rgba(255, 250, 240, 0.96) !important;
+  border: 1px solid rgba(92, 62, 32, 0.12) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8) !important;
+  margin-top: 13px !important;
+  overflow: hidden !important;
+}
+
+.product-price-box {
+  min-width: 0 !important;
+}
+
+.product-price-label {
+  font-size: 0.59rem !important;
+  letter-spacing: 0.14em !important;
+  margin-bottom: 2px !important;
+  color: rgba(45, 27, 19, 0.46) !important;
+  font-weight: 950 !important;
+  text-transform: uppercase !important;
+}
+
+.product-price {
+  font-size: 1.5rem !important;
+  font-weight: 800 !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+  color: #15100d !important;
+}
+
+.product-price-request {
+  font-size: 1rem !important;
+  font-weight: 950 !important;
+  color: #8b3f20 !important;
+  line-height: 1.1 !important;
+  white-space: normal !important;
+}
+
+.product-actions-row {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 7px !important;
+  width: 100% !important;
+  min-width: 0 !important;
+}
+
+.product-detail-btn,
+.product-cart-btn {
+  width: 100% !important;
+  min-width: 0 !important;
+  height: 40px !important;
+  padding: 0 9px !important;
+  border-radius: 12px !important;
+  font-size: 0.74rem !important;
+  font-weight: 950 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+}
+
+.product-buy-zone--request {
+  grid-template-columns: 1fr !important;
+}
+
+.product-buy-zone--request .product-actions-row {
+  grid-template-columns: 1fr 1fr !important;
+}
+
+@media (max-width: 640px) {
+  .product-buy-zone {
+    gap: 9px !important;
+    padding: 9px 11px !important;
+    border-radius: 14px !important;
+  }
+
+  .product-price {
+    font-size: 1.28rem !important;
+  }
+
+  .product-detail-btn,
+  .product-cart-btn {
+    height: 37px !important;
+    font-size: 0.69rem !important;
+    padding: 0 7px !important;
+    border-radius: 10px !important;
+  }
+}
