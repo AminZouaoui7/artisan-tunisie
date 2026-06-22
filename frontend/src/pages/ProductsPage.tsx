@@ -800,6 +800,65 @@ export default function ProductsPage() {
     [t]
   );
 
+  function getProductCategoryFamily(product: ProductViewDto): string {
+    return normalizeText(
+      [
+        product.category,
+        (product as ProductViewDto & { categorie?: string | null }).categorie,
+        product.type,
+        product.name,
+        product.slug,
+        product.variantGroupKey,
+        product.technique,
+      ]
+        .filter(Boolean)
+        .join(" ")
+    );
+  }
+
+  function matchesCategoryFilter(
+    product: ProductViewDto,
+    categoryKey: string
+  ): boolean {
+    if (categoryKey === "all") return true;
+
+    const family = getProductCategoryFamily(product);
+
+    const hasMargoum = family.includes("margoum");
+    const hasBerber = family.includes("berber") || family.includes("berbere");
+    const hasKilim = family.includes("kilim");
+    const hasToujen = family.includes("toujen") || family.includes("toujane");
+    const hasExtraFin =
+      family.includes("extra fin") ||
+      family.includes("extrafin") ||
+      family.includes("extra-fin");
+
+    switch (categoryKey) {
+      case "tapis": {
+        const productCategory = normalizeValue(
+          product.category ??
+            (product as ProductViewDto & { categorie?: string | null }).categorie
+        );
+        return (
+          productCategory === "tapis" ||
+          (!hasMargoum && !hasKilim && family.includes("noue"))
+        );
+      }
+      case "margoum tisser berber":
+        return hasMargoum && !hasBerber;
+      case "margoum berber":
+        return hasMargoum && hasBerber;
+      case "kilim berber":
+        return hasKilim && hasBerber && !hasToujen && !hasExtraFin;
+      case "kilim toujen":
+        return hasKilim && hasToujen;
+      case "kilim extra fin":
+        return hasKilim && hasExtraFin;
+      default:
+        return false;
+    }
+  }
+
   const hasActiveFilters = Boolean(
     search.trim() ||
       selectedCategory !== "all" ||
@@ -827,14 +886,7 @@ export default function ProductsPage() {
       `);
 
       const matchSearch = !normalizedSearch || text.includes(normalizedSearch);
-      const productCategory = normalizeValue(
-        product.category ??
-          (product as ProductViewDto & { categorie?: string | null }).categorie
-      );
-
-      const matchCategory =
-        selectedCategory === "all" ||
-        productCategory === normalizeValue(selectedCategory);
+      const matchCategory = matchesCategoryFilter(product, selectedCategory);
 
       const productColors = splitValues(product.colors).map(canonicalColor);
       const matchColor =
