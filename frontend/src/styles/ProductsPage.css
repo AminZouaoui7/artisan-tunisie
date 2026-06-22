@@ -1215,7 +1215,7 @@
 
 .products-page {
   min-height: 100vh;
-  padding: 86px 4vw 110px;
+  padding: 0 4vw 110px;
   background: linear-gradient(180deg, #f8f1e6 0%, #fffaf0 34%, #fffdf7 100%);
   color: #2d1b13;
 }
@@ -1223,10 +1223,6 @@
 .products-hero-premium {
   position: relative;
   max-width: 1580px;
-
-  height: 280px !important;
-  min-height: 280px !important;
-
   margin: 0 auto;
   overflow: hidden;
   border-radius: 0 0 34px 34px;
@@ -1259,11 +1255,9 @@
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: 24px !important;
 }
 
 .products-breadcrumb {
-  margin-bottom: 12px;
   color: rgba(88, 55, 34, 0.74);
   font-size: 0.72rem;
   font-weight: 900;
@@ -1278,24 +1272,17 @@
   margin: 0;
   color: #3a2418;
   font-family: Georgia, "Times New Roman", serif;
-  font-size: clamp(3rem, 5vw, 4.5rem) !important;
-  line-height: 0.92;
   font-weight: 500;
 }
 
 .products-hero-separator {
-  width: 150px;
   height: 1px;
-  margin: 20px 0;
   background: linear-gradient(90deg, transparent, #9c633a, transparent);
 }
 
 .products-hero-overlay p {
-  max-width: 650px !important;
   margin: 0;
   color: rgba(45, 27, 19, 0.82);
-  font-size: 1rem !important;
-  line-height: 1.55;
   font-weight: 600;
 }
 
@@ -1305,7 +1292,6 @@
   width: min(1620px, calc(100% - 28px));
   max-width: 1440px;
   margin: 0 auto 34px;
-  margin-top: -40px !important;
   padding: 26px 30px 28px;
   border-radius: 28px;
   background: rgba(255, 253, 247, 0.94);
@@ -4759,71 +4745,7 @@
 }
 
 
-/* =========================
-   COMPACT PREMIUM REFRESH — HERO + CARD MOBILE
-   Overrides finaux (cascade gagne car derniers)
-========================= */
-
-/* ===== 1. HERO — hauteur réduite de ~30%, espacements resserrés ===== */
-.products-hero-premium {
-  height: 188px !important;
-  min-height: 188px !important;
-}
-
-.products-breadcrumb {
-  margin-bottom: 6px !important;
-}
-
-.products-hero-overlay h1 {
-  font-size: clamp(1.85rem, 3.4vw, 2.85rem) !important;
-  margin: 0 !important;
-}
-
-.products-hero-separator {
-  width: 76px !important;
-  margin: 8px 0 !important;
-}
-
-.products-hero-overlay p {
-  font-size: 0.86rem !important;
-  max-width: 470px !important;
-  line-height: 1.46 !important;
-}
-
-.products-category-panel {
-  margin-top: -14px !important;
-  margin-bottom: 18px !important;
-  padding: 16px 18px 18px !important;
-}
-
-@media (max-width: 680px) {
-  .products-hero-premium {
-    height: 144px !important;
-    min-height: 144px !important;
-  }
-
-  .products-hero-overlay h1 {
-    font-size: 1.6rem !important;
-  }
-
-  .products-hero-separator {
-    width: 52px !important;
-    margin: 5px 0 !important;
-  }
-
-  .products-hero-overlay p {
-    font-size: 0.74rem !important;
-    line-height: 1.38 !important;
-  }
-
-  .products-category-panel {
-    margin-top: -10px !important;
-    margin-bottom: 14px !important;
-    padding: 12px 14px 14px !important;
-  }
-}
-
-/* ===== 2. IMAGE CARD — hauteur légèrement augmentée ===== */
+/* ===== IMAGE CARD — hauteur légèrement augmentée ===== */
 .product-card-image-frame {
   height: 298px !important;
 }
@@ -5011,41 +4933,6 @@
    CORRECTIF DEFINITIF v3 — SPECS + HERO + BOUTONS
    Dernier bloc = gagne la cascade sur tous les precedents.
 ================================================================ */
-
-/* 0. PAGE top spacing */
-.products-page {
-  padding-top: 68px !important;
-}
-
-/* 1. HERO compact */
-.products-hero-premium {
-  height: 174px !important;
-  min-height: 174px !important;
-}
-.products-hero-overlay {
-  padding: 12px 20px !important;
-}
-.products-breadcrumb {
-  margin-bottom: 5px !important;
-}
-.products-hero-overlay h1 {
-  font-size: clamp(1.65rem, 3.1vw, 2.5rem) !important;
-  margin: 0 !important;
-}
-.products-hero-separator {
-  width: 58px !important;
-  margin: 7px 0 !important;
-}
-.products-hero-overlay p {
-  font-size: 0.82rem !important;
-  max-width: 430px !important;
-  line-height: 1.42 !important;
-}
-.products-category-panel {
-  margin-top: -8px !important;
-  margin-bottom: 12px !important;
-  padding: 14px 16px 16px !important;
-}
 
 /* 2. CARD overflow */
 .product-card {
@@ -5316,29 +5203,75 @@
   }
 }
 
-/* 7. HERO MOBILE */
+/* ================================================================
+   HERO DEFINITIF — UNIQUE SOURCE DE VERITE
+   Ce bloc est le seul qui fixe hauteur, espacement et typographie
+   du hero. Tous les anciens blocs hero ont été supprimés ci-dessus.
+================================================================ */
+
+.products-page {
+  padding-top: 35px !important;
+}
+
+.products-hero-premium {
+  height: 170px !important;
+  min-height: 170px !important;
+  max-height: 170px !important;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+.products-hero-overlay {
+  padding: 10px 20px !important;
+}
+
+.products-breadcrumb {
+  margin-bottom: 4px !important;
+  font-size: 0.68rem !important;
+}
+
+.products-hero-overlay h1 {
+  font-size: clamp(1.8rem, 3vw, 2.7rem) !important;
+  line-height: 1 !important;
+}
+
+.products-hero-separator {
+  width: 55px !important;
+  margin: 6px 0 !important;
+}
+
+.products-hero-overlay p {
+  max-width: 460px !important;
+  font-size: 0.82rem !important;
+  line-height: 1.35 !important;
+}
+
+.products-category-panel {
+  margin-top: -12px !important;
+  margin-bottom: 18px !important;
+}
+
 @media (max-width: 680px) {
   .products-page {
-    padding-top: 60px !important;
+    padding-top: 20px !important;
   }
+
   .products-hero-premium {
-    height: 132px !important;
-    min-height: 132px !important;
+    height: 125px !important;
+    min-height: 125px !important;
+    max-height: 125px !important;
   }
+
   .products-hero-overlay h1 {
-    font-size: 1.48rem !important;
+    font-size: 1.45rem !important;
   }
-  .products-hero-separator {
-    width: 42px !important;
-    margin: 4px 0 !important;
-  }
+
   .products-hero-overlay p {
-    font-size: 0.7rem !important;
-    line-height: 1.36 !important;
+    font-size: 0.68rem !important;
   }
+
   .products-category-panel {
-    margin-top: -6px !important;
-    margin-bottom: 8px !important;
-    padding: 10px 12px 12px !important;
+    margin-top: -8px !important;
   }
 }
+
