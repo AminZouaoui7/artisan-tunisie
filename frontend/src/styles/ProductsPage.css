@@ -5302,46 +5302,64 @@
 /* ── Mobile ── */
 @media (max-width: 680px) {
   .products-hero-premium {
-    height: 200px !important;
-    min-height: 200px !important;
-    max-height: 200px !important;
+    height: clamp(260px, 52vw, 340px) !important;
+    min-height: unset !important;
+    max-height: unset !important;
+    border-radius: 0 0 22px 22px !important;
   }
 
-  /* Sur mobile : gradient couvre toute la largeur */
+  .products-hero-premium img {
+    object-position: center 30% !important;
+  }
+
+  /* Gradient vertical couvrant tout pour lisibilité du texte */
   .products-hero-premium::after {
     background:
       linear-gradient(
         180deg,
-        rgba(15, 8, 3, 0.70) 0%,
-        rgba(15, 8, 3, 0.82) 60%,
-        rgba(15, 8, 3, 0.55) 100%
+        rgba(10, 5, 2, 0.55) 0%,
+        rgba(10, 5, 2, 0.72) 50%,
+        rgba(10, 5, 2, 0.48) 100%
       ) !important;
   }
 
-  /* Sur mobile : recentre le texte */
+  /* Texte centré sur mobile */
   .products-hero-overlay {
     align-items: center !important;
+    justify-content: center !important;
     text-align: center !important;
-    padding: 0 20px !important;
+    padding: 24px 20px !important;
+    gap: 0 !important;
+  }
+
+  .products-breadcrumb {
+    font-size: 0.58rem !important;
+    letter-spacing: 0.22em !important;
+    margin-bottom: 10px !important;
   }
 
   .products-hero-overlay h1 {
-    font-size: clamp(1.9rem, 7vw, 2.6rem) !important;
+    font-size: clamp(2rem, 8.5vw, 2.8rem) !important;
+    line-height: 1 !important;
   }
 
   .products-hero-separator {
-    width: 40px !important;
-    margin: 10px auto !important;
+    width: 36px !important;
+    height: 1.5px !important;
+    margin: 12px auto !important;
     background: linear-gradient(90deg, transparent, #c9a373, transparent) !important;
   }
 
   .products-hero-overlay p {
-    font-size: 0.72rem !important;
-    max-width: 280px !important;
+    font-size: 0.73rem !important;
+    line-height: 1.5 !important;
+    max-width: 260px !important;
+    color: rgba(255, 235, 200, 0.75) !important;
   }
 
   .products-category-panel {
-    margin-top: -10px !important;
+    margin-top: -14px !important;
+    border-radius: 20px !important;
   }
 }
 
