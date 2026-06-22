@@ -1146,23 +1146,7 @@ export default function ProductsPage() {
             RÉINITIALISER LES FILTRES
           </button>
 
-          <div className="products-filter-benefits">
-            <div>
-              Livraison offerte
-              <br />
-              <span>À partir de 300 € d’achat</span>
-            </div>
-            <div>
-              Paiement sécurisé
-              <br />
-              <span>Carte bancaire, PayPal...</span>
-            </div>
-            <div>
-              Pièces uniques
-              <br />
-              <span>Chaque tapis est unique</span>
-            </div>
-          </div>
+          
         </aside>
 
         <main className="products-catalog" ref={productsCatalogRef}>
