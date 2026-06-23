@@ -1,5 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://artisansdelamedina.com/sitemap.xml
-
+Sitemap: https://www.artisansdelamedina.com/sitemap.xml
