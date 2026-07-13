@@ -840,10 +840,9 @@ export default function ProductsPage() {
     const hasMargoum = family.includes("margoum");
     const hasBerberInCategory =
       categoryFields.includes("berber") || categoryFields.includes("berbere");
-    const hasKilim = family.includes("kilim");
-    const hasBerberInFamily =
-      family.includes("berber") ||
-      family.includes("berbere");
+    const hasKilim =
+      family.includes("kilim") ||
+      family.includes("killim");
     const hasToujen = family.includes("toujen") || family.includes("toujane");
     const hasExtraFin =
       family.includes("extra fin") ||
@@ -866,12 +865,7 @@ export default function ProductsPage() {
       case "margoum berber":
         return hasMargoum && hasBerberInCategory;
       case "kilim berber":
-        return (
-          hasKilim &&
-          hasBerberInFamily &&
-          !hasToujen &&
-          !hasExtraFin
-        );
+        return hasKilim && hasBerberInCategory && !hasToujen && !hasExtraFin;
       case "kilim toujen":
         return hasKilim && hasToujen;
       case "kilim extra fin":
