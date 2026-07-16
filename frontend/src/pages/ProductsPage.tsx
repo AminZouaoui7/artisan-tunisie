@@ -41,6 +41,9 @@ import {
 } from "../services/productService";
 import { createPriceRequest } from "../services/priceRequestService";
 import { useCurrency } from "../context/CurrencyContext";
+import photoHero from "../assets/photohero.png";
+import photoHero1 from "../assets/photohero1.png";
+import photoHero2 from "../assets/photohero2.png";
 import "../styles/ProductsPage.css";
 import { useI18n } from "../i18n/i18n";
 
@@ -65,6 +68,7 @@ export default function ProductsPage() {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [selectedPrice, setSelectedPrice] = useState("all");
   const [showMobileFilters, setShowMobileFilters] = useState(false);
+  const [heroSlideIndex, setHeroSlideIndex] = useState(0);
 
   const normalizeValue = (value?: string | null) =>
     (value ?? "")
@@ -186,6 +190,13 @@ export default function ProductsPage() {
     return () => {
       document.body.classList.remove("products-page-body");
     };
+  }, []);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setHeroSlideIndex((prev) => (prev + 1) % 3);
+    }, 6000);
+    return () => clearInterval(timer);
   }, []);
 
   function getSurfaceM2(product: ProductViewDto) {
@@ -1032,55 +1043,65 @@ export default function ProductsPage() {
   return (
     <section className="products-page">
       <section className="products-hero-premium">
-        <div className="products-hero-inner">
-          <div className="products-hero-copy">
-            <div className="products-breadcrumb">
-              ACCUEIL <span>›</span> NOS TAPIS
-            </div>
+        <div className="hero-slider" aria-hidden="true">
+          {([photoHero, photoHero1, photoHero2] as const).map((src, i) => (
+            <img
+              key={i}
+              src={src}
+              alt=""
+              className={`hero-slide${heroSlideIndex === i ? " hero-slide--active" : ""}`}
+              fetchPriority={i === 0 ? "high" : undefined}
+            />
+          ))}
+        </div>
 
-            <span className="products-hero-kicker">
-              Artisanat tunisien d'exception
-            </span>
+        <div className="hero-overlay" aria-hidden="true" />
 
-            <h1>Des tapis façonnés comme des œuvres</h1>
-
-            <div className="products-hero-separator" />
-
-            <p>
-              Découvrez une sélection de tapis artisanaux tunisiens,
-              tissés et noués à la main dans le respect du savoir-faire ancestral.
-            </p>
-
-            <div className="products-hero-actions">
-              <button
-                type="button"
-                className="products-hero-primary-btn"
-                onClick={() =>
-                  productsCatalogRef.current?.scrollIntoView({
-                    behavior: "smooth",
-                    block: "start",
-                  })
-                }
-              >
-                Découvrir la collection
-              </button>
-
-              <button
-                type="button"
-                className="products-hero-secondary-btn"
-                onClick={() =>
-                  document.querySelector(".products-category-panel")?.scrollIntoView({
-                    behavior: "smooth",
-                    block: "start",
-                  })
-                }
-              >
-                Explorer les catégories
-              </button>
-            </div>
+        <div className="hero-content">
+          <div className="products-breadcrumb">
+            ACCUEIL <span>›</span> NOS TAPIS
           </div>
 
-         
+          <span className="products-hero-kicker">
+            Artisanat tunisien d'exception
+          </span>
+
+          <h1>Des tapis façonnés<br />comme des œuvres</h1>
+
+          <div className="products-hero-separator" />
+
+          <p>
+            Découvrez une sélection de tapis artisanaux tunisiens,
+            tissés et noués à la main dans le respect du savoir-faire ancestral.
+          </p>
+
+          <div className="products-hero-actions">
+            <button
+              type="button"
+              className="products-hero-primary-btn"
+              onClick={() =>
+                productsCatalogRef.current?.scrollIntoView({
+                  behavior: "smooth",
+                  block: "start",
+                })
+              }
+            >
+              Découvrir la collection
+            </button>
+
+            <button
+              type="button"
+              className="products-hero-secondary-btn"
+              onClick={() =>
+                document.querySelector(".products-category-panel")?.scrollIntoView({
+                  behavior: "smooth",
+                  block: "start",
+                })
+              }
+            >
+              Explorer les catégories
+            </button>
+          </div>
         </div>
       </section>
 
@@ -1212,15 +1233,16 @@ export default function ProductsPage() {
 
         <main className="products-catalog" ref={productsCatalogRef}>
           <div className="products-catalog-header">
-            <p className="products-count-line">
-              {language === "FR"
-                ? `${filteredProducts.length} tapis ${
-                    filteredProducts.length === 1 ? "trouvé" : "trouvés"
-                  }`
-                : `${filteredProducts.length} rug${
-                    filteredProducts.length === 1 ? "" : "s"
-                  } found`}
-            </p>
+            <div className="products-catalog-title-block">
+              <h2 className="products-catalog-title">
+                {language === "FR"
+                  ? `${filteredProducts.length} tapis artisanaux`
+                  : `${filteredProducts.length} artisan rug${filteredProducts.length === 1 ? "" : "s"}`}
+              </h2>
+              <p className="products-catalog-subtitle">
+                {language === "FR" ? "Découvrez notre collection" : "Discover our collection"}
+              </p>
+            </div>
 
             <div className="products-sort-control">
               <span>Trier par :</span>
