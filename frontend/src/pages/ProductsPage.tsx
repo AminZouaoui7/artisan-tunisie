@@ -30,6 +30,8 @@ import {
   ScanLine,
   Shapes,
   Frame,
+  Heart,
+  CircleDashed,
 } from "lucide-react";
 
 import { useAuth } from "../context/useAuth";
@@ -1361,6 +1363,14 @@ export default function ProductsPage() {
 
                       <button
                         type="button"
+                        className="pc-favorite"
+                        aria-label="Ajouter aux favoris"
+                      >
+                        <Heart size={18} />
+                      </button>
+
+                      <button
+                        type="button"
                         className="pc-quick-view"
                         onClick={() => openDetailProduct(product)}
                         aria-label={t("products.viewDetails")}
@@ -1383,7 +1393,7 @@ export default function ProductsPage() {
 
                       <div className="pc-specs">
                         <div className="pc-spec">
-                          <Ruler size={15} className="pc-spec-icon" />
+                          <Ruler size={20} className="pc-spec-icon" />
                           <strong className="pc-spec-value">
                             {product.lengthCm && product.widthCm
                               ? `${product.lengthCm} × ${product.widthCm}`
@@ -1392,14 +1402,14 @@ export default function ProductsPage() {
                           <span className="pc-spec-label">Dimensions</span>
                         </div>
                         <div className="pc-spec">
-                          <Gem size={15} className="pc-spec-icon" />
+                          <CircleDashed size={20} className="pc-spec-icon" />
                           <strong className="pc-spec-value">
                             {product.material || "—"}
                           </strong>
                           <span className="pc-spec-label">Matière</span>
                         </div>
                         <div className="pc-spec">
-                          <MapPin size={15} className="pc-spec-icon" />
+                          <MapPin size={20} className="pc-spec-icon" />
                           <strong className="pc-spec-value">
                             {product.region || "—"}
                           </strong>

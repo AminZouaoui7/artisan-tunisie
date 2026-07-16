@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&display=swap');
+
 /* ================================================================
    PRODUCTS PAGE — PREMIUM EDITORIAL V4
    Inspiré de Beni Rugs · Nordic Knots · RH · Zara Home
@@ -765,47 +767,47 @@
 .products-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 26px;
+  gap: 28px;
 }
 
 /* ================================================================
-   CARTES PRODUITS PREMIUM — NORDIC KNOTS / ZARA HOME
+   CARTES PRODUITS — HERMÈS / ZARA HOME / RESTORATION HARDWARE
 ================================================================ */
 
 .product-card {
-  border-radius: 26px;
-  background: #fff;
-  border: 1px solid #eadfd2;
+  border-radius: 28px;
+  background: #fffdf9;
+  border: 1px solid rgba(210, 190, 170, .45);
   padding: 0;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 25px 60px rgba(39, 26, 18, 0.08);
+  box-shadow: 0 8px 32px rgba(39, 26, 18, .06);
   transition:
-    transform 0.38s cubic-bezier(0.22, 1, 0.36, 1),
-    box-shadow 0.38s cubic-bezier(0.22, 1, 0.36, 1);
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .product-card:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 40px 90px rgba(39, 26, 18, 0.13);
+  transform: translateY(-8px);
+  box-shadow: 0 28px 70px rgba(39, 26, 18, .14);
 }
 
 /* ── Zone image ── */
 
 .pc-media {
   position: relative;
-  background: #f8f4ee;
+  background: #faf7f2;
   border-radius: 22px;
   overflow: hidden;
-  margin: 14px 14px 0;
+  margin: 16px 16px 0;
   flex-shrink: 0;
 }
 
 .pc-image-btn {
   display: block;
   width: 100%;
-  height: 295px;
+  height: 320px;
   border: none;
   padding: 0;
   background: none;
@@ -826,11 +828,11 @@
   width: 100%;
   height: 100%;
   object-fit: contain;
-  padding: 18px;
+  padding: 20px;
   box-sizing: border-box;
   transition:
-    opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
-    transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+    opacity 0.5s ease,
+    transform 0.5s ease;
 }
 
 .pc-img--primary {
@@ -840,12 +842,12 @@
 
 .pc-img--hover {
   opacity: 0;
-  transform: scale(1.06);
+  transform: scale(1.04);
 }
 
 .product-card:hover .pc-img--primary {
   opacity: 0;
-  transform: scale(1.06);
+  transform: scale(1.04);
 }
 
 .product-card:hover .pc-img--hover {
@@ -887,17 +889,17 @@
 .pc-badge {
   display: inline-flex;
   align-items: center;
-  height: 30px;
+  height: 28px;
   padding: 0 14px;
   border-radius: 999px;
-  font-size: 0.6rem;
+  font-size: 0.58rem;
   font-weight: 700;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.09em;
   text-transform: uppercase;
 }
 
 .pc-badge--unique {
-  background: #b8673d;
+  background: #B86437;
   color: #fff;
 }
 
@@ -907,7 +909,35 @@
   backdrop-filter: blur(8px);
 }
 
-/* ── Quick view ── */
+/* ── Bouton favori (haut droite) ── */
+
+.pc-favorite {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 4;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid #e9dccd;
+  background: rgba(255, 255, 255, .96);
+  color: #2a1c15;
+  box-shadow: 0 4px 14px rgba(39, 26, 18, .1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
+}
+
+.pc-favorite:hover {
+  background: #B86437;
+  color: #fff;
+  border-color: #B86437;
+  transform: scale(1.08);
+}
+
+/* ── Quick view (bas droite) ── */
 
 .pc-quick-view {
   position: absolute;
@@ -918,9 +948,9 @@
   height: 44px;
   border-radius: 50%;
   border: 1px solid #e9dccd;
-  background: rgba(255, 255, 255, 0.96);
+  background: rgba(255, 255, 255, .96);
   color: #2a1c15;
-  box-shadow: 0 4px 16px rgba(39, 26, 18, 0.12);
+  box-shadow: 0 4px 16px rgba(39, 26, 18, .12);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -936,9 +966,9 @@
 }
 
 .pc-quick-view:hover {
-  background: #b8673d;
+  background: #B86437;
   color: #fff;
-  border-color: #b8673d;
+  border-color: #B86437;
 }
 
 @media (hover: none) {
@@ -954,72 +984,68 @@
   display: flex;
   flex-direction: column;
   flex: 1;
-  padding: 20px 26px 26px;
+  padding: 24px 28px 28px;
 }
 
-/* Titre serif */
 .pc-title {
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: clamp(1.1rem, 1.5vw, 1.35rem);
-  font-weight: 400;
-  color: #1a0e08;
-  line-height: 1.26;
-  margin: 0 0 9px;
+  font-family: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  font-size: clamp(1.25rem, 1.8vw, 1.9rem);
+  font-weight: 600;
+  color: #2B1D15;
+  line-height: 1.22;
+  margin: 0 0 12px;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
 
-/* Description courte */
 .pc-desc {
-  font-size: 0.79rem;
+  font-size: 0.97rem;
   font-weight: 400;
-  color: #6d5d50;
-  line-height: 1.6;
-  margin: 0 0 16px;
+  color: #756A63;
+  line-height: 1.7;
+  margin: 0 0 20px;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
 
-/* Ligne de séparation */
 .pc-divider {
   height: 1px;
-  background: #efe7db;
-  margin: 0 0 18px;
+  background: rgba(210, 190, 170, .5);
+  margin: 0 0 20px;
   flex-shrink: 0;
 }
 
-/* 3 colonnes d'infos */
 .pc-specs {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 6px;
-  margin-bottom: 22px;
+  gap: 10px;
+  margin-bottom: 28px;
 }
 
 .pc-spec {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 5px;
+  gap: 7px;
   text-align: center;
-  padding: 10px 4px;
-  background: #faf6f1;
-  border-radius: 10px;
+  padding: 18px 6px;
+  background: #fbf8f4;
+  border-radius: 20px;
 }
 
 .pc-spec-icon {
-  color: #b8673d;
+  color: #B86437;
   flex-shrink: 0;
 }
 
 .pc-spec-value {
-  font-size: 0.74rem;
+  font-size: 0.82rem;
   font-weight: 700;
-  color: #1a0e08;
+  color: #2B1D15;
   line-height: 1.2;
   max-width: 100%;
   overflow: hidden;
@@ -1029,48 +1055,49 @@
 
 .pc-spec-label {
   font-size: 0.6rem;
-  font-weight: 500;
-  color: rgba(109, 93, 80, 0.65);
+  font-weight: 600;
+  color: #756A63;
   text-transform: uppercase;
-  letter-spacing: 0.07em;
+  letter-spacing: 0.09em;
 }
 
-/* ── Footer : prix + bouton ── */
+/* ── Footer : prix gauche + bouton droite ── */
 
 .pc-footer {
   margin-top: auto;
   display: flex;
-  flex-direction: column;
-  gap: 14px;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
 }
 
-/* Prix serif grand */
 .pc-price {
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: clamp(1.55rem, 2.2vw, 2rem);
+  font-family: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  font-size: clamp(1.8rem, 2.5vw, 3rem);
   font-weight: 400;
-  color: #1a0e08;
+  color: #2B1D15;
   line-height: 1;
-  display: block;
+  flex-shrink: 0;
 }
 
 .pc-price--request {
   font-family: inherit;
-  font-size: 0.82rem;
+  font-size: 0.88rem;
   font-weight: 700;
-  color: #b8673d;
+  color: #B86437;
   line-height: 1.4;
 }
 
-/* Bouton panier terracotta */
 .pc-cart-btn {
-  width: 100%;
-  height: 54px;
-  border-radius: 18px;
+  height: 64px;
+  min-width: 170px;
+  padding: 0 24px;
+  border-radius: 20px;
   border: none;
-  background: #b8673d;
+  background: #B86437;
   color: #fff;
-  font-size: 0.83rem;
+  font-size: 0.85rem;
   font-weight: 700;
   letter-spacing: 0.05em;
   cursor: pointer;
@@ -1078,13 +1105,14 @@
   align-items: center;
   justify-content: center;
   gap: 10px;
-  transition: background 0.24s ease, transform 0.2s ease;
+  transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
   flex-shrink: 0;
 }
 
 .pc-cart-btn:hover:not(:disabled) {
   background: #9a5230;
   transform: translateY(-2px);
+  box-shadow: 0 10px 28px rgba(184, 100, 55, .32);
 }
 
 .pc-cart-btn:disabled {
@@ -1096,23 +1124,23 @@
   background: #3a7a50 !important;
 }
 
-/* Bouton "sur demande" */
 .pc-request-btn {
-  width: 100%;
-  height: 54px;
-  border-radius: 18px;
-  border: 1.5px solid #b8673d;
+  height: 64px;
+  min-width: 170px;
+  padding: 0 22px;
+  border-radius: 20px;
+  border: 1.5px solid #B86437;
   background: transparent;
-  color: #b8673d;
-  font-size: 0.82rem;
+  color: #B86437;
+  font-size: 0.85rem;
   font-weight: 700;
   cursor: pointer;
-  transition: background 0.22s ease, color 0.22s ease;
+  transition: background 0.3s ease, color 0.3s ease;
   flex-shrink: 0;
 }
 
 .pc-request-btn:hover:not(:disabled) {
-  background: #b8673d;
+  background: #B86437;
   color: #fff;
 }
 
@@ -1128,7 +1156,7 @@
 @media (max-width: 1400px) {
   .products-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 20px;
+    gap: 22px;
   }
 }
 
@@ -1211,7 +1239,24 @@
   }
 
   .pc-body {
-    padding: 16px 20px 22px;
+    padding: 18px 20px 22px;
+  }
+
+  .pc-title {
+    font-size: clamp(1.1rem, 3vw, 1.5rem);
+  }
+
+  .pc-price {
+    font-size: clamp(1.5rem, 4vw, 2.2rem);
+  }
+
+  .pc-cart-btn,
+  .pc-request-btn {
+    height: 52px;
+    min-width: 130px;
+    padding: 0 16px;
+    border-radius: 16px;
+    font-size: 0.8rem;
   }
 }
 
@@ -1268,13 +1313,27 @@
     padding: 18px 22px 24px;
   }
 
-  .pc-specs {
-    gap: 5px;
+  .pc-footer {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
   }
 
   .pc-cart-btn,
   .pc-request-btn {
-    height: 50px;
+    width: 100%;
+    height: 56px;
+    border-radius: 18px;
+    min-width: unset;
+    padding: 0 20px;
+  }
+
+  .pc-specs {
+    gap: 7px;
+  }
+
+  .pc-spec {
+    padding: 14px 6px;
     border-radius: 16px;
   }
 }
