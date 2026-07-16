@@ -41,7 +41,6 @@ import {
 } from "../services/productService";
 import { createPriceRequest } from "../services/priceRequestService";
 import { useCurrency } from "../context/CurrencyContext";
-import photoHero3 from "../assets/photohero3.png";
 import "../styles/ProductsPage.css";
 import { useI18n } from "../i18n/i18n";
 
@@ -1081,13 +1080,7 @@ export default function ProductsPage() {
             </div>
           </div>
 
-          <div className="products-hero-visual">
-            <img
-              src={photoHero3}
-              alt="Collection de tapis artisanaux tunisiens"
-              fetchPriority="high"
-            />
-          </div>
+         
         </div>
       </section>
 
@@ -1327,11 +1320,24 @@ export default function ProductsPage() {
                     <div className="product-content">
                       <h2>{product.name}</h2>
 
-                      <p className="product-card-dimensions">
-                        {product.lengthCm && product.widthCm
-                          ? `${product.lengthCm} × ${product.widthCm} cm`
-                          : product.dimensions || ""}
-                      </p>
+                      <ul className="product-card-details">
+                        <li>
+                          <Ruler size={12} />
+                          <span>
+                            {product.lengthCm && product.widthCm
+                              ? `${product.lengthCm} × ${product.widthCm} cm`
+                              : product.dimensions || "—"}
+                          </span>
+                        </li>
+                        <li>
+                          <Gem size={12} />
+                          <span>{product.material || "—"}</span>
+                        </li>
+                        <li>
+                          <MapPin size={12} />
+                          <span>{product.region || "—"}</span>
+                        </li>
+                      </ul>
 
                       <div className="product-card-footer">
                         <strong
