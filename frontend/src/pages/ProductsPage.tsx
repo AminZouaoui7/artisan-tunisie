@@ -23,6 +23,8 @@ import {
   Gem,
   Grid3X3,
   Sparkles,
+  Search,
+  SlidersHorizontal,
 } from "lucide-react";
 
 import { useAuth } from "../context/useAuth";
@@ -39,9 +41,6 @@ import {
 } from "../services/productService";
 import { createPriceRequest } from "../services/priceRequestService";
 import { useCurrency } from "../context/CurrencyContext";
-import photoHero from "../assets/photohero.png";
-import photoHero1 from "../assets/photohero1.png";
-import photoHero2 from "../assets/photohero2.png";
 import photoHero3 from "../assets/photohero3.png";
 import "../styles/ProductsPage.css";
 import { useI18n } from "../i18n/i18n";
@@ -66,6 +65,7 @@ export default function ProductsPage() {
   const [selectedSizes, setSelectedSizes] = useState<SizeBucket[]>([]);
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [selectedPrice, setSelectedPrice] = useState("all");
+  const [showMobileFilters, setShowMobileFilters] = useState(false);
 
   const normalizeValue = (value?: string | null) =>
     (value ?? "")
@@ -1033,8 +1033,6 @@ export default function ProductsPage() {
   return (
     <section className="products-page">
       <section className="products-hero-premium">
-        <div className="products-hero-background" aria-hidden="true" />
-
         <div className="products-hero-inner">
           <div className="products-hero-copy">
             <div className="products-breadcrumb">
@@ -1050,9 +1048,8 @@ export default function ProductsPage() {
             <div className="products-hero-separator" />
 
             <p>
-              Découvrez une sélection de tapis artisanaux tunisiens, tissés et noués
-              à la main dans le respect des traditions, des matières nobles et du
-              savoir-faire ancestral.
+              Découvrez une sélection de tapis artisanaux tunisiens,
+              tissés et noués à la main dans le respect du savoir-faire ancestral.
             </p>
 
             <div className="products-hero-actions">
@@ -1082,162 +1079,142 @@ export default function ProductsPage() {
                 Explorer les catégories
               </button>
             </div>
-
-            <div className="products-hero-trust">
-              <span>Pièces uniques</span>
-              <span>Fait main</span>
-              <span>Livraison internationale</span>
-            </div>
           </div>
 
-          <div className="products-hero-gallery">
-            <figure className="products-hero-main-image">
-              <img
-                src={photoHero}
-                alt="Tapis artisanal tunisien mis en valeur dans un intérieur élégant"
-                fetchPriority="high"
-              />
-            </figure>
-
-            <div className="products-hero-side-images">
-              <figure className="products-hero-small-image products-hero-small-image--one">
-                <img
-                  src={photoHero1}
-                  alt="Détail d'un tapis tunisien fait main"
-                  loading="lazy"
-                />
-              </figure>
-
-              <figure className="products-hero-small-image products-hero-small-image--two">
-                <img
-                  src={photoHero2}
-                  alt="Tapis artisanal tunisien dans un décor raffiné"
-                  loading="lazy"
-                />
-              </figure>
-
-              <figure className="products-hero-small-image products-hero-small-image--three">
-                <img
-                  src={photoHero3}
-                  alt="Motifs et textures d'un tapis artisanal"
-                  loading="lazy"
-                />
-              </figure>
-            </div>
-
-            <div className="products-hero-floating-card">
-              <strong>100 % fait main</strong>
-              <span>Des créations sélectionnées auprès d'artisans tunisiens</span>
-            </div>
+          <div className="products-hero-visual">
+            <img
+              src={photoHero3}
+              alt="Collection de tapis artisanaux tunisiens"
+              fetchPriority="high"
+            />
           </div>
         </div>
       </section>
 
       <section className="products-category-panel">
-        <p className="products-category-title">PARCOURIR PAR CATÉGORIE</p>
+        <div className="products-category-inner">
+          <p className="products-category-title">PARCOURIR PAR CATÉGORIE</p>
 
-        <div className="products-category-list">
-          {categoryFilters.map((category) => (
-            <button
-              key={category.key}
-              type="button"
-              className={`products-category-card ${
-                selectedCategory === category.key
-                  ? "products-category-card--active"
-                  : ""
-              }`}
-              onClick={() => handleCategoryClick(category.key)}
-            >
-              <div className="products-category-content">
-                <strong>{category.label}</strong>
-                <span>{category.subtitle}</span>
-              </div>
-            </button>
-          ))}
+          <div className="products-category-list">
+            {categoryFilters.map((category) => (
+              <button
+                key={category.key}
+                type="button"
+                className={`products-category-card ${
+                  selectedCategory === category.key
+                    ? "products-category-card--active"
+                    : ""
+                }`}
+                onClick={() => handleCategoryClick(category.key)}
+              >
+                <span className="products-category-icon">
+                  {category.key === "all" ? (
+                    <Grid3X3 size={18} />
+                  ) : (
+                    <Sparkles size={18} />
+                  )}
+                </span>
+                <div className="products-category-content">
+                  <strong>{category.label}</strong>
+                  <span>{category.subtitle}</span>
+                </div>
+              </button>
+            ))}
+          </div>
         </div>
       </section>
 
       <div className="products-layout">
         <aside className="products-sidebar-filters">
-          <h3>AFFINER VOTRE RECHERCHE</h3>
-
-          <div className="sidebar-search">
-            <input
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Rechercher un tapis..."
-            />
-          </div>
-
-          <div className="filter-section">
-            <h4>TAILLE</h4>
-            {sizeOptions.map((option) => (
-              <label key={option.key} className="filter-option">
-                <span>{option.label}</span>
-                <input
-                  type="checkbox"
-                  checked={selectedSizes.includes(option.key)}
-                  onChange={() =>
-                    setSelectedSizes((prev) =>
-                      prev.includes(option.key)
-                        ? prev.filter((item) => item !== option.key)
-                        : [...prev, option.key]
-                    )
-                  }
-                />
-              </label>
-            ))}
-          </div>
-
-          <div className="filter-section">
-            <h4>COULEUR</h4>
-            <div className="color-filter-dots">
-              {colorOptions.map((item) => (
-                <button
-                  key={item.key}
-                  type="button"
-                  title={item.label}
-                  aria-label={item.label}
-                  className={`color-dot-premium ${
-                    canonicalColor(color) === item.key
-                      ? "color-dot-premium--active"
-                      : ""
-                  }`}
-                  onClick={() =>
-                    setColor((prev) =>
-                      canonicalColor(prev) === item.key ? "all" : item.key
-                    )
-                  }
-                >
-                  <span style={{ background: getColorBackground(item.key) }} />
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div className="filter-section">
-            <h4>PRIX</h4>
-            <div className="price-filter-list">
-              {priceOptions.map((option) => (
-                <button
-                  key={option.key}
-                  type="button"
-                  className={`price-filter-chip ${
-                    selectedPrice === option.key ? "price-filter-chip--active" : ""
-                  }`}
-                  onClick={() => setSelectedPrice(option.key)}
-                >
-                  {option.label}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <button type="button" className="reset-filters-btn" onClick={resetFilters}>
-            RÉINITIALISER LES FILTRES
+          <button
+            type="button"
+            className="sidebar-mobile-toggle"
+            onClick={() => setShowMobileFilters((v) => !v)}
+          >
+            <SlidersHorizontal size={15} />
+            {showMobileFilters ? "Masquer les filtres" : "Afficher les filtres"}
           </button>
 
-          
+          <div className={`sidebar-filters-body${showMobileFilters ? " sidebar-filters-body--open" : ""}`}>
+            <h3>AFFINER VOTRE RECHERCHE</h3>
+
+            <div className="sidebar-search">
+              <input
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Rechercher un tapis..."
+              />
+              <Search size={14} className="sidebar-search-icon" />
+            </div>
+
+            <div className="filter-section">
+              <h4>TAILLE</h4>
+              {sizeOptions.map((option) => (
+                <label key={option.key} className="filter-option">
+                  <span>{option.label}</span>
+                  <input
+                    type="checkbox"
+                    checked={selectedSizes.includes(option.key)}
+                    onChange={() =>
+                      setSelectedSizes((prev) =>
+                        prev.includes(option.key)
+                          ? prev.filter((item) => item !== option.key)
+                          : [...prev, option.key]
+                      )
+                    }
+                  />
+                </label>
+              ))}
+            </div>
+
+            <div className="filter-section">
+              <h4>COULEUR</h4>
+              <div className="color-filter-dots">
+                {colorOptions.map((item) => (
+                  <button
+                    key={item.key}
+                    type="button"
+                    title={item.label}
+                    aria-label={item.label}
+                    className={`color-dot-premium ${
+                      canonicalColor(color) === item.key
+                        ? "color-dot-premium--active"
+                        : ""
+                    }`}
+                    onClick={() =>
+                      setColor((prev) =>
+                        canonicalColor(prev) === item.key ? "all" : item.key
+                      )
+                    }
+                  >
+                    <span style={{ background: getColorBackground(item.key) }} />
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="filter-section">
+              <h4>PRIX</h4>
+              <div className="price-filter-list">
+                {priceOptions.map((option) => (
+                  <button
+                    key={option.key}
+                    type="button"
+                    className={`price-filter-chip ${
+                      selectedPrice === option.key ? "price-filter-chip--active" : ""
+                    }`}
+                    onClick={() => setSelectedPrice(option.key)}
+                  >
+                    {option.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <button type="button" className="reset-filters-btn" onClick={resetFilters}>
+              RÉINITIALISER LES FILTRES
+            </button>
+          </div>
         </aside>
 
         <main className="products-catalog" ref={productsCatalogRef}>
@@ -1251,6 +1228,13 @@ export default function ProductsPage() {
                     filteredProducts.length === 1 ? "" : "s"
                   } found`}
             </p>
+
+            <div className="products-sort-control">
+              <span>Trier par :</span>
+              <select defaultValue="newest" aria-label="Trier les produits">
+                <option value="newest">Nouveautés</option>
+              </select>
+            </div>
           </div>
 
           {loading && (
@@ -1290,6 +1274,7 @@ export default function ProductsPage() {
                         type="button"
                         className="product-card-image-frame"
                         onClick={() => openDetailProduct(product)}
+                        aria-label={`Voir ${product.name}`}
                       >
                         {coverImage ? (
                           <div className="product-card-image-hover-wrap">
@@ -1297,13 +1282,15 @@ export default function ProductsPage() {
                               src={coverImage}
                               alt={product.name}
                               className="product-image product-image--primary"
+                              loading="lazy"
                             />
-
                             {hoverImage && hoverImage !== coverImage && (
                               <img
                                 src={hoverImage}
-                                alt={`${product.name} aperçu`}
+                                alt=""
+                                aria-hidden="true"
                                 className="product-image product-image--hover"
+                                loading="lazy"
                               />
                             )}
                           </div>
@@ -1315,150 +1302,74 @@ export default function ProductsPage() {
                       </button>
 
                       <div className="product-card-badges">
-                        {product.isFeatured && (
-                          <span className="product-badge product-badge-featured">
-                            {t("products.featured")}
-                          </span>
-                        )}
-
                         {product.isUniquePiece && (
                           <span className="product-badge product-badge-unique">
                             {t("products.unique")}
                           </span>
                         )}
+                        {product.isFeatured && (
+                          <span className="product-badge product-badge-featured">
+                            {t("products.featured")}
+                          </span>
+                        )}
                       </div>
+
+                      <button
+                        type="button"
+                        className="product-card-quick-view"
+                        onClick={() => openDetailProduct(product)}
+                        aria-label={t("products.viewDetails")}
+                      >
+                        <Eye size={15} />
+                      </button>
                     </div>
 
                     <div className="product-content">
-                      <div className="product-meta product-meta--compact">
-                        {product.type && <span>{product.type}</span>}
-                        {product.region && <span>{product.region}</span>}
-                        <span>{getSizeLabel(product)}</span>
-                      </div>
-
                       <h2>{product.name}</h2>
 
-                      <div className="product-card-specs">
-                        <div>
-                          <span
-                            className="product-spec-icon product-spec-icon--wool"
-                            aria-hidden="true"
-                          >
-                            <svg
-                              viewBox="0 0 48 48"
-                              fill="none"
-                              stroke="currentColor"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            >
-                              <circle cx="22" cy="22" r="12" />
-                              <path d="M12.5 20.5c3.5-4 15.5-4 19 0" />
-                              <path d="M11.8 24.2c4.2-3.2 16.2-3.2 20.4 0" />
-                              <path d="M13.2 28.4c3.5-2.4 14.1-2.4 17.6 0" />
-                              <path d="M30.5 30.5c4.8 1.4 8.2 4.5 10 8.5" />
-                              <path d="M40.5 39c-5.3 2.3-10.5 2.8-15.5 1.5" />
-                            </svg>
-                          </span>
-                          <span>{language === "FR" ? "MATIÈRE" : "MATERIAL"}</span>
-                          <strong>{product.material || "-"}</strong>
-                        </div>
+                      <p className="product-card-dimensions">
+                        {product.lengthCm && product.widthCm
+                          ? `${product.lengthCm} × ${product.widthCm} cm`
+                          : product.dimensions || ""}
+                      </p>
 
-                        <div className="product-spec-dimension">
-                          <Ruler className="product-spec-icon" />
-                          <span>
-                            {language === "FR" ? "DIMENSIONS" : "DIMENSIONS"}
-                          </span>
-                          <strong>
-                            {product.lengthCm && product.widthCm
-                              ? `${product.lengthCm} × ${product.widthCm} cm`
-                              : product.dimensions || "-"}
-                          </strong>
-                        </div>
+                      <div className="product-card-footer">
+                        <strong
+                          className={
+                            hasVisiblePrice ? "product-price" : "product-price-request"
+                          }
+                        >
+                          {hasVisiblePrice
+                            ? formatPrice(product.price)
+                            : showPriceOnRequest
+                            ? t("products.priceOnRequest")
+                            : "-"}
+                        </strong>
 
-                        <div>
-                          <Hand className="product-spec-icon" />
-                          <span>
-                            {language === "FR" ? "TECHNIQUE" : "TECHNIQUE"}
-                          </span>
-                          <strong>{product.technique || "-"}</strong>
-                        </div>
-                      </div>
-
-                      <div
-                        className={`product-buy-zone ${
-                          showPriceOnRequest ? "product-buy-zone--request" : ""
-                        }`}
-                      >
-                        <div className="product-price-box">
-                          <p className="product-price-label">
-                            {hasVisiblePrice
-                              ? t("products.price")
-                              : showPriceOnRequest
-                              ? t("products.priceOnRequest")
-                              : t("products.price")}
-                          </p>
-
-                          <strong
-                            className={
-                              hasVisiblePrice
-                                ? "product-price"
-                                : "product-price-request"
-                            }
-                          >
-                            {hasVisiblePrice
-                              ? formatPrice(product.price)
-                              : showPriceOnRequest
-                              ? t("products.priceOnRequest")
-                              : "-"}
-                          </strong>
-                        </div>
-
-                        <div className="product-actions-row">
+                        {hasVisiblePrice ? (
                           <button
                             type="button"
-                            className="product-detail-btn"
-                            onClick={() => openDetailProduct(product)}
+                            className={`product-card-add-btn${isAdded ? " product-card-add-btn--added" : ""}`}
+                            onClick={() => handleAddToCart(product)}
+                            disabled={loadingAuth}
+                            aria-label={isAdded ? t("products.added") : t("products.cart")}
                           >
-                            <Eye size={16} />
-                            {t("products.viewDetails")}
+                            {isAdded ? (
+                              <CheckCircle2 size={15} />
+                            ) : (
+                              <ShoppingCart size={15} />
+                            )}
                           </button>
-
-                          {hasVisiblePrice ? (
-                            <button
-                              type="button"
-                              className={`product-cart-btn ${
-                                isAdded ? "product-cart-btn--added" : ""
-                              }`}
-                              onClick={() => handleAddToCart(product)}
-                              disabled={loadingAuth}
-                            >
-                              <span className="product-cart-icon">
-                                {isAdded ? (
-                                  <CheckCircle2 size={17} />
-                                ) : (
-                                  <ShoppingCart size={17} />
-                                )}
-                              </span>
-                              <span>
-                                {isAdded ? t("products.added") : t("products.cart")}
-                              </span>
-                            </button>
-                          ) : (
-                            <button
-                              type="button"
-                              className="product-cart-btn product-cart-btn--request"
-                              onClick={() => openPriceRequest(product)}
-                              disabled={loadingAuth}
-                            >
-                              <HeartHandshake size={17} />
-                              <span>
-                                {loadingAuth
-                                  ? t("products.loading")
-                                  : t("products.requestPrice")}
-                              </span>
-                            </button>
-                          )}
-                        </div>
+                        ) : (
+                          <button
+                            type="button"
+                            className="product-card-request-btn"
+                            onClick={() => openPriceRequest(product)}
+                            disabled={loadingAuth}
+                          >
+                            {t("products.requestPrice")}
+                          </button>
+                        )}
                       </div>
                     </div>
                   </article>
