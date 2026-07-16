@@ -39,7 +39,10 @@ import {
 } from "../services/productService";
 import { createPriceRequest } from "../services/priceRequestService";
 import { useCurrency } from "../context/CurrencyContext";
-import productsHeroImage from "../assets/3e1db467-54fd-42b2-8d1e-69621087379f.png";
+import photoHero from "../assets/photohero.png";
+import photoHero1 from "../assets/photohero1.png";
+import photoHero2 from "../assets/photohero2.png";
+import photoHero3 from "../assets/photohero3.png";
 import "../styles/ProductsPage.css";
 import { useI18n } from "../i18n/i18n";
 
@@ -1030,17 +1033,103 @@ export default function ProductsPage() {
   return (
     <section className="products-page">
       <section className="products-hero-premium">
-        <img src={productsHeroImage} alt="Nos tapis artisanaux" />
-        <div className="products-hero-overlay">
-          <div className="products-breadcrumb">
-            ACCUEIL <span>›</span> NOS TAPIS
+        <div className="products-hero-background" aria-hidden="true" />
+
+        <div className="products-hero-inner">
+          <div className="products-hero-copy">
+            <div className="products-breadcrumb">
+              ACCUEIL <span>›</span> NOS TAPIS
+            </div>
+
+            <span className="products-hero-kicker">
+              Artisanat tunisien d'exception
+            </span>
+
+            <h1>Des tapis façonnés comme des œuvres</h1>
+
+            <div className="products-hero-separator" />
+
+            <p>
+              Découvrez une sélection de tapis artisanaux tunisiens, tissés et noués
+              à la main dans le respect des traditions, des matières nobles et du
+              savoir-faire ancestral.
+            </p>
+
+            <div className="products-hero-actions">
+              <button
+                type="button"
+                className="products-hero-primary-btn"
+                onClick={() =>
+                  productsCatalogRef.current?.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start",
+                  })
+                }
+              >
+                Découvrir la collection
+              </button>
+
+              <button
+                type="button"
+                className="products-hero-secondary-btn"
+                onClick={() =>
+                  document.querySelector(".products-category-panel")?.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start",
+                  })
+                }
+              >
+                Explorer les catégories
+              </button>
+            </div>
+
+            <div className="products-hero-trust">
+              <span>Pièces uniques</span>
+              <span>Fait main</span>
+              <span>Livraison internationale</span>
+            </div>
           </div>
-          <h1>Nos tapis</h1>
-          <div className="products-hero-separator"></div>
-          <p>
-            Découvrez notre sélection de tapis artisanaux tunisiens, façonnés à
-            la main avec héritage, matières nobles et savoir-faire.
-          </p>
+
+          <div className="products-hero-gallery">
+            <figure className="products-hero-main-image">
+              <img
+                src={photoHero}
+                alt="Tapis artisanal tunisien mis en valeur dans un intérieur élégant"
+                fetchPriority="high"
+              />
+            </figure>
+
+            <div className="products-hero-side-images">
+              <figure className="products-hero-small-image products-hero-small-image--one">
+                <img
+                  src={photoHero1}
+                  alt="Détail d'un tapis tunisien fait main"
+                  loading="lazy"
+                />
+              </figure>
+
+              <figure className="products-hero-small-image products-hero-small-image--two">
+                <img
+                  src={photoHero2}
+                  alt="Tapis artisanal tunisien dans un décor raffiné"
+                  loading="lazy"
+                />
+              </figure>
+
+              <figure className="products-hero-small-image products-hero-small-image--three">
+                <img
+                  src={photoHero3}
+                  alt="Motifs et textures d'un tapis artisanal"
+                  loading="lazy"
+                />
+              </figure>
+            </div>
+
+            <div className="products-hero-floating-card">
+              <strong>100 % fait main</strong>
+              <span>Des créations sélectionnées auprès d'artisans tunisiens</span>
+            </div>
+          </div>
         </div>
       </section>
 
