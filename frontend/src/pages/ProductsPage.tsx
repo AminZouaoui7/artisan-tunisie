@@ -25,6 +25,11 @@ import {
   Sparkles,
   Search,
   SlidersHorizontal,
+  Diamond,
+  Layers3,
+  ScanLine,
+  Shapes,
+  Frame,
 } from "lucide-react";
 
 import { useAuth } from "../context/useAuth";
@@ -1040,6 +1045,28 @@ export default function ProductsPage() {
 
   return <Sparkles size={16} />;
 };
+
+  function getCategoryIcon(categoryKey: string) {
+    switch (categoryKey) {
+      case "all":
+        return <Grid3X3 size={24} strokeWidth={1.7} />;
+      case "tapis":
+        return <Frame size={24} strokeWidth={1.7} />;
+      case "margoum tisser berber":
+        return <Sparkles size={24} strokeWidth={1.7} />;
+      case "margoum berber":
+        return <Diamond size={24} strokeWidth={1.7} />;
+      case "kilim berber":
+        return <Shapes size={24} strokeWidth={1.7} />;
+      case "kilim toujen":
+        return <Layers3 size={24} strokeWidth={1.7} />;
+      case "kilim extra fin":
+        return <ScanLine size={24} strokeWidth={1.7} />;
+      default:
+        return <Sparkles size={24} strokeWidth={1.7} />;
+    }
+  }
+
   return (
     <section className="products-page">
       <section className="products-hero-premium">
@@ -1107,33 +1134,34 @@ export default function ProductsPage() {
 
       <section className="products-category-panel">
         <div className="products-category-inner">
-          <p className="products-category-title">PARCOURIR PAR CATÉGORIE</p>
+          <div className="products-category-heading">
+            <p className="products-category-title">PARCOURIR PAR CATÉGORIE</p>
+            <span className="products-category-heading-line" aria-hidden="true" />
+          </div>
 
-          <div className="products-category-list">
-            {categoryFilters.map((category) => (
-              <button
-                key={category.key}
-                type="button"
-                className={`products-category-card ${
-                  selectedCategory === category.key
-                    ? "products-category-card--active"
-                    : ""
-                }`}
-                onClick={() => handleCategoryClick(category.key)}
-              >
-                <span className="products-category-icon">
-                  {category.key === "all" ? (
-                    <Grid3X3 size={18} />
-                  ) : (
-                    <Sparkles size={18} />
-                  )}
-                </span>
-                <div className="products-category-content">
-                  <strong>{category.label}</strong>
-                  <span>{category.subtitle}</span>
-                </div>
-              </button>
-            ))}
+          <div className="products-category-scroll">
+            <div className="products-category-list">
+              {categoryFilters.map((category) => {
+                const isActive = selectedCategory === category.key;
+                return (
+                  <button
+                    key={category.key}
+                    type="button"
+                    className={`products-category-card${isActive ? " products-category-card--active" : ""}`}
+                    onClick={() => handleCategoryClick(category.key)}
+                    aria-pressed={isActive}
+                  >
+                    <span className="products-category-icon">
+                      {getCategoryIcon(category.key)}
+                    </span>
+                    <span className="products-category-content">
+                      <strong>{category.label}</strong>
+                      <small>{category.subtitle}</small>
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
           </div>
         </div>
       </section>
@@ -1284,19 +1312,21 @@ export default function ProductsPage() {
 
                 return (
                   <article key={product.id} className="product-card">
-                    <div className="product-card-media">
+
+                    {/* ── IMAGE ── */}
+                    <div className="pc-media">
                       <button
                         type="button"
-                        className="product-card-image-frame"
+                        className="pc-image-btn"
                         onClick={() => openDetailProduct(product)}
                         aria-label={`Voir ${product.name}`}
                       >
                         {coverImage ? (
-                          <div className="product-card-image-hover-wrap">
+                          <div className="pc-image-wrap">
                             <img
                               src={coverImage}
                               alt={product.name}
-                              className="product-image product-image--primary"
+                              className="pc-img pc-img--primary"
                               loading="lazy"
                             />
                             {hoverImage && hoverImage !== coverImage && (
@@ -1304,7 +1334,7 @@ export default function ProductsPage() {
                                 src={hoverImage}
                                 alt=""
                                 aria-hidden="true"
-                                className="product-image product-image--hover"
+                                className="pc-img pc-img--hover"
                                 loading="lazy"
                               />
                             )}
@@ -1316,14 +1346,14 @@ export default function ProductsPage() {
                         )}
                       </button>
 
-                      <div className="product-card-badges">
+                      <div className="pc-badges">
                         {product.isUniquePiece && (
-                          <span className="product-badge product-badge-unique">
+                          <span className="pc-badge pc-badge--unique">
                             {t("products.unique")}
                           </span>
                         )}
                         {product.isFeatured && (
-                          <span className="product-badge product-badge-featured">
+                          <span className="pc-badge pc-badge--featured">
                             {t("products.featured")}
                           </span>
                         )}
@@ -1331,67 +1361,86 @@ export default function ProductsPage() {
 
                       <button
                         type="button"
-                        className="product-card-quick-view"
+                        className="pc-quick-view"
                         onClick={() => openDetailProduct(product)}
                         aria-label={t("products.viewDetails")}
                       >
-                        <Eye size={15} />
+                        <Eye size={16} />
                       </button>
                     </div>
 
-                    <div className="product-content">
-                      <h2>{product.name}</h2>
+                    {/* ── BODY ── */}
+                    <div className="pc-body">
+                      <h2 className="pc-title">{product.name}</h2>
 
-                      <ul className="product-card-details">
-                        <li>
-                          <Ruler size={12} />
-                          <span>
+                      {(product.shortStory || product.description) && (
+                        <p className="pc-desc">
+                          {product.shortStory || product.description}
+                        </p>
+                      )}
+
+                      <div className="pc-divider" />
+
+                      <div className="pc-specs">
+                        <div className="pc-spec">
+                          <Ruler size={15} className="pc-spec-icon" />
+                          <strong className="pc-spec-value">
                             {product.lengthCm && product.widthCm
-                              ? `${product.lengthCm} × ${product.widthCm} cm`
+                              ? `${product.lengthCm} × ${product.widthCm}`
                               : product.dimensions || "—"}
-                          </span>
-                        </li>
-                        <li>
-                          <Gem size={12} />
-                          <span>{product.material || "—"}</span>
-                        </li>
-                        <li>
-                          <MapPin size={12} />
-                          <span>{product.region || "—"}</span>
-                        </li>
-                      </ul>
+                          </strong>
+                          <span className="pc-spec-label">Dimensions</span>
+                        </div>
+                        <div className="pc-spec">
+                          <Gem size={15} className="pc-spec-icon" />
+                          <strong className="pc-spec-value">
+                            {product.material || "—"}
+                          </strong>
+                          <span className="pc-spec-label">Matière</span>
+                        </div>
+                        <div className="pc-spec">
+                          <MapPin size={15} className="pc-spec-icon" />
+                          <strong className="pc-spec-value">
+                            {product.region || "—"}
+                          </strong>
+                          <span className="pc-spec-label">Origine</span>
+                        </div>
+                      </div>
 
-                      <div className="product-card-footer">
+                      <div className="pc-footer">
                         <strong
                           className={
-                            hasVisiblePrice ? "product-price" : "product-price-request"
+                            hasVisiblePrice ? "pc-price" : "pc-price pc-price--request"
                           }
                         >
                           {hasVisiblePrice
                             ? formatPrice(product.price)
                             : showPriceOnRequest
                             ? t("products.priceOnRequest")
-                            : "-"}
+                            : "—"}
                         </strong>
 
                         {hasVisiblePrice ? (
                           <button
                             type="button"
-                            className={`product-card-add-btn${isAdded ? " product-card-add-btn--added" : ""}`}
+                            className={`pc-cart-btn${isAdded ? " pc-cart-btn--added" : ""}`}
                             onClick={() => handleAddToCart(product)}
                             disabled={loadingAuth}
                             aria-label={isAdded ? t("products.added") : t("products.cart")}
                           >
                             {isAdded ? (
-                              <CheckCircle2 size={15} />
+                              <CheckCircle2 size={18} />
                             ) : (
-                              <ShoppingCart size={15} />
+                              <ShoppingCart size={18} />
                             )}
+                            <span>
+                              {isAdded ? t("products.added") : t("products.cart")}
+                            </span>
                           </button>
                         ) : (
                           <button
                             type="button"
-                            className="product-card-request-btn"
+                            className="pc-request-btn"
                             onClick={() => openPriceRequest(product)}
                             disabled={loadingAuth}
                           >
