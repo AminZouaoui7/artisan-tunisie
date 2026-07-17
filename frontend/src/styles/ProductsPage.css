@@ -1425,7 +1425,7 @@
 /* ── 2-column top grid (gallery left | info+purchase right) ── */
 .products-detail-top {
   display: grid;
-  grid-template-columns: minmax(0, 0.72fr) minmax(340px, 1fr);
+  grid-template-columns: minmax(0, 1.4fr) minmax(300px, 1fr);
   grid-template-rows: auto 1fr;
   gap: 24px;
   flex: 1;
@@ -1459,8 +1459,8 @@
 }
 
 .products-detail-image img {
-  max-width: 60%;
-  max-height: 430px;
+  max-width: 82%;
+  max-height: 440px;
   width: auto;
   height: auto;
   object-fit: contain;
@@ -1496,8 +1496,8 @@
   justify-content: center;
 }
 
-.products-detail-gallery-btn--left { left: 30px; }
-.products-detail-gallery-btn--right { right: 30px; }
+.products-detail-gallery-btn--left { left: 16px; }
+.products-detail-gallery-btn--right { right: 16px; }
 
 .products-detail-thumbs {
   height: 72px;
@@ -1558,7 +1558,7 @@
 
 .detail-price-main {
   display: block;
-  color: #241711;
+  color: #a94b24;
   font-family: 'Playfair Display', Georgia, serif;
   font-size: clamp(2.2rem, 2.8vw, 3.6rem);
   font-weight: 500;
@@ -1572,28 +1572,26 @@
 }
 
 .products-detail-stock {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
   margin: 0;
-  padding: 4px 12px;
-  border-radius: 999px;
-  font-size: 0.72rem;
-  font-weight: 800;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
+  padding: 0;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: none;
 }
 
 .products-detail-stock--available {
-  background: rgba(34, 120, 60, 0.1);
   color: #1a6832;
 }
 
 .products-detail-stock--order {
-  background: rgba(180, 120, 20, 0.1);
   color: #8a5e10;
 }
 
 .products-detail-stock--unavailable {
-  background: rgba(160, 30, 20, 0.1);
   color: #8a1e14;
 }
 
@@ -1862,17 +1860,35 @@
   border: 1px solid rgba(92, 62, 32, 0.08);
 }
 
-.products-detail-bottom-collection h3 {
+.products-detail-collection-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   margin: 0 0 10px;
+}
+
+.products-detail-bottom-collection h3 {
+  margin: 0;
   font-family: 'Playfair Display', Georgia, serif;
   font-size: 0.9rem;
   font-weight: 600;
   color: #241711;
 }
 
-.products-detail-bottom-collection h3 span {
+.products-detail-collection-see-all {
+  border: 0;
+  background: transparent;
+  padding: 0;
+  color: #a94b24;
+  font-size: 0.76rem;
   font-weight: 700;
-  color: rgba(36, 23, 17, 0.5);
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.products-detail-collection-see-all:hover {
+  text-decoration: underline;
 }
 
 .product-collection-scroll {

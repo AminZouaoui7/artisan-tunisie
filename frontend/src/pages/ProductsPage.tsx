@@ -1546,6 +1546,9 @@ export default function ProductsPage() {
                   return (
                     <p className={`products-detail-stock ${stockCls}`}>
                       {stockLabel}
+                      {stockCls === "products-detail-stock--available" && (
+                        <CheckCircle2 size={14} />
+                      )}
                     </p>
                   );
                 })()}
@@ -1833,10 +1836,16 @@ export default function ProductsPage() {
 
             {detailColorVariants.length > 0 && (
               <section className="products-detail-bottom-collection">
-                <h3>
-                  Autres tapis de la même collection{" "}
-                  <span>({detailColorVariants.length})</span>
-                </h3>
+                <div className="products-detail-collection-header">
+                  <h3>Autres tapis de la même collection</h3>
+                  <button
+                    type="button"
+                    className="products-detail-collection-see-all"
+                    onClick={closeDetailProduct}
+                  >
+                    Voir toute la collection →
+                  </button>
+                </div>
                 <div className="product-collection-scroll">
                   {detailColorVariants.map((variant) => {
                     const variantImage = getProductImages(variant)[0];
