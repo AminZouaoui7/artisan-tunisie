@@ -776,8 +776,8 @@
 
 .product-card {
   border-radius: 28px;
-  background: #fffdf9;
-  border: 1px solid rgba(210, 190, 170, .45);
+  background: #ffffff;
+  border: 1px solid rgba(210, 190, 170, .35);
   padding: 0;
   overflow: hidden;
   display: flex;
@@ -797,7 +797,7 @@
 
 .pc-media {
   position: relative;
-  background: #faf7f2;
+  background: #ede8df;
   border-radius: 22px;
   overflow: hidden;
   margin: 16px 16px 0;
@@ -889,12 +889,12 @@
 .pc-badge {
   display: inline-flex;
   align-items: center;
-  height: 28px;
-  padding: 0 14px;
+  height: 36px;
+  padding: 0 18px;
   border-radius: 999px;
-  font-size: 0.58rem;
+  font-size: 0.7rem;
   font-weight: 700;
-  letter-spacing: 0.09em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
@@ -989,9 +989,9 @@
 
 .pc-title {
   font-family: 'Playfair Display', Georgia, 'Times New Roman', serif;
-  font-size: clamp(1.25rem, 1.8vw, 1.9rem);
-  font-weight: 600;
-  color: #2B1D15;
+  font-size: clamp(1.35rem, 1.9vw, 2rem);
+  font-weight: 700;
+  color: #1a0e08;
   line-height: 1.22;
   margin: 0 0 12px;
   display: -webkit-box;
@@ -1091,8 +1091,9 @@
 
 .pc-cart-btn {
   height: 64px;
-  min-width: 170px;
-  padding: 0 24px;
+  flex: 1;
+  min-width: 0;
+  padding: 0 20px;
   border-radius: 20px;
   border: none;
   background: #B86437;
@@ -1106,7 +1107,6 @@
   justify-content: center;
   gap: 10px;
   transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
-  flex-shrink: 0;
 }
 
 .pc-cart-btn:hover:not(:disabled) {
@@ -1126,8 +1126,9 @@
 
 .pc-request-btn {
   height: 64px;
-  min-width: 170px;
-  padding: 0 22px;
+  flex: 1;
+  min-width: 0;
+  padding: 0 20px;
   border-radius: 20px;
   border: 1.5px solid #B86437;
   background: transparent;
@@ -1136,7 +1137,6 @@
   font-weight: 700;
   cursor: pointer;
   transition: background 0.3s ease, color 0.3s ease;
-  flex-shrink: 0;
 }
 
 .pc-request-btn:hover:not(:disabled) {

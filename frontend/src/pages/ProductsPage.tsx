@@ -31,7 +31,7 @@ import {
   Shapes,
   Frame,
   Heart,
-  CircleDashed,
+  Volleyball,
 } from "lucide-react";
 
 import { useAuth } from "../context/useAuth";
@@ -1402,7 +1402,7 @@ export default function ProductsPage() {
                           <span className="pc-spec-label">Dimensions</span>
                         </div>
                         <div className="pc-spec">
-                          <CircleDashed size={20} className="pc-spec-icon" />
+                          <Volleyball size={20} className="pc-spec-icon" />
                           <strong className="pc-spec-value">
                             {product.material || "—"}
                           </strong>
