@@ -153,6 +153,11 @@ export default function ProductsPage() {
   const [detailVariantsLoading, setDetailVariantsLoading] = useState(false);
 
   const [detailImageIndex, setDetailImageIndex] = useState(0);
+
+  type DetailContentTab = "description" | "story" | "care";
+  const [detailContentTab, setDetailContentTab] =
+    useState<DetailContentTab>("description");
+
   const [lightboxImageIndex, setLightboxImageIndex] = useState<number | null>(
     null
   );
@@ -621,6 +626,7 @@ export default function ProductsPage() {
   async function openDetailProduct(product: ProductViewDto) {
     setDetailProduct(product);
     setDetailImageIndex(0);
+    setDetailContentTab("description");
     closeLightbox();
     setSelectedProduct(null);
     setDetailVariants([]);
@@ -988,6 +994,43 @@ export default function ProductsPage() {
        
       ].filter((item) => item.value && item.value !== "-")
     : [];
+
+  const detailContentTabs = useMemo(
+    () =>
+      detailProduct
+        ? [
+            {
+              key: "description" as const,
+              label: "Description",
+              content:
+                detailProduct.description ||
+                detailProduct.shortStory ||
+                t("home.selectedFallbackDescription"),
+            },
+            {
+              key: "story" as const,
+              label: "Notre histoire",
+              content: detailProduct.shortStory,
+            },
+            {
+              key: "care" as const,
+              label: "Entretien",
+              content: detailProduct.careInstructions,
+            },
+          ].filter((item) => Boolean(item.content?.trim()))
+        : [],
+    [detailProduct, t]
+  );
+
+  useEffect(() => {
+    if (!detailProduct || detailContentTabs.length === 0) return;
+    const activeTabExists = detailContentTabs.some(
+      (tab) => tab.key === detailContentTab
+    );
+    if (!activeTabExists) {
+      setDetailContentTab(detailContentTabs[0].key);
+    }
+  }, [detailProduct, detailContentTab, detailContentTabs]);
 
   const detailColorVariants = useMemo(() => {
     if (!detailProduct) return [];
@@ -1506,11 +1549,30 @@ export default function ProductsPage() {
 
     <div className="detail-divider" />
 
-    <p className="detail-description">
-      {detailProduct.description ||
-        detailProduct.shortStory ||
-        t("home.selectedFallbackDescription")}
-    </p>
+    <div className="detail-content-tabs">
+      <div
+        className="detail-content-tab-list"
+        role="tablist"
+        aria-label="Informations sur le tapis"
+      >
+        {detailContentTabs.map((tab) => (
+          <button
+            key={tab.key}
+            type="button"
+            role="tab"
+            aria-selected={detailContentTab === tab.key}
+            className={`detail-content-tab${detailContentTab === tab.key ? " detail-content-tab--active" : ""}`}
+            onClick={() => setDetailContentTab(tab.key)}
+          >
+            {tab.label}
+          </button>
+        ))}
+      </div>
+      <div className="detail-content-panel" role="tabpanel">
+        {detailContentTabs.find((tab) => tab.key === detailContentTab)
+          ?.content}
+      </div>
+    </div>
 
     {productDetailHighlights.length > 0 && (
       <div className="detail-spec-list">
