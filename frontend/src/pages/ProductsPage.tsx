@@ -977,24 +977,6 @@ export default function ProductsPage() {
     setSelectedPrice("all");
   }
 
-  const productDetailHighlights = detailProduct
-    ? [
-        { label: "Type", value: detailProduct.type },
-        { label: "Technique", value: detailProduct.technique },
-        { label: "Région", value: detailProduct.region },
-        { label: "Matière", value: detailProduct.material },
-        { label: "Couleurs", value: detailProduct.colors },
-        { label: "Dimensions", value: detailProduct.dimensions },
-        { label: "Style", value: detailProduct.style },
-        { label: "Usage", value: detailProduct.usageSpace },
-        {
-          label: "Pièce unique",
-          value: detailProduct.isUniquePiece ? "Oui" : undefined,
-        },
-       
-      ].filter((item) => item.value && item.value !== "-")
-    : [];
-
   const detailContentTabs = useMemo(
     () =>
       detailProduct
@@ -1519,25 +1501,15 @@ export default function ProductsPage() {
               <X size={18} />
             </button>
 
-            <div className="products-detail-top-layout">
+            <div className="products-detail-main-grid">
 
 <aside className="products-detail-left-info">
   <div className="products-detail-left-content">
-    <span className="detail-kicker">DÉTAILS DU TAPIS</span>
-
-    <h2>{detailProduct.name}</h2>
-
-    {detailProduct.variantGroupKey && (
-      <p className="detail-collection">
-        Collection <strong>{detailProduct.variantGroupKey}</strong>
-      </p>
-    )}
-
     <strong
       className={
         shouldShowProductPrice(detailProduct)
-          ? "detail-price"
-          : "detail-price products-detail-price--request"
+          ? "detail-price-main"
+          : "detail-price-main products-detail-price--request"
       }
     >
       {shouldShowProductPrice(detailProduct) && detailProduct.price != null
@@ -1548,6 +1520,12 @@ export default function ProductsPage() {
     </strong>
 
     <div className="detail-divider" />
+
+    <p className="detail-intro-text">
+      {detailProduct.shortStory ||
+        detailProduct.description ||
+        t("home.selectedFallbackDescription")}
+    </p>
 
     <div className="detail-content-tabs">
       <div
@@ -1574,19 +1552,6 @@ export default function ProductsPage() {
       </div>
     </div>
 
-    {productDetailHighlights.length > 0 && (
-      <div className="detail-spec-list">
-        {productDetailHighlights.map((item) => (
-          <div className="detail-spec-row" key={item.label}>
-            <span className="detail-spec-icon">
-              {getDetailIcon(item.label)}
-            </span>
-            <strong>{item.label}</strong>
-            <span>{item.value}</span>
-          </div>
-        ))}
-      </div>
-    )}
   </div>
 
   <div className="products-detail-actions">
@@ -1780,6 +1745,38 @@ export default function ProductsPage() {
     </div>
   )}
 </aside>
+
+      <section className="products-detail-spec-bar">
+        {[
+          {
+            label: "Dimensions",
+            value:
+              detailProduct.dimensions ||
+              (detailProduct.lengthCm && detailProduct.widthCm
+                ? `${detailProduct.lengthCm} × ${detailProduct.widthCm} cm`
+                : null),
+          },
+          { label: "Matière", value: detailProduct.material },
+          { label: "Région", value: detailProduct.region },
+          { label: "Technique", value: detailProduct.technique },
+          {
+            label: "Pièce unique",
+            value: detailProduct.isUniquePiece ? "Oui" : null,
+          },
+        ]
+          .filter((item) => Boolean(item.value))
+          .map((item) => (
+            <div key={item.label} className="products-detail-spec-item">
+              <span className="products-detail-spec-icon">
+                {getDetailIcon(item.label)}
+              </span>
+              <div>
+                <strong>{item.value}</strong>
+                <small>{item.label}</small>
+              </div>
+            </div>
+          ))}
+      </section>
 </div>
 
             {detailColorVariants.length > 0 && (
