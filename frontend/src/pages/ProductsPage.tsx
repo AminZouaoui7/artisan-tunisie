@@ -30,8 +30,7 @@ import {
   ScanLine,
   Shapes,
   Frame,
-  Heart,
-  Orbit,
+  Volleyball,
 } from "lucide-react";
 
 import { useAuth } from "../context/useAuth";
@@ -1213,16 +1212,16 @@ export default function ProductsPage() {
 
             <div className="filter-section">
               <h4>COULEUR</h4>
-              <div className="color-filter-dots">
+              <div className="color-chip-list">
                 {colorOptions.map((item) => (
                   <button
                     key={item.key}
                     type="button"
-                    title={item.label}
                     aria-label={item.label}
-                    className={`color-dot-premium ${
+                    aria-pressed={canonicalColor(color) === item.key}
+                    className={`color-chip${
                       canonicalColor(color) === item.key
-                        ? "color-dot-premium--active"
+                        ? " color-chip--active"
                         : ""
                     }`}
                     onClick={() =>
@@ -1231,7 +1230,11 @@ export default function ProductsPage() {
                       )
                     }
                   >
-                    <span style={{ background: getColorBackground(item.key) }} />
+                    <span
+                      className="color-chip-swatch"
+                      style={{ background: getColorBackground(item.key) }}
+                    />
+                    <span className="color-chip-name">{item.label}</span>
                   </button>
                 ))}
               </div>
@@ -1363,14 +1366,6 @@ export default function ProductsPage() {
 
                       <button
                         type="button"
-                        className="pc-favorite"
-                        aria-label="Ajouter aux favoris"
-                      >
-                        <Heart size={18} />
-                      </button>
-
-                      <button
-                        type="button"
                         className="pc-quick-view"
                         onClick={() => openDetailProduct(product)}
                         aria-label={t("products.viewDetails")}
@@ -1402,7 +1397,7 @@ export default function ProductsPage() {
                           <span className="pc-spec-label">Dimensions</span>
                         </div>
                         <div className="pc-spec">
-                          <Orbit size={20} className="pc-spec-icon" />
+                          <Volleyball size={20} className="pc-spec-icon" />
                           <strong className="pc-spec-value">
                             {product.material || "—"}
                           </strong>

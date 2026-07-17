@@ -9,7 +9,7 @@ import {
 import { useCart } from "../context/useCart";
 import "../styles/ProductsPage.css";
 import { Link, useNavigate } from "react-router-dom";
-import { X, ChevronLeft, ChevronRight, Eye, ShoppingCart, Ruler, Hand, CheckCircle2, HeartHandshake } from "lucide-react";
+import { X, ChevronLeft, ChevronRight, Eye, ShoppingCart, Ruler, Hand, CheckCircle2, HeartHandshake, Volleyball } from "lucide-react";
 import { useEffect, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import PhoneInput from "../components/PhoneInput";
@@ -772,25 +772,29 @@ if (isMounted) setProducts(homeProducts);
                       : { ...scrollTransition, delay: i * 0.06 }
                   }
                 >
-                  <div className="product-card-media">
+                  {/* ── MEDIA ── */}
+                  <div className="pc-media">
                     <button
                       type="button"
-                      className="product-card-image-frame"
+                      className="pc-image-btn"
                       onClick={() => openProductModal(product)}
                       aria-label={t("home.viewDetailsOf", { name: product.name })}
                     >
                       {coverImage ? (
-                        <div className="product-card-image-hover-wrap">
+                        <div className="pc-image-wrap">
                           <img
                             src={coverImage}
                             alt={product.name}
-                            className="product-image product-image--primary"
+                            className="pc-img pc-img--primary"
+                            loading="lazy"
                           />
                           {hoverImage && hoverImage !== coverImage && (
                             <img
                               src={hoverImage}
-                              alt={`${product.name} aperçu`}
-                              className="product-image product-image--hover"
+                              alt=""
+                              aria-hidden="true"
+                              className="pc-img pc-img--hover"
+                              loading="lazy"
                             />
                           )}
                         </div>
@@ -801,149 +805,113 @@ if (isMounted) setProducts(homeProducts);
                       )}
                     </button>
 
-                    <div className="product-card-badges">
-                      {product.isFeatured && (
-                        <span className="product-badge product-badge-featured">
-                          {t("products.featured")}
-                        </span>
-                      )}
-
+                    <div className="pc-badges">
                       {product.isUniquePiece && (
-                        <span className="product-badge product-badge-unique">
+                        <span className="pc-badge pc-badge--unique">
                           {t("products.unique")}
                         </span>
                       )}
+                      {product.isFeatured && (
+                        <span className="pc-badge pc-badge--featured">
+                          {t("products.featured")}
+                        </span>
+                      )}
                     </div>
+
+                    <button
+                      type="button"
+                      className="pc-quick-view"
+                      onClick={() => openProductModal(product)}
+                      aria-label={t("products.viewDetails")}
+                    >
+                      <Eye size={16} />
+                    </button>
                   </div>
 
-                  <div className="product-content">
-                    <div className="product-meta product-meta--compact">
-                      {product.type && <span>{product.type}</span>}
-                      {product.region && <span>{product.region}</span>}
-                      {product.usageSpace && <span>{product.usageSpace}</span>}
-                    </div>
+                  {/* ── BODY ── */}
+                  <div className="pc-body">
+                    <h2 className="pc-title">{product.name}</h2>
 
-                    <h2>{product.name}</h2>
+                    {(product.shortStory || product.description) && (
+                      <p className="pc-desc">
+                        {product.shortStory || product.description}
+                      </p>
+                    )}
 
-                    <div className="product-card-specs">
-                      <div>
-                        <span
-                          className="product-spec-icon product-spec-icon--wool"
-                          aria-hidden="true"
-                        >
-                          <svg
-                            viewBox="0 0 48 48"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          >
-                            <circle cx="22" cy="22" r="12" />
-                            <path d="M12.5 20.5c3.5-4 15.5-4 19 0" />
-                            <path d="M11.8 24.2c4.2-3.2 16.2-3.2 20.4 0" />
-                            <path d="M13.2 28.4c3.5-2.4 14.1-2.4 17.6 0" />
-                            <path d="M30.5 30.5c4.8 1.4 8.2 4.5 10 8.5" />
-                            <path d="M40.5 39c-5.3 2.3-10.5 2.8-15.5 1.5" />
-                          </svg>
-                        </span>
-                        <span>{language === "FR" ? "MATIÈRE" : "MATERIAL"}</span>
-                        <strong>{product.material || "-"}</strong>
-                      </div>
+                    <div className="pc-divider" />
 
-                      <div className="product-spec-dimension">
-                        <Ruler className="product-spec-icon" />
-                        <span>{language === "FR" ? "DIMENSIONS" : "DIMENSIONS"}</span>
-                        <strong>
+                    <div className="pc-specs">
+                      <div className="pc-spec">
+                        <Ruler size={20} className="pc-spec-icon" />
+                        <strong className="pc-spec-value">
                           {product.lengthCm && product.widthCm
-                            ? `${product.lengthCm} × ${product.widthCm} cm`
-                            : product.dimensions || "-"}
+                            ? `${product.lengthCm} × ${product.widthCm}`
+                            : product.dimensions || "—"}
                         </strong>
+                        <span className="pc-spec-label">Dimensions</span>
                       </div>
-
-                      <div>
-                        <Hand className="product-spec-icon" />
-                        <span>{language === "FR" ? "TECHNIQUE" : "TECHNIQUE"}</span>
-                        <strong>{product.technique || "-"}</strong>
+                      <div className="pc-spec">
+                        <Volleyball size={20} className="pc-spec-icon" />
+                        <strong className="pc-spec-value">
+                          {product.material || "—"}
+                        </strong>
+                        <span className="pc-spec-label">Matière</span>
+                      </div>
+                      <div className="pc-spec">
+                        <MapPin size={20} className="pc-spec-icon" />
+                        <strong className="pc-spec-value">
+                          {product.region || "—"}
+                        </strong>
+                        <span className="pc-spec-label">Origine</span>
                       </div>
                     </div>
 
-                    <div
-                      className={`product-buy-zone ${
-                        showPriceOnRequest ? "product-buy-zone--request" : ""
-                      }`}
-                    >
-                      <div className="product-price-box">
-                        <p className="product-price-label">
-                          {showVisiblePrice
-                            ? t("products.price")
-                            : showPriceOnRequest
-                            ? t("products.priceOnRequest")
-                            : t("products.price")}
-                        </p>
+                    <div className="pc-footer">
+                      <strong
+                        className={
+                          showVisiblePrice
+                            ? "pc-price"
+                            : "pc-price pc-price--request"
+                        }
+                      >
+                        {showVisiblePrice
+                          ? formatPrice(product.price)
+                          : showPriceOnRequest
+                          ? t("products.priceOnRequest")
+                          : "—"}
+                      </strong>
 
-                        <strong
-                          className={
-                            showVisiblePrice
-                              ? "product-price"
-                              : "product-price-request"
-                          }
-                        >
-                          {showVisiblePrice
-                            ? formatPrice(product.price)
-                            : showPriceOnRequest
-                            ? t("products.priceOnRequest")
-                            : "-"}
-                        </strong>
-                      </div>
-
-                      <div className="product-actions-row">
+                      {showVisiblePrice ? (
                         <button
                           type="button"
-                          className="product-detail-btn"
-                          onClick={() => openProductModal(product)}
+                          className={`pc-cart-btn${isAdded ? " pc-cart-btn--added" : ""}`}
+                          onClick={() => handleAddToCart(product)}
+                          disabled={loadingAuth}
+                          aria-label={
+                            isAdded ? t("products.added") : t("products.cart")
+                          }
                         >
-                          <Eye size={16} />
-                          {t("products.viewDetails")}
+                          {isAdded ? (
+                            <CheckCircle2 size={18} />
+                          ) : (
+                            <ShoppingCart size={18} />
+                          )}
+                          <span>
+                            {isAdded
+                              ? t("products.added")
+                              : t("products.cart")}
+                          </span>
                         </button>
-
-                        {showVisiblePrice ? (
-                          <button
-                            type="button"
-                            className={`product-cart-btn ${
-                              isAdded ? "product-cart-btn--added" : ""
-                            }`}
-                            onClick={() => handleAddToCart(product)}
-                            disabled={loadingAuth}
-                          >
-                            <span className="product-cart-icon">
-                              {isAdded ? (
-                                <CheckCircle2 size={17} />
-                              ) : (
-                                <ShoppingCart size={17} />
-                              )}
-                            </span>
-                            <span>
-                              {isAdded
-                                ? t("products.added")
-                                : t("products.cart")}
-                            </span>
-                          </button>
-                        ) : (
-                          <button
-                            type="button"
-                            className="product-cart-btn product-cart-btn--request"
-                            onClick={() => openProductModal(product)}
-                            disabled={loadingAuth}
-                          >
-                            <HeartHandshake size={17} />
-                            <span>
-                              {loadingAuth
-                                ? t("products.loading")
-                                : t("products.requestPrice")}
-                            </span>
-                          </button>
-                        )}
-                      </div>
+                      ) : (
+                        <button
+                          type="button"
+                          className="pc-request-btn"
+                          onClick={() => openProductModal(product)}
+                          disabled={loadingAuth}
+                        >
+                          {t("products.requestPrice")}
+                        </button>
+                      )}
                     </div>
                   </div>
                 </motion.article>

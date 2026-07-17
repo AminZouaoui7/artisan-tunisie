@@ -598,40 +598,58 @@
   height: 14px;
 }
 
-.color-filter-dots {
+.color-chip-list {
   display: flex;
-  flex-wrap: wrap;
-  gap: 9px;
+  flex-direction: column;
+  gap: 5px;
 }
 
-.color-dot-premium {
-  width: 26px;
-  height: 26px;
-  border-radius: 999px;
-  border: 1.5px solid var(--products-border);
-  background: var(--products-surface);
-  display: grid;
-  place-items: center;
+.color-chip {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  height: 32px;
+  padding: 0 10px 0 8px;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--products-text);
+  font-size: 0.78rem;
+  font-weight: 500;
   cursor: pointer;
-  transition: transform 0.18s ease, box-shadow 0.18s ease;
-  padding: 0;
+  text-align: left;
+  transition: background 0.16s ease, border-color 0.16s ease, color 0.16s ease;
 }
 
-.color-dot-premium span {
-  width: 15px;
-  height: 15px;
-  border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.7);
+.color-chip:hover {
+  background: var(--products-surface-soft);
+  border-color: var(--products-border-soft);
+  color: var(--products-title);
 }
 
-.color-dot-premium:hover {
-  transform: scale(1.16);
-  box-shadow: 0 4px 12px rgba(54, 36, 23, 0.12);
-}
-
-.color-dot-premium--active {
+.color-chip--active {
+  background: var(--products-accent-soft);
   border-color: var(--products-accent);
-  box-shadow: 0 0 0 3px rgba(185, 104, 58, 0.18);
+  color: #7a2e0f;
+  font-weight: 700;
+}
+
+.color-chip-swatch {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.18);
+}
+
+.color-chip-name {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-transform: capitalize;
 }
 
 .price-filter-list {
@@ -941,34 +959,6 @@
   background: rgba(36, 33, 31, 0.62);
   color: rgba(255, 248, 240, 0.96);
   backdrop-filter: blur(8px);
-}
-
-/* ── Bouton favori ── */
-
-.pc-favorite {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  z-index: 4;
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  border: 1px solid rgba(200, 180, 160, 0.5);
-  background: rgba(255, 253, 249, 0.95);
-  color: var(--products-title);
-  box-shadow: 0 4px 16px rgba(54, 36, 23, 0.1);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease, transform 0.22s ease;
-}
-
-.pc-favorite:hover {
-  background: var(--products-accent);
-  color: #fff;
-  border-color: var(--products-accent);
-  transform: scale(1.1);
 }
 
 /* ── Quick view ── */
