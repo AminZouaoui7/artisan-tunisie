@@ -1501,88 +1501,55 @@ export default function ProductsPage() {
               <X size={18} />
             </button>
 
-            <div className="products-detail-main-grid">
+            <div className="products-detail-top">
 
-<aside className="products-detail-left-info">
-  <div className="products-detail-left-content">
-    <strong
-      className={
-        shouldShowProductPrice(detailProduct)
-          ? "detail-price-main"
-          : "detail-price-main products-detail-price--request"
-      }
-    >
-      {shouldShowProductPrice(detailProduct) && detailProduct.price != null
-        ? formatPrice(detailProduct.price)
-        : shouldShowPriceOnRequest(detailProduct)
-        ? t("products.priceOnRequest")
-        : "-"}
-    </strong>
-
-    <div className="detail-divider" />
-
-    <p className="detail-intro-text">
-      {detailProduct.shortStory ||
-        detailProduct.description ||
-        t("home.selectedFallbackDescription")}
-    </p>
-
-    <div className="detail-content-tabs">
-      <div
-        className="detail-content-tab-list"
-        role="tablist"
-        aria-label="Informations sur le tapis"
-      >
-        {detailContentTabs.map((tab) => (
-          <button
-            key={tab.key}
-            type="button"
-            role="tab"
-            aria-selected={detailContentTab === tab.key}
-            className={`detail-content-tab${detailContentTab === tab.key ? " detail-content-tab--active" : ""}`}
-            onClick={() => setDetailContentTab(tab.key)}
-          >
-            {tab.label}
-          </button>
-        ))}
-      </div>
-      <div className="detail-content-panel" role="tabpanel">
-        {detailContentTabs.find((tab) => tab.key === detailContentTab)
-          ?.content}
-      </div>
-    </div>
-
-  </div>
-
-  <div className="products-detail-actions">
-    {canProductBeAddedToCart(detailProduct) ? (
-      <button
-        type="button"
-        className="product-cart-btn"
-        onClick={() => {
-          handleAddToCart(detailProduct);
-          closeDetailProduct();
-        }}
-      >
-        <ShoppingCart size={17} />
-        {t("home.addToCart")}
-      </button>
-    ) : (
-      <button
-        type="button"
-        className="product-cart-btn product-cart-btn--request"
-        onClick={() => {
-          const product = detailProduct;
-          closeDetailProduct();
-          openPriceRequest(product);
-        }}
-      >
-        <HeartHandshake size={17} />
-        {t("products.requestPrice")}
-      </button>
-    )}
-  </div>
-</aside>
+              <div className="products-detail-product-info">
+                <h2 className="products-detail-product-title">
+                  {detailProduct.name}
+                </h2>
+                <strong
+                  className={
+                    shouldShowProductPrice(detailProduct)
+                      ? "detail-price-main"
+                      : "detail-price-main products-detail-price--request"
+                  }
+                >
+                  {shouldShowProductPrice(detailProduct) &&
+                  detailProduct.price != null
+                    ? formatPrice(detailProduct.price)
+                    : shouldShowPriceOnRequest(detailProduct)
+                    ? t("products.priceOnRequest")
+                    : "-"}
+                </strong>
+                {(() => {
+                  const s = `${detailProduct.status || ""}`.toLowerCase();
+                  const available =
+                    detailProduct.isAvailable !== false &&
+                    s !== "sold" &&
+                    s !== "hidden";
+                  const stockLabel = !available
+                    ? s === "reserved"
+                      ? "Réservé"
+                      : s === "sold"
+                      ? "Vendu"
+                      : "Indisponible"
+                    : typeof detailProduct.stock === "number" &&
+                      detailProduct.stock <= 0
+                    ? "Sur commande"
+                    : "En stock";
+                  const stockCls = !available
+                    ? "products-detail-stock--unavailable"
+                    : typeof detailProduct.stock === "number" &&
+                      detailProduct.stock <= 0
+                    ? "products-detail-stock--order"
+                    : "products-detail-stock--available";
+                  return (
+                    <p className={`products-detail-stock ${stockCls}`}>
+                      {stockLabel}
+                    </p>
+                  );
+                })()}
+              </div>
 
 <section className="products-detail-center-gallery">
   <div className="products-detail-image">
@@ -1653,131 +1620,216 @@ export default function ProductsPage() {
   )}
 </section>
 
-<aside className="products-detail-right-variants">
-  {(detailVariantsLoading || detailVariants.length > 0) && (
-    <div>
-      <h3>
-        Dimensions disponibles{" "}
-        <span>
-          (
-          {
-            [detailProduct, ...detailVariants].filter(
-              (product, index, array) =>
-                array.findIndex((item) => item.id === product.id) === index
-            ).length
-          }
-          )
-        </span>
-      </h3>
+              <div className="products-detail-purchase-bottom">
+                {(detailVariantsLoading || detailVariants.length > 0) && (
+                  <div className="products-detail-variants-section">
+                    <h3 className="products-detail-variants-title">
+                      Dimensions disponibles{" "}
+                      <span>
+                        (
+                        {
+                          [detailProduct, ...detailVariants].filter(
+                            (product, index, array) =>
+                              array.findIndex(
+                                (item) => item.id === product.id
+                              ) === index
+                          ).length
+                        }
+                        )
+                      </span>
+                    </h3>
 
-      {detailVariantsLoading && detailVariants.length === 0 ? (
-        <p className="product-variants-premium-loading">Chargement...</p>
-      ) : (
-        <div className="product-variants-premium-options">
-          {(() => {
-            const dimensionVariants = [detailProduct, ...detailVariants]
-              .filter(
-                (product, index, array) =>
-                  array.findIndex((item) => item.id === product.id) === index
-              )
-              .sort((a, b) => getSurfaceM2(a) - getSurfaceM2(b));
+                    {detailVariantsLoading && detailVariants.length === 0 ? (
+                      <p className="product-variants-premium-loading">
+                        Chargement...
+                      </p>
+                    ) : (
+                      <div className="product-variants-premium-options">
+                        {(() => {
+                          const dimensionVariants = [
+                            detailProduct,
+                            ...detailVariants,
+                          ]
+                            .filter(
+                              (product, index, array) =>
+                                array.findIndex(
+                                  (item) => item.id === product.id
+                                ) === index
+                            )
+                            .sort(
+                              (a, b) => getSurfaceM2(a) - getSurfaceM2(b)
+                            );
 
-            return dimensionVariants.map((variant) => {
-              const isActive = variant.id === detailProduct.id;
-              const variantImage = getProductImages(variant)[0];
+                          return dimensionVariants.map((variant) => {
+                            const isActive = variant.id === detailProduct.id;
+                            const variantImage = getProductImages(variant)[0];
 
-              const label =
-                variant.lengthCm && variant.widthCm
-                  ? `${variant.lengthCm} x ${variant.widthCm}`
-                  : variant.dimensions || `${variant.name || ""}`.trim();
+                            const label =
+                              variant.lengthCm && variant.widthCm
+                                ? `${variant.lengthCm} x ${variant.widthCm}`
+                                : variant.dimensions ||
+                                  `${variant.name || ""}`.trim();
 
-              const priceLabel =
-                shouldShowProductPrice(variant) && variant.price != null
-                  ? formatPrice(variant.price)
-                  : t("products.priceOnRequest");
+                            const priceLabel =
+                              shouldShowProductPrice(variant) &&
+                              variant.price != null
+                                ? formatPrice(variant.price)
+                                : t("products.priceOnRequest");
 
-              const normalizedStatus = `${variant.status || ""}`.toLowerCase();
+                            const normalizedStatus = `${
+                              variant.status || ""
+                            }`.toLowerCase();
 
-              const isVariantAvailable =
-                variant.isAvailable !== false &&
-                normalizedStatus !== "sold" &&
-                normalizedStatus !== "hidden";
+                            const isVariantAvailable =
+                              variant.isAvailable !== false &&
+                              normalizedStatus !== "sold" &&
+                              normalizedStatus !== "hidden";
 
-              const stockLabel = !isVariantAvailable
-                ? normalizedStatus === "reserved"
-                  ? "Réservé"
-                  : normalizedStatus === "sold"
-                  ? "Vendu"
-                  : "Indisponible"
-                : typeof variant.stock === "number" && variant.stock <= 0
-                ? "Sur commande"
-                : "En stock";
+                            const stockLabel = !isVariantAvailable
+                              ? normalizedStatus === "reserved"
+                                ? "Réservé"
+                                : normalizedStatus === "sold"
+                                ? "Vendu"
+                                : "Indisponible"
+                              : typeof variant.stock === "number" &&
+                                variant.stock <= 0
+                              ? "Sur commande"
+                              : "En stock";
 
-              return (
-                <button
-                  key={variant.id}
-                  type="button"
-                  className={`variant-size-button ${
-                    isActive ? "active" : ""
-                  }`}
-                  onClick={() => openDetailProduct(variant)}
-                  disabled={isActive}
-                >
-                  {variantImage ? (
-                    <img src={variantImage} alt={variant.name} />
+                            return (
+                              <button
+                                key={variant.id}
+                                type="button"
+                                className={`variant-size-button ${
+                                  isActive ? "active" : ""
+                                }`}
+                                onClick={() => openDetailProduct(variant)}
+                                disabled={isActive}
+                              >
+                                {variantImage ? (
+                                  <img
+                                    src={variantImage}
+                                    alt={variant.name}
+                                  />
+                                ) : (
+                                  <span className="variant-size-placeholder" />
+                                )}
+
+                                <span className="variant-size-label">
+                                  {label}
+                                </span>
+
+                                <span className="variant-size-meta">
+                                  <strong>{priceLabel}</strong>
+                                  <small>{stockLabel}</small>
+                                  {isActive && <CheckCircle2 size={18} />}
+                                </span>
+                              </button>
+                            );
+                          });
+                        })()}
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                <div className="products-detail-purchase-actions">
+                  {canProductBeAddedToCart(detailProduct) ? (
+                    <button
+                      type="button"
+                      className="product-cart-btn"
+                      onClick={() => {
+                        handleAddToCart(detailProduct);
+                        closeDetailProduct();
+                      }}
+                    >
+                      <ShoppingCart size={17} />
+                      {t("home.addToCart")}
+                    </button>
                   ) : (
-                    <span className="variant-size-placeholder" />
+                    <button
+                      type="button"
+                      className="product-cart-btn product-cart-btn--request"
+                      onClick={() => {
+                        const product = detailProduct;
+                        closeDetailProduct();
+                        openPriceRequest(product);
+                      }}
+                    >
+                      <HeartHandshake size={17} />
+                      {t("products.requestPrice")}
+                    </button>
                   )}
-
-                  <span className="variant-size-label">{label}</span>
-
-                  <span className="variant-size-meta">
-                    <strong>{priceLabel}</strong>
-                    <small>{stockLabel}</small>
-                    {isActive && <CheckCircle2 size={18} />}
-                  </span>
-                </button>
-              );
-            });
-          })()}
-        </div>
-      )}
-    </div>
-  )}
-</aside>
-
-      <section className="products-detail-spec-bar">
-        {[
-          {
-            label: "Dimensions",
-            value:
-              detailProduct.dimensions ||
-              (detailProduct.lengthCm && detailProduct.widthCm
-                ? `${detailProduct.lengthCm} × ${detailProduct.widthCm} cm`
-                : null),
-          },
-          { label: "Matière", value: detailProduct.material },
-          { label: "Région", value: detailProduct.region },
-          { label: "Technique", value: detailProduct.technique },
-          {
-            label: "Pièce unique",
-            value: detailProduct.isUniquePiece ? "Oui" : null,
-          },
-        ]
-          .filter((item) => Boolean(item.value))
-          .map((item) => (
-            <div key={item.label} className="products-detail-spec-item">
-              <span className="products-detail-spec-icon">
-                {getDetailIcon(item.label)}
-              </span>
-              <div>
-                <strong>{item.value}</strong>
-                <small>{item.label}</small>
+                </div>
               </div>
             </div>
-          ))}
-      </section>
-</div>
+
+            <section className="products-detail-spec-bar">
+              {[
+                {
+                  label: "Dimensions",
+                  value:
+                    detailProduct.dimensions ||
+                    (detailProduct.lengthCm && detailProduct.widthCm
+                      ? `${detailProduct.lengthCm} × ${detailProduct.widthCm} cm`
+                      : null),
+                },
+                { label: "Matière", value: detailProduct.material },
+                { label: "Région", value: detailProduct.region },
+                { label: "Technique", value: detailProduct.technique },
+                {
+                  label: "Pièce unique",
+                  value: detailProduct.isUniquePiece ? "Oui" : null,
+                },
+              ]
+                .filter((item) => Boolean(item.value))
+                .map((item) => (
+                  <div
+                    key={item.label}
+                    className="products-detail-spec-item"
+                  >
+                    <span className="products-detail-spec-icon">
+                      {getDetailIcon(item.label)}
+                    </span>
+                    <div>
+                      <strong>{item.value}</strong>
+                      <small>{item.label}</small>
+                    </div>
+                  </div>
+                ))}
+            </section>
+
+            <section className="products-detail-content-section">
+              <div
+                className="detail-content-tab-list"
+                role="tablist"
+                aria-label="Informations sur le tapis"
+              >
+                {detailContentTabs.map((tab) => (
+                  <button
+                    key={tab.key}
+                    type="button"
+                    role="tab"
+                    aria-selected={detailContentTab === tab.key}
+                    className={`detail-content-tab${
+                      detailContentTab === tab.key
+                        ? " detail-content-tab--active"
+                        : ""
+                    }`}
+                    onClick={() => setDetailContentTab(tab.key)}
+                  >
+                    {tab.label}
+                  </button>
+                ))}
+              </div>
+              <div className="detail-content-panel" role="tabpanel">
+                {
+                  detailContentTabs.find(
+                    (tab) => tab.key === detailContentTab
+                  )?.content
+                }
+              </div>
+            </section>
 
             {detailColorVariants.length > 0 && (
               <section className="products-detail-bottom-collection">
