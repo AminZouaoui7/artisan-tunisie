@@ -9,7 +9,7 @@ import {
 import { useCart } from "../context/useCart";
 import "../styles/ProductsPage.css";
 import { Link, useNavigate } from "react-router-dom";
-import { X, ChevronLeft, ChevronRight, Eye, ShoppingCart, Ruler, Hand, CheckCircle2, HeartHandshake, Volleyball } from "lucide-react";
+import { X, ChevronLeft, ChevronRight, Eye, ShoppingCart, Ruler, CheckCircle2, Volleyball } from "lucide-react";
 import { useEffect, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import PhoneInput from "../components/PhoneInput";
@@ -69,7 +69,7 @@ const boutiqueImages = [
 ];
 
 export default function HomePage() {
-  const { t, language } = useI18n();
+  const { t } = useI18n();
   const { formatPrice } = useCurrency();
   const navigate = useNavigate();
   const { isAuthenticated, loadingAuth } = useAuth();
