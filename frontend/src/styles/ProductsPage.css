@@ -1377,15 +1377,43 @@
   position: fixed;
   inset: 0;
   z-index: 99999;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 
-  /* Réduit l’espace autour du popup */
-  padding: 1px;
+  display: block;
+  padding: 0;
 
   background: rgba(18, 12, 8, 0.58);
   backdrop-filter: blur(10px);
+
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+/* Sélecteur plus précis pour éviter les règles qui écrasent la taille */
+.products-detail-modal > .products-detail-card {
+  position: absolute;
+
+  /* Seulement 6 px de vide autour */
+  inset: 6px;
+
+  width: auto !important;
+  height: auto !important;
+  max-width: none !important;
+  max-height: none !important;
+  min-width: 0;
+
+  margin: 0 !important;
+  padding: 22px;
+
+  border-radius: 18px;
+  background: #fffdf9;
+
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
 
   box-sizing: border-box;
 }
