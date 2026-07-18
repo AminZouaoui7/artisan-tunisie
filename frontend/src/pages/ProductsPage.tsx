@@ -1253,38 +1253,9 @@ export default function ProductsPage() {
 
           <div className="products-hero-separator" />
 
-          <p>
-            Découvrez une sélection de tapis artisanaux tunisiens,
-            tissés et noués à la main dans le respect du savoir-faire ancestral.
-          </p>
+         
 
-          <div className="products-hero-actions">
-            <button
-              type="button"
-              className="products-hero-primary-btn"
-              onClick={() =>
-                productsCatalogRef.current?.scrollIntoView({
-                  behavior: "smooth",
-                  block: "start",
-                })
-              }
-            >
-              Découvrir la collection
-            </button>
-
-            <button
-              type="button"
-              className="products-hero-secondary-btn"
-              onClick={() =>
-                document.querySelector(".products-category-panel")?.scrollIntoView({
-                  behavior: "smooth",
-                  block: "start",
-                })
-              }
-            >
-              Explorer les catégories
-            </button>
-          </div>
+       
         </div>
       </section>
 
