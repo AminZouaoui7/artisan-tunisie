@@ -635,6 +635,36 @@ export default function ProductsPage() {
     });
   }, [closeLightbox, detailImages.length, isLightboxOpen]);
 
+  useEffect(() => {
+    const shouldLock =
+      showMobileFilters ||
+      Boolean(detailProduct) ||
+      showPriceRequestModal ||
+      isLightboxOpen;
+
+    if (!shouldLock) return;
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [showMobileFilters, detailProduct, showPriceRequestModal, isLightboxOpen]);
+
+  useEffect(() => {
+    if (!showMobileFilters) return;
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setShowMobileFilters(false);
+      }
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [showMobileFilters]);
+
   async function openDetailProduct(product: ProductViewDto) {
     setDetailProduct(product);
     setDetailImageIndex(0);
@@ -920,6 +950,13 @@ export default function ProductsPage() {
       selectedPrice !== "all"
   );
 
+  const activeFiltersCount =
+    (search.trim() ? 1 : 0) +
+    (selectedCategory !== "all" ? 1 : 0) +
+    (color !== "all" ? 1 : 0) +
+    selectedSizes.length +
+    (selectedPrice !== "all" ? 1 : 0);
+
   const filteredProducts = useMemo(() => {
     const normalizedSearch = normalizeText(search);
 
@@ -987,6 +1024,87 @@ export default function ProductsPage() {
     setColor("all");
     setSelectedSizes([]);
     setSelectedPrice("all");
+  }
+
+  function FiltersContent() {
+    return (
+      <>
+        <div className="sidebar-search">
+          <input
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Rechercher un tapis..."
+          />
+          <Search size={14} className="sidebar-search-icon" />
+        </div>
+
+        <div className="filter-section">
+          <h4>TAILLE</h4>
+          {sizeOptions.map((option) => (
+            <label key={option.key} className="filter-option">
+              <span>{option.label}</span>
+              <input
+                type="checkbox"
+                checked={selectedSizes.includes(option.key)}
+                onChange={() =>
+                  setSelectedSizes((prev) =>
+                    prev.includes(option.key)
+                      ? prev.filter((item) => item !== option.key)
+                      : [...prev, option.key]
+                  )
+                }
+              />
+            </label>
+          ))}
+        </div>
+
+        <div className="filter-section">
+          <h4>COULEUR</h4>
+          <div className="color-chip-list">
+            {colorOptions.map((item) => (
+              <button
+                key={item.key}
+                type="button"
+                aria-label={item.label}
+                aria-pressed={canonicalColor(color) === item.key}
+                className={`color-chip${
+                  canonicalColor(color) === item.key ? " color-chip--active" : ""
+                }`}
+                onClick={() =>
+                  setColor((prev) =>
+                    canonicalColor(prev) === item.key ? "all" : item.key
+                  )
+                }
+              >
+                <span
+                  className="color-chip-swatch"
+                  style={{ background: getColorBackground(item.key) }}
+                />
+                <span className="color-chip-name">{item.label}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="filter-section">
+          <h4>PRIX</h4>
+          <div className="price-filter-list">
+            {priceOptions.map((option) => (
+              <button
+                key={option.key}
+                type="button"
+                className={`price-filter-chip ${
+                  selectedPrice === option.key ? "price-filter-chip--active" : ""
+                }`}
+                onClick={() => setSelectedPrice(option.key)}
+              >
+                {option.label}
+              </button>
+            ))}
+          </div>
+        </div>
+      </>
+    );
   }
 
   const detailContentTabs = useMemo(
@@ -1206,102 +1324,31 @@ export default function ProductsPage() {
 
       <div className="products-layout">
         <aside className="products-sidebar-filters">
+          <h3>AFFINER VOTRE RECHERCHE</h3>
+          <FiltersContent />
           <button
             type="button"
-            className="sidebar-mobile-toggle"
-            onClick={() => setShowMobileFilters((v) => !v)}
+            className="reset-filters-btn"
+            onClick={resetFilters}
+            disabled={!hasActiveFilters}
           >
-            <SlidersHorizontal size={15} />
-            {showMobileFilters ? "Masquer les filtres" : "Afficher les filtres"}
+            RÉINITIALISER LES FILTRES
           </button>
-
-          <div className={`sidebar-filters-body${showMobileFilters ? " sidebar-filters-body--open" : ""}`}>
-            <h3>AFFINER VOTRE RECHERCHE</h3>
-
-            <div className="sidebar-search">
-              <input
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                placeholder="Rechercher un tapis..."
-              />
-              <Search size={14} className="sidebar-search-icon" />
-            </div>
-
-            <div className="filter-section">
-              <h4>TAILLE</h4>
-              {sizeOptions.map((option) => (
-                <label key={option.key} className="filter-option">
-                  <span>{option.label}</span>
-                  <input
-                    type="checkbox"
-                    checked={selectedSizes.includes(option.key)}
-                    onChange={() =>
-                      setSelectedSizes((prev) =>
-                        prev.includes(option.key)
-                          ? prev.filter((item) => item !== option.key)
-                          : [...prev, option.key]
-                      )
-                    }
-                  />
-                </label>
-              ))}
-            </div>
-
-            <div className="filter-section">
-              <h4>COULEUR</h4>
-              <div className="color-chip-list">
-                {colorOptions.map((item) => (
-                  <button
-                    key={item.key}
-                    type="button"
-                    aria-label={item.label}
-                    aria-pressed={canonicalColor(color) === item.key}
-                    className={`color-chip${
-                      canonicalColor(color) === item.key
-                        ? " color-chip--active"
-                        : ""
-                    }`}
-                    onClick={() =>
-                      setColor((prev) =>
-                        canonicalColor(prev) === item.key ? "all" : item.key
-                      )
-                    }
-                  >
-                    <span
-                      className="color-chip-swatch"
-                      style={{ background: getColorBackground(item.key) }}
-                    />
-                    <span className="color-chip-name">{item.label}</span>
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div className="filter-section">
-              <h4>PRIX</h4>
-              <div className="price-filter-list">
-                {priceOptions.map((option) => (
-                  <button
-                    key={option.key}
-                    type="button"
-                    className={`price-filter-chip ${
-                      selectedPrice === option.key ? "price-filter-chip--active" : ""
-                    }`}
-                    onClick={() => setSelectedPrice(option.key)}
-                  >
-                    {option.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <button type="button" className="reset-filters-btn" onClick={resetFilters}>
-              RÉINITIALISER LES FILTRES
-            </button>
-          </div>
         </aside>
 
         <main className="products-catalog" ref={productsCatalogRef}>
+          <button
+            type="button"
+            className="mobile-filter-trigger"
+            onClick={() => setShowMobileFilters(true)}
+          >
+            <SlidersHorizontal size={18} />
+            <span>Filtrer les tapis</span>
+            {activeFiltersCount > 0 && (
+              <span className="mobile-filter-count">{activeFiltersCount}</span>
+            )}
+          </button>
+
           <div className="products-catalog-header">
             <div className="products-catalog-title-block">
               <h2 className="products-catalog-title">
@@ -1498,6 +1545,62 @@ export default function ProductsPage() {
           )}
         </main>
       </div>
+
+      {showMobileFilters && (
+        <div
+          className="mobile-filter-overlay"
+          onClick={() => setShowMobileFilters(false)}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Filtres produits"
+        >
+          <aside
+            className="mobile-filter-sheet"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div className="mobile-filter-handle" />
+
+            <header className="mobile-filter-header">
+              <div>
+                <span className="mobile-filter-kicker">Collection</span>
+                <h2>Filtrer les tapis</h2>
+              </div>
+
+              <button
+                type="button"
+                className="mobile-filter-close"
+                onClick={() => setShowMobileFilters(false)}
+                aria-label="Fermer les filtres"
+              >
+                <X size={20} />
+              </button>
+            </header>
+
+            <div className="mobile-filter-content">
+              <FiltersContent />
+            </div>
+
+            <footer className="mobile-filter-footer">
+              <button
+                type="button"
+                className="mobile-filter-reset"
+                onClick={resetFilters}
+                disabled={!hasActiveFilters}
+              >
+                Réinitialiser
+              </button>
+
+              <button
+                type="button"
+                className="mobile-filter-apply"
+                onClick={() => setShowMobileFilters(false)}
+              >
+                Voir {filteredProducts.length} tapis
+              </button>
+            </footer>
+          </aside>
+        </div>
+      )}
 
       {detailProduct && (
         <div className="products-detail-modal" onClick={closeDetailProduct}>
