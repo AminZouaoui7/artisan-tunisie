@@ -1450,7 +1450,7 @@
 
 @media (max-width: 900px) {
   .products-hero-premium {
-    height: 340px;
+    height: 320px;
   }
 
   .hero-overlay {
@@ -1464,17 +1464,40 @@
   }
 
   .hero-content {
-    justify-content: flex-start;
-    padding: 32px 22px 0;
+    justify-content: center;
+    padding: 26px 20px 22px;
     max-width: 100%;
+  }
+
+  .products-breadcrumb {
+    margin-bottom: 10px;
+    font-size: 0.6rem;
+  }
+
+  .products-hero-kicker {
+    margin-bottom: 10px;
   }
 
   .hero-content h1 {
     font-size: clamp(1.9rem, 8vw, 2.6rem);
+    margin-bottom: 12px;
+  }
+
+  .products-hero-separator {
+    margin-bottom: 12px;
   }
 
   .hero-content > p {
     max-width: 100%;
+    margin-bottom: 18px;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .products-hero-actions {
+    margin-top: 2px;
   }
 
   .products-grid {
@@ -1512,11 +1535,29 @@
 
 @media (max-width: 640px) {
   .products-hero-premium {
-    height: 300px;
+    height: 280px;
   }
 
   .hero-content {
-    padding: 26px 18px 0;
+    padding: 22px 16px 18px;
+  }
+
+  .products-breadcrumb {
+    display: none;
+  }
+
+  .hero-content h1 {
+    font-size: clamp(2.05rem, 9vw, 2.75rem);
+    line-height: 1.08;
+  }
+
+  .hero-content > p {
+    font-size: 0.86rem;
+    line-height: 1.62;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 
   .products-hero-actions {
@@ -1527,7 +1568,7 @@
   .products-hero-primary-btn,
   .products-hero-secondary-btn {
     width: 100%;
-    height: 42px;
+    height: 46px;
   }
 
   .products-layout {
@@ -1609,6 +1650,16 @@
 
 /* Sélecteur plus précis pour éviter les règles qui écrasent la taille */
 .products-detail-modal > .products-detail-card {
+}
+
+@media (max-width: 430px) {
+  .products-hero-premium {
+    height: 260px;
+  }
+
+  .hero-content h1 br {
+    display: none;
+  }
 }
 
 @media (min-width: 901px) {
