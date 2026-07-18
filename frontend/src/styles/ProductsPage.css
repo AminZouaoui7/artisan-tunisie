@@ -1444,90 +1444,8 @@
   }
 }
 
-/* ================================================================
-   RESPONSIVE — 900px
-================================================================ */
 
-@media (max-width: 900px) {
-  .products-hero-premium {
-    height: 320px;
-  }
 
-  .hero-overlay {
-    background: linear-gradient(
-      180deg,
-      rgba(248, 244, 238, 0.96) 0%,
-      rgba(248, 244, 238, 0.82) 42%,
-      rgba(248, 244, 238, 0.3) 72%,
-      rgba(248, 244, 238, 0) 100%
-    );
-  }
-
-  .hero-content {
-    justify-content: center;
-    padding: 26px 20px 22px;
-    max-width: 100%;
-  }
-
-  .products-breadcrumb {
-    margin-bottom: 10px;
-    font-size: 0.6rem;
-  }
-
-  .products-hero-kicker {
-    margin-bottom: 10px;
-  }
-
-  .hero-content h1 {
-    font-size: clamp(1.9rem, 8vw, 2.6rem);
-    margin-bottom: 12px;
-  }
-
-  .products-hero-separator {
-    margin-bottom: 12px;
-  }
-
-  .hero-content > p {
-    max-width: 100%;
-    margin-bottom: 18px;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-
-  .products-hero-actions {
-    margin-top: 2px;
-  }
-
-  .products-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 16px;
-  }
-
-  .pc-image-btn {
-    height: 240px;
-  }
-
-  .pc-body {
-    padding: 18px 20px 22px;
-  }
-
-  .pc-title {
-    font-size: clamp(1.1rem, 3vw, 1.5rem);
-  }
-
-  .pc-price {
-    font-size: clamp(1.5rem, 4vw, 2.2rem);
-  }
-
-  .pc-cart-btn,
-  .pc-request-btn {
-    height: 52px;
-    border-radius: 14px;
-    font-size: 0.79rem;
-  }
-}
 
 /* ================================================================
    RESPONSIVE — 640px
@@ -2933,5 +2851,178 @@
   .hero-content {
     transition: none;
     animation: none;
+  }
+}
+/* =========================================================
+   HERO PRODUCTS PAGE — VERSION MOBILE
+   À ajouter tout en bas de ProductsPage.css
+========================================================= */
+
+@media (max-width: 900px) {
+  .products-hero-premium {
+    position: relative;
+    height: 430px;
+    min-height: 430px;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-end;
+  }
+
+  /* Image du slider */
+  .products-hero-premium img,
+  .products-hero-premium .products-hero-image,
+  .products-hero-premium .hero-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  /* Dégradé sombre pour rendre le texte lisible */
+  .products-hero-premium::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+
+    background: linear-gradient(
+      to bottom,
+      rgba(12, 8, 5, 0.08) 15%,
+      rgba(12, 8, 5, 0.25) 48%,
+      rgba(12, 8, 5, 0.88) 100%
+    );
+  }
+
+  /* Contenu du hero */
+  .products-hero-content {
+    position: relative;
+    z-index: 2;
+
+    width: 100%;
+    max-width: none;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-end;
+
+    padding: 28px 20px 24px;
+    text-align: left;
+  }
+
+  /* Masquer le fil d’Ariane sur mobile */
+  .products-hero-breadcrumb,
+  .products-breadcrumb {
+    display: none;
+  }
+
+  .products-hero-kicker {
+    margin: 0 0 8px;
+    color: rgba(255, 255, 255, 0.82);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  .products-hero-title {
+    max-width: 520px;
+    margin: 0;
+
+    color: #ffffff;
+    font-size: clamp(30px, 8vw, 46px);
+    line-height: 1.02;
+    letter-spacing: -0.035em;
+  }
+
+  /* Empêcher le titre de se couper avec le <br> */
+  .products-hero-title br {
+    display: none;
+  }
+
+  .products-hero-separator {
+    width: 48px;
+    height: 2px;
+    margin: 14px 0;
+
+    border: 0;
+    background: rgba(255, 255, 255, 0.75);
+  }
+
+  .products-hero-description,
+  .products-hero-content p {
+    max-width: 520px;
+    margin: 0 0 18px;
+
+    color: rgba(255, 255, 255, 0.88);
+    font-size: 14px;
+    line-height: 1.55;
+
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  .products-hero-actions {
+    width: auto;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .products-hero-actions .products-hero-btn,
+  .products-hero-actions a,
+  .products-hero-actions button {
+    min-height: 46px;
+    padding: 0 22px;
+    border-radius: 999px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  /* Garder seulement le bouton principal */
+  .products-hero-actions > :nth-child(2) {
+    display: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .products-hero-premium {
+    height: 420px;
+    min-height: 420px;
+  }
+
+  .products-hero-content {
+    padding: 24px 18px 22px;
+  }
+}
+
+@media (max-width: 390px) {
+  .products-hero-premium {
+    height: 440px;
+    min-height: 440px;
+  }
+
+  .products-hero-content {
+    padding: 22px 16px 20px;
+  }
+
+  .products-hero-title {
+    font-size: 31px;
+  }
+
+  .products-hero-actions {
+    width: 100%;
+  }
+
+  .products-hero-actions > :first-child {
+    width: 100%;
   }
 }
