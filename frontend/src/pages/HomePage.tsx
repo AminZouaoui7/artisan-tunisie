@@ -3,8 +3,6 @@ import {
   MapPin,
   Gem,
   Palette,
-  PackageCheck,
-  ShieldCheck,
   X,
   ChevronLeft,
   ChevronRight,
