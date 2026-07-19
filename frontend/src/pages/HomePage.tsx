@@ -5,12 +5,21 @@ import {
   Palette,
   PackageCheck,
   ShieldCheck,
+  X,
+  ChevronLeft,
+  ChevronRight,
+  Eye,
+  ShoppingCart,
+  Ruler,
+  Hand,
+  CheckCircle2,
+  Volleyball,
+  HeartHandshake,
+  Grid3X3,
 } from "lucide-react";
 import { useCart } from "../context/useCart";
-import "../styles/ProductsPage.css";
 import { Link, useNavigate } from "react-router-dom";
-import { X, ChevronLeft, ChevronRight, Eye, ShoppingCart, Ruler, Hand, CheckCircle2, Volleyball } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import PhoneInput from "../components/PhoneInput";
 import boutiqueImg1 from "../assets/ceramic3.png";
@@ -23,8 +32,8 @@ import boutiqueImg6 from "../assets/mosaique.png";
 import heroRug from "../assets/088fc89b-c8a7-49da-8450-cc19fc82ade1.png";
 import storyImage from "../assets/cbd0ea42-92dc-4cd6-a8e7-0b3133fe44f2.png";
 
-import "../styles/HomePage.css";
 import "../styles/ProductsPage.css";
+import "../styles/HomePage.css";
 
 import { useAuth } from "../context/AuthContext";
 import ActionSuccess from "../components/ActionSuccess";
@@ -69,7 +78,7 @@ const boutiqueImages = [
 ];
 
 export default function HomePage() {
-  const { t } = useI18n();
+  const { t, language } = useI18n();
   const { formatPrice } = useCurrency();
   const navigate = useNavigate();
   const { isAuthenticated, loadingAuth } = useAuth();
@@ -81,20 +90,21 @@ export default function HomePage() {
   const { addToCart, isInCart } = useCart();
   const visitorLocation = getStoredUserLocation();
 
+  const [allProducts, setAllProducts] = useState<ProductViewDto[]>([]);
   const [products, setProducts] = useState<ProductViewDto[]>([]);
   const [loadingProducts, setLoadingProducts] = useState(true);
   const [productsErrorKey, setProductsErrorKey] = useState<string | null>(null);
 
   const [boutiqueIndex, setBoutiqueIndex] = useState(0);
 
-  const [selectedProduct, setSelectedProduct] = useState<ProductViewDto | null>(null);
-  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
-  const [selectedVariants, setSelectedVariants] = useState<ProductViewDto[]>([]);
-  const [selectedVariantsLoading, setSelectedVariantsLoading] = useState(false);
-  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [detailProduct, setDetailProduct] = useState<ProductViewDto | null>(null);
+  const [detailImageIndex, setDetailImageIndex] = useState(0);
+  const [detailVariants, setDetailVariants] = useState<ProductViewDto[]>([]);
+  const [detailVariantsLoading, setDetailVariantsLoading] = useState(false);
   const [lightboxImageIndex, setLightboxImageIndex] = useState<number | null>(null);
 
   const [priceRequestOpen, setPriceRequestOpen] = useState(false);
+  const [priceRequestProduct, setPriceRequestProduct] = useState<ProductViewDto | null>(null);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [priceRequestLoading, setPriceRequestLoading] = useState(false);
   const [priceRequestErrorKey, setPriceRequestErrorKey] = useState<string | null>(null);
@@ -107,6 +117,263 @@ export default function HomePage() {
     phone: "",
     message: "",
   });
+
+  type DetailContentTab = "description" | "story" | "care";
+  const [detailContentTab, setDetailContentTab] =
+    useState<DetailContentTab>("description");
+
+  const collectionScrollRef = useRef<HTMLDivElement | null>(null);
+
+  const normalizeText = (value?: string | null) =>
+    (value ?? "")
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/\p{Diacritic}/gu, "")
+      .trim();
+
+  function splitValues(value?: string | null) {
+    return (value || "")
+      .split(",")
+      .map((item) => item.trim())
+      .filter(Boolean);
+  }
+
+  function canonicalColor(value?: string | null) {
+    const key = normalizeText(value);
+    if (["bleu", "blue"].includes(key)) return "blue";
+    if (["rouge", "red"].includes(key)) return "red";
+    if (["vert", "green"].includes(key)) return "green";
+    if (["noir", "black"].includes(key)) return "black";
+    if (["blanc", "white"].includes(key)) return "white";
+    if (["beige", "cream", "creme", "crème", "ivoire", "ivory"].includes(key))
+      return "beige";
+    if (["gris", "grise", "grey", "gray"].includes(key)) return "grey";
+    if (["marron", "brown"].includes(key)) return "brown";
+    if (["rose", "pink"].includes(key)) return "pink";
+    if (["moutarde", "mustard", "jaune", "yellow", "ocre", "ochre"].includes(key))
+      return "mustard";
+    if (["orange"].includes(key)) return "orange";
+    if (["multicolore", "multicolor"].includes(key)) return "multicolore";
+    return key;
+  }
+
+  const colorLabels: Record<string, { fr: string; en: string }> = {
+    beige: { fr: "Beige", en: "Beige" },
+    bleu: { fr: "Bleu", en: "Blue" },
+    blue: { fr: "Bleu", en: "Blue" },
+    rouge: { fr: "Rouge", en: "Red" },
+    red: { fr: "Rouge", en: "Red" },
+    vert: { fr: "Vert", en: "Green" },
+    green: { fr: "Vert", en: "Green" },
+    noir: { fr: "Noir", en: "Black" },
+    black: { fr: "Noir", en: "Black" },
+    blanc: { fr: "Blanc", en: "White" },
+    white: { fr: "Blanc", en: "White" },
+    grey: { fr: "Gris", en: "Grey" },
+    gray: { fr: "Gris", en: "Grey" },
+    brown: { fr: "Marron", en: "Brown" },
+    marron: { fr: "Marron", en: "Brown" },
+    orange: { fr: "Orange", en: "Orange" },
+    mustard: { fr: "Moutarde", en: "Mustard" },
+    pink: { fr: "Rose", en: "Pink" },
+    multicolore: { fr: "Multicolore", en: "Multicolor" },
+  };
+
+  const colorTranslations: Record<string, { fr: string; en: string }> = {
+    blue: { fr: "Bleu", en: "Blue" },
+    bleu: { fr: "Bleu", en: "Blue" },
+    red: { fr: "Rouge", en: "Red" },
+    rouge: { fr: "Rouge", en: "Red" },
+    green: { fr: "Vert", en: "Green" },
+    vert: { fr: "Vert", en: "Green" },
+    beige: { fr: "Beige", en: "Beige" },
+    black: { fr: "Noir", en: "Black" },
+    noir: { fr: "Noir", en: "Black" },
+    white: { fr: "Blanc", en: "White" },
+    blanc: { fr: "Blanc", en: "White" },
+    brown: { fr: "Marron", en: "Brown" },
+    marron: { fr: "Marron", en: "Brown" },
+    grey: { fr: "Gris", en: "Grey" },
+    gray: { fr: "Gris", en: "Grey" },
+    gris: { fr: "Gris", en: "Grey" },
+    orange: { fr: "Orange", en: "Orange" },
+    mustard: { fr: "Moutarde", en: "Mustard" },
+    moutarde: { fr: "Moutarde", en: "Mustard" },
+    pink: { fr: "Rose", en: "Pink" },
+    rose: { fr: "Rose", en: "Pink" },
+  };
+
+  function getColorLabel(value: string, lang: "fr" | "en") {
+    const canonical = canonicalColor(value);
+    return colorLabels[canonical]?.[lang] || value;
+  }
+
+  function getTranslatedColor(color?: string) {
+    const lang = language === "FR" ? "fr" : "en";
+    const raw = splitValues(color)[0] || color || "";
+    const key = canonicalColor(raw) || normalizeText(raw);
+    return (
+      colorTranslations[key]?.[lang] ||
+      colorLabels[key]?.[lang] ||
+      getColorLabel(key, lang) ||
+      raw ||
+      ""
+    );
+  }
+
+  function getSurfaceM2(product: ProductViewDto) {
+    if (!product.lengthCm || !product.widthCm) return 0;
+    return (product.lengthCm * product.widthCm) / 10000;
+  }
+
+  function getVariantFamilyKey(product: ProductViewDto) {
+    const rawKey = product.variantGroupKey || product.slug || product.name || "";
+    const normalized = normalizeText(rawKey);
+    let key = normalized.replace(/[\s\-_]+/g, "").replace(/[^a-z0-9]/g, "");
+
+    const colorSuffixes = [
+      "bleuclair",
+      "lightblue",
+      "bleufoncee",
+      "bleufonce",
+      "darkblue",
+      "multicolore",
+      "multicolor",
+      "multicouleur",
+      "multicolour",
+      "rosebleu",
+      "bleurose",
+      "rougebleu",
+      "bleurouge",
+      "vertbleu",
+      "bleuvert",
+      "noirblanc",
+      "blancnoir",
+      "beigebleu",
+      "bleubeige",
+      "rougevert",
+      "vertrouge",
+      "terracotta",
+      "turquoise",
+      "bordeaux",
+      "burgundy",
+      "saumon",
+      "salmon",
+      "argenté",
+      "argente",
+      "silver",
+      "doré",
+      "dore",
+      "golden",
+      "gold",
+      "crème",
+      "creme",
+      "cream",
+      "ivoire",
+      "ivory",
+      "naturelle",
+      "naturel",
+      "natural",
+      "kaki",
+      "khaki",
+      "violette",
+      "violet",
+      "purple",
+      "orange",
+      "jaune",
+      "yellow",
+      "gris",
+      "grise",
+      "gray",
+      "grey",
+      "rose",
+      "pink",
+      "marron",
+      "brown",
+      "beige",
+      "blanche",
+      "blanc",
+      "white",
+      "noire",
+      "noir",
+      "black",
+      "verte",
+      "vert",
+      "green",
+      "rouge",
+      "red",
+      "bleu",
+      "blue",
+      "ocre",
+      "ochre",
+      "camel",
+    ]
+      .map((item) => normalizeText(item).replace(/\s+/g, ""))
+      .filter(Boolean)
+      .sort((a, b) => b.length - a.length);
+
+    const sizeSuffixes = ["xxl", "xl", "xs", "sm", "md", "lg", "s", "m", "l", "sb"]
+      .map((item) => normalizeText(item))
+      .sort((a, b) => b.length - a.length);
+
+    const stripSuffixes = (suffixes: string[]) => {
+      let changed = false;
+      do {
+        changed = false;
+        for (const suffix of suffixes) {
+          if (!suffix) continue;
+          if (key.endsWith(suffix) && key.length > suffix.length + 2) {
+            key = key.slice(0, -suffix.length);
+            changed = true;
+            break;
+          }
+        }
+      } while (changed);
+    };
+
+    stripSuffixes(colorSuffixes);
+    stripSuffixes(sizeSuffixes);
+
+    if (key.length > 6) {
+      if (key.endsWith("b")) key = key.slice(0, -1);
+      if (key.endsWith("r")) key = key.slice(0, -1);
+      if (key.endsWith("v")) key = key.slice(0, -1);
+      if (key.endsWith("n")) key = key.slice(0, -1);
+      if (key.endsWith("w")) key = key.slice(0, -1);
+    }
+
+    return key.trim();
+  }
+
+  function getDetailIcon(label: string) {
+    const value = label.toLowerCase();
+
+    if (value.includes("mati")) {
+      return <Gem size={16} />;
+    }
+
+    if (value.includes("technique")) {
+      return <Hand size={16} />;
+    }
+
+    if (value.includes("couleur")) {
+      return <Palette size={16} />;
+    }
+
+    if (value.includes("origine") || value.includes("région") || value.includes("region")) {
+      return <MapPin size={16} />;
+    }
+
+    if (value.includes("dens")) {
+      return <Grid3X3 size={16} />;
+    }
+
+    if (value.includes("dimension") || value.includes("épaisseur") || value.includes("epaisseur")) {
+      return <Ruler size={16} />;
+    }
+
+    return <Sparkles size={16} />;
+  }
 
   function getProductImages(product: ProductViewDto | null) {
     if (!product) return [];
@@ -125,6 +392,84 @@ export default function HomePage() {
 
     return [];
   }
+
+  function getDetailImages(product: ProductViewDto | null) {
+    if (!product) return [];
+    const allImages = getProductImages(product);
+    if (allImages.length <= 1) return allImages;
+    const mainUrl = product.fullMainImageUrl;
+    if (!mainUrl || allImages[0] === mainUrl) return allImages;
+    const mainIdx = allImages.indexOf(mainUrl);
+    if (mainIdx <= 0) return allImages;
+    return [mainUrl, ...allImages.filter((_, i) => i !== mainIdx)];
+  }
+
+  const detailImages = getDetailImages(detailProduct);
+  const isLightboxOpen = lightboxImageIndex !== null;
+
+  const detailContentTabs = useMemo(
+    () =>
+      detailProduct
+        ? [
+            {
+              key: "description" as const,
+              label: "Description",
+              content:
+                detailProduct.description ||
+                detailProduct.shortStory ||
+                t("home.selectedFallbackDescription"),
+            },
+            {
+              key: "story" as const,
+              label: "Notre histoire",
+              content: detailProduct.shortStory,
+            },
+            {
+              key: "care" as const,
+              label: "Entretien",
+              content: detailProduct.careInstructions,
+            },
+          ].filter((item) => Boolean(item.content?.trim()))
+        : [],
+    [detailProduct, t]
+  );
+
+  useEffect(() => {
+    if (!detailProduct || detailContentTabs.length === 0) return;
+    const activeTabExists = detailContentTabs.some(
+      (tab) => tab.key === detailContentTab
+    );
+    if (!activeTabExists) {
+      setDetailContentTab(detailContentTabs[0].key);
+    }
+  }, [detailProduct, detailContentTab, detailContentTabs]);
+
+  const detailColorVariants = useMemo(() => {
+    if (!detailProduct) return [];
+    const currentFamilyKey = getVariantFamilyKey(detailProduct);
+    if (!currentFamilyKey) return [];
+
+    const excludedIds = new Set([detailProduct.id]);
+    const uniqueById = new Map<number, ProductViewDto>();
+
+    allProducts.forEach((product) => {
+      if (excludedIds.has(product.id)) return;
+      if (getVariantFamilyKey(product) !== currentFamilyKey) return;
+      uniqueById.set(product.id, product);
+    });
+
+    return Array.from(uniqueById.values()).sort((a, b) => {
+      const groupA = String(a.variantGroupKey || "");
+      const groupB = String(b.variantGroupKey || "");
+      const groupDiff = groupA.localeCompare(groupB);
+      if (groupDiff !== 0) return groupDiff;
+
+      const surfaceDiff = getSurfaceM2(b) - getSurfaceM2(a);
+      if (surfaceDiff !== 0) return surfaceDiff;
+
+      return String(a.name || "").localeCompare(String(b.name || ""));
+    });
+  }, [allProducts, detailProduct]);
 
   const categories = [
     {
@@ -145,43 +490,40 @@ export default function HomePage() {
   ];
 
   const openProductModal = async (product: ProductViewDto) => {
-    setSelectedProduct(product);
-    setSelectedImageIndex(0);
-    setSelectedVariants([]);
-    setLightboxOpen(false);
+    setDetailProduct(product);
+    setDetailImageIndex(0);
+    setDetailContentTab("description");
+    setDetailVariants([]);
     setLightboxImageIndex(null);
     setPriceRequestOpen(false);
     setShowSuccessModal(false);
     setPriceRequestSuccessProductName(null);
     setPriceRequestErrorKey(null);
+    setPriceRequestProduct(null);
 
     try {
-      setSelectedVariantsLoading(true);
+      setDetailVariantsLoading(true);
       const variants = await getProductVariants(product.id);
-      setSelectedVariants(variants.filter((variant) => variant.id !== product.id));
+      setDetailVariants(variants.filter((variant) => variant.id !== product.id));
     } catch (error) {
       console.error("Erreur chargement variantes :", error);
-      setSelectedVariants([]);
+      setDetailVariants([]);
     } finally {
-      setSelectedVariantsLoading(false);
+      setDetailVariantsLoading(false);
     }
   };
 
   const closeProductModal = () => {
-    setSelectedProduct(null);
-    setSelectedImageIndex(0);
-    setSelectedVariants([]);
-    setSelectedVariantsLoading(false);
-    setLightboxOpen(false);
+    setDetailProduct(null);
+    setDetailImageIndex(0);
+    setDetailContentTab("description");
+    setDetailVariants([]);
+    setDetailVariantsLoading(false);
     setLightboxImageIndex(null);
-    setPriceRequestOpen(false);
-    setShowSuccessModal(false);
-    setPriceRequestSuccessProductName(null);
-    setPriceRequestErrorKey(null);
   };
 
-  const openPriceRequestForm = () => {
-    if (!selectedProduct || loadingAuth) return;
+  function openPriceRequest(product: ProductViewDto) {
+    if (loadingAuth) return;
 
     if (!isAuthenticated) {
       closeProductModal();
@@ -194,19 +536,21 @@ export default function HomePage() {
       email: "",
       phone: "",
       message: t("home.priceRequestPrefill", {
-        productName: selectedProduct.name,
+        productName: product.name,
       }),
     });
 
     setPriceRequestSuccessProductName(null);
     setPriceRequestErrorKey(null);
     setShowSuccessModal(false);
+    setPriceRequestProduct(product);
     setPriceRequestOpen(true);
-  };
+  }
 
   const closePriceRequestForm = () => {
     setPriceRequestOpen(false);
     setPriceRequestErrorKey(null);
+    setPriceRequestProduct(null);
   };
 
   const closeSuccessModal = () => {
@@ -245,11 +589,10 @@ export default function HomePage() {
   const submitPriceRequest = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!selectedProduct) return;
+    if (!priceRequestProduct) return;
 
     if (!isAuthenticated) {
       closePriceRequestForm();
-      closeProductModal();
       navigate("/login");
       return;
     }
@@ -260,17 +603,18 @@ export default function HomePage() {
       setPriceRequestSuccessProductName(null);
 
       await createPriceRequest({
-        productId: selectedProduct.id,
+        productId: priceRequestProduct.id,
         customerName: priceRequestForm.customerName,
         email: priceRequestForm.email,
         phone: priceRequestForm.phone,
-        countryCode: selectedProduct.countryCode || visitorLocation.countryCode,
+        countryCode: priceRequestProduct.countryCode || visitorLocation.countryCode,
         message: priceRequestForm.message,
       });
 
-      setPriceRequestSuccessProductName(selectedProduct.name);
+      setPriceRequestSuccessProductName(priceRequestProduct.name);
       setPriceRequestOpen(false);
       setShowSuccessModal(true);
+      setPriceRequestProduct(null);
 
       setPriceRequestForm({
         customerName: "",
@@ -325,6 +669,7 @@ export default function HomePage() {
         setProductsErrorKey(null);
 
         const data = await getProducts();
+        if (isMounted) setAllProducts(data);
 
        const getSurfaceM2 = (product: ProductViewDto) => {
   const length = product.lengthCm || 0;
@@ -420,56 +765,44 @@ if (isMounted) setProducts(homeProducts);
     ? { duration: 0 }
     : scrollTransition;
 
-  const selectedProductImages = selectedProduct
-    ? [
-        selectedProduct.fullMainImageUrl,
-        ...selectedProduct.fullImages.filter(
-          (image) => image !== selectedProduct.fullMainImageUrl
-        ),
-      ].filter((image): image is string => Boolean(image))
-    : [];
-
-  function nextSelectedImage() {
-    if (!selectedProductImages.length) return;
-    setSelectedImageIndex((prev) => (prev + 1) % selectedProductImages.length);
+  function nextDetailImage() {
+    if (!detailImages.length) return;
+    setDetailImageIndex((prev) => (prev + 1) % detailImages.length);
   }
 
-  function prevSelectedImage() {
-    if (!selectedProductImages.length) return;
-    setSelectedImageIndex((prev) =>
-      prev === 0 ? selectedProductImages.length - 1 : prev - 1
-    );
+  function prevDetailImage() {
+    if (!detailImages.length) return;
+    setDetailImageIndex((prev) => (prev === 0 ? detailImages.length - 1 : prev - 1));
+  }
+
+  function openLightbox(index: number) {
+    if (!detailImages.length) return;
+    const safeIndex = Math.max(0, Math.min(index, detailImages.length - 1));
+    setLightboxImageIndex(safeIndex);
   }
 
   function closeLightbox() {
-    setLightboxOpen(false);
     setLightboxImageIndex(null);
   }
 
   function nextLightboxImage() {
-    if (!selectedProductImages.length) return;
+    if (!detailImages.length) return;
     setLightboxImageIndex((prev) => {
-      const current = prev ?? selectedImageIndex;
-      return (current + 1) % selectedProductImages.length;
+      if (prev === null) return prev;
+      return (prev + 1) % detailImages.length;
     });
   }
 
   function prevLightboxImage() {
-    if (!selectedProductImages.length) return;
+    if (!detailImages.length) return;
     setLightboxImageIndex((prev) => {
-      const current = prev ?? selectedImageIndex;
-      return current === 0 ? selectedProductImages.length - 1 : current - 1;
+      if (prev === null) return prev;
+      return prev === 0 ? detailImages.length - 1 : prev - 1;
     });
   }
 
   useEffect(() => {
-    if (!lightboxOpen) return;
-    if (lightboxImageIndex !== null) return;
-    setLightboxImageIndex(selectedImageIndex);
-  }, [lightboxImageIndex, lightboxOpen, selectedImageIndex]);
-
-  useEffect(() => {
-    if (!lightboxOpen) return;
+    if (!isLightboxOpen) return;
 
     function onKeyDown(e: KeyboardEvent) {
       if (e.key === "Escape") {
@@ -492,7 +825,29 @@ if (isMounted) setProducts(homeProducts);
 
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [lightboxOpen, selectedProductImages.length, selectedImageIndex]);
+  }, [isLightboxOpen, detailImages.length]);
+
+  useEffect(() => {
+    const shouldLock =
+      Boolean(detailProduct) || priceRequestOpen || isLightboxOpen;
+
+    if (!shouldLock) return;
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [detailProduct, isLightboxOpen, priceRequestOpen]);
+
+  async function openDetailProduct(product: ProductViewDto) {
+    await openProductModal(product);
+  }
+
+  function closeDetailProduct() {
+    closeProductModal();
+  }
 
   return (
     <div className="home">
@@ -1053,321 +1408,444 @@ if (isMounted) setProducts(homeProducts);
         </motion.div>
       </section>
 
-{selectedProduct && (
-  <div
-    className="products-detail-modal"
-    role="dialog"
-    aria-modal="true"
-    onClick={closeProductModal}
-  >
-    <div className="products-detail-card" onClick={(e) => e.stopPropagation()}>
-      <button
-        type="button"
-        className="products-detail-close"
-        onClick={closeProductModal}
-        aria-label="Fermer"
-      >
-        <X size={20} />
-      </button>
-
-      <div className="products-detail-top-layout">
-        <aside className="products-detail-left-info">
-          <div className="products-detail-left-content">
-            <span className="detail-kicker">Détails du tapis</span>
-
-            <h2>{selectedProduct.name}</h2>
-
-            {selectedProduct.variantGroupKey && (
-              <p className="detail-collection">
-                Collection <strong>{selectedProduct.variantGroupKey}</strong>
-              </p>
-            )}
-
-            <strong
-              className={
-                shouldShowProductPrice(selectedProduct)
-                  ? "detail-price"
-                  : "detail-price products-detail-price--request"
-              }
-            >
-              {shouldShowProductPrice(selectedProduct) && selectedProduct.price != null
-                ? formatPrice(selectedProduct.price)
-                : t("products.priceOnRequest")}
-            </strong>
-
-            <div className="detail-divider" />
-
-            {selectedProduct.description ? (
-              <p className="detail-description">{selectedProduct.description}</p>
-            ) : (
-              <p className="detail-description">
-                Pièce artisanale sélectionnée avec soin.
-              </p>
-            )}
-
-            <div className="detail-spec-list">
-  <div className="detail-spec-row">
-    <span className="detail-spec-icon">
-      <Sparkles size={16} />
-    </span>
-    <strong>Type</strong>
-    <span>{selectedProduct.type || "-"}</span>
-  </div>
-
-  <div className="detail-spec-row">
-    <span className="detail-spec-icon">
-      <Hand size={16} />
-    </span>
-    <strong>Technique</strong>
-    <span>{selectedProduct.technique || "-"}</span>
-  </div>
-
-  <div className="detail-spec-row">
-    <span className="detail-spec-icon">
-      <MapPin size={16} />
-    </span>
-    <strong>Région</strong>
-    <span>{selectedProduct.region || "-"}</span>
-  </div>
-
-  <div className="detail-spec-row">
-    <span className="detail-spec-icon">
-      <Gem size={16} />
-    </span>
-    <strong>Matière</strong>
-    <span>{selectedProduct.material || "-"}</span>
-  </div>
-
-  <div className="detail-spec-row">
-    <span className="detail-spec-icon">
-      <Palette size={16} />
-    </span>
-    <strong>Couleurs</strong>
-    <span>{selectedProduct.colors || "-"}</span>
-  </div>
-
-  <div className="detail-spec-row">
-    <span className="detail-spec-icon">
-      <Ruler size={16} />
-    </span>
-    <strong>Dimensions</strong>
-    <span>{selectedProduct.dimensions || "-"}</span>
-  </div>
-
-  <div className="detail-spec-row">
-    <span className="detail-spec-icon">
-      <PackageCheck size={16} />
-    </span>
-    <strong>Pièce unique</strong>
-    <span>Oui</span>
-  </div>
-
-  {selectedProduct.careInstructions && (
-    <div className="detail-spec-row detail-spec-row--care">
-      <span className="detail-spec-icon">
-        <ShieldCheck size={16} />
-      </span>
-      <strong>Entretien</strong>
-      <span>{selectedProduct.careInstructions}</span>
-    </div>
-  )}
-</div>
-          </div>
-
-          <div className="products-detail-actions">
-            {shouldShowPriceOnRequest(selectedProduct) ? (
-              <button
-                type="button"
-                className="product-cart-btn product-cart-btn--request"
-                onClick={openPriceRequestForm}
-                disabled={loadingAuth}
-              >
-                Demander le prix
-              </button>
-            ) : (
-              <button
-                type="button"
-                className="product-cart-btn"
-                onClick={() => handleAddToCart(selectedProduct)}
-                disabled={loadingAuth || !canProductBeAddedToCart(selectedProduct)}
-              >
-                Ajouter au panier
-              </button>
-            )}
-          </div>
-        </aside>
-
-        <section className="products-detail-center-gallery">
-          <div className="products-detail-image">
-            {selectedProductImages.length > 1 && (
-              <>
-                <button
-                  type="button"
-                  className="products-detail-gallery-btn products-detail-gallery-btn--left"
-                  onClick={prevSelectedImage}
-                  aria-label="Image précédente"
-                >
-                  <ChevronLeft size={22} />
-                </button>
-
-                <button
-                  type="button"
-                  className="products-detail-gallery-btn products-detail-gallery-btn--right"
-                  onClick={nextSelectedImage}
-                  aria-label="Image suivante"
-                >
-                  <ChevronRight size={22} />
-                </button>
-              </>
-            )}
-
+      {detailProduct && (
+        <div className="products-detail-modal" onClick={closeDetailProduct}>
+          <div
+            className="products-detail-card"
+            onClick={(e) => e.stopPropagation()}
+          >
             <button
               type="button"
-              className="products-detail-image-button"
-              onClick={() => setLightboxOpen(true)}
+              className="products-detail-close"
+              onClick={closeDetailProduct}
             >
-              {selectedProductImages[selectedImageIndex] ? (
-                <img
-                  src={selectedProductImages[selectedImageIndex]}
-                  alt={selectedProduct.name}
-                />
-              ) : (
-                <div className="product-image-placeholder">
-                  {t("products.imageUnavailable")}
-                </div>
-              )}
+              <X size={18} />
             </button>
-          </div>
 
-          {selectedProductImages.length > 1 && (
-            <div className="products-detail-thumbs">
-              {selectedProductImages.map((image, index) => (
-                <button
-                  key={`${image}-${index}`}
-                  type="button"
-                  className={`products-detail-thumb ${
-                    index === selectedImageIndex
-                      ? "products-detail-thumb--active"
-                      : ""
-                  }`}
-                  onClick={() => setSelectedImageIndex(index)}
-                >
-                  <img src={image} alt={`${selectedProduct.name} ${index + 1}`} />
-                </button>
-              ))}
-            </div>
-          )}
-        </section>
-
-        <aside className="products-detail-right-variants">
-          <div className="product-variants-premium-title">
-            <h3>
-              Dimensions disponibles{" "}
-              <span>
-                ({selectedVariantsLoading ? "..." : selectedVariants.length})
-              </span>
-            </h3>
-          </div>
-
-          {selectedVariantsLoading ? (
-            <p className="product-variants-premium-loading">
-              Chargement des variantes...
-            </p>
-          ) : selectedVariants.length > 0 ? (
-            <div className="product-variants-premium-options">
-              {selectedVariants.map((variant) => (
-                <button
-                  key={variant.id}
-                  type="button"
-                  className="variant-size-button"
-                  onClick={() => openProductModal(variant)}
-                >
-                  {variant.fullMainImageUrl ? (
-                    <img src={variant.fullMainImageUrl} alt={variant.name} />
+            <div className="products-detail-top">
+              <section className="products-detail-center-gallery">
+                <div className="products-detail-image">
+                  {detailImages[detailImageIndex] ? (
+                    <button
+                      type="button"
+                      className="products-detail-image-button"
+                      onClick={() => openLightbox(detailImageIndex)}
+                      aria-label={detailProduct.name}
+                    >
+                      <img
+                        src={detailImages[detailImageIndex]}
+                        alt={detailProduct.name}
+                      />
+                    </button>
                   ) : (
-                    <span className="product-collection-thumb--empty" />
+                    <div className="product-image-placeholder">
+                      {t("products.imageUnavailable")}
+                    </div>
                   )}
 
-                  <span>{variant.dimensions || "Dimensions non précisées"}</span>
+                  {detailImages.length > 1 && (
+                    <>
+                      <button
+                        type="button"
+                        className="products-detail-gallery-btn products-detail-gallery-btn--left"
+                        onClick={prevDetailImage}
+                      >
+                        <ChevronLeft size={22} />
+                      </button>
+                      <button
+                        type="button"
+                        className="products-detail-gallery-btn products-detail-gallery-btn--right"
+                        onClick={nextDetailImage}
+                      >
+                        <ChevronRight size={22} />
+                      </button>
+                    </>
+                  )}
+                </div>
 
-                  <div className="variant-size-meta">
-                    <strong>
-                      {shouldShowProductPrice(variant) && variant.price != null
-                        ? formatPrice(variant.price)
-                        : t("products.priceOnRequest")}
-                    </strong>
-
-                    <small>
-                      {variant.isAvailable ? "En stock" : "Indisponible"}
-                    </small>
+                {detailImages.length > 1 && (
+                  <div className="products-detail-thumbs">
+                    {detailImages.map((img, index) => (
+                      <button
+                        key={`${img}-${index}`}
+                        type="button"
+                        className={`products-detail-thumb${
+                          detailImageIndex === index
+                            ? " products-detail-thumb--active"
+                            : ""
+                        }`}
+                        onClick={() => setDetailImageIndex(index)}
+                      >
+                        <img
+                          src={img}
+                          alt={`${detailProduct.name} ${index + 1}`}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setDetailImageIndex(index);
+                            openLightbox(index);
+                          }}
+                        />
+                      </button>
+                    ))}
                   </div>
-                </button>
-              ))}
-            </div>
-          ) : (
-            <p className="product-variants-premium-loading">
-              Aucune autre dimension disponible.
-            </p>
-          )}
-        </aside>
-      </div>
+                )}
+              </section>
 
-      {selectedVariants.length > 0 && (
-        <div className="products-detail-bottom-collection">
-          <h3>
-            Autres tapis de la même collection{" "}
-            <span>({selectedVariants.length})</span>
-          </h3>
+              <aside className="products-detail-purchase-panel">
+                <h2 className="products-detail-product-title">
+                  {detailProduct.name}
+                </h2>
 
-          <div className="product-collection-scroll">
-            {selectedVariants.map((variant) => (
-              <button
-                key={`collection-${variant.id}`}
-                type="button"
-                className="product-collection-card"
-                onClick={() => openProductModal(variant)}
-              >
-                {variant.fullMainImageUrl ? (
-                  <img
-                    className="product-collection-thumb"
-                    src={variant.fullMainImageUrl}
-                    alt={variant.name}
-                  />
-                ) : (
-                  <span className="product-collection-thumb product-collection-thumb--empty" />
+                <strong
+                  className={
+                    shouldShowProductPrice(detailProduct)
+                      ? "detail-price-main"
+                      : "detail-price-main products-detail-price--request"
+                  }
+                >
+                  {shouldShowProductPrice(detailProduct) && detailProduct.price != null
+                    ? formatPrice(detailProduct.price)
+                    : shouldShowPriceOnRequest(detailProduct)
+                    ? t("products.priceOnRequest")
+                    : "-"}
+                </strong>
+
+                {(() => {
+                  const s = `${detailProduct.status || ""}`.toLowerCase();
+                  const available =
+                    detailProduct.isAvailable !== false &&
+                    s !== "sold" &&
+                    s !== "hidden";
+                  const stockLabel = !available
+                    ? s === "reserved"
+                      ? "Réservé"
+                      : s === "sold"
+                      ? "Vendu"
+                      : "Indisponible"
+                    : typeof detailProduct.stock === "number" &&
+                      detailProduct.stock <= 0
+                    ? "Sur commande"
+                    : "En stock";
+                  const stockCls = !available
+                    ? "products-detail-stock--unavailable"
+                    : typeof detailProduct.stock === "number" &&
+                      detailProduct.stock <= 0
+                    ? "products-detail-stock--order"
+                    : "products-detail-stock--available";
+                  return (
+                    <p className={`products-detail-stock ${stockCls}`}>
+                      {stockLabel}
+                      {stockCls === "products-detail-stock--available" && (
+                        <CheckCircle2 size={14} />
+                      )}
+                    </p>
+                  );
+                })()}
+
+                {(detailVariantsLoading || detailVariants.length > 0) && (
+                  <div className="products-detail-variants-section">
+                    <h3 className="products-detail-variants-title">
+                      Dimensions disponibles{" "}
+                      <span>
+                        (
+                        {
+                          [detailProduct, ...detailVariants].filter(
+                            (product, index, array) =>
+                              array.findIndex(
+                                (item) => item.id === product.id
+                              ) === index
+                          ).length
+                        }
+                        )
+                      </span>
+                    </h3>
+
+                    <div className="products-detail-variants-scroll">
+                      {detailVariantsLoading && detailVariants.length === 0 ? (
+                        <p className="product-variants-premium-loading">
+                          Chargement...
+                        </p>
+                      ) : (
+                        <div className="product-variants-premium-options">
+                          {(() => {
+                            const dimensionVariants = [
+                              detailProduct,
+                              ...detailVariants,
+                            ]
+                              .filter(
+                                (product, index, array) =>
+                                  array.findIndex(
+                                    (item) => item.id === product.id
+                                  ) === index
+                              )
+                              .sort(
+                                (a, b) => getSurfaceM2(a) - getSurfaceM2(b)
+                              );
+
+                            return dimensionVariants.map((variant) => {
+                              const isActive = variant.id === detailProduct.id;
+                              const variantImage = getProductImages(variant)[0];
+                              const label =
+                                variant.lengthCm && variant.widthCm
+                                  ? `${variant.lengthCm} x ${variant.widthCm}`
+                                  : variant.dimensions ||
+                                    `${variant.name || ""}`.trim();
+                              const priceLabel =
+                                shouldShowProductPrice(variant) &&
+                                variant.price != null
+                                  ? formatPrice(variant.price)
+                                  : t("products.priceOnRequest");
+                              const normalizedStatus = `${
+                                variant.status || ""
+                              }`.toLowerCase();
+                              const isVariantAvailable =
+                                variant.isAvailable !== false &&
+                                normalizedStatus !== "sold" &&
+                                normalizedStatus !== "hidden";
+                              const stockLabel = !isVariantAvailable
+                                ? normalizedStatus === "reserved"
+                                  ? "Réservé"
+                                  : normalizedStatus === "sold"
+                                  ? "Vendu"
+                                  : "Indisponible"
+                                : typeof variant.stock === "number" &&
+                                  variant.stock <= 0
+                                ? "Sur commande"
+                                : "En stock";
+
+                              return (
+                                <button
+                                  key={variant.id}
+                                  type="button"
+                                  className={`variant-size-button${
+                                    isActive ? " active" : ""
+                                  }`}
+                                  onClick={() => openDetailProduct(variant)}
+                                  disabled={isActive}
+                                >
+                                  {variantImage ? (
+                                    <img
+                                      src={variantImage}
+                                      alt={variant.name}
+                                    />
+                                  ) : (
+                                    <span className="variant-size-placeholder" />
+                                  )}
+                                  <span className="variant-size-label">
+                                    {label}
+                                  </span>
+                                  <span className="variant-size-meta">
+                                    <strong>{priceLabel}</strong>
+                                    <small>{stockLabel}</small>
+                                    {isActive && <CheckCircle2 size={18} />}
+                                  </span>
+                                </button>
+                              );
+                            });
+                          })()}
+                        </div>
+                      )}
+                    </div>
+                  </div>
                 )}
 
-                <div className="product-collection-content">
-                  <strong className="product-collection-name">
-                    {variant.name}
-                  </strong>
-
-                  {variant.colors && (
-                    <span className="product-collection-color">
-                      {variant.colors}
-                    </span>
+                <div className="products-detail-purchase-actions">
+                  {canProductBeAddedToCart(detailProduct) ? (
+                    <button
+                      type="button"
+                      className="product-cart-btn"
+                      onClick={() => {
+                        handleAddToCart(detailProduct);
+                        closeDetailProduct();
+                      }}
+                    >
+                      <ShoppingCart size={17} />
+                      {t("home.addToCart")}
+                    </button>
+                  ) : (
+                    <button
+                      type="button"
+                      className="product-cart-btn product-cart-btn--request"
+                      onClick={() => {
+                        const product = detailProduct;
+                        closeDetailProduct();
+                        openPriceRequest(product);
+                      }}
+                    >
+                      <HeartHandshake size={17} />
+                      {t("products.requestPrice")}
+                    </button>
                   )}
-
-                  <span className="product-collection-dimensions">
-                    {variant.dimensions || "Dimensions non précisées"}
-                  </span>
-
-                  <span className="product-collection-price">
-                    {shouldShowProductPrice(variant) && variant.price != null
-                      ? formatPrice(variant.price)
-                      : t("products.priceOnRequest")}
-                  </span>
                 </div>
-              </button>
-            ))}
+              </aside>
+            </div>
+
+            <section className="products-detail-spec-bar">
+              {[
+                {
+                  label: "Dimensions",
+                  value:
+                    detailProduct.dimensions ||
+                    (detailProduct.lengthCm && detailProduct.widthCm
+                      ? `${detailProduct.lengthCm} × ${detailProduct.widthCm} cm`
+                      : null),
+                },
+                { label: "Matière", value: detailProduct.material },
+                { label: "Région", value: detailProduct.region },
+                { label: "Technique", value: detailProduct.technique },
+                {
+                  label: "Pièce unique",
+                  value: detailProduct.isUniquePiece ? "Oui" : null,
+                },
+              ].map((item) => (
+                <div
+                  key={item.label}
+                  className="products-detail-spec-item"
+                >
+                  <span className="products-detail-spec-icon">
+                    {getDetailIcon(item.label)}
+                  </span>
+                  <div>
+                    <strong>{item.value || "—"}</strong>
+                    <small>{item.label}</small>
+                  </div>
+                </div>
+              ))}
+            </section>
+
+            <section className="products-detail-content-section">
+              <div
+                className="detail-content-tab-list"
+                role="tablist"
+                aria-label="Informations sur le tapis"
+              >
+                {detailContentTabs.map((tab) => (
+                  <button
+                    key={tab.key}
+                    type="button"
+                    role="tab"
+                    aria-selected={detailContentTab === tab.key}
+                    className={`detail-content-tab${
+                      detailContentTab === tab.key
+                        ? " detail-content-tab--active"
+                        : ""
+                    }`}
+                    onClick={() => setDetailContentTab(tab.key)}
+                  >
+                    {tab.label}
+                  </button>
+                ))}
+              </div>
+              <div className="detail-content-panel" role="tabpanel">
+                {
+                  detailContentTabs.find(
+                    (tab) => tab.key === detailContentTab
+                  )?.content
+                }
+              </div>
+            </section>
+
+            {detailColorVariants.length > 0 && (
+              <section className="products-detail-bottom-collection">
+                <div className="products-detail-collection-header">
+                  <h3>Autres tapis de la même collection</h3>
+                  <button
+                    type="button"
+                    className="products-detail-collection-see-all"
+                    onClick={closeDetailProduct}
+                  >
+                    Voir toute la collection →
+                  </button>
+                </div>
+                <div className="products-detail-collection-nav-wrap">
+                  <button
+                    type="button"
+                    className="products-detail-collection-nav products-detail-collection-nav--left"
+                    onClick={() =>
+                      collectionScrollRef.current?.scrollBy({
+                        left: -300,
+                        behavior: "smooth",
+                      })
+                    }
+                    aria-label="Défiler à gauche"
+                  >
+                    <ChevronLeft size={16} />
+                  </button>
+                  <div
+                    className="product-collection-scroll"
+                    ref={collectionScrollRef}
+                  >
+                    {detailColorVariants.map((variant) => {
+                      const variantImage = getProductImages(variant)[0];
+                      const dimensions =
+                        variant.lengthCm && variant.widthCm
+                          ? `${variant.lengthCm} x ${variant.widthCm} cm`
+                          : variant.dimensions || "-";
+
+                      const priceLabel =
+                        shouldShowProductPrice(variant) &&
+                        variant.price != null
+                          ? formatPrice(variant.price)
+                          : t("products.priceOnRequest");
+
+                      return (
+                        <button
+                          key={variant.id}
+                          type="button"
+                          className="product-collection-card"
+                          onClick={() => openDetailProduct(variant)}
+                        >
+                          {variantImage ? (
+                            <img
+                              src={variantImage}
+                              alt={variant.name}
+                              className="product-collection-thumb"
+                            />
+                          ) : (
+                            <div className="product-collection-thumb product-collection-thumb--empty" />
+                          )}
+
+                          <div className="product-collection-content">
+                            <strong className="product-collection-name">
+                              {variant.name}
+                            </strong>
+                            <span className="product-collection-color">
+                              {getTranslatedColor(variant.colors)}
+                            </span>
+                            <span className="product-collection-dimensions">
+                              {dimensions}
+                            </span>
+                            <span className="product-collection-price">
+                              {priceLabel}
+                            </span>
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
+                  <button
+                    type="button"
+                    className="products-detail-collection-nav products-detail-collection-nav--right"
+                    onClick={() =>
+                      collectionScrollRef.current?.scrollBy({
+                        left: 300,
+                        behavior: "smooth",
+                      })
+                    }
+                    aria-label="Défiler à droite"
+                  >
+                    <ChevronRight size={16} />
+                  </button>
+                </div>
+              </section>
+            )}
           </div>
         </div>
       )}
-    </div>
-  </div>
-)}
 
-      {lightboxOpen && (
+      {isLightboxOpen &&
+        lightboxImageIndex !== null &&
+        detailImages[lightboxImageIndex] && (
         <div
           className="products-image-lightbox"
           onClick={closeLightbox}
@@ -1382,49 +1860,43 @@ if (isMounted) setProducts(homeProducts);
               type="button"
               className="products-image-lightbox-close"
               onClick={closeLightbox}
-              aria-label="Fermer"
+              aria-label={t("products.close")}
             >
               <X size={20} />
             </button>
 
-            {selectedProductImages.length > 1 && (
+            {detailImages.length > 1 && (
               <button
                 type="button"
                 className="products-image-lightbox-nav products-image-lightbox-nav--left"
                 onClick={prevLightboxImage}
-                aria-label="Image précédente"
+                aria-label="Previous image"
               >
                 <ChevronLeft size={26} />
               </button>
             )}
 
-            {selectedProductImages[lightboxImageIndex ?? selectedImageIndex] ? (
-              <img
-                src={selectedProductImages[lightboxImageIndex ?? selectedImageIndex]}
-                alt={selectedProduct?.name || ""}
-                className="products-image-lightbox-image"
-              />
-            ) : (
-              <div className="product-image-placeholder">
-                {t("products.imageUnavailable")}
-              </div>
-            )}
+            <img
+              src={detailImages[lightboxImageIndex]}
+              alt={detailProduct?.name || ""}
+              className="products-image-lightbox-image"
+            />
 
-            {selectedProductImages.length > 1 && (
+            {detailImages.length > 1 && (
               <button
                 type="button"
                 className="products-image-lightbox-nav products-image-lightbox-nav--right"
                 onClick={nextLightboxImage}
-                aria-label="Image suivante"
+                aria-label="Next image"
               >
                 <ChevronRight size={26} />
               </button>
             )}
           </div>
         </div>
-      )}
+        )}
 
-      {priceRequestOpen && selectedProduct && (
+      {priceRequestOpen && priceRequestProduct && (
         <div className="home-price-request-modal" onClick={closePriceRequestForm}>
           <form
             className="home-price-request-card"
@@ -1441,19 +1913,19 @@ if (isMounted) setProducts(homeProducts);
             </button>
 
             <p className="page-kicker">{t("home.priceRequestKicker")}</p>
-            <h2>{selectedProduct.name}</h2>
+            <h2>{priceRequestProduct.name}</h2>
 
             <div className="home-price-product-mini">
-              {selectedProduct.fullMainImageUrl && (
-                <img src={selectedProduct.fullMainImageUrl} alt={selectedProduct.name} />
+              {priceRequestProduct.fullMainImageUrl && (
+                <img src={priceRequestProduct.fullMainImageUrl} alt={priceRequestProduct.name} />
               )}
 
               <div>
-                <strong>{selectedProduct.name}</strong>
+                <strong>{priceRequestProduct.name}</strong>
                 <span>
-                  {selectedProduct.dimensions || t("products.miniFallbackDimensions")}
+                  {priceRequestProduct.dimensions || t("products.miniFallbackDimensions")}
                 </span>
-                <span>{selectedProduct.region || t("common.tunisia")}</span>
+                <span>{priceRequestProduct.region || t("common.tunisia")}</span>
               </div>
             </div>
 
