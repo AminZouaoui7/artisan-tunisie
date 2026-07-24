@@ -38,6 +38,7 @@ import ActionSuccess from "../components/ActionSuccess";
 import { getStoredUserLocation } from "../services/apiClient";
 import {
   canProductBeAddedToCart,
+  getOptimizedProductImageUrl,
   getProducts,
   getProductVariants,
   keepLargestProductByVariantGroup,
@@ -1446,8 +1447,13 @@ if (isMounted) setProducts(homeProducts);
                       aria-label={detailProduct.name}
                     >
                       <img
-                        src={detailImages[detailImageIndex]}
+                        src={getOptimizedProductImageUrl(
+                          detailImages[detailImageIndex],
+                          1200
+                        )}
                         alt={detailProduct.name}
+                        fetchPriority="high"
+                        decoding="async"
                       />
                     </button>
                   ) : (
@@ -1490,8 +1496,10 @@ if (isMounted) setProducts(homeProducts);
                         onClick={() => setDetailImageIndex(index)}
                       >
                         <img
-                          src={img}
+                          src={getOptimizedProductImageUrl(img, 180)}
                           alt={`${detailProduct.name} ${index + 1}`}
+                          loading="lazy"
+                          decoding="async"
                           onClick={(e) => {
                             e.stopPropagation();
                             setDetailImageIndex(index);
@@ -1638,8 +1646,13 @@ if (isMounted) setProducts(homeProducts);
                                 >
                                   {variantImage ? (
                                     <img
-                                      src={variantImage}
+                                      src={getOptimizedProductImageUrl(
+                                        variantImage,
+                                        240
+                                      )}
                                       alt={variant.name}
+                                      loading="lazy"
+                                      decoding="async"
                                     />
                                   ) : (
                                     <span className="variant-size-placeholder" />
@@ -1810,9 +1823,14 @@ if (isMounted) setProducts(homeProducts);
                         >
                           {variantImage ? (
                             <img
-                              src={variantImage}
+                              src={getOptimizedProductImageUrl(
+                                variantImage,
+                                360
+                              )}
                               alt={variant.name}
                               className="product-collection-thumb"
+                              loading="lazy"
+                              decoding="async"
                             />
                           ) : (
                             <div className="product-collection-thumb product-collection-thumb--empty" />
@@ -1893,6 +1911,7 @@ if (isMounted) setProducts(homeProducts);
               src={detailImages[lightboxImageIndex]}
               alt={detailProduct?.name || ""}
               className="products-image-lightbox-image"
+              decoding="async"
             />
 
             {detailImages.length > 1 && (
@@ -1930,7 +1949,15 @@ if (isMounted) setProducts(homeProducts);
 
             <div className="home-price-product-mini">
               {priceRequestProduct.fullMainImageUrl && (
-                <img src={priceRequestProduct.fullMainImageUrl} alt={priceRequestProduct.name} />
+                <img
+                  src={getOptimizedProductImageUrl(
+                    priceRequestProduct.fullMainImageUrl,
+                    320
+                  )}
+                  alt={priceRequestProduct.name}
+                  loading="lazy"
+                  decoding="async"
+                />
               )}
 
               <div>

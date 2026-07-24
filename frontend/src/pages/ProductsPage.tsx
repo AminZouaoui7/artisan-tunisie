@@ -1656,8 +1656,13 @@ export default function ProductsPage() {
                       aria-label={detailProduct.name}
                     >
                       <img
-                        src={detailImages[detailImageIndex]}
+                        src={getOptimizedProductImageUrl(
+                          detailImages[detailImageIndex],
+                          1200
+                        )}
                         alt={detailProduct.name}
+                        fetchPriority="high"
+                        decoding="async"
                       />
                     </button>
                   ) : (
@@ -1700,8 +1705,10 @@ export default function ProductsPage() {
                         onClick={() => setDetailImageIndex(index)}
                       >
                         <img
-                          src={img}
+                          src={getOptimizedProductImageUrl(img, 180)}
                           alt={`${detailProduct.name} ${index + 1}`}
+                          loading="lazy"
+                          decoding="async"
                           onClick={(e) => {
                             e.stopPropagation();
                             setDetailImageIndex(index);
@@ -1850,8 +1857,13 @@ export default function ProductsPage() {
                                 >
                                   {variantImage ? (
                                     <img
-                                      src={variantImage}
+                                      src={getOptimizedProductImageUrl(
+                                        variantImage,
+                                        240
+                                      )}
                                       alt={variant.name}
+                                      loading="lazy"
+                                      decoding="async"
                                     />
                                   ) : (
                                     <span className="variant-size-placeholder" />
@@ -2015,9 +2027,14 @@ export default function ProductsPage() {
                       >
                         {variantImage ? (
                           <img
-                            src={variantImage}
+                            src={getOptimizedProductImageUrl(
+                              variantImage,
+                              360
+                            )}
                             alt={variant.name}
                             className="product-collection-thumb"
+                            loading="lazy"
+                            decoding="async"
                           />
                         ) : (
                           <div className="product-collection-thumb product-collection-thumb--empty" />
@@ -2093,6 +2110,7 @@ export default function ProductsPage() {
                 src={detailImages[lightboxImageIndex]}
                 alt={detailProduct?.name || ""}
                 className="products-image-lightbox-image"
+                decoding="async"
               />
 
               {detailImages.length > 1 && (
@@ -2131,8 +2149,13 @@ export default function ProductsPage() {
             <div className="products-price-product-mini">
               {getProductImages(selectedProduct)[0] && (
                 <img
-                  src={getProductImages(selectedProduct)[0]}
+                  src={getOptimizedProductImageUrl(
+                    getProductImages(selectedProduct)[0],
+                    320
+                  )}
                   alt={selectedProduct.name}
+                  loading="lazy"
+                  decoding="async"
                 />
               )}
 
