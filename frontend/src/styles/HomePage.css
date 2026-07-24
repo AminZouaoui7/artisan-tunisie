@@ -1857,11 +1857,36 @@
 
 .home-boutique-map-text p {
   max-width: 460px;
-  margin: 0 0 34px;
+  margin: 0 0 22px;
   color: var(--text-muted);
   font-size: 16px;
   line-height: 1.8;
   font-weight: 700;
+}
+
+.home-shop-hours {
+  width: fit-content;
+  margin: 0 0 30px;
+  padding: 13px 18px;
+  border: 1px solid color-mix(in srgb, var(--color-terracotta) 22%, transparent);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: color-mix(in srgb, var(--color-cream) 72%, white 28%);
+  color: var(--color-dark);
+}
+
+.home-shop-hours span {
+  color: var(--color-clay);
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.home-shop-hours strong {
+  font-size: 15px;
 }
 
 .home-boutique-map-text .home-btn-primary {
@@ -3395,6 +3420,14 @@
     text-align: center !important;
     margin-left: auto !important;
     margin-right: auto !important;
+  }
+
+  .home-shop-hours {
+    width: 100%;
+    max-width: 300px;
+    margin: 0 auto 18px;
+    justify-content: center;
+    flex-wrap: wrap;
   }
 
   .home-boutique-map-text {

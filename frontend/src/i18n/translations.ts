@@ -353,6 +353,8 @@ export const translations: Record<Language, Record<string, unknown>> = {
       findUsInTunis: "Retrouvez-nous au cœur de Tunis",
       shopParagraph:
         "Venez découvrir nos tapis artisanaux directement en boutique et choisir la pièce qui correspond à votre intérieur.",
+      shopHoursLabel: "Ouvert tous les jours",
+      shopHoursValue: "De 9h00 à 21h00",
       seeOnGoogleMaps: "Voir sur Google Maps",
       mapTitle: "Localisation Artisan Madina",
       productDetailKicker: "Détail du produit",
@@ -1582,6 +1584,8 @@ export const translations: Record<Language, Record<string, unknown>> = {
       findUsInTunis: "Find us in the heart of Tunis",
       shopParagraph:
         "Come discover our handmade rugs in-store and choose the piece that fits your interior.",
+      shopHoursLabel: "Open every day",
+      shopHoursValue: "From 9:00 AM to 9:00 PM",
       seeOnGoogleMaps: "View on Google Maps",
       mapTitle: "Artisan Madina location",
       productDetailKicker: "Product details",

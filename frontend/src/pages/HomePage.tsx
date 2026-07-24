@@ -886,6 +886,7 @@ if (isMounted) setProducts(homeProducts);
             hasMap: GOOGLE_MAPS_URL,
             sameAs: [INSTAGRAM_URL, FACEBOOK_URL],
             priceRange: "€€",
+            openingHours: "Mo-Su 09:00-21:00",
           }),
         }}
       />
@@ -1441,6 +1442,11 @@ if (isMounted) setProducts(homeProducts);
             <p className="page-kicker">{t("home.shopKicker")}</p>
             <h3>{t("home.findUsInTunis")}</h3>
             <p>{t("home.shopParagraph")}</p>
+
+            <div className="home-shop-hours">
+              <span>{t("home.shopHoursLabel")}</span>
+              <strong>{t("home.shopHoursValue")}</strong>
+            </div>
 
             <a
               href={GOOGLE_MAPS_URL}
