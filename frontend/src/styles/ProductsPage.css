@@ -5,20 +5,20 @@
 ================================================================ */
 
 :root {
-  --products-bg:          #f6f1ea;
-  --products-surface:     #fffdf9;
-  --products-surface-soft:#f3ede5;
-  --products-surface-muted:#eee6dc;
-  --products-border:      #e5d8ca;
-  --products-border-soft: rgba(111, 82, 60, 0.12);
-  --products-accent:      #b9683a;
-  --products-accent-hover:#9a522d;
-  --products-accent-soft: #ead6c5;
-  --products-title:       #21150f;
-  --products-text:        #69594d;
-  --products-text-soft:   #8a796d;
-  --products-dark:        #24211f;
-  --products-white:       #fffdf9;
+  --products-bg:          var(--color-cream);
+  --products-surface:     color-mix(in srgb, var(--color-cream) 88%, white 12%);
+  --products-surface-soft:color-mix(in srgb, var(--color-cream) 82%, var(--color-sage) 18%);
+  --products-surface-muted:color-mix(in srgb, var(--color-cream) 72%, var(--color-sage) 28%);
+  --products-border:      color-mix(in srgb, var(--color-dark) 16%, transparent);
+  --products-border-soft: color-mix(in srgb, var(--color-dark) 11%, transparent);
+  --products-accent:      var(--color-terracotta);
+  --products-accent-hover:var(--color-clay);
+  --products-accent-soft: color-mix(in srgb, var(--color-terracotta) 22%, var(--color-cream));
+  --products-title:       var(--color-dark);
+  --products-text:        var(--text-muted);
+  --products-text-soft:   color-mix(in srgb, var(--color-dark) 58%, var(--color-cream));
+  --products-dark:        var(--color-bordeaux);
+  --products-white:       var(--color-cream);
   --products-shadow:      0 12px 40px rgba(54, 36, 23, 0.07);
   --products-shadow-hover:0 28px 70px rgba(54, 36, 23, 0.14);
 }
@@ -29,7 +29,13 @@
 
 .products-page {
   min-height: 100vh;
-  background: #f5ead7;
+  background:
+    linear-gradient(
+      180deg,
+      var(--color-cream) 0%,
+      color-mix(in srgb, var(--color-cream) 78%, var(--color-sage) 22%) 58%,
+      color-mix(in srgb, var(--color-cream) 72%, var(--color-sage) 28%) 100%
+    );
   color: var(--products-title);
 }
 
@@ -159,18 +165,18 @@
   padding: 0 24px;
   border-radius: 999px;
   border: none;
-  background: var(--products-dark);
+  background: linear-gradient(135deg, var(--color-bordeaux), var(--color-terracotta));
   color: var(--products-white);
   font-size: 0.78rem;
   font-weight: 700;
   letter-spacing: 0.06em;
   cursor: pointer;
   transition: background 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
-  box-shadow: 0 6px 20px rgba(36, 33, 31, 0.3);
+  box-shadow: 0 10px 24px rgba(90, 46, 54, 0.24);
 }
 
 .products-hero-primary-btn:hover {
-  background: var(--products-accent);
+  background: linear-gradient(135deg, var(--color-terracotta), var(--color-clay));
   transform: translateY(-2px);
   box-shadow: 0 10px 28px rgba(185, 104, 58, 0.36);
 }
@@ -366,8 +372,8 @@
 
 .products-category-card--active {
   border-color: var(--products-accent);
-  background: linear-gradient(135deg, #c87848 0%, #b05e30 100%);
-  color: #fffaf5;
+  background: linear-gradient(135deg, var(--color-bordeaux), var(--color-terracotta));
+  color: var(--color-cream);
   box-shadow: 0 12px 28px rgba(176, 94, 48, 0.25);
 }
 
@@ -387,7 +393,7 @@
 
 .products-category-card--active:hover {
   border-color: var(--products-accent-hover);
-  background: linear-gradient(135deg, #c87848 0%, #a04d28 100%);
+  background: linear-gradient(135deg, var(--color-terracotta), var(--color-clay));
 }
 
 .products-category-card:focus-visible {
@@ -1152,7 +1158,7 @@
   padding: 0 20px;
   border-radius: 18px;
   border: none;
-  background: linear-gradient(180deg, #c4693a 0%, #a8512a 100%);
+  background: linear-gradient(135deg, var(--color-bordeaux), var(--color-terracotta));
   color: var(--products-white);
   font-size: 0.84rem;
   font-weight: 700;
@@ -1167,7 +1173,7 @@
 }
 
 .pc-cart-btn:hover:not(:disabled) {
-  background: linear-gradient(180deg, #a8512a 0%, #8c3f1c 100%);
+  background: linear-gradient(135deg, var(--color-terracotta), var(--color-clay));
   transform: translateY(-2px);
   box-shadow: 0 10px 30px rgba(185, 100, 54, 0.45);
 }
@@ -1434,8 +1440,8 @@
 
   .mobile-filter-apply {
     border: 0;
-    background: linear-gradient(135deg, #be6739, #94421f);
-    color: #fff;
+    background: linear-gradient(135deg, var(--color-bordeaux), var(--color-terracotta));
+    color: var(--color-cream);
     box-shadow: 0 8px 22px rgba(169, 75, 36, 0.28);
   }
 
@@ -1970,8 +1976,8 @@
   padding: 0 20px;
   border: none;
   border-radius: 13px;
-  background: linear-gradient(135deg, #b85428, #873616);
-  color: #fffaf3;
+  background: linear-gradient(135deg, var(--color-bordeaux), var(--color-terracotta));
+  color: var(--color-cream);
   font-size: 0.95rem;
   font-weight: 700;
   cursor: pointer;
@@ -1983,7 +1989,7 @@
 }
 
 .product-cart-btn--request {
-  background: linear-gradient(135deg, #9c4d2a, #5a1e0a);
+  background: linear-gradient(135deg, var(--color-terracotta), var(--color-clay));
 }
 
 /* ── Level 2: Spec bar ── */
@@ -2698,8 +2704,8 @@
   height: 50px !important;
   border-radius: 999px !important;
   border: none !important;
-  background: linear-gradient(135deg, #b75b31, #7b2e16) !important;
-  color: #fff7ec !important;
+  background: linear-gradient(135deg, var(--color-bordeaux), var(--color-terracotta)) !important;
+  color: var(--color-cream) !important;
   font-size: 0.88rem !important;
   font-weight: 900 !important;
   cursor: pointer !important;
