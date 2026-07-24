@@ -77,6 +77,27 @@ function buildImageUrl(imageUrl?: string | null): string | null {
   return buildAssetUrl(imageUrl);
 }
 
+export function getOptimizedProductImageUrl(
+  imageUrl?: string | null,
+  width = 700
+): string {
+  if (!imageUrl) return "";
+
+  if (
+    !imageUrl.includes("res.cloudinary.com") ||
+    !imageUrl.includes("/image/upload/")
+  ) {
+    return imageUrl;
+  }
+
+  const safeWidth = Math.max(100, Math.round(width));
+
+  return imageUrl.replace(
+    "/image/upload/",
+    `/image/upload/f_auto,q_auto:eco,c_limit,w_${safeWidth}/`
+  );
+}
+
 function sortByNewest(products: ProductViewDto[]): ProductViewDto[] {
   return [...products].sort((a, b) => {
     const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;

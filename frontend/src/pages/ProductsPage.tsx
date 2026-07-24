@@ -39,6 +39,7 @@ import { useCart } from "../context/useCart";
 import { getStoredUserLocation } from "../services/apiClient";
 import {
   canProductBeAddedToCart,
+  getOptimizedProductImageUrl,
   getProducts,
   getProductVariants,
   shouldShowPriceOnRequest,
@@ -165,6 +166,15 @@ export default function ProductsPage() {
 
   const [addedProductId, setAddedProductId] = useState<string | number | null>(
     null
+  );
+  const [loadedProductImages, setLoadedProductImages] = useState<Set<number>>(
+    () => new Set()
+  );
+  const [requestedHoverImages, setRequestedHoverImages] = useState<Set<number>>(
+    () => new Set()
+  );
+  const [loadedHoverImages, setLoadedHoverImages] = useState<Set<number>>(
+    () => new Set()
   );
 
   const [priceRequestLoading, setPriceRequestLoading] = useState(false);
@@ -1361,7 +1371,7 @@ export default function ProductsPage() {
 
           {!loading && !errorKey && filteredProducts.length > 0 && (
             <div className="products-grid">
-              {filteredProducts.map((product) => {
+              {filteredProducts.map((product, index) => {
                 const isAdded = addedProductId === product.id;
                 const hasVisiblePrice = shouldShowProductPrice(product);
                 const showPriceOnRequest = shouldShowPriceOnRequest(product);
@@ -1369,9 +1379,31 @@ export default function ProductsPage() {
                 const productImages = getProductImages(product);
                 const coverImage = productImages[0];
                 const hoverImage = productImages[1] || productImages[0];
+                const optimizedCoverImage =
+                  getOptimizedProductImageUrl(coverImage);
+                const optimizedHoverImage =
+                  getOptimizedProductImageUrl(hoverImage);
+                const isCoverLoaded = loadedProductImages.has(product.id);
+                const shouldLoadHover =
+                  requestedHoverImages.has(product.id) &&
+                  optimizedHoverImage !== optimizedCoverImage;
+                const isHoverReady = loadedHoverImages.has(product.id);
 
                 return (
-                  <article key={product.id} className="product-card">
+                  <article
+                    key={product.id}
+                    className={`product-card${
+                      isHoverReady ? " product-card--hover-ready" : ""
+                    }`}
+                    onMouseEnter={() => {
+                      setRequestedHoverImages((current) => {
+                        if (current.has(product.id)) return current;
+                        const next = new Set(current);
+                        next.add(product.id);
+                        return next;
+                      });
+                    }}
+                  >
 
                     {/* ── IMAGE ── */}
                     <div className="pc-media">
@@ -1381,21 +1413,44 @@ export default function ProductsPage() {
                         onClick={() => openDetailProduct(product)}
                         aria-label={`Voir ${product.name}`}
                       >
-                        {coverImage ? (
-                          <div className="pc-image-wrap">
+                        {optimizedCoverImage ? (
+                          <div
+                            className={`pc-image-wrap${
+                              isCoverLoaded ? "" : " pc-image-wrap--loading"
+                            }`}
+                          >
                             <img
-                              src={coverImage}
+                              src={optimizedCoverImage}
                               alt={product.name}
                               className="pc-img pc-img--primary"
-                              loading="lazy"
+                              loading={index < 6 ? "eager" : "lazy"}
+                              fetchPriority={index < 3 ? "high" : "auto"}
+                              decoding="async"
+                              onLoad={() => {
+                                setLoadedProductImages((current) => {
+                                  if (current.has(product.id)) return current;
+                                  const next = new Set(current);
+                                  next.add(product.id);
+                                  return next;
+                                });
+                              }}
                             />
-                            {hoverImage && hoverImage !== coverImage && (
+                            {shouldLoadHover && (
                               <img
-                                src={hoverImage}
+                                src={optimizedHoverImage}
                                 alt=""
                                 aria-hidden="true"
                                 className="pc-img pc-img--hover"
                                 loading="lazy"
+                                decoding="async"
+                                onLoad={() => {
+                                  setLoadedHoverImages((current) => {
+                                    if (current.has(product.id)) return current;
+                                    const next = new Set(current);
+                                    next.add(product.id);
+                                    return next;
+                                  });
+                                }}
                               />
                             )}
                           </div>

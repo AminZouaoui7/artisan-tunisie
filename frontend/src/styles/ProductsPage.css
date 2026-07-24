@@ -875,6 +875,28 @@
   height: 100%;
 }
 
+.pc-image-wrap--loading::before {
+  content: "";
+  position: absolute;
+  inset: 22px;
+  border-radius: 16px;
+  background:
+    linear-gradient(
+      105deg,
+      transparent 35%,
+      rgba(255, 255, 255, 0.72) 50%,
+      transparent 65%
+    ),
+    rgba(255, 255, 255, 0.38);
+  background-size: 220% 100%;
+  animation: pc-image-shimmer 1.25s ease-in-out infinite;
+}
+
+@keyframes pc-image-shimmer {
+  from { background-position: 100% 0; }
+  to { background-position: -100% 0; }
+}
+
 .pc-img {
   position: absolute;
   inset: 0;
@@ -894,24 +916,28 @@
   transform: scale(1);
 }
 
+.pc-image-wrap--loading .pc-img--primary {
+  opacity: 0;
+}
+
 .pc-img--hover {
   opacity: 0;
   transform: scale(1.03);
 }
 
-.product-card:hover .pc-img--primary {
+.product-card--hover-ready:hover .pc-img--primary {
   opacity: 0;
   transform: scale(1.03);
 }
 
-.product-card:hover .pc-img--hover {
+.product-card--hover-ready:hover .pc-img--hover {
   opacity: 1;
   transform: scale(1);
 }
 
 @media (hover: none) {
   .pc-img--hover { display: none; }
-  .product-card:hover .pc-img--primary {
+  .product-card--hover-ready:hover .pc-img--primary {
     opacity: 1;
     transform: none;
   }
@@ -3022,5 +3048,11 @@
 
   .products-hero-actions > :first-child {
     width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pc-image-wrap--loading::before {
+    animation: none;
   }
 }
