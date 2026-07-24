@@ -6,6 +6,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
+import { useAuth } from "./AuthContext";
 
 export type CartProduct = {
   id: number;
@@ -37,6 +38,7 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 const CART_KEY = "artisan_cart";
 
 export function CartProvider({ children }: { children: ReactNode }) {
+  const { isAuthenticated, loadingAuth } = useAuth();
   const [items, setItems] = useState<CartProduct[]>(() => {
     try {
       const saved = localStorage.getItem(CART_KEY);
@@ -56,7 +58,21 @@ export function CartProvider({ children }: { children: ReactNode }) {
     localStorage.setItem(CART_KEY, JSON.stringify(items));
   }, [items]);
 
+  useEffect(() => {
+    if (!loadingAuth && !isAuthenticated) {
+      setItems([]);
+      localStorage.removeItem(CART_KEY);
+    }
+  }, [isAuthenticated, loadingAuth]);
+
   const addToCart = (product: CartProduct) => {
+    if (!isAuthenticated) {
+      return {
+        ok: false,
+        message: "Vous devez vous connecter pour ajouter un produit au panier.",
+      };
+    }
+
     if (
       product.canShowPrice !== true ||
       product.isPriceHidden === true ||
@@ -101,19 +117,20 @@ export function CartProvider({ children }: { children: ReactNode }) {
   };
 
   const isInCart = (productId: number) => {
-    return items.some((x) => x.id === productId);
+    return isAuthenticated && items.some((x) => x.id === productId);
   };
 
-  const cartCount = items.length;
+  const visibleItems = isAuthenticated ? items : [];
+  const cartCount = visibleItems.length;
 
   const cartTotal = useMemo(() => {
-    return items.reduce((sum, item) => sum + (item.price ?? 0), 0);
-  }, [items]);
+    return visibleItems.reduce((sum, item) => sum + (item.price ?? 0), 0);
+  }, [visibleItems]);
 
   return (
     <CartContext.Provider
       value={{
-        items,
+        items: visibleItems,
         cartCount,
         cartTotal,
         addToCart,
