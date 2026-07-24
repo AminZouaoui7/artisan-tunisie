@@ -1,12 +1,12 @@
 import { Link } from "react-router-dom";
 import { useI18n } from "../i18n/i18n";
-import lhajjImage from "../assets/lhajj.jpg";
-import founderDecorImage from "../assets/imageeess.png";
+import lhajjImage from "../assets/lhajj.optimized.webp";
+import founderDecorImage from "../assets/imageeess.optimized.webp";
 
 import "../styles/OurStoryPage.css";
 
-import ourstory1 from "../assets/ourstory1.jpg";
-import ourstory2 from "../assets/ourstory2.jpg";
+import ourstory1 from "../assets/ourstory1.optimized.webp";
+import ourstory2 from "../assets/ourstory2.optimized.webp";
 
 const IMG_FOUNDER = lhajjImage;
 
@@ -77,6 +77,8 @@ export default function OurStoryPage() {
                 src={IMG_FOUNDER}
                 alt={t("ourStory.page.generations.g1962.title")}
                 className="story-founder-image"
+                loading="lazy"
+                decoding="async"
               />
 
               <div className="story-founder-badge">
@@ -156,6 +158,8 @@ export default function OurStoryPage() {
                     src={guest.image}
                     alt={guest.alt}
                     className="story-guest-image"
+                    loading="lazy"
+                    decoding="async"
                   />
 
                   <div className="story-guest-caption">

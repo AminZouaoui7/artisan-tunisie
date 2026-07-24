@@ -20,15 +20,15 @@ import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import PhoneInput from "../components/PhoneInput";
-import boutiqueImg1 from "../assets/ceramic3.png";
-import boutiqueImg2 from "../assets/rooftop1 (1).png";
-import boutiqueImg3 from "../assets/tab2.png";
-import boutiqueImg4 from "../assets/bijoux.png";
-import boutiqueImg5 from "../assets/mosaique.png";
-import boutiqueImg6 from "../assets/mosaique.png";
+import boutiqueImg1 from "../assets/ceramic3.optimized.webp";
+import boutiqueImg2 from "../assets/rooftop1 (1).optimized.webp";
+import boutiqueImg3 from "../assets/tab2.optimized.webp";
+import boutiqueImg4 from "../assets/bijoux.optimized.webp";
+import boutiqueImg5 from "../assets/mosaique.optimized.webp";
+import boutiqueImg6 from "../assets/mosaique.optimized.webp";
 //fix
-import heroRug from "../assets/088fc89b-c8a7-49da-8450-cc19fc82ade1.png";
-import storyImage from "../assets/cbd0ea42-92dc-4cd6-a8e7-0b3133fe44f2.png";
+import heroRug from "../assets/088fc89b-c8a7-49da-8450-cc19fc82ade1.optimized.webp";
+import storyImage from "../assets/cbd0ea42-92dc-4cd6-a8e7-0b3133fe44f2.optimized.webp";
 
 import "../styles/ProductsPage.css";
 import "../styles/HomePage.css";
@@ -856,6 +856,9 @@ if (isMounted) setProducts(homeProducts);
         key={index}
         src={img}
         alt={t("home.heroImageAlt")}
+        loading={index === 0 ? "eager" : "lazy"}
+        fetchPriority={index === 0 ? "high" : "low"}
+        decoding="async"
         initial={false}
         animate={{ opacity: index === boutiqueIndex ? 1 : 0 }}
         transition={{
@@ -938,7 +941,13 @@ if (isMounted) setProducts(homeProducts);
             transition={motionTransition}
           >
             <div className="home-story-image-card">
-              <img src={storyImage} alt={t("home.storyImageAlt")} className="home-story-image" />
+              <img
+                src={storyImage}
+                alt={t("home.storyImageAlt")}
+                className="home-story-image"
+                loading="lazy"
+                decoding="async"
+              />
               <div className="home-story-image-badge">
                 <span>{t("home.since")}</span>
                 <strong>1982</strong>
@@ -1346,7 +1355,13 @@ if (isMounted) setProducts(homeProducts);
           >
             <div className="home-rug-3d-scene">
               <div className="home-rug-glow" />
-              <img src={heroRug} alt="" className="home-rug-3d-img" />
+              <img
+                src={heroRug}
+                alt=""
+                className="home-rug-3d-img"
+                loading="lazy"
+                decoding="async"
+              />
               <div className="home-rug-shadow" />
             </div>
           </motion.div>

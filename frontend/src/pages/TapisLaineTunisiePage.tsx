@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import SeoHead from "../components/SeoHead";
-import woolImage from "../assets/loader-rug.png";
+import woolImage from "../assets/loader-rug.optimized.webp";
 import "../styles/SeoPages.css";
 
 export default function TapisLaineTunisiePage() {

@@ -1,5 +1,5 @@
 import type { CSSProperties } from "react";
-import logoMain from "../assets/color white.png";
+import logoMain from "../assets/color white.optimized.webp";
 import { useI18n } from "../i18n/i18n";
 
 type SiteLoaderProps = {

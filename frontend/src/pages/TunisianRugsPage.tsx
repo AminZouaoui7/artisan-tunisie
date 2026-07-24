@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import SeoHead from "../components/SeoHead";
-import tunisianImage from "../assets/7b8bc78c-67d9-4be5-9309-c8ac60f44393.png";
+import tunisianImage from "../assets/7b8bc78c-67d9-4be5-9309-c8ac60f44393.optimized.webp";
 import "../styles/SeoPages.css";
 
 export default function TunisianRugsPage() {

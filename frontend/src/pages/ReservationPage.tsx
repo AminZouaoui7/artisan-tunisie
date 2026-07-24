@@ -17,11 +17,11 @@ import "../styles/ReservationPage.css";
 import { useI18n } from "../i18n/i18n";
 import "../styles/PhoneInput.css";
 
-import demo1 from "../assets/IMG_2574.jpeg";
-import demo2 from "../assets/IMG_2576.jpeg";
-import demo3 from "../assets/IMG_2766.jpeg";
-import demo4 from "../assets/IMG_2771.jpeg";
-import demo5 from "../assets/IMG_2776.jpeg";
+import demo1 from "../assets/IMG_2574.optimized.webp";
+import demo2 from "../assets/IMG_2576.optimized.webp";
+import demo3 from "../assets/IMG_2766.optimized.webp";
+import demo4 from "../assets/IMG_2771.optimized.webp";
+import demo5 from "../assets/IMG_2776.optimized.webp";
 
 const demoImages = [demo1, demo2, demo3, demo4, demo5];
 

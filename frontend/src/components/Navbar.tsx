@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 
 import "../styles/Navbar.css";
-import logoMain from "../assets/color white.png";
+import logoMain from "../assets/color white.optimized.webp";
 import { useI18n } from "../i18n/i18n";
 import { useAuth } from "../context/useAuth";
 import { useCart } from "../context/useCart";

@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import SeoHead from "../components/SeoHead";
-import heroImage from "../assets/hero.png";
+import heroImage from "../assets/hero.optimized.webp";
 import "../styles/SeoPages.css";
 
 export default function TapisArtisanalTunisiePage() {

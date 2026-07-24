@@ -1,7 +1,7 @@
 import { ShieldAlert, House } from "lucide-react";
 import { Link } from "react-router-dom";
 
-import logo from "../assets/color white.png";
+import logo from "../assets/color white.optimized.webp";
 import { useI18n } from "../i18n/i18n";
 import "../styles/SessionExpiredPage.css";
 

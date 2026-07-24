@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import SeoHead from "../components/SeoHead";
-import tunisiaImage from "../assets/088fc89b-c8a7-49da-8450-cc19fc82ade1.png";
+import tunisiaImage from "../assets/088fc89b-c8a7-49da-8450-cc19fc82ade1.optimized.webp";
 import "../styles/SeoPages.css";
 
 export default function TapisTunisiensPage() {

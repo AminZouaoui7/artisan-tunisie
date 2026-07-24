@@ -5,28 +5,28 @@ import { useI18n } from "../i18n/i18n";
 
 import "../styles/BoutiquePage.css";
 
-import heroImage from "../assets/cbd0ea42-92dc-4cd6-a8e7-0b3133fe44f2.png";
+import heroImage from "../assets/cbd0ea42-92dc-4cd6-a8e7-0b3133fe44f2.optimized.webp";
 
-import ceramicImg from "../assets/ceramic.png";
-import ceramic2 from "../assets/ceramic2.png";
-import ceramic3 from "../assets/ceramic3.png";
-import ceramic4 from "../assets/ceramic4.png";
-import ceramic5 from "../assets/ceramic5.png";
-import ceramic6 from "../assets/ceramic6.png";
+import ceramicImg from "../assets/ceramic.optimized.webp";
+import ceramic2 from "../assets/ceramic2.optimized.webp";
+import ceramic3 from "../assets/ceramic3.optimized.webp";
+import ceramic4 from "../assets/ceramic4.optimized.webp";
+import ceramic5 from "../assets/ceramic5.optimized.webp";
+import ceramic6 from "../assets/ceramic6.optimized.webp";
 
-import bijouxImg from "../assets/bijoux.png";
+import bijouxImg from "../assets/bijoux.optimized.webp";
 
-import mosaiqueImg from "../assets/mosaique.png";
-import mosaique2 from "../assets/mosaique2.png";
+import mosaiqueImg from "../assets/mosaique.optimized.webp";
+import mosaique2 from "../assets/mosaique2.optimized.webp";
 
-import boisImg from "../assets/bois.png";
-import bois2Img from "../assets/bois2.png";
+import boisImg from "../assets/bois.optimized.webp";
+import bois2Img from "../assets/bois2.optimized.webp";
 
-import tab1 from "../assets/tab1.png";
-import tab2 from "../assets/tab2.png";
-import tab3 from "../assets/tab3.png";
-import tab4 from "../assets/tab4.png";
-import tab5 from "../assets/tab5.png";
+import tab1 from "../assets/tab1.optimized.webp";
+import tab2 from "../assets/tab2.optimized.webp";
+import tab3 from "../assets/tab3.optimized.webp";
+import tab4 from "../assets/tab4.optimized.webp";
+import tab5 from "../assets/tab5.optimized.webp";
 
 type CategoryCard = {
   id: string;

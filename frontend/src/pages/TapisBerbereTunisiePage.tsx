@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import SeoHead from "../components/SeoHead";
-import berberImage from "../assets/middle-rug.png";
+import berberImage from "../assets/middle-rug.optimized.webp";
 import "../styles/SeoPages.css";
 
 export default function TapisBerbereTunisiePage() {

@@ -48,9 +48,9 @@ import {
 } from "../services/productService";
 import { createPriceRequest } from "../services/priceRequestService";
 import { useCurrency } from "../context/CurrencyContext";
-import photoHero from "../assets/photohero.png";
-import photoHero1 from "../assets/photohero1.png";
-import photoHero2 from "../assets/photohero2.png";
+import photoHero from "../assets/photohero.optimized.webp";
+import photoHero1 from "../assets/photohero1.optimized.webp";
+import photoHero2 from "../assets/photohero2.optimized.webp";
 import "../styles/ProductsPage.css";
 import { useI18n } from "../i18n/i18n";
 
@@ -1243,7 +1243,9 @@ export default function ProductsPage() {
               src={src}
               alt=""
               className={`hero-slide${heroSlideIndex === i ? " hero-slide--active" : ""}`}
-              fetchPriority={i === 0 ? "high" : undefined}
+              loading={i === 0 ? "eager" : "lazy"}
+              fetchPriority={i === 0 ? "high" : "low"}
+              decoding="async"
             />
           ))}
         </div>
