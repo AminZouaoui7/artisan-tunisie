@@ -23,6 +23,16 @@ type CountryOption = {
   dial: string;
 };
 
+type CheckoutFieldName =
+  | "firstName"
+  | "lastName"
+  | "email"
+  | "country"
+  | "city"
+  | "addressLine1"
+  | "postalCode"
+  | "phoneNumber";
+
 const countries: CountryOption[] = rawCountries
   .filter((country) => country.cca2 && country.idd?.root)
   .map((country) => ({
@@ -47,6 +57,8 @@ export default function CheckoutPage() {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [invalidField, setInvalidField] =
+    useState<CheckoutFieldName | null>(null);
   const [orderSuccess, setOrderSuccess] = useState<{
     orderId?: string;
     message?: string;
@@ -114,6 +126,10 @@ export default function CheckoutPage() {
 
   const updateField = (name: string, value: string) => {
     setForm((prev) => ({ ...prev, [name]: value }));
+    if (invalidField === name) {
+      setInvalidField(null);
+      setError("");
+    }
   };
 
   const selectCountry = (country: CountryOption) => {
@@ -126,6 +142,10 @@ export default function CheckoutPage() {
 
     setCountryOpen(false);
     setCountrySearch("");
+    if (invalidField === "country") {
+      setInvalidField(null);
+      setError("");
+    }
   };
 
   const selectPhoneCountry = (country: CountryOption) => {
@@ -138,49 +158,90 @@ export default function CheckoutPage() {
     setPhoneSearch("");
   };
 
-  const validateForm = () => {
+  const validateForm = (): {
+    field: CheckoutFieldName;
+    message: string;
+  } | null => {
     const nameRegex = /^[A-Za-zÀ-ÿ' -]{2,}$/;
     const phoneRegex = /^[0-9\s().-]{6,18}$/;
     const postalRegex = /^[A-Za-z0-9\s-]{3,14}$/;
 
     if (!nameRegex.test(form.firstName.trim())) {
-      return t("checkout.validation.firstName");
+      return {
+        field: "firstName",
+        message: t("checkout.validation.firstName"),
+      };
     }
 
     if (!nameRegex.test(form.lastName.trim())) {
-      return t("checkout.validation.lastName");
+      return {
+        field: "lastName",
+        message: t("checkout.validation.lastName"),
+      };
     }
 
     if (!/^\S+@\S+\.\S+$/.test(form.email.trim())) {
-      return t("checkout.validation.email");
-    }
-
-    if (!phoneRegex.test(form.phoneNumber.trim())) {
-      return t("checkout.validation.phone");
+      return { field: "email", message: t("checkout.validation.email") };
     }
 
     if (!form.country.trim() || !form.deliveryCountryCode.trim()) {
-      return t("checkout.validation.country");
+      return { field: "country", message: t("checkout.validation.country") };
     }
 
     if (form.city.trim().length < 2) {
-      return t("checkout.validation.city");
-    }
-
-    if (!postalRegex.test(form.postalCode.trim())) {
-      return t("checkout.validation.postalCode");
+      return { field: "city", message: t("checkout.validation.city") };
     }
 
     if (form.addressLine1.trim().length < 8) {
-      return t("checkout.validation.addressLine1");
+      return {
+        field: "addressLine1",
+        message: t("checkout.validation.addressLine1"),
+      };
     }
 
-    return "";
+    if (!postalRegex.test(form.postalCode.trim())) {
+      return {
+        field: "postalCode",
+        message: t("checkout.validation.postalCode"),
+      };
+    }
+
+    if (!phoneRegex.test(form.phoneNumber.trim())) {
+      return { field: "phoneNumber", message: t("checkout.validation.phone") };
+    }
+
+    return null;
+  };
+
+  const showFieldError = (
+    field: CheckoutFieldName,
+    message: string
+  ) => {
+    setInvalidField(field);
+    setError(message);
+
+    window.requestAnimationFrame(() => {
+      const fieldContainer = document.querySelector<HTMLElement>(
+        `[data-checkout-field="${field}"]`
+      );
+
+      fieldContainer?.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+
+      window.setTimeout(() => {
+        fieldContainer
+          ?.querySelector<HTMLElement>("input, button, textarea, select")
+          ?.focus({ preventScroll: true });
+      }, 450);
+    });
   };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setError("");
+    setInvalidField(null);
 
     if (items.length === 0) {
       setError(t("checkout.validation.emptyCart"));
@@ -190,7 +251,7 @@ export default function CheckoutPage() {
     const validationError = validateForm();
 
     if (validationError) {
-      setError(validationError);
+      showFieldError(validationError.field, validationError.message);
       return;
     }
 
@@ -302,7 +363,7 @@ export default function CheckoutPage() {
         <div className="checkout-main">
           {error && <div className="checkout-error-banner">{error}</div>}
 
-          <form id="checkout-form" onSubmit={handleSubmit}>
+          <form id="checkout-form" onSubmit={handleSubmit} noValidate>
             <article className="checkout-card">
               <div className="checkout-card-header">
                 <div className="checkout-step-number">
@@ -315,7 +376,12 @@ export default function CheckoutPage() {
               </div>
 
               <div className="checkout-form-grid">
-                <div className="checkout-field">
+                <div
+                  className={`checkout-field${
+                    invalidField === "firstName" ? " checkout-field--invalid" : ""
+                  }`}
+                  data-checkout-field="firstName"
+                >
                   <label>{t("checkout.fields.firstName")}</label>
                   <input
                     type="text"
@@ -323,10 +389,19 @@ export default function CheckoutPage() {
                     onChange={(e) => updateField("firstName", e.target.value)}
                     placeholder={t("checkout.placeholders.firstName")}
                     required
+                    aria-invalid={invalidField === "firstName"}
                   />
+                  {invalidField === "firstName" && (
+                    <span className="checkout-field-error">{error}</span>
+                  )}
                 </div>
 
-                <div className="checkout-field">
+                <div
+                  className={`checkout-field${
+                    invalidField === "lastName" ? " checkout-field--invalid" : ""
+                  }`}
+                  data-checkout-field="lastName"
+                >
                   <label>{t("checkout.fields.lastName")}</label>
                   <input
                     type="text"
@@ -334,10 +409,19 @@ export default function CheckoutPage() {
                     onChange={(e) => updateField("lastName", e.target.value)}
                     placeholder={t("checkout.placeholders.lastName")}
                     required
+                    aria-invalid={invalidField === "lastName"}
                   />
+                  {invalidField === "lastName" && (
+                    <span className="checkout-field-error">{error}</span>
+                  )}
                 </div>
 
-                <div className="checkout-field checkout-field--full">
+                <div
+                  className={`checkout-field checkout-field--full${
+                    invalidField === "email" ? " checkout-field--invalid" : ""
+                  }`}
+                  data-checkout-field="email"
+                >
                   <label>{t("checkout.fields.email")}</label>
                   <input
                     type="email"
@@ -345,16 +429,26 @@ export default function CheckoutPage() {
                     onChange={(e) => updateField("email", e.target.value)}
                     placeholder={t("common.emailPlaceholder")}
                     required
+                    aria-invalid={invalidField === "email"}
                   />
+                  {invalidField === "email" && (
+                    <span className="checkout-field-error">{error}</span>
+                  )}
                 </div>
 
-                <div className="checkout-field">
+                <div
+                  className={`checkout-field${
+                    invalidField === "country" ? " checkout-field--invalid" : ""
+                  }`}
+                  data-checkout-field="country"
+                >
                   <label>{t("checkout.fields.country")}</label>
 
                   <div className="country-combobox">
                     <button
                       type="button"
                       className="country-trigger"
+                      aria-invalid={invalidField === "country"}
                       onClick={() => {
                         setCountryOpen((prev) => !prev);
                         setPhoneOpen(false);
@@ -396,9 +490,17 @@ export default function CheckoutPage() {
                       </div>
                     )}
                   </div>
+                  {invalidField === "country" && (
+                    <span className="checkout-field-error">{error}</span>
+                  )}
                 </div>
 
-                <div className="checkout-field">
+                <div
+                  className={`checkout-field${
+                    invalidField === "city" ? " checkout-field--invalid" : ""
+                  }`}
+                  data-checkout-field="city"
+                >
                   <label>{t("checkout.fields.city")}</label>
                   <input
                     type="text"
@@ -406,10 +508,21 @@ export default function CheckoutPage() {
                     onChange={(e) => updateField("city", e.target.value)}
                     placeholder={t("checkout.placeholders.city")}
                     required
+                    aria-invalid={invalidField === "city"}
                   />
+                  {invalidField === "city" && (
+                    <span className="checkout-field-error">{error}</span>
+                  )}
                 </div>
 
-                <div className="checkout-field checkout-field--full">
+                <div
+                  className={`checkout-field checkout-field--full${
+                    invalidField === "addressLine1"
+                      ? " checkout-field--invalid"
+                      : ""
+                  }`}
+                  data-checkout-field="addressLine1"
+                >
                   <label>{t("checkout.fields.address")}</label>
                   <input
                     type="text"
@@ -417,7 +530,11 @@ export default function CheckoutPage() {
                     onChange={(e) => updateField("addressLine1", e.target.value)}
                     placeholder={t("checkout.placeholders.addressLine1")}
                     required
+                    aria-invalid={invalidField === "addressLine1"}
                   />
+                  {invalidField === "addressLine1" && (
+                    <span className="checkout-field-error">{error}</span>
+                  )}
                 </div>
 
                 <div className="checkout-field checkout-field--full">
@@ -430,7 +547,12 @@ export default function CheckoutPage() {
                   />
                 </div>
 
-                <div className="checkout-field">
+                <div
+                  className={`checkout-field${
+                    invalidField === "postalCode" ? " checkout-field--invalid" : ""
+                  }`}
+                  data-checkout-field="postalCode"
+                >
                   <label>{t("checkout.fields.state")}</label>
                   <input
                     type="text"
@@ -450,10 +572,21 @@ export default function CheckoutPage() {
                     onChange={(e) => updateField("postalCode", e.target.value)}
                     placeholder={t("checkout.placeholders.postalCode")}
                     required
+                    aria-invalid={invalidField === "postalCode"}
                   />
+                  {invalidField === "postalCode" && (
+                    <span className="checkout-field-error">{error}</span>
+                  )}
                 </div>
 
-                <div className="checkout-field checkout-field--full">
+                <div
+                  className={`checkout-field checkout-field--full${
+                    invalidField === "phoneNumber"
+                      ? " checkout-field--invalid"
+                      : ""
+                  }`}
+                  data-checkout-field="phoneNumber"
+                >
                   <label>{t("checkout.fields.phone")}</label>
 
                   <div className="checkout-phone">
@@ -512,8 +645,12 @@ export default function CheckoutPage() {
                       onChange={(e) => updateField("phoneNumber", e.target.value)}
                       placeholder={t("checkout.placeholders.phoneNumber")}
                       required
+                      aria-invalid={invalidField === "phoneNumber"}
                     />
                   </div>
+                  {invalidField === "phoneNumber" && (
+                    <span className="checkout-field-error">{error}</span>
+                  )}
                 </div>
 
                 <div className="checkout-field checkout-field--full">
