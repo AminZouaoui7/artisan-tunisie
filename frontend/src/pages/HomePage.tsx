@@ -20,6 +20,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import PhoneInput from "../components/PhoneInput";
+import SeoHead from "../components/SeoHead";
 import boutiqueImg1 from "../assets/ceramic3.optimized.webp";
 import boutiqueImg2 from "../assets/rooftop1 (1).optimized.webp";
 import boutiqueImg3 from "../assets/tab2.optimized.webp";
@@ -50,6 +51,7 @@ import { createPriceRequest } from "../services/priceRequestService";
 import { useI18n } from "../i18n/i18n";
 import { useCurrency } from "../context/CurrencyContext";
 import { GOOGLE_MAPS_URL } from "../constants/externalLinks";
+import { FACEBOOK_URL, INSTAGRAM_URL } from "../constants/externalLinks";
 
 const fadeUp = { hidden: { opacity: 0, y: 24 }, visible: { opacity: 1, y: 0 } };
 const fadeLeft = { hidden: { opacity: 0, x: -24 }, visible: { opacity: 1, x: 0 } };
@@ -850,6 +852,43 @@ if (isMounted) setProducts(homeProducts);
 
   return (
     <div className="home">
+      <SeoHead
+        title="Tapis artisanaux tunisiens à Tunis | L’Artisan de la Médina"
+        description="Découvrez des tapis tunisiens faits main, Margoum, Kilim et tapis berbères. Visitez L’Artisan de la Médina au cœur de Tunis."
+        canonical="/"
+        image={heroRug}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": ["LocalBusiness", "Store"],
+            name: "L’Artisan de la Médina",
+            url: typeof window === "undefined" ? "/" : window.location.origin,
+            image:
+              typeof window === "undefined"
+                ? heroRug
+                : new URL(heroRug, window.location.origin).toString(),
+            telephone: "+21656250910",
+            email: "contact@artisan-medina.com",
+            address: {
+              "@type": "PostalAddress",
+              addressLocality: "Tunis",
+              addressRegion: "Tunis",
+              addressCountry: "TN",
+            },
+            geo: {
+              "@type": "GeoCoordinates",
+              latitude: 36.796468,
+              longitude: 10.169834,
+            },
+            hasMap: GOOGLE_MAPS_URL,
+            sameAs: [INSTAGRAM_URL, FACEBOOK_URL],
+            priceRange: "€€",
+          }),
+        }}
+      />
  <section className="home-boutique-hero">
   <div className="home-boutique-hero-bg">
     {boutiqueImages.map((img, index) => (
@@ -1193,7 +1232,9 @@ if (isMounted) setProducts(homeProducts);
 
                   {/* ── BODY ── */}
                   <div className="pc-body">
-                    <h2 className="pc-title">{product.name}</h2>
+                    <h2 className="pc-title">
+                      <Link to={`/products/${product.slug}`}>{product.name}</Link>
+                    </h2>
 
                     {(product.shortStory || product.description) && (
                       <p className="pc-desc">

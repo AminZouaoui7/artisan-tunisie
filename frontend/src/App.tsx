@@ -6,6 +6,7 @@ import Footer from "./components/Footer";
 
 import HomePage from "./pages/HomePage";
 import ProductsPage from "./pages/ProductsPage";
+import ProductDetailPage from "./pages/ProductDetailPage";
 import OurStoryPage from "./pages/OurStoryPage";
 import BoutiquePage from "./pages/BoutiquePage";
 import ReservationPage from "./pages/ReservationPage";
@@ -161,6 +162,7 @@ function AppContent() {
               <Route path="/" element={<HomePage />} />
 
               <Route path="/products" element={<ProductsPage />} />
+              <Route path="/products/:slug" element={<ProductDetailPage />} />
 
               <Route path="/our-story" element={<OurStoryPage />} />
 

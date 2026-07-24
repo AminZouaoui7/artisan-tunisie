@@ -1,0 +1,213 @@
+.product-seo-page {
+  min-height: 100vh;
+  padding: 130px clamp(20px, 5vw, 80px) 80px;
+  color: var(--color-dark);
+  background:
+    linear-gradient(
+      180deg,
+      var(--color-cream),
+      color-mix(in srgb, var(--color-cream) 78%, var(--color-sage) 22%)
+    );
+}
+
+.product-seo-state {
+  display: grid;
+  place-items: center;
+  text-align: center;
+}
+
+.product-seo-breadcrumb,
+.product-seo-back {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--color-clay);
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.product-seo-breadcrumb {
+  max-width: 1320px;
+  margin: 0 auto 20px;
+  font-size: 0.82rem;
+}
+
+.product-seo-breadcrumb a {
+  color: inherit;
+}
+
+.product-seo-back {
+  width: fit-content;
+  max-width: 1320px;
+  margin: 0 auto 22px;
+}
+
+.product-seo-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(360px, 0.95fr);
+  max-width: 1320px;
+  margin: 0 auto;
+  overflow: hidden;
+  border: 1px solid var(--border-soft);
+  border-radius: 32px;
+  background: color-mix(in srgb, var(--color-cream) 88%, white 12%);
+  box-shadow: 0 28px 80px rgba(43, 24, 19, 0.12);
+}
+
+.product-seo-gallery {
+  min-height: 620px;
+  padding: 38px;
+  display: grid;
+  place-items: center;
+  background: color-mix(in srgb, var(--color-cream) 72%, var(--color-sage) 28%);
+}
+
+.product-seo-gallery img {
+  width: 100%;
+  height: 100%;
+  max-height: 650px;
+  object-fit: contain;
+}
+
+.product-seo-placeholder {
+  color: var(--text-muted);
+}
+
+.product-seo-content {
+  padding: clamp(32px, 5vw, 70px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.product-seo-kicker {
+  margin: 0 0 14px;
+  color: var(--color-clay);
+  font-weight: 900;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.product-seo-content h1 {
+  margin: 0 0 22px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(2.4rem, 5vw, 4.8rem);
+  line-height: 0.98;
+}
+
+.product-seo-story,
+.product-seo-description p {
+  color: var(--text-muted);
+  line-height: 1.8;
+}
+
+.product-seo-specs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin: 30px 0;
+}
+
+.product-seo-specs div {
+  padding: 18px 12px;
+  border: 1px solid var(--border-soft);
+  border-radius: 16px;
+  text-align: center;
+}
+
+.product-seo-specs svg {
+  color: var(--color-terracotta);
+}
+
+.product-seo-specs span,
+.product-seo-specs strong {
+  display: block;
+}
+
+.product-seo-specs span {
+  margin: 7px 0 3px;
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+}
+
+.product-seo-purchase {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.product-seo-purchase > strong {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(1.8rem, 3vw, 3rem);
+}
+
+.product-seo-purchase button,
+.product-seo-purchase a {
+  min-height: 56px;
+  padding: 0 26px;
+  border: 0;
+  border-radius: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  background: linear-gradient(135deg, var(--color-bordeaux), var(--color-terracotta));
+  color: var(--color-cream);
+  text-decoration: none;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.product-seo-purchase button:disabled {
+  opacity: 0.72;
+  cursor: default;
+}
+
+.product-seo-description {
+  max-width: 1000px;
+  margin: 36px auto 0;
+  padding: 36px;
+  border-radius: 24px;
+  background: color-mix(in srgb, var(--color-cream) 90%, white 10%);
+}
+
+.product-seo-description h2 {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 2rem;
+}
+
+@media (max-width: 900px) {
+  .product-seo-page {
+    padding: 105px 16px 50px;
+  }
+
+  .product-seo-card {
+    grid-template-columns: 1fr;
+  }
+
+  .product-seo-gallery {
+    min-height: 420px;
+  }
+}
+
+@media (max-width: 560px) {
+  .product-seo-gallery {
+    min-height: 330px;
+    padding: 20px;
+  }
+
+  .product-seo-content {
+    padding: 28px 20px;
+  }
+
+  .product-seo-specs {
+    grid-template-columns: 1fr;
+  }
+
+  .product-seo-purchase {
+    align-items: stretch;
+    flex-direction: column;
+  }
+}

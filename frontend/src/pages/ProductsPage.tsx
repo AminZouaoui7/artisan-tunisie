@@ -7,7 +7,8 @@ import {
   type FormEvent,
 } from "react";
 import PhoneInput from "../components/PhoneInput";
-import { useNavigate } from "react-router-dom";
+import SeoHead from "../components/SeoHead";
+import { Link, useNavigate } from "react-router-dom";
 import {
   X,
   ShoppingCart,
@@ -1235,6 +1236,12 @@ export default function ProductsPage() {
 
   return (
     <section className="products-page">
+      <SeoHead
+        title="Tapis tunisiens faits main | Margoum, Kilim et tapis berbères"
+        description="Explorez notre collection de tapis artisanaux tunisiens : Margoum, Kilim, tapis berbères et tapis en laine faits main."
+        canonical="/products"
+        image={photoHero}
+      />
       <section className="products-hero-premium">
         <div className="hero-slider" aria-hidden="true">
           {([photoHero, photoHero1, photoHero2] as const).map((src, i) => (
@@ -1488,7 +1495,9 @@ export default function ProductsPage() {
 
                     {/* ── BODY ── */}
                     <div className="pc-body">
-                      <h2 className="pc-title">{product.name}</h2>
+                    <h2 className="pc-title">
+                      <Link to={`/products/${product.slug}`}>{product.name}</Link>
+                    </h2>
 
                       {(product.shortStory || product.description) && (
                         <p className="pc-desc">

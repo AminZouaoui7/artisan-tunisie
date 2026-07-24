@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useI18n } from "../i18n/i18n";
+import SeoHead from "../components/SeoHead";
 import lhajjImage from "../assets/lhajj.optimized.webp";
 import founderDecorImage from "../assets/imageeess.optimized.webp";
 
@@ -41,6 +42,12 @@ export default function OurStoryPage() {
 
   return (
     <div className="story-page">
+      <SeoHead
+        title="Notre histoire | Artisanat tunisien depuis 1962"
+        description="Découvrez l’histoire de L’Artisan de la Médina, une maison dédiée à la transmission et à la valorisation de l’artisanat tunisien depuis 1962."
+        canonical="/our-story"
+        image={IMG_FOUNDER}
+      />
       <section className="story-hero">
         <div className="story-hero-photo" />
 

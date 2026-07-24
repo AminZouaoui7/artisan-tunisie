@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import { useI18n } from "../i18n/i18n";
 import ActionSuccess from "../components/ActionSuccess";
+import SeoHead from "../components/SeoHead";
 import { apiFetch } from "../services/apiClient";
 import "../styles/ContactPage.css";
 
@@ -98,6 +99,11 @@ export default function ContactPage() {
 
   return (
     <main className="contact-page">
+      <SeoHead
+        title="Contact et visite de notre boutique à Tunis | L’Artisan de la Médina"
+        description="Contactez L’Artisan de la Médina ou préparez votre visite dans notre boutique de tapis et d’artisanat au cœur de la Médina de Tunis."
+        canonical="/contact"
+      />
       <section className="contact-hero">
         <div className="contact-hero-inner">
           <div className="contact-intro">

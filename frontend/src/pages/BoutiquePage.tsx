@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { ChevronLeft, ChevronRight, Eye } from "lucide-react";
 import { useI18n } from "../i18n/i18n";
+import SeoHead from "../components/SeoHead";
 
 import "../styles/BoutiquePage.css";
 
@@ -91,6 +92,12 @@ export default function BoutiquePage() {
 
   return (
     <main className="boutique-page">
+      <SeoHead
+        title="Boutique d’artisanat dans la Médina de Tunis | L’Artisan de la Médina"
+        description="Visitez notre boutique d’artisanat tunisien dans la Médina de Tunis : tapis faits main, céramique, bijoux, mosaïque et bois d’olivier."
+        canonical="/boutique"
+        image={heroImage}
+      />
       <section className="boutique-hero">
         <img src={heroImage} alt="Boutique artisanale tunisienne" />
         <div className="boutique-hero__overlay" />
