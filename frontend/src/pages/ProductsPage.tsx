@@ -133,6 +133,8 @@ export default function ProductsPage() {
 
   const productsCatalogRef = useRef<HTMLDivElement | null>(null);
   const collectionScrollRef = useRef<HTMLDivElement | null>(null);
+  const detailModalCardRef = useRef<HTMLDivElement | null>(null);
+  const detailVariantsRequestRef = useRef(0);
 
   const handleCategoryClick = useCallback((categoryKey: string) => {
     setSelectedCategory(categoryKey);
@@ -190,6 +192,24 @@ export default function ProductsPage() {
     phone: "",
     message: "",
   });
+
+  useEffect(() => {
+    if (!detailProduct) return;
+
+    const frameId = window.requestAnimationFrame(() => {
+      detailModalCardRef.current?.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: "auto",
+      });
+      collectionScrollRef.current?.scrollTo({
+        left: 0,
+        behavior: "auto",
+      });
+    });
+
+    return () => window.cancelAnimationFrame(frameId);
+  }, [detailProduct]);
 
   useEffect(() => {
     async function loadProducts() {
@@ -677,6 +697,8 @@ export default function ProductsPage() {
   }, [showMobileFilters]);
 
   async function openDetailProduct(product: ProductViewDto) {
+    const requestId = ++detailVariantsRequestRef.current;
+
     setDetailProduct(product);
     setDetailImageIndex(0);
     setDetailContentTab("description");
@@ -687,15 +709,20 @@ export default function ProductsPage() {
     try {
       setDetailVariantsLoading(true);
       const variants = await getProductVariants(product.id);
+      if (requestId !== detailVariantsRequestRef.current) return;
       setDetailVariants(variants);
     } catch {
+      if (requestId !== detailVariantsRequestRef.current) return;
       setDetailVariants([]);
     } finally {
-      setDetailVariantsLoading(false);
+      if (requestId === detailVariantsRequestRef.current) {
+        setDetailVariantsLoading(false);
+      }
     }
   }
 
   function closeDetailProduct() {
+    detailVariantsRequestRef.current += 1;
     setDetailProduct(null);
     setDetailImageIndex(0);
     closeLightbox();
@@ -1640,15 +1667,23 @@ export default function ProductsPage() {
         <div className="products-detail-modal" onClick={closeDetailProduct}>
           <div
             className="products-detail-card"
+            ref={detailModalCardRef}
             onClick={(e) => e.stopPropagation()}
           >
-            <button
-              type="button"
-              className="products-detail-close"
-              onClick={closeDetailProduct}
-            >
-              <X size={18} />
-            </button>
+            <div className="products-detail-mobile-toolbar">
+              <span
+                className="products-detail-mobile-handle"
+                aria-hidden="true"
+              />
+              <button
+                type="button"
+                className="products-detail-close"
+                onClick={closeDetailProduct}
+                aria-label={t("common.close")}
+              >
+                <X size={18} />
+              </button>
+            </div>
 
             <div className="products-detail-top">
               {/* LEFT — Gallery */}
