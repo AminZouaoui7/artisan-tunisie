@@ -51,7 +51,7 @@ export default async function handler(
   let products: SitemapProduct[] = [];
 
   try {
-    const response = await fetch(`${API_URL}/products?country=TN`);
+    const response = await fetch(`${API_URL}/products`);
     if (response.ok) {
       products = (await response.json()) as SitemapProduct[];
     }

@@ -1,8 +1,6 @@
 import {
   apiFetch,
   buildAssetUrl,
-  fetchAndStoreUserLocation,
-  getVisitorCountryCode,
 } from "./apiClient";
 
 export type ProductStatus = "Available" | "Reserved" | "Sold" | "Hidden";
@@ -150,27 +148,6 @@ export function keepLargestProductByVariantGroup(
   return [...withoutGroup, ...Array.from(bestByGroup.values())];
 }
 
-function normalizeCountry(country?: string | null): string {
-  const normalized = country?.trim().toUpperCase();
-
-  if (!normalized || normalized === "NULL" || normalized === "UNDEFINED") {
-    return "";
-  }
-
-  return normalized;
-}
-
-async function ensureVisitorCountryCode(): Promise<string> {
-  const savedCountry = normalizeCountry(getVisitorCountryCode());
-
-  if (savedCountry) {
-    return savedCountry;
-  }
-
-  const location = await fetchAndStoreUserLocation();
-  return normalizeCountry(location.countryCode);
-}
-
 export function shouldShowProductPrice(
   product: Pick<ProductDto, "canShowPrice" | "price">
 ): boolean {
@@ -255,13 +232,8 @@ function normalizeProduct(product: ProductApiDto): ProductViewDto {
   };
 }
 
-export async function getProducts(country?: string): Promise<ProductViewDto[]> {
-  const normalizedCountry =
-    normalizeCountry(country) || (await ensureVisitorCountryCode());
-
-  const res = await apiFetch(
-    `/products?country=${encodeURIComponent(normalizedCountry)}`
-  );
+export async function getProducts(): Promise<ProductViewDto[]> {
+  const res = await apiFetch("/products");
 
   if (!res.ok) {
     throw new Error("Erreur lors du chargement des produits");
@@ -273,16 +245,10 @@ export async function getProducts(country?: string): Promise<ProductViewDto[]> {
 }
 
 export async function getProductBySlug(
-  slug: string,
-  country?: string
+  slug: string
 ): Promise<ProductViewDto> {
-  const normalizedCountry =
-    normalizeCountry(country) || (await ensureVisitorCountryCode());
-
   const res = await apiFetch(
-    `/products/${encodeURIComponent(slug)}?country=${encodeURIComponent(
-      normalizedCountry
-    )}`
+    `/products/${encodeURIComponent(slug)}`
   );
 
   if (!res.ok) {
@@ -295,17 +261,9 @@ export async function getProductBySlug(
 }
 
 export async function getProductVariants(
-  productId: number,
-  country?: string
+  productId: number
 ): Promise<ProductViewDto[]> {
-  const normalizedCountry =
-    normalizeCountry(country) || (await ensureVisitorCountryCode());
-
-  const res = await apiFetch(
-    `/products/${productId}/variants?country=${encodeURIComponent(
-      normalizedCountry
-    )}`
-  );
+  const res = await apiFetch(`/products/${productId}/variants`);
 
   if (!res.ok) {
     throw new Error("Erreur lors du chargement des variantes du produit");

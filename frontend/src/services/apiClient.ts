@@ -279,12 +279,6 @@ export async function apiFetch(endpoint: string, options: RequestInit = {}) {
     headers.set("Authorization", `Bearer ${token}`);
   }
 
-  const visitorCountry = getVisitorCountryCode();
-
-  if (visitorCountry) {
-    headers.set("X-Country-Code", visitorCountry);
-  }
-
   const res = await fetch(buildApiUrl(endpoint), {
     ...options,
     headers,

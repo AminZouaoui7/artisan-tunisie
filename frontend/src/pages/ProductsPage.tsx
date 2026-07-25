@@ -686,10 +686,7 @@ export default function ProductsPage() {
 
     try {
       setDetailVariantsLoading(true);
-      const variants = await getProductVariants(
-        product.id,
-        product.countryCode ?? undefined
-      );
+      const variants = await getProductVariants(product.id);
       setDetailVariants(variants);
     } catch {
       setDetailVariants([]);
