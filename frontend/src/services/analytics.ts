@@ -111,8 +111,9 @@ export function initializeGoogleAnalytics() {
   window.dataLayer = window.dataLayer || [];
   window.gtag =
     window.gtag ||
-    function gtag(...args: unknown[]) {
-      window.dataLayer?.push(args);
+    function gtag() {
+      // eslint-disable-next-line prefer-rest-params -- gtag.js requires the Arguments object.
+      window.dataLayer?.push(arguments);
     };
 
   const existingScript = document.querySelector<HTMLScriptElement>(
