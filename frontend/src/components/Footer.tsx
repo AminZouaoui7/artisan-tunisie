@@ -214,6 +214,10 @@ export default function Footer() {
 
           <nav className="artisan-footer-nav">
             {[
+              {
+                to: "/artisanat-de-la-tunisie",
+                label: t("seo.links.artisanatTunisie"),
+              },
               { to: "/tapis-tunisiens", label: t("seo.links.tapisTunisiens") },
               {
                 to: "/tapis-artisanal-tunisie",

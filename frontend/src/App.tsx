@@ -15,6 +15,7 @@ import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import VerifyEmailPage from "./pages/VerifyEmailPage";
 import SessionExpiredPage from "./pages/SessionExpiredPage";
+import ArtisanatTunisiePage from "./pages/ArtisanatTunisiePage";
 import TapisTunisiensPage from "./pages/TapisTunisiensPage";
 import TapisArtisanalTunisiePage from "./pages/TapisArtisanalTunisiePage";
 import TapisBerbereTunisiePage from "./pages/TapisBerbereTunisiePage";
@@ -172,6 +173,10 @@ function AppContent() {
 
               <Route path="/contact" element={<ContactPage />} />
 
+              <Route
+                path="/artisanat-de-la-tunisie"
+                element={<ArtisanatTunisiePage />}
+              />
               <Route path="/tapis-tunisiens" element={<TapisTunisiensPage />} />
               <Route
                 path="/tapis-artisanal-tunisie"

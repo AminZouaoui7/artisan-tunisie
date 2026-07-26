@@ -1060,9 +1060,17 @@ if (isMounted) setProducts(homeProducts);
               </div>
             </div>
 
-            <Link to="/our-story" className="home-btn-primary">
-              {t("home.discoverOurStory")}
-            </Link>
+            <div className="home-story-actions">
+              <Link to="/our-story" className="home-btn-primary">
+                {t("home.discoverOurStory")}
+              </Link>
+              <Link
+                to="/artisanat-de-la-tunisie"
+                className="home-btn-secondary"
+              >
+                {t("seo.links.artisanatTunisie")}
+              </Link>
+            </div>
           </motion.div>
         </div>
       </section>

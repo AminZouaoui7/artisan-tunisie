@@ -47,6 +47,19 @@
   max-width: 70ch;
 }
 
+.seo-hero-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 560px;
+  margin-top: 20px;
+  object-fit: cover;
+  border-radius: 22px;
+  border: 1px solid rgba(94, 70, 35, 0.14);
+  background: rgba(255, 255, 255, 0.6);
+  box-shadow: 0 18px 50px rgba(31, 16, 4, 0.08);
+}
+
 .seo-cta-row {
   margin-top: 18px;
   display: flex;
@@ -141,6 +154,14 @@
   font-weight: 950;
 }
 
+.seo-card h3 {
+  margin: 0 0 6px;
+  color: #2b1b15;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.02rem;
+  line-height: 1.35;
+}
+
 .seo-card span {
   display: block;
   color: rgba(52, 39, 31, 0.72);
@@ -174,6 +195,29 @@
   color: rgba(35, 20, 9, 0.82);
   line-height: 1.85;
   font-weight: 600;
+}
+
+.seo-source-list {
+  margin: 12px 0 0;
+  padding-left: 22px;
+  color: rgba(35, 20, 9, 0.82);
+  font-weight: 650;
+  line-height: 1.8;
+}
+
+.seo-source-list li + li {
+  margin-top: 8px;
+}
+
+.seo-source-list a,
+.seo-section p a {
+  color: #7b351b;
+  font-weight: 850;
+  text-underline-offset: 3px;
+}
+
+.seo-cards--regions {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .seo-blog-grid {
@@ -239,4 +283,3 @@
     border-radius: 22px;
   }
 }
-

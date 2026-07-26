@@ -5,18 +5,19 @@ const API_URL =
   process.env.VITE_API_URL || "https://artisanmedinabackend.onrender.com/api";
 
 const STATIC_ROUTES = [
-  "",
-  "/products",
-  "/our-story",
-  "/boutique",
-  "/reservation",
-  "/contact",
-  "/tapis-tunisiens",
-  "/tapis-artisanal-tunisie",
-  "/tapis-berbere-tunisie",
-  "/tapis-laine-tunisie",
-  "/tunisian-rugs",
-  "/blog",
+  { path: "" },
+  { path: "/products" },
+  { path: "/our-story" },
+  { path: "/boutique" },
+  { path: "/reservation" },
+  { path: "/contact" },
+  { path: "/artisanat-de-la-tunisie", lastModified: "2026-07-26" },
+  { path: "/tapis-tunisiens", lastModified: "2026-07-26" },
+  { path: "/tapis-artisanal-tunisie", lastModified: "2026-07-26" },
+  { path: "/tapis-berbere-tunisie", lastModified: "2026-07-26" },
+  { path: "/tapis-laine-tunisie", lastModified: "2026-07-26" },
+  { path: "/tunisian-rugs", lastModified: "2026-07-26" },
+  { path: "/blog" },
 ];
 
 type SitemapProduct = {
@@ -76,7 +77,9 @@ export default async function handler(
   const xml = [
     '<?xml version="1.0" encoding="UTF-8"?>',
     '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
-    ...STATIC_ROUTES.map((route) => urlEntry(route)),
+    ...STATIC_ROUTES.map((route) =>
+      urlEntry(route.path, route.lastModified)
+    ),
     ...productUrls,
     "</urlset>",
   ].join("");

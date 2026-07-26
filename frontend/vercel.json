@@ -5,6 +5,30 @@
       "destination": "/api/sitemap"
     },
     {
+      "source": "/artisanat-de-la-tunisie",
+      "destination": "/artisanat-de-la-tunisie.html"
+    },
+    {
+      "source": "/tapis-tunisiens",
+      "destination": "/tapis-tunisiens.html"
+    },
+    {
+      "source": "/tapis-artisanal-tunisie",
+      "destination": "/tapis-artisanal-tunisie.html"
+    },
+    {
+      "source": "/tapis-berbere-tunisie",
+      "destination": "/tapis-berbere-tunisie.html"
+    },
+    {
+      "source": "/tapis-laine-tunisie",
+      "destination": "/tapis-laine-tunisie.html"
+    },
+    {
+      "source": "/tunisian-rugs",
+      "destination": "/tunisian-rugs.html"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }

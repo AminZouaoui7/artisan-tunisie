@@ -11,8 +11,13 @@ import { CurrencyProvider } from "./context/CurrencyContext";
 import "./index.css";
 
 const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+const rootElement = document.getElementById("root")!;
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
+if (rootElement.hasAttribute("data-seo-prerendered")) {
+  rootElement.replaceChildren();
+}
+
+ReactDOM.createRoot(rootElement).render(
   <React.StrictMode>
     <GoogleOAuthProvider clientId={googleClientId}>
       <BrowserRouter>

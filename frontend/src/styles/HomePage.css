@@ -1591,6 +1591,21 @@
   box-shadow: 0 18px 38px rgba(59, 38, 41, 0.22);
 }
 
+.home-story-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+
+.home-story-actions .home-btn-secondary {
+  display: inline-flex;
+  min-height: 58px;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
 @media (max-width: 1150px) {
   .home-story-inner {
     grid-template-columns: 1fr;

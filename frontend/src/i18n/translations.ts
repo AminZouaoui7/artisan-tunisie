@@ -67,7 +67,7 @@ export const translations: Record<Language, Record<string, unknown>> = {
       description:
         "Pièces artisanales tunisiennes, façonnées avec héritage, élégance et un esprit artisanal intemporel.",
       quickLinks: "Navigation",
-      guidesTitle: "Guides tapis",
+      guidesTitle: "Artisanat & guides",
       contact: "Contact",
       rights: "Tous droits réservés",
       newsletter: "Newsletter",
@@ -95,6 +95,7 @@ export const translations: Record<Language, Record<string, unknown>> = {
         faqTitle: "FAQ",
       },
       links: {
+        artisanatTunisie: "Artisanat de la Tunisie",
         tapisTunisiens: "Tapis tunisiens",
         tapisArtisanalTunisie: "Tapis artisanal Tunisie",
         tapisBerbereTunisie: "Tapis berbère Tunisie",
@@ -1298,7 +1299,7 @@ export const translations: Record<Language, Record<string, unknown>> = {
       description:
         "Tunisian artisanal pieces, crafted with heritage, elegance, and a timeless handmade spirit.",
       quickLinks: "Navigation",
-      guidesTitle: "Rug Guides",
+      guidesTitle: "Craft & rug guides",
       contact: "Contact",
       rights: "All rights reserved",
       newsletter: "Newsletter",
@@ -1326,6 +1327,7 @@ export const translations: Record<Language, Record<string, unknown>> = {
         faqTitle: "FAQ",
       },
       links: {
+        artisanatTunisie: "Tunisian craftsmanship (FR)",
         tapisTunisiens: "Tunisian rugs (FR)",
         tapisArtisanalTunisie: "Handmade rugs Tunisia (FR)",
         tapisBerbereTunisie: "Berber rugs Tunisia (FR)",
