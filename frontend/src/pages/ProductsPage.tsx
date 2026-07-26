@@ -48,6 +48,7 @@ import {
   type ProductViewDto,
 } from "../services/productService";
 import { createPriceRequest } from "../services/priceRequestService";
+import { trackSearch, trackViewItem } from "../services/analytics";
 import { useCurrency } from "../context/CurrencyContext";
 import photoHero from "../assets/photohero.optimized.webp";
 import photoHero1 from "../assets/photohero1.optimized.webp";
@@ -192,6 +193,23 @@ export default function ProductsPage() {
     phone: "",
     message: "",
   });
+
+  useEffect(() => {
+    if (detailProduct) {
+      trackViewItem(detailProduct);
+    }
+  }, [detailProduct]);
+
+  useEffect(() => {
+    const searchTerm = search.trim();
+    if (!searchTerm) return;
+
+    const timeoutId = window.setTimeout(() => {
+      trackSearch(searchTerm);
+    }, 750);
+
+    return () => window.clearTimeout(timeoutId);
+  }, [search]);
 
   useEffect(() => {
     if (!detailProduct) return;
@@ -806,6 +824,7 @@ export default function ProductsPage() {
       dimensions: product.dimensions,
       lengthCm: product.lengthCm,
       widthCm: product.widthCm,
+      category: product.category || product.type,
       canShowPrice: product.canShowPrice,
       isPriceHidden: product.isPriceHidden,
       requiresPriceRequest: product.requiresPriceRequest,

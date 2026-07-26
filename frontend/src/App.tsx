@@ -34,6 +34,7 @@ import AccountOrdersPage from "./pages/AccountOrdersPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import SiteLoader from "./components/SiteLoader";
 import ScrollToTop from "./components/ScrollToTop";
+import AnalyticsPageView from "./components/AnalyticsPageView";
 
 import { I18nProvider, useI18n } from "./i18n/i18n";
 
@@ -156,6 +157,7 @@ function AppContent() {
 
       {!isLoading && (
         <div className="site-shell">
+          <AnalyticsPageView />
           <Navbar />
 
           <main className="site-content">

@@ -13,6 +13,7 @@ import {
   shouldShowProductPrice,
   type ProductViewDto,
 } from "../services/productService";
+import { trackViewItem } from "../services/analytics";
 import "../styles/ProductDetailPage.css";
 
 export default function ProductDetailPage() {
@@ -46,6 +47,12 @@ export default function ProductDetailPage() {
       active = false;
     };
   }, [slug]);
+
+  useEffect(() => {
+    if (product) {
+      trackViewItem(product);
+    }
+  }, [product]);
 
   if (loading) {
     return (
@@ -143,6 +150,7 @@ export default function ProductDetailPage() {
       dimensions: product.dimensions,
       lengthCm: product.lengthCm,
       widthCm: product.widthCm,
+      category: product.category || product.type,
       canShowPrice: product.canShowPrice,
       isPriceHidden: product.isPriceHidden,
       requiresPriceRequest: product.requiresPriceRequest,

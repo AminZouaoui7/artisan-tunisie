@@ -7,6 +7,7 @@ import {
   type ReactNode,
 } from "react";
 import { useAuth } from "./AuthContext";
+import { trackAddToCart } from "../services/analytics";
 
 export type CartProduct = {
   id: number;
@@ -18,6 +19,7 @@ export type CartProduct = {
   dimensions?: string | null;
   lengthCm?: number | null;
   widthCm?: number | null;
+  category?: string | null;
   canShowPrice?: boolean;
   isPriceHidden?: boolean;
   requiresPriceRequest?: boolean;
@@ -100,6 +102,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         price: product.price,
       },
     ]);
+    trackAddToCart(product);
 
     return {
       ok: true,

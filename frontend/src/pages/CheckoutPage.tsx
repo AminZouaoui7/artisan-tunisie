@@ -1,4 +1,4 @@
-import { useMemo, useState, type FormEvent } from "react";
+import { useEffect, useMemo, useState, type FormEvent } from "react";
 import rawCountries from "world-countries";
 import {
   CheckCircle2,
@@ -14,6 +14,10 @@ import { useCurrency } from "../context/CurrencyContext";
 import { useCart } from "../context/useCart";
 import { useAuth } from "../context/AuthContext";
 import { apiFetch } from "../services/apiClient";
+import {
+  trackBeginCheckout,
+  trackPurchase,
+} from "../services/analytics";
 import { useI18n } from "../i18n/i18n";
 import "../styles/CheckoutPage.css";
 
@@ -85,6 +89,12 @@ export default function CheckoutPage() {
     paymentMethod: "BankTransferIban",
     notes: "",
   });
+
+  useEffect(() => {
+    if (items.length > 0) {
+      trackBeginCheckout(items);
+    }
+  }, [items]);
 
   const selectedCountry = useMemo(
     () =>
@@ -293,9 +303,22 @@ export default function CheckoutPage() {
         throw new Error(data?.message || t("checkout.orderCreateError"));
       }
 
+      const orderId = data?.id ? String(data.id) : undefined;
+      const analyticsTransactionId = String(
+        data?.id ??
+          data?.orderId ??
+          data?.reference ??
+          window.crypto.randomUUID()
+      );
+
+      trackPurchase({
+        transactionId: analyticsTransactionId,
+        products: items,
+        value: cartTotal,
+      });
       clearCart();
       setOrderSuccess({
-        orderId: data?.id ? String(data.id) : undefined,
+        orderId,
         message: data?.message,
       });
     } catch (err) {

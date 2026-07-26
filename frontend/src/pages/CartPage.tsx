@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   ArrowLeft,
@@ -13,6 +14,7 @@ import {
 import { useCurrency } from "../context/CurrencyContext";
 import { useCart } from "../context/useCart";
 import { useI18n } from "../i18n/i18n";
+import { trackViewCart } from "../services/analytics";
 import "../styles/CartPage.css";
 
 export default function CartPage() {
@@ -20,6 +22,12 @@ export default function CartPage() {
   const { currency, formatPrice } = useCurrency();
   const navigate = useNavigate();
   const { items, cartTotal, removeFromCart, clearCart } = useCart();
+
+  useEffect(() => {
+    if (items.length > 0) {
+      trackViewCart(items);
+    }
+  }, [items]);
 
   if (items.length === 0) {
     return (

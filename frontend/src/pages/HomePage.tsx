@@ -48,6 +48,7 @@ import {
   type ProductViewDto,
 } from "../services/productService";
 import { createPriceRequest } from "../services/priceRequestService";
+import { trackViewItem } from "../services/analytics";
 import { useI18n } from "../i18n/i18n";
 import { useCurrency } from "../context/CurrencyContext";
 import { GOOGLE_MAPS_URL } from "../constants/externalLinks";
@@ -126,6 +127,12 @@ export default function HomePage() {
   const collectionScrollRef = useRef<HTMLDivElement | null>(null);
   const detailModalCardRef = useRef<HTMLDivElement | null>(null);
   const detailVariantsRequestRef = useRef(0);
+
+  useEffect(() => {
+    if (detailProduct) {
+      trackViewItem(detailProduct);
+    }
+  }, [detailProduct]);
 
   useEffect(() => {
     if (!detailProduct) return;
@@ -608,6 +615,7 @@ export default function HomePage() {
       dimensions: product.dimensions,
       lengthCm: product.lengthCm,
       widthCm: product.widthCm,
+      category: product.category || product.type,
       canShowPrice: product.canShowPrice,
       isPriceHidden: product.isPriceHidden,
       requiresPriceRequest: product.requiresPriceRequest,
