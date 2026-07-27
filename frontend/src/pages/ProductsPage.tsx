@@ -41,6 +41,7 @@ import { getStoredUserLocation } from "../services/apiClient";
 import {
   canProductBeAddedToCart,
   getOptimizedProductImageUrl,
+  getProductDimensionsLabel,
   getProducts,
   getProductVariants,
   shouldShowPriceOnRequest,
@@ -1533,6 +1534,9 @@ export default function ProductsPage() {
                         aria-label={t("products.viewDetails")}
                       >
                         <Eye size={16} />
+                        <span className="pc-quick-view-label">
+                          {t("products.viewDetails")}
+                        </span>
                       </button>
                     </div>
 
@@ -1554,9 +1558,7 @@ export default function ProductsPage() {
                         <div className="pc-spec">
                           <Ruler size={20} className="pc-spec-icon" />
                           <strong className="pc-spec-value">
-                            {product.lengthCm && product.widthCm
-                              ? `${product.lengthCm} × ${product.widthCm}`
-                              : product.dimensions || "—"}
+                            {getProductDimensionsLabel(product)}
                           </strong>
                           <span className="pc-spec-label">Dimensions</span>
                         </div>
@@ -1977,23 +1979,23 @@ export default function ProductsPage() {
               </aside>
             </div>
 
-            {/* LEVEL 2 — Spec bar (always 5 items) */}
+            {/* LEVEL 2 — Complete product specifications */}
             <section className="products-detail-spec-bar">
               {[
                 {
                   label: "Dimensions",
-                  value:
-                    detailProduct.dimensions ||
-                    (detailProduct.lengthCm && detailProduct.widthCm
-                      ? `${detailProduct.lengthCm} × ${detailProduct.widthCm} cm`
-                      : null),
+                  value: getProductDimensionsLabel(detailProduct),
                 },
                 { label: "Matière", value: detailProduct.material },
+                {
+                  label: "Couleur",
+                  value: getTranslatedColor(detailProduct.colors),
+                },
                 { label: "Région", value: detailProduct.region },
                 { label: "Technique", value: detailProduct.technique },
                 {
                   label: "Pièce unique",
-                  value: detailProduct.isUniquePiece ? "Oui" : null,
+                  value: detailProduct.isUniquePiece ? "Oui" : "Non",
                 },
               ].map((item) => (
                 <div

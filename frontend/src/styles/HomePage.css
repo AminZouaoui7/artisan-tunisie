@@ -4861,3 +4861,13 @@
     width: 100% !important;
   }
 }
+
+/* Catalogue actuel : les cartes partagent désormais le composant ProductsPage. */
+@media (max-width: 768px) {
+  .home-catalog-track > .product-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    margin: 0 auto !important;
+  }
+}

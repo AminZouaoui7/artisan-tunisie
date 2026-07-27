@@ -40,6 +40,7 @@ import { getStoredUserLocation } from "../services/apiClient";
 import {
   canProductBeAddedToCart,
   getOptimizedProductImageUrl,
+  getProductDimensionsLabel,
   getProducts,
   getProductVariants,
   keepLargestProductByVariantGroup,
@@ -1271,6 +1272,9 @@ if (isMounted) setProducts(homeProducts);
                       aria-label={t("products.viewDetails")}
                     >
                       <Eye size={16} />
+                      <span className="pc-quick-view-label">
+                        {t("products.viewDetails")}
+                      </span>
                     </button>
                   </div>
 
@@ -1292,9 +1296,7 @@ if (isMounted) setProducts(homeProducts);
                       <div className="pc-spec">
                         <Ruler size={20} className="pc-spec-icon" />
                         <strong className="pc-spec-value">
-                          {product.lengthCm && product.widthCm
-                            ? `${product.lengthCm} × ${product.widthCm}`
-                            : product.dimensions || "—"}
+                          {getProductDimensionsLabel(product)}
                         </strong>
                         <span className="pc-spec-label">Dimensions</span>
                       </div>
@@ -1808,18 +1810,18 @@ if (isMounted) setProducts(homeProducts);
               {[
                 {
                   label: "Dimensions",
-                  value:
-                    detailProduct.dimensions ||
-                    (detailProduct.lengthCm && detailProduct.widthCm
-                      ? `${detailProduct.lengthCm} × ${detailProduct.widthCm} cm`
-                      : null),
+                  value: getProductDimensionsLabel(detailProduct),
                 },
                 { label: "Matière", value: detailProduct.material },
+                {
+                  label: "Couleur",
+                  value: getTranslatedColor(detailProduct.colors),
+                },
                 { label: "Région", value: detailProduct.region },
                 { label: "Technique", value: detailProduct.technique },
                 {
                   label: "Pièce unique",
-                  value: detailProduct.isUniquePiece ? "Oui" : null,
+                  value: detailProduct.isUniquePiece ? "Oui" : "Non",
                 },
               ].map((item) => (
                 <div

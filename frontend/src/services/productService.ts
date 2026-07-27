@@ -124,6 +124,25 @@ export function getProductSurface(product: ProductViewDto): number {
   return length * width;
 }
 
+export function getProductDimensionsLabel(
+  product: Pick<ProductDto, "lengthCm" | "widthCm" | "dimensions">,
+  fallback = "—"
+): string {
+  const hasNumericDimensions =
+    typeof product.lengthCm === "number" &&
+    Number.isFinite(product.lengthCm) &&
+    product.lengthCm > 0 &&
+    typeof product.widthCm === "number" &&
+    Number.isFinite(product.widthCm) &&
+    product.widthCm > 0;
+
+  if (hasNumericDimensions) {
+    return `${product.lengthCm} × ${product.widthCm} cm`;
+  }
+
+  return product.dimensions?.trim() || fallback;
+}
+
 export function keepLargestProductByVariantGroup(
   products: ProductViewDto[]
 ): ProductViewDto[] {
