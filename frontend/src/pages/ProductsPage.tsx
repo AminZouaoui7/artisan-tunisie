@@ -1279,6 +1279,26 @@ export default function ProductsPage() {
     }
   }
 
+  const detailSpecifications = detailProduct
+    ? [
+        {
+          label: "Dimensions",
+          value: getProductDimensionsLabel(detailProduct),
+        },
+        { label: "Matière", value: detailProduct.material },
+        {
+          label: "Couleur",
+          value: getTranslatedColor(detailProduct.colors),
+        },
+        { label: "Région", value: detailProduct.region },
+        { label: "Technique", value: detailProduct.technique },
+        {
+          label: "Pièce unique",
+          value: detailProduct.isUniquePiece ? "Oui" : "Non",
+        },
+      ]
+    : [];
+
   return (
     <section className="products-page">
       <SeoHead
@@ -1851,6 +1871,27 @@ export default function ProductsPage() {
                   );
                 })()}
 
+                <section
+                  className="products-detail-mobile-specs"
+                  aria-label="Caractéristiques du tapis"
+                >
+                  <h3>Caractéristiques</h3>
+                  <div className="products-detail-mobile-spec-grid">
+                    {detailSpecifications.map((item) => (
+                      <div
+                        key={item.label}
+                        className="products-detail-mobile-spec-item"
+                      >
+                        <span>{getDetailIcon(item.label)}</span>
+                        <div>
+                          <small>{item.label}</small>
+                          <strong>{item.value || "—"}</strong>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </section>
+
                 {(detailVariantsLoading || detailVariants.length > 0) && (
                   <div className="products-detail-variants-section">
                     <h3 className="products-detail-variants-title">
@@ -1996,23 +2037,7 @@ export default function ProductsPage() {
 
             {/* LEVEL 2 — Complete product specifications */}
             <section className="products-detail-spec-bar">
-              {[
-                {
-                  label: "Dimensions",
-                  value: getProductDimensionsLabel(detailProduct),
-                },
-                { label: "Matière", value: detailProduct.material },
-                {
-                  label: "Couleur",
-                  value: getTranslatedColor(detailProduct.colors),
-                },
-                { label: "Région", value: detailProduct.region },
-                { label: "Technique", value: detailProduct.technique },
-                {
-                  label: "Pièce unique",
-                  value: detailProduct.isUniquePiece ? "Oui" : "Non",
-                },
-              ].map((item) => (
+              {detailSpecifications.map((item) => (
                 <div
                   key={item.label}
                   className="products-detail-spec-item"
