@@ -18,6 +18,7 @@ import {
 import { useCart } from "../context/useCart";
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { motion, useReducedMotion } from "framer-motion";
 import PhoneInput from "../components/PhoneInput";
 import SeoHead from "../components/SeoHead";
@@ -1514,8 +1515,16 @@ if (isMounted) setProducts(homeProducts);
         </motion.div>
       </section>
 
-      {detailProduct && (
-        <div className="products-detail-modal" onClick={closeDetailProduct}>
+      {detailProduct &&
+        typeof document !== "undefined" &&
+        createPortal(
+        <div
+          className="products-detail-modal"
+          onClick={closeDetailProduct}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="products-detail-title"
+        >
           <div
             className="products-detail-card"
             ref={detailModalCardRef}
@@ -1526,6 +1535,9 @@ if (isMounted) setProducts(homeProducts);
                 className="products-detail-mobile-handle"
                 aria-hidden="true"
               />
+              <span className="products-detail-mobile-title">
+                {t("products.viewDetails")}
+              </span>
               <button
                 type="button"
                 className="products-detail-close"
@@ -1613,7 +1625,10 @@ if (isMounted) setProducts(homeProducts);
               </section>
 
               <aside className="products-detail-purchase-panel">
-                <h2 className="products-detail-product-title">
+                <h2
+                  className="products-detail-product-title"
+                  id="products-detail-title"
+                >
                   {detailProduct.name}
                 </h2>
 
@@ -1971,7 +1986,8 @@ if (isMounted) setProducts(homeProducts);
               </section>
             )}
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
       {isLightboxOpen &&

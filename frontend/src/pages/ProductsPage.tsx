@@ -6,6 +6,7 @@ import {
   useState,
   type FormEvent,
 } from "react";
+import { createPortal } from "react-dom";
 import PhoneInput from "../components/PhoneInput";
 import SeoHead from "../components/SeoHead";
 import { Link, useNavigate } from "react-router-dom";
@@ -1684,8 +1685,16 @@ export default function ProductsPage() {
         </div>
       )}
 
-      {detailProduct && (
-        <div className="products-detail-modal" onClick={closeDetailProduct}>
+      {detailProduct &&
+        typeof document !== "undefined" &&
+        createPortal(
+        <div
+          className="products-detail-modal"
+          onClick={closeDetailProduct}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="products-detail-title"
+        >
           <div
             className="products-detail-card"
             ref={detailModalCardRef}
@@ -1696,6 +1705,9 @@ export default function ProductsPage() {
                 className="products-detail-mobile-handle"
                 aria-hidden="true"
               />
+              <span className="products-detail-mobile-title">
+                {t("products.viewDetails")}
+              </span>
               <button
                 type="button"
                 className="products-detail-close"
@@ -1785,7 +1797,10 @@ export default function ProductsPage() {
 
               {/* RIGHT — Purchase panel */}
               <aside className="products-detail-purchase-panel">
-                <h2 className="products-detail-product-title">
+                <h2
+                  className="products-detail-product-title"
+                  id="products-detail-title"
+                >
                   {detailProduct.name}
                 </h2>
 
@@ -2132,7 +2147,8 @@ export default function ProductsPage() {
               </section>
             )}
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
       {isLightboxOpen &&
