@@ -5,18 +5,18 @@ const API_URL =
   process.env.VITE_API_URL || "https://artisanmedinabackend.onrender.com/api";
 
 const STATIC_ROUTES = [
-  { path: "" },
+  { path: "", lastModified: "2026-07-29" },
   { path: "/products" },
   { path: "/our-story" },
   { path: "/boutique" },
   { path: "/reservation" },
   { path: "/contact" },
-  { path: "/artisanat-de-la-tunisie", lastModified: "2026-07-26" },
-  { path: "/tapis-tunisiens", lastModified: "2026-07-26" },
-  { path: "/tapis-artisanal-tunisie", lastModified: "2026-07-26" },
-  { path: "/tapis-berbere-tunisie", lastModified: "2026-07-26" },
-  { path: "/tapis-laine-tunisie", lastModified: "2026-07-26" },
-  { path: "/tunisian-rugs", lastModified: "2026-07-26" },
+  { path: "/artisanat-de-la-tunisie", lastModified: "2026-07-29" },
+  { path: "/tapis-tunisiens", lastModified: "2026-07-29" },
+  { path: "/tapis-artisanal-tunisie", lastModified: "2026-07-29" },
+  { path: "/tapis-berbere-tunisie", lastModified: "2026-07-29" },
+  { path: "/tapis-laine-tunisie", lastModified: "2026-07-29" },
+  { path: "/tunisian-rugs", lastModified: "2026-07-29" },
   { path: "/blog" },
 ];
 

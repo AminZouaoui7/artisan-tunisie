@@ -21,9 +21,9 @@ const SITE_URL = "https://www.artisansdelamedina.com";
 const routeDefinitions: Record<string, SeoRouteDefinition> = {
   "/artisanat-de-la-tunisie": {
     component: ArtisanatTunisiePage,
-    title: "Artisanat de la Tunisie | L’Artisan de la Médina",
+    title: "Artisan tunisien à Tunis | Artisanat de la Tunisie",
     description:
-      "Découvrez l’artisanat de la Tunisie : tapis de Kairouan, poterie de Sejnane, céramique de Nabeul, fouta, cuivre, bois d’olivier et savoir-faire de la Médina.",
+      "Artisan tunisien à Tunis : découvrez l’artisanat de la Tunisie, les tapis faits main, la poterie, la céramique et les savoir-faire de la Médina.",
     lang: "fr",
     image: `${SITE_URL}/og-artisanat-tunisie.png`,
   },

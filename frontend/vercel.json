@@ -29,6 +29,10 @@
       "destination": "/tunisian-rugs.html"
     },
     {
+      "source": "/products/:slug",
+      "destination": "/products/:slug.html"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }

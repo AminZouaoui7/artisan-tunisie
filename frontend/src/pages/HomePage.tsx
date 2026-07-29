@@ -54,7 +54,6 @@ import { trackViewItem } from "../services/analytics";
 import { useI18n } from "../i18n/i18n";
 import { useCurrency } from "../context/CurrencyContext";
 import { GOOGLE_MAPS_URL } from "../constants/externalLinks";
-import { FACEBOOK_URL, INSTAGRAM_URL } from "../constants/externalLinks";
 
 const fadeUp = { hidden: { opacity: 0, y: 24 }, visible: { opacity: 1, y: 0 } };
 const fadeLeft = { hidden: { opacity: 0, x: -24 }, visible: { opacity: 1, x: 0 } };
@@ -914,38 +913,6 @@ if (isMounted) setProducts(homeProducts);
         description="Découvrez des tapis tunisiens faits main, Margoum, Kilim et tapis berbères. Visitez L’Artisan de la Médina au cœur de Tunis."
         canonical="/"
         image={heroRug}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": ["LocalBusiness", "Store"],
-            name: "L’Artisan de la Médina",
-            url: typeof window === "undefined" ? "/" : window.location.origin,
-            image:
-              typeof window === "undefined"
-                ? heroRug
-                : new URL(heroRug, window.location.origin).toString(),
-            telephone: "+21656250910",
-            email: "contact@artisan-medina.com",
-            address: {
-              "@type": "PostalAddress",
-              addressLocality: "Tunis",
-              addressRegion: "Tunis",
-              addressCountry: "TN",
-            },
-            geo: {
-              "@type": "GeoCoordinates",
-              latitude: 36.796468,
-              longitude: 10.169834,
-            },
-            hasMap: GOOGLE_MAPS_URL,
-            sameAs: [INSTAGRAM_URL, FACEBOOK_URL],
-            priceRange: "€€",
-            openingHours: "Mo-Su 09:00-21:00",
-          }),
-        }}
       />
  <section className="home-boutique-hero">
   <div className="home-boutique-hero-bg">

@@ -5,9 +5,9 @@ import "../styles/SeoPages.css";
 
 const SITE_URL = "https://www.artisansdelamedina.com";
 const CANONICAL_PATH = "/artisanat-de-la-tunisie";
-const TITLE = "Artisanat de la Tunisie | L’Artisan de la Médina";
+const TITLE = "Artisan tunisien à Tunis | Artisanat de la Tunisie";
 const DESCRIPTION =
-  "Découvrez l’artisanat de la Tunisie : tapis de Kairouan, poterie de Sejnane, céramique de Nabeul, fouta, cuivre, bois d’olivier et savoir-faire de la Médina.";
+  "Artisan tunisien à Tunis : découvrez l’artisanat de la Tunisie, les tapis faits main, la poterie, la céramique et les savoir-faire de la Médina.";
 
 const regionalCrafts = [
   {
@@ -83,7 +83,7 @@ export default function ArtisanatTunisiePage() {
       image: imageUrl,
       inLanguage: "fr",
       datePublished: "2026-07-26",
-      dateModified: "2026-07-26",
+      dateModified: "2026-07-29",
       author: {
         "@type": "Organization",
         name: "L’Artisan de la Médina",
@@ -158,14 +158,15 @@ export default function ArtisanatTunisiePage() {
         <header className="seo-hero">
           <p className="seo-kicker">Patrimoine & savoir-faire tunisiens</p>
           <h1 className="seo-title">
-            Artisanat de la Tunisie : un patrimoine vivant
+            Artisan tunisien à Tunis : l’artisanat de la Tunisie
           </h1>
           <p className="seo-lead">
-            L’artisanat de la Tunisie réunit des gestes, des matières et des
-            identités régionales transmis de génération en génération. Du tapis
-            de Kairouan à la poterie de Sejnane, de la céramique de Nabeul aux
-            métiers d’art de la Médina de Tunis, chaque pièce raconte un
-            territoire et le temps nécessaire pour la façonner.
+            L’Artisan de la Médina présente à Tunis un artisanat de la Tunisie
+            façonné par des gestes, des matières et des identités régionales
+            transmis de génération en génération. Du tapis de Kairouan à la
+            poterie de Sejnane, de la céramique de Nabeul aux métiers d’art de
+            la Médina de Tunis, chaque pièce raconte un territoire et le temps
+            nécessaire pour la façonner.
           </p>
 
           <img
