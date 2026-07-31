@@ -1984,56 +1984,59 @@ if (isMounted) setProducts(homeProducts);
 
       {isLightboxOpen &&
         lightboxImageIndex !== null &&
-        detailImages[lightboxImageIndex] && (
-        <div
-          className="products-image-lightbox"
-          onClick={closeLightbox}
-          role="dialog"
-          aria-modal="true"
-        >
+        detailImages[lightboxImageIndex] &&
+        typeof document !== "undefined" &&
+        createPortal(
           <div
-            className="products-image-lightbox-content"
-            onClick={(e) => e.stopPropagation()}
+            className="products-image-lightbox"
+            onClick={closeLightbox}
+            role="dialog"
+            aria-modal="true"
           >
-            <button
-              type="button"
-              className="products-image-lightbox-close"
-              onClick={closeLightbox}
-              aria-label={t("products.close")}
+            <div
+              className="products-image-lightbox-content"
+              onClick={(e) => e.stopPropagation()}
             >
-              <X size={20} />
-            </button>
-
-            {detailImages.length > 1 && (
               <button
                 type="button"
-                className="products-image-lightbox-nav products-image-lightbox-nav--left"
-                onClick={prevLightboxImage}
-                aria-label="Previous image"
+                className="products-image-lightbox-close"
+                onClick={closeLightbox}
+                aria-label={t("products.close")}
               >
-                <ChevronLeft size={26} />
+                <X size={20} />
               </button>
-            )}
 
-            <img
-              src={detailImages[lightboxImageIndex]}
-              alt={detailProduct?.name || ""}
-              className="products-image-lightbox-image"
-              decoding="async"
-            />
+              {detailImages.length > 1 && (
+                <button
+                  type="button"
+                  className="products-image-lightbox-nav products-image-lightbox-nav--left"
+                  onClick={prevLightboxImage}
+                  aria-label="Previous image"
+                >
+                  <ChevronLeft size={26} />
+                </button>
+              )}
 
-            {detailImages.length > 1 && (
-              <button
-                type="button"
-                className="products-image-lightbox-nav products-image-lightbox-nav--right"
-                onClick={nextLightboxImage}
-                aria-label="Next image"
-              >
-                <ChevronRight size={26} />
-              </button>
-            )}
-          </div>
-        </div>
+              <img
+                src={detailImages[lightboxImageIndex]}
+                alt={detailProduct?.name || ""}
+                className="products-image-lightbox-image"
+                decoding="async"
+              />
+
+              {detailImages.length > 1 && (
+                <button
+                  type="button"
+                  className="products-image-lightbox-nav products-image-lightbox-nav--right"
+                  onClick={nextLightboxImage}
+                  aria-label="Next image"
+                >
+                  <ChevronRight size={26} />
+                </button>
+              )}
+            </div>
+          </div>,
+          document.body
         )}
 
       {priceRequestOpen && priceRequestProduct && (

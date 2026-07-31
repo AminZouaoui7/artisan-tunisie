@@ -1,5 +1,6 @@
 import {
   useCallback,
+  useDeferredValue,
   useEffect,
   useMemo,
   useRef,
@@ -67,13 +68,15 @@ export default function ProductsPage() {
   const navigate = useNavigate();
   const { isAuthenticated, loadingAuth, user } = useAuth();
   const { addToCart } = useCart();
-  const visitorLocation = getStoredUserLocation();
-
+  const [visitorLocation, setVisitorLocation] = useState(() =>
+    getStoredUserLocation()
+  );
   const [products, setProducts] = useState<ProductViewDto[]>([]);
   const [loading, setLoading] = useState(true);
   const [errorKey, setErrorKey] = useState<string | null>(null);
 
   const [search, setSearch] = useState("");
+  const deferredSearch = useDeferredValue(search);
   const [color, setColor] = useState("all");
   const [selectedSizes, setSelectedSizes] = useState<SizeBucket[]>([]);
   const [selectedCategory, setSelectedCategory] = useState("all");
@@ -133,6 +136,11 @@ export default function ProductsPage() {
     { key: "1000to1500", label: "1 000 € – 1 500 €", min: 1000, max: 1500 },
     { key: "over1500", label: "Plus de 1 500 €", min: 1500, max: null },
   ];
+
+  const canShowPriceForVisitor = useCallback(
+    (product: ProductViewDto) => shouldShowProductPrice(product),
+    []
+  );
 
   const productsCatalogRef = useRef<HTMLDivElement | null>(null);
   const collectionScrollRef = useRef<HTMLDivElement | null>(null);
@@ -195,6 +203,21 @@ export default function ProductsPage() {
     phone: "",
     message: "",
   });
+
+  useEffect(() => {
+    const handleLocationChanged = () => {
+      setVisitorLocation(getStoredUserLocation());
+    };
+
+    window.addEventListener("artisan:location-changed", handleLocationChanged);
+
+    return () => {
+      window.removeEventListener(
+        "artisan:location-changed",
+        handleLocationChanged
+      );
+    };
+  }, []);
 
   useEffect(() => {
     if (detailProduct) {
@@ -429,6 +452,13 @@ export default function ProductsPage() {
     orange: { fr: "Orange", en: "Orange" },
     mustard: { fr: "Moutarde", en: "Mustard" },
     pink: { fr: "Rose", en: "Pink" },
+    "dark-blue": { fr: "Bleu foncé", en: "Dark blue" },
+    "sky-blue": { fr: "Bleu ciel", en: "Sky blue" },
+    "dark-green": { fr: "Vert foncé", en: "Dark green" },
+    "blue-white": { fr: "Bleu blanc", en: "Blue and white" },
+    "green-white": { fr: "Vert blanc", en: "Green and white" },
+    "beige-white": { fr: "Blanc beige", en: "White and beige" },
+    burgundy: { fr: "Rouge bordeaux", en: "Burgundy" },
     multicolore: { fr: "Multicolore", en: "Multicolor" },
   };
 
@@ -458,6 +488,34 @@ export default function ProductsPage() {
 
   function canonicalColor(value?: string | null) {
     const key = normalizeText(value);
+    const compactKey = key.replace(/[\s_-]+/g, "");
+
+    if (
+      [
+        "multicolore",
+        "multicolores",
+        "multicolor",
+        "multicolour",
+        "multicouleur",
+        "mulitcolore",
+      ].includes(compactKey)
+    ) {
+      return "multicolore";
+    }
+
+    if (["bleufonce", "darkblue"].includes(compactKey)) return "dark-blue";
+    if (["bleuciel", "skyblue", "lightblue"].includes(compactKey))
+      return "sky-blue";
+    if (["vertfonce", "darkgreen"].includes(compactKey)) return "dark-green";
+    if (["bleublanc", "blanbleu", "bluewhite"].includes(compactKey))
+      return "blue-white";
+    if (["vertblanc", "blacvert", "greenwhite"].includes(compactKey))
+      return "green-white";
+    if (["blancbeige", "beigeblanc", "beigewhite"].includes(compactKey))
+      return "beige-white";
+    if (["rougebordeaux", "bordeaux", "burgundy"].includes(compactKey))
+      return "burgundy";
+
     if (["bleu", "blue"].includes(key)) return "blue";
     if (["rouge", "red"].includes(key)) return "red";
     if (["vert", "green"].includes(key)) return "green";
@@ -471,7 +529,6 @@ export default function ProductsPage() {
     if (["moutarde", "mustard", "jaune", "yellow", "ocre", "ochre"].includes(key))
       return "mustard";
     if (["orange"].includes(key)) return "orange";
-    if (["multicolore", "multicolor"].includes(key)) return "multicolore";
     return key;
   }
 
@@ -492,6 +549,13 @@ export default function ProductsPage() {
       moutarde: "#b98532",
       pink: "#d8a39a",
       rose: "#d8a39a",
+      "dark-blue": "#173153",
+      "sky-blue": "#79bde8",
+      "dark-green": "#1f5b3d",
+      "blue-white": "linear-gradient(135deg, #163f7a 0 50%, #f7f3ea 50% 100%)",
+      "green-white": "linear-gradient(135deg, #2f7d4f 0 50%, #f7f3ea 50% 100%)",
+      "beige-white": "linear-gradient(135deg, #d7bc8f 0 50%, #f7f3ea 50% 100%)",
+      burgundy: "#7c1f32",
       multicolore:
         "linear-gradient(135deg, #b31b1b 0%, #c46a2b 30%, #163f7a 60%, #2f7d4f 100%)",
     };
@@ -613,6 +677,15 @@ export default function ProductsPage() {
   const visibleCatalogProducts = useMemo(() => {
     return diversifyProducts(products);
   }, [products]);
+
+  const showPriceFilter =
+    visibleCatalogProducts.some(canShowPriceForVisitor);
+
+  useEffect(() => {
+    if (!showPriceFilter && selectedPrice !== "all") {
+      setSelectedPrice("all");
+    }
+  }, [selectedPrice, showPriceFilter]);
 
   const detailImages = getDetailImages(detailProduct);
   const isLightboxOpen = lightboxImageIndex !== null;
@@ -899,7 +972,11 @@ export default function ProductsPage() {
       });
     });
 
-    return Array.from(map.values());
+    return Array.from(map.values()).sort((a, b) =>
+      a.label.localeCompare(b.label, language === "FR" ? "fr" : "en", {
+        sensitivity: "base",
+      })
+    );
   }, [visibleCatalogProducts, language]);
 
   function getSizeLabel(product: ProductViewDto) {
@@ -1003,7 +1080,7 @@ export default function ProductsPage() {
       selectedCategory !== "all" ||
       color !== "all" ||
       selectedSizes.length > 0 ||
-      selectedPrice !== "all"
+      (showPriceFilter && selectedPrice !== "all")
   );
 
   const activeFiltersCount =
@@ -1011,10 +1088,11 @@ export default function ProductsPage() {
     (selectedCategory !== "all" ? 1 : 0) +
     (color !== "all" ? 1 : 0) +
     selectedSizes.length +
-    (selectedPrice !== "all" ? 1 : 0);
+    (showPriceFilter && selectedPrice !== "all" ? 1 : 0);
 
   const filteredProducts = useMemo(() => {
-    const normalizedSearch = normalizeText(search);
+    const normalizedSearch = normalizeText(deferredSearch);
+    const effectiveSelectedPrice = showPriceFilter ? selectedPrice : "all";
 
     const result = visibleCatalogProducts.filter((product) => {
       const text = normalizeText(`
@@ -1044,15 +1122,18 @@ export default function ProductsPage() {
         (sizeBucket ? selectedSizes.includes(sizeBucket) : false);
 
       const selectedPriceOption = priceOptions.find(
-        (item) => item.key === selectedPrice
+        (item) => item.key === effectiveSelectedPrice
       );
 
       const matchPrice =
-        selectedPrice === "all" ||
-        typeof product.price !== "number" ||
-        !Number.isFinite(product.price) ||
-        ((selectedPriceOption?.min == null || product.price >= selectedPriceOption.min) &&
-          (selectedPriceOption?.max == null || product.price <= selectedPriceOption.max));
+        effectiveSelectedPrice === "all" ||
+        (canShowPriceForVisitor(product) &&
+          typeof product.price === "number" &&
+          Number.isFinite(product.price) &&
+          (selectedPriceOption?.min == null ||
+            product.price >= selectedPriceOption.min) &&
+          (selectedPriceOption?.max == null ||
+            product.price <= selectedPriceOption.max));
 
       return (
         matchSearch &&
@@ -1066,11 +1147,13 @@ export default function ProductsPage() {
     return hasActiveFilters ? result : diversifyProducts(result);
   }, [
     visibleCatalogProducts,
-    search,
+    deferredSearch,
     selectedCategory,
     color,
     selectedSizes,
     selectedPrice,
+    showPriceFilter,
+    canShowPriceForVisitor,
     hasActiveFilters,
   ]);
 
@@ -1082,14 +1165,16 @@ export default function ProductsPage() {
     setSelectedPrice("all");
   }
 
-  function FiltersContent() {
+  function renderFiltersContent() {
     return (
       <>
         <div className="sidebar-search">
           <input
+            type="search"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Rechercher un tapis..."
+            aria-label="Rechercher un tapis"
           />
           <Search size={14} className="sidebar-search-icon" />
         </div>
@@ -1142,23 +1227,27 @@ export default function ProductsPage() {
           </div>
         </div>
 
-        <div className="filter-section">
-          <h4>PRIX</h4>
-          <div className="price-filter-list">
-            {priceOptions.map((option) => (
-              <button
-                key={option.key}
-                type="button"
-                className={`price-filter-chip ${
-                  selectedPrice === option.key ? "price-filter-chip--active" : ""
-                }`}
-                onClick={() => setSelectedPrice(option.key)}
-              >
-                {option.label}
-              </button>
-            ))}
+        {showPriceFilter && (
+          <div className="filter-section">
+            <h4>PRIX</h4>
+            <div className="price-filter-list">
+              {priceOptions.map((option) => (
+                <button
+                  key={option.key}
+                  type="button"
+                  className={`price-filter-chip ${
+                    selectedPrice === option.key
+                      ? "price-filter-chip--active"
+                      : ""
+                  }`}
+                  onClick={() => setSelectedPrice(option.key)}
+                >
+                  {option.label}
+                </button>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
       </>
     );
   }
@@ -1380,7 +1469,7 @@ export default function ProductsPage() {
       <div className="products-layout">
         <aside className="products-sidebar-filters">
           <h3>AFFINER VOTRE RECHERCHE</h3>
-          <FiltersContent />
+          {renderFiltersContent()}
           <button
             type="button"
             className="reset-filters-btn"
@@ -1447,7 +1536,7 @@ export default function ProductsPage() {
             <div className="products-grid">
               {filteredProducts.map((product, index) => {
                 const isAdded = addedProductId === product.id;
-                const hasVisiblePrice = shouldShowProductPrice(product);
+                const hasVisiblePrice = canShowPriceForVisitor(product);
                 const showPriceOnRequest = shouldShowPriceOnRequest(product);
 
                 const productImages = getProductImages(product);
@@ -1680,7 +1769,7 @@ export default function ProductsPage() {
             </header>
 
             <div className="mobile-filter-content">
-              <FiltersContent />
+              {renderFiltersContent()}
             </div>
 
             <footer className="mobile-filter-footer">
@@ -1826,12 +1915,12 @@ export default function ProductsPage() {
 
                 <strong
                   className={
-                    shouldShowProductPrice(detailProduct)
+                    canShowPriceForVisitor(detailProduct)
                       ? "detail-price-main"
                       : "detail-price-main products-detail-price--request"
                   }
                 >
-                  {shouldShowProductPrice(detailProduct) &&
+                  {canShowPriceForVisitor(detailProduct) &&
                   detailProduct.price != null
                     ? formatPrice(detailProduct.price)
                     : shouldShowPriceOnRequest(detailProduct)
@@ -1941,7 +2030,7 @@ export default function ProductsPage() {
                                   : variant.dimensions ||
                                     `${variant.name || ""}`.trim();
                               const priceLabel =
-                                shouldShowProductPrice(variant) &&
+                                canShowPriceForVisitor(variant) &&
                                 variant.price != null
                                   ? formatPrice(variant.price)
                                   : t("products.priceOnRequest");
@@ -2115,7 +2204,7 @@ export default function ProductsPage() {
                         : variant.dimensions || "-";
 
                     const priceLabel =
-                      shouldShowProductPrice(variant) &&
+                      canShowPriceForVisitor(variant) &&
                       variant.price != null
                         ? formatPrice(variant.price)
                         : t("products.priceOnRequest");
@@ -2178,7 +2267,9 @@ export default function ProductsPage() {
 
       {isLightboxOpen &&
         lightboxImageIndex !== null &&
-        detailImages[lightboxImageIndex] && (
+        detailImages[lightboxImageIndex] &&
+        typeof document !== "undefined" &&
+        createPortal(
           <div
             className="products-image-lightbox"
             onClick={closeLightbox}
@@ -2227,7 +2318,8 @@ export default function ProductsPage() {
                 </button>
               )}
             </div>
-          </div>
+          </div>,
+          document.body
         )}
 
       {showPriceRequestModal && selectedProduct && (

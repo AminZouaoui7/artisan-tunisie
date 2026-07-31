@@ -496,11 +496,27 @@
 .products-sidebar-filters {
   position: sticky;
   top: 84px;
+  max-height: calc(100vh - 104px);
+  max-height: calc(100dvh - 104px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(159, 75, 66, 0.45) transparent;
   background: var(--products-surface);
   border: 1px solid var(--products-border);
   border-radius: 22px;
   padding: 18px;
   box-shadow: var(--products-shadow);
+}
+
+.products-sidebar-filters::-webkit-scrollbar {
+  width: 6px;
+}
+
+.products-sidebar-filters::-webkit-scrollbar-thumb {
+  background: rgba(159, 75, 66, 0.45);
+  border-radius: 999px;
 }
 
 .sidebar-mobile-toggle {
@@ -3291,7 +3307,9 @@
 .products-image-lightbox {
   position: fixed !important;
   inset: 0 !important;
-  z-index: 100000 !important;
+  z-index: 2147483646 !important;
+  isolation: isolate !important;
+  pointer-events: auto !important;
   padding: 18px !important;
   display: flex !important;
   align-items: center !important;
