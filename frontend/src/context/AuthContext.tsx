@@ -7,7 +7,6 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { useNavigate } from "react-router-dom";
 
 import {
   authService,
@@ -32,46 +31,8 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 const TOKEN_KEY = "artisan_access_token";
 const REFRESH_TOKEN_KEY = "artisan_refresh_token";
 
-function decodeJwtPayload(token: string): { exp?: number } | null {
-  try {
-    const [, payload] = token.split(".");
-
-    if (!payload) {
-      return null;
-    }
-
-    const normalized = payload.replace(/-/g, "+").replace(/_/g, "/");
-    const padded = normalized.padEnd(
-      normalized.length + ((4 - (normalized.length % 4)) % 4),
-      "="
-    );
-
-    return JSON.parse(window.atob(padded)) as { exp?: number };
-  } catch {
-    return null;
-  }
-}
-
-function isTokenExpired(token: string | null): boolean {
-  if (!token) {
-    return false;
-  }
-
-  const payload = decodeJwtPayload(token);
-
-  if (!payload || typeof payload.exp !== "number") {
-    return false;
-  }
-
-  return payload.exp * 1000 <= Date.now();
-}
-
-function isPublicAuthPage(pathname: string): boolean {
-  return ["/login", "/register", "/verify-email"].includes(pathname);
-}
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const navigate = useNavigate();
   const [user, setUser] = useState<CustomerProfile | null>(null);
 
   const [token, setToken] = useState<string | null>(() =>
@@ -88,18 +49,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(null);
   }, []);
 
-  const handleSessionExpired = useCallback(() => {
-    clearStoredSession();
-    localStorage.removeItem("artisan_user");
-
-    setToken(null);
-    setUser(null);
-    setLoadingAuth(false);
-
-    if (window.location.pathname !== "/session-expired") {
-      navigate("/session-expired", { replace: true });
-    }
-  }, [navigate]);
 
   const saveSession = async (accessToken: string, refreshToken?: string) => {
     localStorage.setItem(TOKEN_KEY, accessToken);
@@ -137,17 +86,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return;
     }
 
-    if (isTokenExpired(savedToken)) {
-      handleSessionExpired();
-      return;
-    }
-
     try {
       const currentUser = await authService.me(savedToken);
 
+      const activeToken = localStorage.getItem(TOKEN_KEY);
+
+      if (!activeToken) {
+        clearSession();
+        return;
+      }
+
       localStorage.setItem("artisan_user", JSON.stringify(currentUser));
       setUser(currentUser);
-      setToken(savedToken);
+      setToken(activeToken);
     } catch {
       clearSession();
     } finally {
@@ -184,56 +135,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   useEffect(() => {
-    const savedToken = localStorage.getItem(TOKEN_KEY);
-
-    if (savedToken && isTokenExpired(savedToken)) {
-      if (isPublicAuthPage(window.location.pathname)) {
-        clearSession();
-        setLoadingAuth(false);
-      } else {
-        handleSessionExpired();
-      }
-      return;
-    }
-
     refreshUser();
-  }, [clearSession, handleSessionExpired]);
-
-  useEffect(() => {
-    const blockExpiredSessionAction = (event: Event) => {
-      const currentToken = localStorage.getItem(TOKEN_KEY);
-
-      if (!currentToken || !isTokenExpired(currentToken)) {
-        return;
-      }
-
-      if (isPublicAuthPage(window.location.pathname)) {
-        clearSession();
-        return;
-      }
-
-      event.preventDefault();
-      event.stopPropagation();
-
-      if ("stopImmediatePropagation" in event) {
-        event.stopImmediatePropagation();
-      }
-
-      handleSessionExpired();
-    };
-
-    const guardedEvents = ["click", "keydown", "submit", "touchstart"];
-
-    guardedEvents.forEach((eventName) => {
-      document.addEventListener(eventName, blockExpiredSessionAction, true);
-    });
-
-    return () => {
-      guardedEvents.forEach((eventName) => {
-        document.removeEventListener(eventName, blockExpiredSessionAction, true);
-      });
-    };
-  }, [clearSession, handleSessionExpired]);
+  }, []);
 
   useEffect(() => {
     const handleAuthCleared = () => {
@@ -242,10 +145,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setLoadingAuth(false);
     };
 
+    const handleAuthRefreshed = (event: Event) => {
+      const customEvent = event as CustomEvent<{ token?: string }>;
+      const nextToken = customEvent.detail?.token;
+
+      if (nextToken) {
+        setToken(nextToken);
+      }
+    };
+
     window.addEventListener("artisan:auth-cleared", handleAuthCleared);
+    window.addEventListener("artisan:auth-refreshed", handleAuthRefreshed);
 
     return () => {
       window.removeEventListener("artisan:auth-cleared", handleAuthCleared);
+      window.removeEventListener("artisan:auth-refreshed", handleAuthRefreshed);
     };
   }, []);
 

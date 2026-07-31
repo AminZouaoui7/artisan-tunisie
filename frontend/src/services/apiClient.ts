@@ -24,6 +24,13 @@ type SessionExpiredDetail = {
   pathname: string;
   requestMethod: string;
 };
+type RefreshSessionResponse = {
+  token?: string;
+  accessToken?: string;
+  refreshToken?: string;
+};
+
+let refreshSessionPromise: Promise<string | null> | null = null;
 
 function redirectToSessionExpired(detail: SessionExpiredDetail) {
   clearSession();
@@ -41,6 +48,65 @@ function normalizeToken(value: string | null): string | null {
   if (!trimmed) return null;
   if (trimmed === "null" || trimmed === "undefined") return null;
   return trimmed;
+}
+async function refreshAccessToken(): Promise<string | null> {
+  if (refreshSessionPromise) {
+    return refreshSessionPromise;
+  }
+
+  refreshSessionPromise = (async () => {
+    const storedRefreshToken = normalizeToken(
+      localStorage.getItem(REFRESH_TOKEN_KEY)
+    );
+
+    if (!storedRefreshToken) {
+      return null;
+    }
+
+    const response = await fetch(buildApiUrl("/auth/refresh-token"), {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ refreshToken: storedRefreshToken }),
+    });
+
+    if (!response.ok) {
+      return null;
+    }
+
+    const data = (await response.json().catch(() => null)) as
+      | RefreshSessionResponse
+      | null;
+    const nextAccessToken = normalizeToken(
+      data?.token ?? data?.accessToken ?? null
+    );
+
+    if (!nextAccessToken) {
+      return null;
+    }
+
+    localStorage.setItem(ACCESS_TOKEN_KEY, nextAccessToken);
+
+    const nextRefreshToken = normalizeToken(data?.refreshToken ?? null);
+    if (nextRefreshToken) {
+      localStorage.setItem(REFRESH_TOKEN_KEY, nextRefreshToken);
+    }
+
+    window.dispatchEvent(
+      new CustomEvent("artisan:auth-refreshed", {
+        detail: { token: nextAccessToken },
+      })
+    );
+
+    return nextAccessToken;
+  })();
+
+  try {
+    return await refreshSessionPromise;
+  } finally {
+    refreshSessionPromise = null;
+  }
 }
 
 function extractBearerToken(value: string | null): string | null {
@@ -233,7 +299,7 @@ function isPublicEndpoint(endpoint: string): boolean {
     normalized === "/auth/verify-email" ||
     normalized === "/auth/google" ||
     normalized === "/auth/google-login" ||
-    normalized === "/auth/refresh" ||
+    normalized === "/auth/refresh-token" ||
     normalized === "/visitor-country" ||
     normalized === "/user-location" ||
     normalized === "/contact" ||
@@ -276,7 +342,7 @@ export async function apiFetch(endpoint: string, options: RequestInit = {}) {
     headers.set("Authorization", `Bearer ${token}`);
   }
 
-  const res = await fetch(buildApiUrl(endpoint), {
+  let res = await fetch(buildApiUrl(endpoint), {
     ...options,
     headers,
   });
@@ -285,19 +351,37 @@ export async function apiFetch(endpoint: string, options: RequestInit = {}) {
     Boolean(bearerTokenFromHeader) || Boolean(shouldAttachToken && token);
 
   if (res.status === 401 && sentAuth) {
-    const detail: SessionExpiredDetail = {
-      endpoint: normalizeApiEndpoint(endpoint),
-      pathname: window.location.pathname,
-      requestMethod,
-    };
+    const normalizedEndpoint = normalizeApiEndpoint(endpoint);
+    const refreshedToken =
+      normalizedEndpoint === "/auth/refresh-token"
+        ? null
+        : await refreshAccessToken();
 
-    if (!isAuthPage()) {
-      redirectToSessionExpired(detail);
-    } else {
-      clearSession();
+    if (refreshedToken) {
+      const retryHeaders = new Headers(headers);
+      retryHeaders.set("Authorization", `Bearer ${refreshedToken}`);
+
+      res = await fetch(buildApiUrl(endpoint), {
+        ...options,
+        headers: retryHeaders,
+      });
     }
 
-    throw new Error("SESSION_EXPIRED");
+    if (res.status === 401) {
+      const detail: SessionExpiredDetail = {
+        endpoint: normalizedEndpoint,
+        pathname: window.location.pathname,
+        requestMethod,
+      };
+
+      if (!isAuthPage()) {
+        redirectToSessionExpired(detail);
+      } else {
+        clearSession();
+      }
+
+      throw new Error("SESSION_EXPIRED");
+    }
   }
 
   return res;
