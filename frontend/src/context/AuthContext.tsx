@@ -66,6 +66,10 @@ function isTokenExpired(token: string | null): boolean {
   return payload.exp * 1000 <= Date.now();
 }
 
+function isPublicAuthPage(pathname: string): boolean {
+  return ["/login", "/register", "/verify-email"].includes(pathname);
+}
+
 export function AuthProvider({ children }: { children: ReactNode }) {
   const navigate = useNavigate();
   const [user, setUser] = useState<CustomerProfile | null>(null);
@@ -183,18 +187,28 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const savedToken = localStorage.getItem(TOKEN_KEY);
 
     if (savedToken && isTokenExpired(savedToken)) {
-      handleSessionExpired();
+      if (isPublicAuthPage(window.location.pathname)) {
+        clearSession();
+        setLoadingAuth(false);
+      } else {
+        handleSessionExpired();
+      }
       return;
     }
 
     refreshUser();
-  }, [handleSessionExpired]);
+  }, [clearSession, handleSessionExpired]);
 
   useEffect(() => {
     const blockExpiredSessionAction = (event: Event) => {
       const currentToken = localStorage.getItem(TOKEN_KEY);
 
       if (!currentToken || !isTokenExpired(currentToken)) {
+        return;
+      }
+
+      if (isPublicAuthPage(window.location.pathname)) {
+        clearSession();
         return;
       }
 
@@ -219,7 +233,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         document.removeEventListener(eventName, blockExpiredSessionAction, true);
       });
     };
-  }, [handleSessionExpired]);
+  }, [clearSession, handleSessionExpired]);
 
   useEffect(() => {
     const handleAuthCleared = () => {

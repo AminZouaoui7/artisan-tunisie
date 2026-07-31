@@ -7,7 +7,6 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import { useGoogleLogin } from "@react-oauth/google";
 
-import ActionSuccess from "../components/ActionSuccess";
 import { authService } from "../services/authService";
 import { useAuth } from "../context/useAuth";
 import { useI18n } from "../i18n/i18n";
@@ -17,7 +16,7 @@ export default function RegisterPage() {
   const { t } = useI18n();
 
   const navigate = useNavigate();
-  const { loginWithGoogle } = useAuth();
+  const { login, loginWithGoogle } = useAuth();
 
   const [form, setForm] = useState({
     firstName: "",
@@ -31,7 +30,6 @@ export default function RegisterPage() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
-  const [registrationSuccess, setRegistrationSuccess] = useState(false);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setForm((prev) => ({
@@ -111,7 +109,6 @@ export default function RegisterPage() {
 
     try {
       setLoading(true);
-      setRegistrationSuccess(false);
 
       const email = form.email.trim().toLowerCase();
 
@@ -123,26 +120,12 @@ export default function RegisterPage() {
         password: form.password,
       });
 
-      const loginResult = await authService.login({
+      await login({
         email,
         password: form.password,
       });
 
-      localStorage.setItem("artisan_access_token", loginResult.token);
-
-      if (loginResult.refreshToken) {
-        localStorage.setItem("artisan_refresh_token", loginResult.refreshToken);
-      }
-
-      if (loginResult.customer) {
-        localStorage.setItem(
-          "artisan_user",
-          JSON.stringify(loginResult.customer)
-        );
-      }
-
-      window.dispatchEvent(new CustomEvent("artisan:auth-changed"));
-      setRegistrationSuccess(true);
+      navigate("/", { replace: true });
     } catch (err) {
       setError(
         err instanceof Error
@@ -179,16 +162,7 @@ export default function RegisterPage() {
         <div className="register-strip" />
 
         <div className="register-card-inner">
-          {registrationSuccess ? (
-            <ActionSuccess
-              title={t("auth.register.successTitle")}
-              message={t("auth.register.successMessage")}
-              primaryActionLabel={t("auth.register.successPrimaryAction")}
-              primaryActionTo="/account"
-              variant="auth"
-            />
-          ) : (
-            <>
+          <>
               <div className="register-card-kicker">
                 <span>{t("auth.common.kicker")}</span>
               </div>
@@ -329,8 +303,7 @@ export default function RegisterPage() {
               <p className="register-footer">
                 {t("auth.register.alreadyAccount")} <Link to="/login">{t("auth.login.submit")}</Link>
               </p>
-            </>
-          )}
+          </>
         </div>
       </div>
     </section>
