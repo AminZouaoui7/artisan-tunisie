@@ -34,9 +34,6 @@ function redirectToSessionExpired(detail: SessionExpiredDetail) {
     })
   );
 
-  if (window.location.pathname !== "/session-expired") {
-    window.location.replace("/session-expired");
-  }
 }
 
 function normalizeToken(value: string | null): string | null {

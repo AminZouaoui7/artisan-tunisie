@@ -60,7 +60,7 @@ function isTokenExpired(token: string | null): boolean {
   const payload = decodeJwtPayload(token);
 
   if (!payload || typeof payload.exp !== "number") {
-    return true;
+    return false;
   }
 
   return payload.exp * 1000 <= Date.now();
