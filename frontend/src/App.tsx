@@ -1,35 +1,35 @@
-import { useEffect, useState } from "react";
-import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
+import { lazy, Suspense, useEffect, useState } from "react";
+import { Navigate, Routes, Route, useLocation, useNavigate } from "react-router-dom";
 
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 
-import HomePage from "./pages/HomePage";
-import ProductsPage from "./pages/ProductsPage";
-import ProductDetailPage from "./pages/ProductDetailPage";
-import OurStoryPage from "./pages/OurStoryPage";
-import BoutiquePage from "./pages/BoutiquePage";
-import ReservationPage from "./pages/ReservationPage";
-import ContactPage from "./pages/ContactPage";
-import LoginPage from "./pages/LoginPage";
-import RegisterPage from "./pages/RegisterPage";
-import VerifyEmailPage from "./pages/VerifyEmailPage";
-import SessionExpiredPage from "./pages/SessionExpiredPage";
-import ArtisanatTunisiePage from "./pages/ArtisanatTunisiePage";
-import TapisTunisiensPage from "./pages/TapisTunisiensPage";
-import TapisArtisanalTunisiePage from "./pages/TapisArtisanalTunisiePage";
-import TapisBerbereTunisiePage from "./pages/TapisBerbereTunisiePage";
-import TapisLaineTunisiePage from "./pages/TapisLaineTunisiePage";
-import TunisianRugsPage from "./pages/TunisianRugsPage";
-import BlogPage from "./pages/BlogPage";
-
-import CartPage from "./pages/CartPage";
-import CheckoutPage from "./pages/CheckoutPage";
-
-import AccountPage from "./pages/AccountPage";
-import AccountDashboardPage from "./pages/AccountDashboardPage";
-import AccountReservationsPage from "./pages/AccountReservationsPage";
-import AccountOrdersPage from "./pages/AccountOrdersPage";
+const HomePage = lazy(() => import("./pages/HomePage"));
+const ProductsPage = lazy(() => import("./pages/ProductsPage"));
+const ProductDetailPage = lazy(() => import("./pages/ProductDetailPage"));
+const OurStoryPage = lazy(() => import("./pages/OurStoryPage"));
+const BoutiquePage = lazy(() => import("./pages/BoutiquePage"));
+const ReservationPage = lazy(() => import("./pages/ReservationPage"));
+const ContactPage = lazy(() => import("./pages/ContactPage"));
+const LoginPage = lazy(() => import("./pages/LoginPage"));
+const RegisterPage = lazy(() => import("./pages/RegisterPage"));
+const VerifyEmailPage = lazy(() => import("./pages/VerifyEmailPage"));
+const SessionExpiredPage = lazy(() => import("./pages/SessionExpiredPage"));
+const ArtisanatTunisiePage = lazy(() => import("./pages/ArtisanatTunisiePage"));
+const TapisTunisiensPage = lazy(() => import("./pages/TapisTunisiensPage"));
+const TapisArtisanalTunisiePage = lazy(() => import("./pages/TapisArtisanalTunisiePage"));
+const TapisBerbereTunisiePage = lazy(() => import("./pages/TapisBerbereTunisiePage"));
+const TapisLaineTunisiePage = lazy(() => import("./pages/TapisLaineTunisiePage"));
+const TunisianRugsPage = lazy(() => import("./pages/TunisianRugsPage"));
+const RugIntentPage = lazy(() => import("./pages/RugIntentPage"));
+const BlogPage = lazy(() => import("./pages/BlogPage"));
+const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
+const CartPage = lazy(() => import("./pages/CartPage"));
+const CheckoutPage = lazy(() => import("./pages/CheckoutPage"));
+const AccountPage = lazy(() => import("./pages/AccountPage"));
+const AccountDashboardPage = lazy(() => import("./pages/AccountDashboardPage"));
+const AccountReservationsPage = lazy(() => import("./pages/AccountReservationsPage"));
+const AccountOrdersPage = lazy(() => import("./pages/AccountOrdersPage"));
 
 import ProtectedRoute from "./components/ProtectedRoute";
 import SiteLoader from "./components/SiteLoader";
@@ -105,7 +105,6 @@ function AppContent() {
 
   useEffect(() => {
     let isMounted = true;
-    let hideLoaderTimer: number | undefined;
 
     async function initializeApp() {
       try {
@@ -114,11 +113,9 @@ function AppContent() {
       } catch (error) {
         console.error("Erreur chargement localisation :", error);
       } finally {
-        hideLoaderTimer = window.setTimeout(() => {
-          if (isMounted) {
-            setIsLoading(false);
-          }
-        }, 1200);
+        if (isMounted) {
+          setIsLoading(false);
+        }
       }
     }
 
@@ -126,9 +123,6 @@ function AppContent() {
 
     return () => {
       isMounted = false;
-      if (hideLoaderTimer) {
-        window.clearTimeout(hideLoaderTimer);
-      }
     };
   }, []);
 
@@ -160,8 +154,9 @@ function AppContent() {
           <AnalyticsPageView />
           <Navbar />
 
-          <main className="site-content">
-            <Routes>
+          <div className="site-content">
+            <Suspense fallback={<div className="site-page-loading" role="status">Chargement…</div>}>
+              <Routes>
               <Route path="/" element={<HomePage />} />
 
               <Route path="/products" element={<ProductsPage />} />
@@ -192,7 +187,18 @@ function AppContent() {
                 path="/tapis-laine-tunisie"
                 element={<TapisLaineTunisiePage />}
               />
-              <Route path="/tunisian-rugs" element={<TunisianRugsPage />} />
+              <Route path="/tunisian-rugs" element={<Navigate to="/en/tunisian-rugs" replace />} />
+              <Route path="/en/tunisian-rugs" element={<TunisianRugsPage />} />
+              <Route path="/margoum" element={<RugIntentPage pathname="/margoum" />} />
+              <Route path="/kilim" element={<RugIntentPage pathname="/kilim" />} />
+              <Route path="/tapis-noue" element={<RugIntentPage pathname="/tapis-noue" />} />
+              <Route path="/en/handmade-rugs" element={<RugIntentPage pathname="/en/handmade-rugs" />} />
+              <Route path="/en/berber-rugs" element={<RugIntentPage pathname="/en/berber-rugs" />} />
+              <Route path="/en/kilim-rugs" element={<RugIntentPage pathname="/en/kilim-rugs" />} />
+              <Route path="/en/margoum-rugs" element={<RugIntentPage pathname="/en/margoum-rugs" />} />
+              <Route path="/tapis-tunisien" element={<Navigate to="/tapis-tunisiens" replace />} />
+              <Route path="/tapis-berbere" element={<Navigate to="/tapis-berbere-tunisie" replace />} />
+              <Route path="/tapis-laine" element={<Navigate to="/tapis-laine-tunisie" replace />} />
               <Route path="/blog" element={<BlogPage />} />
 
               <Route path="/login" element={<LoginPage />} />
@@ -250,8 +256,11 @@ function AppContent() {
 
                 <Route path="settings" element={<AccountDashboardPage />} />
               </Route>
-            </Routes>
-          </main>
+
+              <Route path="*" element={<NotFoundPage />} />
+              </Routes>
+            </Suspense>
+          </div>
 
           {!hideFooter && <Footer />}
         </div>

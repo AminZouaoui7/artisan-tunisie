@@ -97,9 +97,10 @@ export default function BoutiquePage() {
         description="Visitez notre boutique d’artisanat tunisien dans la Médina de Tunis : tapis faits main, céramique, bijoux, mosaïque et bois d’olivier."
         canonical="/boutique"
         image={heroImage}
+        imageAlt="Boutique d’artisanat tunisien dans la Médina de Tunis"
       />
       <section className="boutique-hero">
-        <img src={heroImage} alt="Boutique artisanale tunisienne" />
+        <img src={heroImage} alt="Boutique artisanale tunisienne dans la Médina de Tunis" width="1536" height="1024" loading="eager" fetchPriority="high" decoding="async" />
         <div className="boutique-hero__overlay" />
 
         <div className="boutique-hero__content">
@@ -142,7 +143,7 @@ export default function BoutiquePage() {
           >
             <div className="boutique-feature-showcase boutique-feature-showcase--slider">
               <div className="boutique-slider-card">
-                <img src={activeImage} alt={section.title} />
+                <img src={activeImage} alt={`${section.title}, artisanat tunisien fait main`} width="1536" height="1024" loading="lazy" decoding="async" />
 
                 {section.gallery.length > 1 && (
                   <>

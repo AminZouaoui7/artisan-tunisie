@@ -4,26 +4,16 @@ import tunisianImage from "../assets/7b8bc78c-67d9-4be5-9309-c8ac60f44393.optimi
 import "../styles/SeoPages.css";
 
 export default function TunisianRugsPage() {
-  const canonical = "/tunisian-rugs";
+  const canonical = "/en/tunisian-rugs";
   const title =
-    "Tunisian rugs | Handmade rugs from Tunisia – L’Artisan de la Médina";
+    "Handmade Tunisian Rugs | Berber, Kilim & Margoum Rugs";
   const description =
-    "Tunisian rugs guide: Medina of Tunis, berber-inspired motifs, kilim & margoum weaving, wool quality, sizing, care tips, and how to explore our rug collection.";
+    "Shop authentic handmade Tunisian rugs, including Berber Kilims, Margoum rugs and hand-knotted wool carpets. Unique artisan pieces with international delivery.";
 
-  const canonicalUrl =
-    typeof window === "undefined"
-      ? canonical
-      : new URL(canonical, window.location.origin).toString();
-
-  const homeUrl =
-    typeof window === "undefined"
-      ? "/"
-      : new URL("/", window.location.origin).toString();
-
-  const productsUrl =
-    typeof window === "undefined"
-      ? "/products"
-      : new URL("/products", window.location.origin).toString();
+  const siteUrl = "https://www.artisansdelamedina.com";
+  const canonicalUrl = `${siteUrl}${canonical}`;
+  const homeUrl = `${siteUrl}/`;
+  const productsUrl = `${siteUrl}/products`;
 
   const org = {
     "@context": "https://schema.org",
@@ -102,7 +92,19 @@ export default function TunisianRugsPage() {
 
   return (
     <div className="seo-page">
-      <SeoHead title={title} description={description} canonical={canonical} />
+      <SeoHead
+        title={title}
+        description={description}
+        canonical={canonical}
+        image={tunisianImage}
+        imageAlt="Authentic handmade Tunisian rug in wool"
+        lang="en"
+        alternates={[
+          { hrefLang: "en", href: canonical },
+          { hrefLang: "fr-TN", href: "/tapis-tunisiens" },
+          { hrefLang: "x-default", href: "/tapis-tunisiens" },
+        ]}
+      />
 
       <script
         type="application/ld+json"
@@ -114,7 +116,7 @@ export default function TunisianRugsPage() {
       <div className="seo-page-inner">
         <header className="seo-hero">
           <p className="seo-kicker">Rug guide</p>
-          <h1 className="seo-title">Tunisian rugs</h1>
+          <h1 className="seo-title">Authentic Handmade Tunisian Rugs</h1>
           <p className="seo-lead">
             Tunisian rugs bring warmth, craft, and character to an interior.
             From the Medina of Tunis to contemporary homes, they combine natural
@@ -127,7 +129,10 @@ export default function TunisianRugsPage() {
           <img
             src={tunisianImage}
             alt="Tunisian rugs: handmade wool rugs from the Medina of Tunis – L’Artisan de la Médina"
-            loading="lazy"
+            width="1536"
+            height="1024"
+            loading="eager"
+            fetchPriority="high"
             style={{
               width: "100%",
               height: "auto",

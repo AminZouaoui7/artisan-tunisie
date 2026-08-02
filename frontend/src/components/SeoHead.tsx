@@ -5,8 +5,14 @@ type SeoHeadProps = {
   description: string;
   canonical: string;
   image?: string | null;
+  imageAlt?: string;
   type?: "website" | "product" | "article";
   noIndex?: boolean;
+  lang?: "fr" | "en";
+  alternates?: Array<{
+    hrefLang: "fr-TN" | "en" | "x-default";
+    href: string;
+  }>;
 };
 
 function toAbsoluteUrl(url: string) {
@@ -31,10 +37,15 @@ export default function SeoHead({
   description,
   canonical,
   image,
+  imageAlt,
   type = "website",
   noIndex = false,
+  lang = "fr",
+  alternates = [],
 }: SeoHeadProps) {
   useEffect(() => {
+    document.documentElement.lang = lang;
+
     if (title) {
       document.title = title;
     }
@@ -66,6 +77,12 @@ export default function SeoHead({
     setMeta('meta[property="og:type"]', "property", "og:type", type);
     setMeta('meta[property="og:url"]', "property", "og:url", canonicalHref);
     setMeta('meta[property="og:site_name"]', "property", "og:site_name", "L’Artisan de la Médina");
+    setMeta(
+      'meta[property="og:locale"]',
+      "property",
+      "og:locale",
+      lang === "en" ? "en_US" : "fr_TN"
+    );
     setMeta('meta[name="twitter:card"]', "name", "twitter:card", "summary_large_image");
     setMeta('meta[name="twitter:title"]', "name", "twitter:title", title);
     setMeta(
@@ -79,11 +96,29 @@ export default function SeoHead({
       const imageUrl = toAbsoluteUrl(image);
       setMeta('meta[property="og:image"]', "property", "og:image", imageUrl);
       setMeta('meta[name="twitter:image"]', "name", "twitter:image", imageUrl);
+      if (imageAlt) {
+        setMeta('meta[property="og:image:alt"]', "property", "og:image:alt", imageAlt);
+        setMeta('meta[name="twitter:image:alt"]', "name", "twitter:image:alt", imageAlt);
+      } else {
+        document.querySelector('meta[property="og:image:alt"]')?.remove();
+        document.querySelector('meta[name="twitter:image:alt"]')?.remove();
+      }
     } else {
       document.querySelector('meta[property="og:image"]')?.remove();
       document.querySelector('meta[name="twitter:image"]')?.remove();
+      document.querySelector('meta[property="og:image:alt"]')?.remove();
+      document.querySelector('meta[name="twitter:image:alt"]')?.remove();
     }
-  }, [canonical, description, image, noIndex, title, type]);
+
+    document.querySelectorAll('link[rel="alternate"][hreflang]').forEach((link) => link.remove());
+    alternates.forEach(({ hrefLang, href }) => {
+      const alternate = document.createElement("link");
+      alternate.rel = "alternate";
+      alternate.hreflang = hrefLang;
+      alternate.href = toAbsoluteUrl(href);
+      document.head.appendChild(alternate);
+    });
+  }, [alternates, canonical, description, image, imageAlt, lang, noIndex, title, type]);
 
   return null;
 }

@@ -129,6 +129,16 @@ export default function ProductsPage() {
     },
   ];
 
+  const categoryGuideRoutes: Record<string, string> = {
+    all: "/tapis-artisanal-tunisie",
+    tapis: "/tapis-noue",
+    "margoum tisser berber": "/margoum",
+    "margoum berber": "/margoum",
+    "kilim berber": "/kilim",
+    "kilim toujen": "/kilim",
+    "kilim extra fin": "/kilim",
+  };
+
   const priceOptions = [
     { key: "all", label: "Tous les prix", min: null as number | null, max: null as number | null },
     { key: "under500", label: "Moins de 500 €", min: 0, max: 500 },
@@ -1388,6 +1398,19 @@ export default function ProductsPage() {
       ]
     : [];
 
+  const productsItemListSchema = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: "Tapis artisanaux tunisiens disponibles",
+    numberOfItems: filteredProducts.length,
+    itemListElement: filteredProducts.map((product, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: product.name,
+      url: `https://www.artisansdelamedina.com/products/${product.slug}`,
+    })),
+  };
+
   return (
     <section className="products-page">
       <SeoHead
@@ -1395,7 +1418,9 @@ export default function ProductsPage() {
         description="Explorez notre collection de tapis artisanaux tunisiens : Margoum, Kilim, tapis berbères et tapis en laine faits main."
         canonical="/products"
         image={photoHero}
+        imageAlt="Collection de tapis artisanaux tunisiens faits main"
       />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(productsItemListSchema) }} />
       <section className="products-hero-premium">
         <div className="hero-slider" aria-hidden="true">
           {([photoHero, photoHero1, photoHero2] as const).map((src, i) => (
@@ -1404,6 +1429,8 @@ export default function ProductsPage() {
               src={src}
               alt=""
               className={`hero-slide${heroSlideIndex === i ? " hero-slide--active" : ""}`}
+              width="1600"
+              height="900"
               loading={i === 0 ? "eager" : "lazy"}
               fetchPriority={i === 0 ? "high" : "low"}
               decoding="async"
@@ -1444,21 +1471,23 @@ export default function ProductsPage() {
               {categoryFilters.map((category) => {
                 const isActive = selectedCategory === category.key;
                 return (
-                  <button
-                    key={category.key}
-                    type="button"
-                    className={`products-category-card${isActive ? " products-category-card--active" : ""}`}
-                    onClick={() => handleCategoryClick(category.key)}
-                    aria-pressed={isActive}
-                  >
-                    <span className="products-category-icon">
-                      {getCategoryIcon(category.key)}
-                    </span>
-                    <span className="products-category-content">
-                      <strong>{category.label}</strong>
-                      <small>{category.subtitle}</small>
-                    </span>
-                  </button>
+                  <div className="products-category-entry" key={category.key}>
+                    <button
+                      type="button"
+                      className={`products-category-card${isActive ? " products-category-card--active" : ""}`}
+                      onClick={() => handleCategoryClick(category.key)}
+                      aria-pressed={isActive}
+                    >
+                      <span className="products-category-icon">{getCategoryIcon(category.key)}</span>
+                      <span className="products-category-content">
+                        <strong>{category.label}</strong>
+                        <small>{category.subtitle}</small>
+                      </span>
+                    </button>
+                    <Link className="products-category-guide" to={categoryGuideRoutes[category.key]}>
+                      Guide de la catégorie
+                    </Link>
+                  </div>
                 );
               })}
             </div>
@@ -1586,6 +1615,8 @@ export default function ProductsPage() {
                               src={optimizedCoverImage}
                               alt={product.name}
                               className="pc-img pc-img--primary"
+                              width="700"
+                              height="900"
                               loading={index < 6 ? "eager" : "lazy"}
                               fetchPriority={index < 3 ? "high" : "auto"}
                               decoding="async"
@@ -1604,6 +1635,8 @@ export default function ProductsPage() {
                                 alt=""
                                 aria-hidden="true"
                                 className="pc-img pc-img--hover"
+                                width="700"
+                                height="900"
                                 loading="lazy"
                                 decoding="async"
                                 onLoad={() => {

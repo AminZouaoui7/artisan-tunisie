@@ -16,7 +16,14 @@ const STATIC_ROUTES = [
   { path: "/tapis-artisanal-tunisie", lastModified: "2026-07-29" },
   { path: "/tapis-berbere-tunisie", lastModified: "2026-07-29" },
   { path: "/tapis-laine-tunisie", lastModified: "2026-07-29" },
-  { path: "/tunisian-rugs", lastModified: "2026-07-29" },
+  { path: "/margoum", lastModified: "2026-08-02" },
+  { path: "/kilim", lastModified: "2026-08-02" },
+  { path: "/tapis-noue", lastModified: "2026-08-02" },
+  { path: "/en/tunisian-rugs", lastModified: "2026-08-02" },
+  { path: "/en/handmade-rugs", lastModified: "2026-08-02" },
+  { path: "/en/berber-rugs", lastModified: "2026-08-02" },
+  { path: "/en/kilim-rugs", lastModified: "2026-08-02" },
+  { path: "/en/margoum-rugs", lastModified: "2026-08-02" },
   { path: "/blog" },
 ];
 
@@ -61,12 +68,12 @@ export default async function handler(
   }
 
   const productUrls = products
-    .filter(
-      (product) =>
-        product.slug &&
-        product.isAvailable !== false &&
-        product.status?.toLowerCase() !== "hidden"
-    )
+    .filter((product) => {
+      const slug = product.slug?.trim() || "";
+      const status = product.status?.toLowerCase() || "";
+      const hasSafeSlug = Boolean(slug) && !/[\\/<>:"|?*]/.test(slug);
+      return hasSafeSlug && product.isAvailable !== false && status !== "hidden" && status !== "sold";
+    })
     .map((product) =>
       urlEntry(
         `/products/${encodeURIComponent(product.slug || "")}`,

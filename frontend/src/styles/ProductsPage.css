@@ -4217,3 +4217,20 @@
     display: none !important;
   }
 }
+.products-category-entry {
+  display: grid;
+  gap: 7px;
+  min-width: 0;
+}
+
+.products-category-entry .products-category-card {
+  width: 100%;
+}
+
+.products-category-guide {
+  color: #7b351b;
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-align: center;
+  text-underline-offset: 3px;
+}

@@ -10,20 +10,10 @@ export default function TapisArtisanalTunisiePage() {
   const description =
     "Tapis artisanal Tunisie : guide complet (Margoum, Kilim, tapis noués), matières, motifs, tailles, entretien et conseils pour acheter un tapis fait main.";
 
-  const canonicalUrl =
-    typeof window === "undefined"
-      ? canonical
-      : new URL(canonical, window.location.origin).toString();
-
-  const homeUrl =
-    typeof window === "undefined"
-      ? "/"
-      : new URL("/", window.location.origin).toString();
-
-  const productsUrl =
-    typeof window === "undefined"
-      ? "/products"
-      : new URL("/products", window.location.origin).toString();
+  const siteUrl = "https://www.artisansdelamedina.com";
+  const canonicalUrl = `${siteUrl}${canonical}`;
+  const homeUrl = `${siteUrl}/`;
+  const productsUrl = `${siteUrl}/products`;
 
   const org = {
     "@context": "https://schema.org",
@@ -117,7 +107,11 @@ export default function TapisArtisanalTunisiePage() {
 
   return (
     <div className="seo-page">
-      <SeoHead title={title} description={description} canonical={canonical} />
+      <SeoHead title={title} description={description} canonical={canonical} image={heroImage} imageAlt="Tapis artisanal tunisien fait main" alternates={[
+        { hrefLang: "fr-TN", href: canonical },
+        { hrefLang: "en", href: "/en/handmade-rugs" },
+        { hrefLang: "x-default", href: canonical },
+      ]} />
 
       <script
         type="application/ld+json"
@@ -141,7 +135,10 @@ export default function TapisArtisanalTunisiePage() {
           <img
             src={heroImage}
             alt="Tapis artisanal en Tunisie : Margoum, Kilim et tapis noués – L’Artisan de la Médina"
-            loading="lazy"
+            width="343"
+            height="361"
+            loading="eager"
+            fetchPriority="high"
             style={{
               width: "100%",
               height: "auto",

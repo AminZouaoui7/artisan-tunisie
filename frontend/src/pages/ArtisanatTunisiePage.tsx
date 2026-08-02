@@ -174,6 +174,8 @@ export default function ArtisanatTunisiePage() {
             src={heroImage}
             alt="Artisanat de la Tunisie avec tapis tunisien fait main dans la Médina de Tunis"
             loading="eager"
+            width="343"
+            height="361"
             fetchPriority="high"
             decoding="async"
           />

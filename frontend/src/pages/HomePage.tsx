@@ -906,13 +906,44 @@ if (isMounted) setProducts(homeProducts);
       ]
     : [];
 
+  const homeFaq = language === "EN"
+    ? [
+        { question: "Which Tunisian rug should I choose?", answer: "Choose a Kilim for a light flatweave, a Margoum for embroidered relief, or a hand-knotted wool rug for a denser and softer surface." },
+        { question: "Are the rugs handmade in Tunisia?", answer: "The catalog highlights handmade pieces and displays the technique, material and Tunisian region whenever those details are available." },
+        { question: "Do you ship internationally?", answer: "International delivery is available for eligible pieces. The shop confirms timing, cost and conditions for the rug and destination." },
+      ]
+    : [
+        { question: "Quel tapis tunisien choisir ?", answer: "Choisissez un Kilim pour un tissage plat et léger, un Margoum pour ses motifs brodés, ou un tapis noué en laine pour une surface plus dense et moelleuse." },
+        { question: "Les tapis sont-ils faits main en Tunisie ?", answer: "Le catalogue met en avant les pièces artisanales et indique la technique, la matière et la région tunisienne lorsque ces informations sont disponibles." },
+        { question: "Proposez-vous la livraison internationale ?", answer: "La livraison internationale est possible pour les pièces éligibles. La boutique confirme le délai, le coût et les conditions selon le tapis et la destination." },
+      ];
+
+  const homeFaqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: homeFaq.map((item) => ({
+      "@type": "Question",
+      name: item.question,
+      acceptedAnswer: { "@type": "Answer", text: item.answer },
+    })),
+  };
+
   return (
     <div className="home">
       <SeoHead
-        title="Tapis artisanaux tunisiens à Tunis | L’Artisan de la Médina"
-        description="Découvrez des tapis tunisiens faits main, Margoum, Kilim et tapis berbères. Visitez L’Artisan de la Médina au cœur de Tunis."
+        title="Tapis Artisanaux Tunisiens Faits Main | Artisan de la Médina"
+        description="Découvrez des tapis artisanaux tunisiens faits main : Margoum, Kilim berbère, Kilim Toujane et tapis noués en laine. Pièces uniques et livraison internationale."
         canonical="/"
         image={heroRug}
+        imageAlt="Tapis artisanal tunisien fait main en laine"
+        alternates={[
+          { hrefLang: "fr-TN", href: "/" },
+          { hrefLang: "x-default", href: "/" },
+        ]}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(homeFaqSchema) }}
       />
  <section className="home-boutique-hero">
   <div className="home-boutique-hero-bg">
@@ -921,6 +952,8 @@ if (isMounted) setProducts(homeProducts);
         key={index}
         src={img}
         alt={t("home.heroImageAlt")}
+        width="1600"
+        height="1200"
         loading={index === 0 ? "eager" : "lazy"}
         fetchPriority={index === 0 ? "high" : "low"}
         decoding="async"
@@ -955,7 +988,7 @@ if (isMounted) setProducts(homeProducts);
   >
     <p className="home-boutique-hero-kicker">{t("home.boutiqueKicker")}</p>
 
-    <h1>{t("home.boutiqueTitle")}</h1>
+    <h1>{language === "EN" ? "Handmade Tunisian rugs" : "Tapis artisanaux tunisiens faits main"}</h1>
 
     <p>{t("home.boutiqueDescription")}</p>
   </motion.div>
@@ -1010,6 +1043,8 @@ if (isMounted) setProducts(homeProducts);
                 src={storyImage}
                 alt={t("home.storyImageAlt")}
                 className="home-story-image"
+                width="1536"
+                height="1024"
                 loading="lazy"
                 decoding="async"
               />
@@ -1221,6 +1256,8 @@ if (isMounted) setProducts(homeProducts);
                             src={coverImage}
                             alt={product.name}
                             className="pc-img pc-img--primary"
+                            width="700"
+                            height="900"
                             loading="lazy"
                           />
                           {hoverImage && hoverImage !== coverImage && (
@@ -1229,6 +1266,8 @@ if (isMounted) setProducts(homeProducts);
                               alt=""
                               aria-hidden="true"
                               className="pc-img pc-img--hover"
+                              width="700"
+                              height="900"
                               loading="lazy"
                             />
                           )}
@@ -1400,11 +1439,11 @@ if (isMounted) setProducts(homeProducts);
               <span className="home-kicker-line" />
             </p>
 
-            <h1 className="home-hero-title">
+            <h2 className="home-hero-title">
               {t("home.heroTitleLine1")}
               <br />
               <em>{t("home.heroTitleEmphasis")}</em>
-            </h1>
+            </h2>
 
             <p className="home-hero-desc">{t("home.heroDescription")}</p>
 
@@ -1435,7 +1474,9 @@ if (isMounted) setProducts(homeProducts);
                 src={heroRug}
                 alt=""
                 className="home-rug-3d-img"
-                loading="lazy"
+                width="1024"
+                height="1536"
+                loading="eager"
                 decoding="async"
               />
               <div className="home-rug-shadow" />
@@ -1445,6 +1486,54 @@ if (isMounted) setProducts(homeProducts);
       </section>
 
 
+
+      <div className="section-divider" />
+
+      <section className="home-seo-content" aria-labelledby="home-seo-title">
+        <div className="home-seo-content__inner">
+          <p className="page-kicker">
+            {language === "EN" ? "Tunisian rug guide" : "Guide du tapis tunisien"}
+          </p>
+          <h2 id="home-seo-title" className="home-section-title">
+            {language === "EN"
+              ? "Margoum, Berber Kilim and hand-knotted rugs"
+              : "Margoum, Kilim berbère et tapis noués"}
+          </h2>
+          <p className="home-seo-intro">
+            {language === "EN"
+              ? "Tunisian weaving brings together natural wool, regional patterns and techniques passed between generations. Explore each family to understand its texture, use and origin before choosing a piece."
+              : "Le tissage tunisien réunit la laine naturelle, des motifs régionaux et des gestes transmis entre générations. Explorez chaque famille pour comprendre sa texture, son usage et son origine avant de choisir une pièce."}
+          </p>
+
+          <div className="home-seo-cards">
+            <Link to="/margoum"><strong>Margoum</strong><span>{language === "EN" ? "Woven and embroidered relief" : "Tissé et brodé en relief"}</span></Link>
+            <Link to="/kilim"><strong>Kilim</strong><span>{language === "EN" ? "Berber and Toujane flatweaves" : "Tissage plat berbère et de Toujane"}</span></Link>
+            <Link to="/tapis-noue"><strong>{language === "EN" ? "Knotted rugs" : "Tapis noués"}</strong><span>{language === "EN" ? "Dense handmade wool pile" : "Velours dense noué à la main"}</span></Link>
+            <Link to="/tapis-berbere-tunisie"><strong>{language === "EN" ? "Berber rugs" : "Tapis berbères"}</strong><span>{language === "EN" ? "Geometry and textile heritage" : "Géométrie et héritage textile"}</span></Link>
+          </div>
+
+          <div className="home-seo-columns">
+            <div>
+              <h2>{language === "EN" ? "Natural materials and Tunisian regions" : "Matières naturelles et régions artisanales"}</h2>
+              <p>{language === "EN" ? "Wool is valued for comfort, resilience and rich color. Toujane and other Tunisian weaving regions express distinct patterns and balances, while every handmade piece retains subtle variations." : "La laine est appréciée pour son confort, sa résistance et la profondeur de ses couleurs. Toujane et les autres régions de tissage tunisiennes développent des motifs distinctifs, tandis que chaque pièce conserve de légères variations faites main."}</p>
+            </div>
+            <div>
+              <h2>{language === "EN" ? "Care and international delivery" : "Entretien et livraison internationale"}</h2>
+              <p>{language === "EN" ? "Vacuum gently, rotate the rug and blot spills without rubbing. Delivery terms are confirmed according to the size, destination and information displayed for the selected piece." : "Aspirez doucement, tournez régulièrement le tapis et tamponnez les taches sans frotter. Les conditions de livraison sont confirmées selon le format, la destination et les informations affichées pour la pièce choisie."}</p>
+            </div>
+          </div>
+
+          <div className="home-seo-faq">
+            <h2>{language === "EN" ? "Frequently asked questions" : "Questions fréquentes"}</h2>
+            {homeFaq.map((item) => (
+              <details key={item.question}>
+                <summary>{item.question}</summary>
+                <p>{item.answer}</p>
+              </details>
+            ))}
+          </div>
+        </div>
+      </section>
 
       <div className="section-divider" />
 

@@ -7,6 +7,8 @@ import TapisBerbereTunisiePage from "./pages/TapisBerbereTunisiePage";
 import TapisLaineTunisiePage from "./pages/TapisLaineTunisiePage";
 import TapisTunisiensPage from "./pages/TapisTunisiensPage";
 import TunisianRugsPage from "./pages/TunisianRugsPage";
+import RugIntentPage from "./pages/RugIntentPage";
+import { rugIntentDefinitions } from "./seo/rugIntentDefinitions";
 
 type SeoRouteDefinition = {
   component: ComponentType;
@@ -14,6 +16,8 @@ type SeoRouteDefinition = {
   description: string;
   lang: "fr" | "en";
   image: string;
+  alternatePath?: string;
+  productKeywords?: string[];
 };
 
 const SITE_URL = "https://www.artisansdelamedina.com";
@@ -34,6 +38,8 @@ const routeDefinitions: Record<string, SeoRouteDefinition> = {
       "Tapis tunisiens : histoire, Margoum, Kilim, tapis noués, matières, motifs et conseils pour choisir un tapis artisanal tunisien authentique.",
     lang: "fr",
     image: `${SITE_URL}/logo-email.png`,
+    alternatePath: "/en/tunisian-rugs",
+    productKeywords: ["tapis", "margoum", "kilim", "killim", "noue"],
   },
   "/tapis-artisanal-tunisie": {
     component: TapisArtisanalTunisiePage,
@@ -43,6 +49,8 @@ const routeDefinitions: Record<string, SeoRouteDefinition> = {
       "Tapis artisanal Tunisie : guide complet (Margoum, Kilim, tapis noués), matières, motifs, tailles, entretien et conseils pour acheter un tapis fait main.",
     lang: "fr",
     image: `${SITE_URL}/logo-email.png`,
+    alternatePath: "/en/handmade-rugs",
+    productKeywords: ["tapis", "margoum", "kilim", "killim", "noue"],
   },
   "/tapis-berbere-tunisie": {
     component: TapisBerbereTunisiePage,
@@ -51,6 +59,8 @@ const routeDefinitions: Record<string, SeoRouteDefinition> = {
       "Tapis berbère Tunisie : motifs, laine, couleurs, styles et conseils pour choisir un tapis berbère tunisien fait main pour salon ou chambre.",
     lang: "fr",
     image: `${SITE_URL}/logo-email.png`,
+    alternatePath: "/en/berber-rugs",
+    productKeywords: ["berber", "berbère", "berbere"],
   },
   "/tapis-laine-tunisie": {
     component: TapisLaineTunisiePage,
@@ -59,16 +69,31 @@ const routeDefinitions: Record<string, SeoRouteDefinition> = {
       "Tapis laine Tunisie : avantages de la laine naturelle, qualité, confort, durabilité, entretien et conseils pour choisir un tapis tunisien fait main.",
     lang: "fr",
     image: `${SITE_URL}/logo-email.png`,
+    productKeywords: ["laine"],
   },
-  "/tunisian-rugs": {
+  "/en/tunisian-rugs": {
     component: TunisianRugsPage,
-    title: "Tunisian rugs | Handmade rugs from Tunisia – L’Artisan de la Médina",
+    title: "Handmade Tunisian Rugs | Berber, Kilim & Margoum Rugs",
     description:
-      "Discover authentic Tunisian rugs: Margoum, Kilim and hand-knotted rugs, natural wool, traditional patterns, buying advice and worldwide delivery.",
+      "Shop authentic handmade Tunisian rugs, including Berber Kilims, Margoum rugs and hand-knotted wool carpets. Unique artisan pieces with international delivery.",
     lang: "en",
     image: `${SITE_URL}/logo-email.png`,
+    alternatePath: "/tapis-tunisiens",
+    productKeywords: ["tapis", "margoum", "kilim", "killim", "noue"],
   },
 };
+
+Object.values(rugIntentDefinitions).forEach((definition) => {
+  routeDefinitions[definition.path] = {
+    component: () => <RugIntentPage pathname={definition.path} />,
+    title: definition.title,
+    description: definition.description,
+    lang: definition.lang,
+    image: `${SITE_URL}/og-artisanat-tunisie.png`,
+    alternatePath: definition.alternatePath,
+    productKeywords: definition.productKeywords,
+  };
+});
 
 export const seoRoutes = Object.entries(routeDefinitions).map(
   ([pathname, definition]) => ({
@@ -78,6 +103,8 @@ export const seoRoutes = Object.entries(routeDefinitions).map(
     lang: definition.lang,
     image: definition.image,
     canonical: `${SITE_URL}${pathname}`,
+    alternatePath: definition.alternatePath,
+    productKeywords: definition.productKeywords || [],
   })
 );
 

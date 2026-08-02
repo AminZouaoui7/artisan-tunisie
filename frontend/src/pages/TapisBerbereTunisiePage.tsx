@@ -10,20 +10,10 @@ export default function TapisBerbereTunisiePage() {
   const description =
     "Tapis berbère Tunisie : comprendre les motifs, les styles (Margoum berbère, Kilim berbère), choisir la taille, les couleurs et trouver un tapis fait main.";
 
-  const canonicalUrl =
-    typeof window === "undefined"
-      ? canonical
-      : new URL(canonical, window.location.origin).toString();
-
-  const homeUrl =
-    typeof window === "undefined"
-      ? "/"
-      : new URL("/", window.location.origin).toString();
-
-  const productsUrl =
-    typeof window === "undefined"
-      ? "/products"
-      : new URL("/products", window.location.origin).toString();
+  const siteUrl = "https://www.artisansdelamedina.com";
+  const canonicalUrl = `${siteUrl}${canonical}`;
+  const homeUrl = `${siteUrl}/`;
+  const productsUrl = `${siteUrl}/products`;
 
   const org = {
     "@context": "https://schema.org",
@@ -107,7 +97,11 @@ export default function TapisBerbereTunisiePage() {
 
   return (
     <div className="seo-page">
-      <SeoHead title={title} description={description} canonical={canonical} />
+      <SeoHead title={title} description={description} canonical={canonical} image={berberImage} imageAlt="Tapis berbère tunisien fait main" alternates={[
+        { hrefLang: "fr-TN", href: canonical },
+        { hrefLang: "en", href: "/en/berber-rugs" },
+        { hrefLang: "x-default", href: canonical },
+      ]} />
 
       <script
         type="application/ld+json"
@@ -132,7 +126,10 @@ export default function TapisBerbereTunisiePage() {
           <img
             src={berberImage}
             alt="Tapis berbère en Tunisie : motifs géométriques et tissage traditionnel – L’Artisan de la Médina"
-            loading="lazy"
+            width="2048"
+            height="916"
+            loading="eager"
+            fetchPriority="high"
             style={{
               width: "100%",
               height: "auto",

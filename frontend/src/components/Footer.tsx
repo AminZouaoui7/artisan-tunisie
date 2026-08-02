@@ -48,7 +48,7 @@ function FacebookIcon({ size = 18 }: { size?: number }) {
 }
 
 export default function Footer() {
-  const { t } = useI18n();
+  const { t, language } = useI18n();
   const [email, setEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
 
@@ -225,7 +225,10 @@ export default function Footer() {
               },
               { to: "/tapis-berbere-tunisie", label: t("seo.links.tapisBerbereTunisie") },
               { to: "/tapis-laine-tunisie", label: t("seo.links.tapisLaineTunisie") },
-              { to: "/tunisian-rugs", label: t("seo.links.tunisianRugs") },
+              { to: "/margoum", label: language === "EN" ? "Margoum rugs" : "Margoum tunisien" },
+              { to: "/kilim", label: language === "EN" ? "Kilim rugs" : "Kilim tunisien" },
+              { to: "/tapis-noue", label: language === "EN" ? "Hand-knotted rugs" : "Tapis noués" },
+              { to: "/en/tunisian-rugs", label: t("seo.links.tunisianRugs") },
               { to: "/blog", label: t("seo.links.blog") },
             ].map(({ to, label }) => (
               <Link key={to} to={to} className="artisan-footer-link">

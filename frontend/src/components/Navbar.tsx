@@ -1,4 +1,4 @@
-import { NavLink, Link, useLocation } from "react-router-dom";
+import { NavLink, Link, useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect, Fragment } from "react";
 import {
   UserRound,
@@ -19,6 +19,7 @@ import CurrencySelector from "./CurrencySelector";
 
 export default function Navbar() {
   const location = useLocation();
+  const navigate = useNavigate();
   const { language, setLanguage, t } = useI18n();
   const { user, isAuthenticated, logout } = useAuth();
   const { cartCount } = useCart();
@@ -71,8 +72,11 @@ export default function Navbar() {
   }, [menuOpen]);
 
   useEffect(() => {
-    setMenuOpen(false);
-    setAccountOpen(false);
+    const timeoutId = window.setTimeout(() => {
+      setMenuOpen(false);
+      setAccountOpen(false);
+    }, 0);
+    return () => window.clearTimeout(timeoutId);
   }, [location.pathname]);
 
   useEffect(() => {
@@ -98,6 +102,26 @@ export default function Navbar() {
     { to: "/reservation", label: t("nav.reservation") },
     { to: "/contact", label: t("nav.contact") },
   ];
+
+  const languageRoutes: Record<string, { FR: string; EN: string }> = {
+    "/tapis-tunisiens": { FR: "/tapis-tunisiens", EN: "/en/tunisian-rugs" },
+    "/tapis-artisanal-tunisie": { FR: "/tapis-artisanal-tunisie", EN: "/en/handmade-rugs" },
+    "/tapis-berbere-tunisie": { FR: "/tapis-berbere-tunisie", EN: "/en/berber-rugs" },
+    "/margoum": { FR: "/margoum", EN: "/en/margoum-rugs" },
+    "/kilim": { FR: "/kilim", EN: "/en/kilim-rugs" },
+    "/tapis-noue": { FR: "/tapis-noue", EN: "/en/handmade-rugs" },
+    "/en/tunisian-rugs": { FR: "/tapis-tunisiens", EN: "/en/tunisian-rugs" },
+    "/en/handmade-rugs": { FR: "/tapis-artisanal-tunisie", EN: "/en/handmade-rugs" },
+    "/en/berber-rugs": { FR: "/tapis-berbere-tunisie", EN: "/en/berber-rugs" },
+    "/en/margoum-rugs": { FR: "/margoum", EN: "/en/margoum-rugs" },
+    "/en/kilim-rugs": { FR: "/kilim", EN: "/en/kilim-rugs" },
+  };
+
+  const changeSiteLanguage = (nextLanguage: "FR" | "EN") => {
+    setLanguage(nextLanguage);
+    const destination = languageRoutes[location.pathname]?.[nextLanguage];
+    if (destination && destination !== location.pathname) navigate(destination);
+  };
 
   const askLogout = () => {
   setAccountOpen(false);
@@ -128,6 +152,10 @@ export default function Navbar() {
               className="nb__logo-image"
               src={logoMain}
               alt={t("common.brandNameAscii")}
+              width="3432"
+              height="3049"
+              loading="eager"
+              decoding="async"
             />
 <span className="nb__logo-text">L’Artisan de la Médina</span>
           </NavLink>
@@ -185,7 +213,7 @@ export default function Navbar() {
                     className={`nb__lang-btn${
                       language === l ? " nb__lang-btn--active" : ""
                     }`}
-                    onClick={() => setLanguage(l)}
+                    onClick={() => changeSiteLanguage(l)}
                     aria-pressed={language === l}
                   >
                     {l}
@@ -402,7 +430,7 @@ export default function Navbar() {
                   <button
                     type="button"
                     className={language === l ? "active" : ""}
-                    onClick={() => setLanguage(l)}
+                    onClick={() => changeSiteLanguage(l)}
                     aria-pressed={language === l}
                   >
                     {l}

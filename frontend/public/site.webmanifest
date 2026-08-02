@@ -1,0 +1,19 @@
+{
+  "name": "L’Artisan de la Médina",
+  "short_name": "Artisan Médina",
+  "description": "Tapis artisanaux tunisiens et savoir-faire de la Médina de Tunis.",
+  "lang": "fr-TN",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#fff7ea",
+  "theme_color": "#7b351b",
+  "icons": [
+    {
+      "src": "/logo-email.png",
+      "sizes": "any",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

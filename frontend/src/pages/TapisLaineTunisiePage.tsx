@@ -10,20 +10,10 @@ export default function TapisLaineTunisiePage() {
   const description =
     "Tapis laine Tunisie : avantages de la laine naturelle, densité, confort, durabilité, entretien et conseils pour choisir un tapis en laine fait main.";
 
-  const canonicalUrl =
-    typeof window === "undefined"
-      ? canonical
-      : new URL(canonical, window.location.origin).toString();
-
-  const homeUrl =
-    typeof window === "undefined"
-      ? "/"
-      : new URL("/", window.location.origin).toString();
-
-  const productsUrl =
-    typeof window === "undefined"
-      ? "/products"
-      : new URL("/products", window.location.origin).toString();
+  const siteUrl = "https://www.artisansdelamedina.com";
+  const canonicalUrl = `${siteUrl}${canonical}`;
+  const homeUrl = `${siteUrl}/`;
+  const productsUrl = `${siteUrl}/products`;
 
   const org = {
     "@context": "https://schema.org",
@@ -132,7 +122,10 @@ export default function TapisLaineTunisiePage() {
           <img
             src={woolImage}
             alt="Tapis en laine fait main en Tunisie : confort et durabilité – L’Artisan de la Médina"
-            loading="lazy"
+            width="1536"
+            height="1024"
+            loading="eager"
+            fetchPriority="high"
             style={{
               width: "100%",
               height: "auto",
