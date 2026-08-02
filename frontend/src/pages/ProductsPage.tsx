@@ -129,15 +129,6 @@ export default function ProductsPage() {
     },
   ];
 
-  const categoryGuideRoutes: Record<string, string> = {
-    all: "/tapis-artisanal-tunisie",
-    tapis: "/tapis-noue",
-    "margoum tisser berber": "/margoum",
-    "margoum berber": "/margoum",
-    "kilim berber": "/kilim",
-    "kilim toujen": "/kilim",
-    "kilim extra fin": "/kilim",
-  };
 
   const priceOptions = [
     { key: "all", label: "Tous les prix", min: null as number | null, max: null as number | null },
