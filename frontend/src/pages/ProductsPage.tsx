@@ -1484,9 +1484,7 @@ export default function ProductsPage() {
                         <small>{category.subtitle}</small>
                       </span>
                     </button>
-                    <Link className="products-category-guide" to={categoryGuideRoutes[category.key]}>
-                      Guide de la catégorie
-                    </Link>
+                 
                   </div>
                 );
               })}
