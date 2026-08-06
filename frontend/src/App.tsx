@@ -16,12 +16,6 @@ const RegisterPage = lazy(() => import("./pages/RegisterPage"));
 const VerifyEmailPage = lazy(() => import("./pages/VerifyEmailPage"));
 const SessionExpiredPage = lazy(() => import("./pages/SessionExpiredPage"));
 const ArtisanatTunisiePage = lazy(() => import("./pages/ArtisanatTunisiePage"));
-const TapisTunisiensPage = lazy(() => import("./pages/TapisTunisiensPage"));
-const TapisArtisanalTunisiePage = lazy(() => import("./pages/TapisArtisanalTunisiePage"));
-const TapisBerbereTunisiePage = lazy(() => import("./pages/TapisBerbereTunisiePage"));
-const TapisLaineTunisiePage = lazy(() => import("./pages/TapisLaineTunisiePage"));
-const TunisianRugsPage = lazy(() => import("./pages/TunisianRugsPage"));
-const RugIntentPage = lazy(() => import("./pages/RugIntentPage"));
 const BlogPage = lazy(() => import("./pages/BlogPage"));
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
 const CartPage = lazy(() => import("./pages/CartPage"));
@@ -174,31 +168,31 @@ function AppContent() {
                 path="/artisanat-de-la-tunisie"
                 element={<ArtisanatTunisiePage />}
               />
-              <Route path="/tapis-tunisiens" element={<TapisTunisiensPage />} />
+              <Route path="/tapis-tunisiens" element={<Navigate to="/products" replace />} />
               <Route
                 path="/tapis-artisanal-tunisie"
-                element={<TapisArtisanalTunisiePage />}
+                element={<Navigate to="/products" replace />}
               />
               <Route
                 path="/tapis-berbere-tunisie"
-                element={<TapisBerbereTunisiePage />}
+                element={<Navigate to="/products" replace />}
               />
               <Route
                 path="/tapis-laine-tunisie"
-                element={<TapisLaineTunisiePage />}
+                element={<Navigate to="/products" replace />}
               />
-              <Route path="/tunisian-rugs" element={<Navigate to="/en/tunisian-rugs" replace />} />
-              <Route path="/en/tunisian-rugs" element={<TunisianRugsPage />} />
-              <Route path="/margoum" element={<RugIntentPage pathname="/margoum" />} />
-              <Route path="/kilim" element={<RugIntentPage pathname="/kilim" />} />
-              <Route path="/tapis-noue" element={<RugIntentPage pathname="/tapis-noue" />} />
-              <Route path="/en/handmade-rugs" element={<RugIntentPage pathname="/en/handmade-rugs" />} />
-              <Route path="/en/berber-rugs" element={<RugIntentPage pathname="/en/berber-rugs" />} />
-              <Route path="/en/kilim-rugs" element={<RugIntentPage pathname="/en/kilim-rugs" />} />
-              <Route path="/en/margoum-rugs" element={<RugIntentPage pathname="/en/margoum-rugs" />} />
-              <Route path="/tapis-tunisien" element={<Navigate to="/tapis-tunisiens" replace />} />
-              <Route path="/tapis-berbere" element={<Navigate to="/tapis-berbere-tunisie" replace />} />
-              <Route path="/tapis-laine" element={<Navigate to="/tapis-laine-tunisie" replace />} />
+              <Route path="/tunisian-rugs" element={<Navigate to="/products" replace />} />
+              <Route path="/en/tunisian-rugs" element={<Navigate to="/products" replace />} />
+              <Route path="/margoum" element={<Navigate to="/products" replace />} />
+              <Route path="/kilim" element={<Navigate to="/products" replace />} />
+              <Route path="/tapis-noue" element={<Navigate to="/products" replace />} />
+              <Route path="/en/handmade-rugs" element={<Navigate to="/products" replace />} />
+              <Route path="/en/berber-rugs" element={<Navigate to="/products" replace />} />
+              <Route path="/en/kilim-rugs" element={<Navigate to="/products" replace />} />
+              <Route path="/en/margoum-rugs" element={<Navigate to="/products" replace />} />
+              <Route path="/tapis-tunisien" element={<Navigate to="/products" replace />} />
+              <Route path="/tapis-berbere" element={<Navigate to="/products" replace />} />
+              <Route path="/tapis-laine" element={<Navigate to="/products" replace />} />
               <Route path="/blog" element={<BlogPage />} />
 
               <Route path="/login" element={<LoginPage />} />

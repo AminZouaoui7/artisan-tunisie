@@ -1484,57 +1484,7 @@ if (isMounted) setProducts(homeProducts);
           </motion.div>
         </div>
       </section>
-
-
-
-      <div className="section-divider" />
-
-      <section className="home-seo-content" aria-labelledby="home-seo-title">
-        <div className="home-seo-content__inner">
-          <p className="page-kicker">
-            {language === "EN" ? "Tunisian rug guide" : "Guide du tapis tunisien"}
-          </p>
-          <h2 id="home-seo-title" className="home-section-title">
-            {language === "EN"
-              ? "Margoum, Berber Kilim and hand-knotted rugs"
-              : "Margoum, Kilim berbère et tapis noués"}
-          </h2>
-          <p className="home-seo-intro">
-            {language === "EN"
-              ? "Tunisian weaving brings together natural wool, regional patterns and techniques passed between generations. Explore each family to understand its texture, use and origin before choosing a piece."
-              : "Le tissage tunisien réunit la laine naturelle, des motifs régionaux et des gestes transmis entre générations. Explorez chaque famille pour comprendre sa texture, son usage et son origine avant de choisir une pièce."}
-          </p>
-
-          <div className="home-seo-cards">
-            <Link to="/margoum"><strong>Margoum</strong><span>{language === "EN" ? "Woven and embroidered relief" : "Tissé et brodé en relief"}</span></Link>
-            <Link to="/kilim"><strong>Kilim</strong><span>{language === "EN" ? "Berber and Toujane flatweaves" : "Tissage plat berbère et de Toujane"}</span></Link>
-            <Link to="/tapis-noue"><strong>{language === "EN" ? "Knotted rugs" : "Tapis noués"}</strong><span>{language === "EN" ? "Dense handmade wool pile" : "Velours dense noué à la main"}</span></Link>
-            <Link to="/tapis-berbere-tunisie"><strong>{language === "EN" ? "Berber rugs" : "Tapis berbères"}</strong><span>{language === "EN" ? "Geometry and textile heritage" : "Géométrie et héritage textile"}</span></Link>
-          </div>
-
-          <div className="home-seo-columns">
-            <div>
-              <h2>{language === "EN" ? "Natural materials and Tunisian regions" : "Matières naturelles et régions artisanales"}</h2>
-              <p>{language === "EN" ? "Wool is valued for comfort, resilience and rich color. Toujane and other Tunisian weaving regions express distinct patterns and balances, while every handmade piece retains subtle variations." : "La laine est appréciée pour son confort, sa résistance et la profondeur de ses couleurs. Toujane et les autres régions de tissage tunisiennes développent des motifs distinctifs, tandis que chaque pièce conserve de légères variations faites main."}</p>
-            </div>
-            <div>
-              <h2>{language === "EN" ? "Care and international delivery" : "Entretien et livraison internationale"}</h2>
-              <p>{language === "EN" ? "Vacuum gently, rotate the rug and blot spills without rubbing. Delivery terms are confirmed according to the size, destination and information displayed for the selected piece." : "Aspirez doucement, tournez régulièrement le tapis et tamponnez les taches sans frotter. Les conditions de livraison sont confirmées selon le format, la destination et les informations affichées pour la pièce choisie."}</p>
-            </div>
-          </div>
-
-          <div className="home-seo-faq">
-            <h2>{language === "EN" ? "Frequently asked questions" : "Questions fréquentes"}</h2>
-            {homeFaq.map((item) => (
-              <details key={item.question}>
-                <summary>{item.question}</summary>
-                <p>{item.answer}</p>
-              </details>
-            ))}
-          </div>
-        </div>
-      </section>
-
+    
       <div className="section-divider" />
 
       <section className="page-section home-testimonials-section">
