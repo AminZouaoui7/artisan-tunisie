@@ -724,15 +724,19 @@
 ========================= */
 
 .register-phone-field {
+  position: relative;
   margin-bottom: 14px !important;
 }
 
 .register-phone-input-wrapper {
   display: block;
+  position: relative;
   width: 100%;
 }
 
 .register-phone-input-wrapper .react-international-phone {
+  display: flex;
+  align-items: stretch;
   width: 100%;
   height: 52px;
   border-radius: 14px;
@@ -751,12 +755,6 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.7);
 }
 
-.register-phone-input-wrapper
-  .react-international-phone
-  .react-international-phone__country-list-box {
-  position: static;
-}
-
 .register-phone-field--error
   .register-phone-input-wrapper
   .react-international-phone {
@@ -768,36 +766,67 @@
   .react-international-phone
   .register-phone-country {
   height: 100%;
-  min-width: 78px;
-  padding: 0 12px;
+  min-width: 96px;
+  padding: 0 10px 0 12px;
   border: none;
   border-right: 1px solid rgba(92, 51, 23, 0.12);
-  background: transparent;
+  background: rgba(92, 51, 23, 0.02);
   color: var(--color-dark);
   font-family: "DM Sans", sans-serif;
-  font-size: 12.5px;
+  font-size: 13px;
   font-weight: 800;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  gap: 6px;
+  justify-content: flex-start;
+  gap: 7px;
+  white-space: nowrap;
+  box-sizing: border-box;
+  flex-shrink: 0;
 }
 
-.register-phone-input-wrapper
-  .react-international-phone
-  .register-phone-country
-  svg {
-  width: 20px;
-  height: 14px;
-  border-radius: 2px;
-  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06);
+.register-phone-flag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 16px;
+  overflow: hidden;
+  border-radius: 3px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+  flex-shrink: 0;
+  background: rgba(92, 51, 23, 0.04);
+}
+
+.register-phone-flag svg,
+.register-phone-flag img {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+  max-height: none !important;
+  display: block !important;
+  border-radius: 3px !important;
+  object-fit: cover !important;
+}
+
+.register-phone-dialcode {
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  color: var(--color-dark);
+}
+
+.register-phone-chevron {
+  font-size: 10px;
+  opacity: 0.55;
+  margin-left: 1px;
+  line-height: 1;
 }
 
 .register-phone-input-wrapper
   .react-international-phone
   .register-phone-country:hover:not(:disabled) {
-  background: rgba(92, 51, 23, 0.04);
+  background: rgba(92, 51, 23, 0.05);
 }
 
 .register-phone-input-wrapper
@@ -808,34 +837,84 @@
 }
 
 .register-phone-input-wrapper
-  .react-international-phone
-  .register-phone-dropdown {
+  .react-international-phone__country-list-box {
+  position: relative;
+  display: block;
+  width: 100%;
+  z-index: 99999;
+}
+
+.register-phone-dropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
   z-index: 99999;
   border-radius: 18px;
   border: 1px solid rgba(92, 51, 23, 0.14);
   background: #fffaf2;
-  box-shadow: 0 28px 80px rgba(59, 38, 41, 0.18);
+  box-shadow: 0 28px 80px rgba(59, 38, 41, 0.22);
   max-height: 320px;
   overflow: auto;
   padding: 8px;
+  list-style: none;
+  margin: 0;
 }
 
-.register-phone-input-wrapper
-  .react-international-phone
-  .register-phone-dropdown
-  li {
+.register-phone-dropdown li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   border-radius: 12px;
   padding: 8px 10px;
   color: var(--color-dark);
   font-family: "DM Sans", sans-serif;
-  font-size: 12.5px;
+  font-size: 13px;
   font-weight: 700;
+  cursor: pointer;
+  line-height: 1.2;
 }
 
-.register-phone-input-wrapper
-  .react-international-phone
-  .register-phone-dropdown
-  li:hover {
+.register-phone-dropdown-flag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 14px;
+  overflow: hidden;
+  border-radius: 3px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+  flex-shrink: 0;
+  background: rgba(92, 51, 23, 0.04);
+}
+
+.register-phone-dropdown-flag svg,
+.register-phone-dropdown-flag img {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+  max-height: none !important;
+  display: block !important;
+  border-radius: 3px !important;
+  object-fit: cover !important;
+}
+
+.register-phone-dropdown-name {
+  flex: 1 1 auto;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.register-phone-dropdown-dial {
+  flex-shrink: 0;
+  font-weight: 900;
+  opacity: 0.85;
+  font-size: 12.5px;
+}
+
+.register-phone-dropdown li:hover {
   background: color-mix(in srgb, var(--color-terracotta) 16%, transparent);
 }
 
@@ -844,14 +923,22 @@
   .register-phone-input {
   flex: 1 1 auto;
   height: 100%;
-  padding: 14px 16px 0 14px;
+  padding: 18px 16px 6px 16px;
   border: none;
   background: transparent;
   color: var(--color-dark);
   font-family: "DM Sans", sans-serif;
-  font-size: 13px;
+  font-size: 13.5px;
   font-weight: 700;
   outline: none;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.register-phone-input-wrapper
+  .react-international-phone
+  .register-phone-input::placeholder {
+  color: transparent;
 }
 
 .register-phone-input-wrapper
@@ -863,30 +950,29 @@
 
 .register-phone-label {
   position: absolute;
-  left: 110px;
+  left: 112px;
   top: 50%;
   transform: translateY(-50%);
   color: color-mix(in srgb, var(--text-muted) 80%, transparent);
-  font-size: 12px;
+  font-size: 12.5px;
   font-weight: 700;
   pointer-events: none;
-  transition: all 0.22s ease;
-  max-width: calc(100% - 126px);
+  transition: all 0.22s cubic-bezier(0.2, 0.8, 0.2, 1);
+  max-width: calc(100% - 130px);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  z-index: 2;
 }
 
 .register-phone-field:has(.react-international-phone--focus)
   .register-phone-label,
 .register-phone-field:has(input.register-phone-input:not(:placeholder-shown))
-  .register-phone-label,
-.register-phone-field:has(input[name="phone"][value]:not([value=""]))
   .register-phone-label {
-  top: 10px;
+  top: 9px;
   transform: none;
   color: var(--color-clay);
-  font-size: 9px;
+  font-size: 9.5px;
   font-weight: 950;
   letter-spacing: 0.9px;
   text-transform: uppercase;

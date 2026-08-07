@@ -424,7 +424,6 @@ export default function RegisterPage() {
                     className={`react-international-phone${
                       phoneFocused ? " react-international-phone--focus" : ""
                     }`}
-                    style={{ display: "flex", alignItems: "center" }}
                   >
                     <button
                       type="button"
@@ -433,20 +432,18 @@ export default function RegisterPage() {
                         setPhoneDropdownOpen((prev) => !prev)
                       }
                     >
-                      <FlagImage iso2={selectedCountryIso2} size="24px" />
-                      <span>+{selectedCountry?.dialCode ?? "216"}</span>
-                      <span
-                        style={{
-                          fontSize: "10px",
-                          opacity: 0.6,
-                          marginLeft: "2px",
-                        }}
-                      >
+                      <span className="register-phone-flag">
+                        <FlagImage iso2={selectedCountryIso2} size="24px" />
+                      </span>
+                      <span className="register-phone-dialcode">+{selectedCountry?.dialCode ?? "216"}</span>
+                      <span className="register-phone-chevron">
                         {phoneDropdownOpen ? "⌃" : "⌄"}
                       </span>
                     </button>
 
                     <input
+                      id="register-phone-national"
+                      name="phone-national"
                       className="register-phone-input"
                       value={nationalPhoneDisplay}
                       onChange={handleNationalPhoneChange}
@@ -458,49 +455,36 @@ export default function RegisterPage() {
                       placeholder={phoneHint || " "}
                       autoComplete="tel-national"
                     />
+                  </div>
 
-                    <div className="react-international-phone__country-list-box">
-                      {phoneDropdownOpen && (
-                        <ul
-                          className="register-phone-dropdown"
-                          style={{
-                            position: "absolute",
-                            top: "100%",
-                            left: 0,
-                            right: 0,
-                            marginTop: "6px",
-                            listStyle: "none",
-                            margin: 0,
-                            padding: 0,
-                          }}
-                        >
-                          {phoneCountries.map((item) => {
-                            const p = parseCountry(item);
-                            return (
-                              <li
-                                key={p.iso2}
-                                onClick={() =>
-                                  handleCountryChange(p.iso2 as AllowedIso2)
-                                }
-                                style={{
-                                  display: "flex",
-                                  alignItems: "center",
-                                  gap: "10px",
-                                  cursor: "pointer",
-                                }}
-                              >
+                  <div className="react-international-phone__country-list-box">
+                    {phoneDropdownOpen && (
+                      <ul className="register-phone-dropdown">
+                        {phoneCountries.map((item) => {
+                          const p = parseCountry(item);
+                          return (
+                            <li
+                              key={p.iso2}
+                              onClick={() =>
+                                handleCountryChange(p.iso2 as AllowedIso2)
+                              }
+                            >
+                              <span className="register-phone-dropdown-flag">
                                 <FlagImage iso2={p.iso2} size="20px" />
-                                <span style={{ flex: 1 }}>{p.name}</span>
-                                <strong>+{p.dialCode}</strong>
-                              </li>
-                            );
-                          })}
-                        </ul>
-                      )}
-                    </div>
+                              </span>
+                              <span className="register-phone-dropdown-name">{p.name}</span>
+                              <strong className="register-phone-dropdown-dial">+{p.dialCode}</strong>
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    )}
                   </div>
                 </div>
-                <label className="register-phone-label" htmlFor="phone">
+                <label
+                  className="register-phone-label"
+                  htmlFor="register-phone-national"
+                >
                   {t("auth.register.phone")}
                 </label>
                 <input
