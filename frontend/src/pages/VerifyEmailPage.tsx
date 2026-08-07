@@ -1,30 +1,61 @@
-import {
-  useState,
-  type ChangeEvent,
-  type FormEvent,
-} from "react";
+import { useEffect, useState, type ChangeEvent, type FormEvent } from "react";
 
-import {
-  Link,
-  useLocation,
-  useNavigate,
-} from "react-router-dom";
+import { Link, useLocation, useNavigate, useSearchParams } from "react-router-dom";
 
 import { authService } from "../services/authService";
 import { useI18n } from "../i18n/i18n";
 import "../styles/VerifyEmailPage.css";
 
+const RESEND_COOLDOWN_SECONDS = 60;
+
 export default function VerifyEmailPage() {
   const { t } = useI18n();
   const navigate = useNavigate();
   const location = useLocation();
+  const [searchParams] = useSearchParams();
 
-  const email = location.state?.email || "";
+  const stateEmail =
+    ((location.state as { email?: string } | null)?.email || "").trim();
+
+  const email = (stateEmail || searchParams.get("email") || "")
+    .trim()
+    .toLowerCase();
 
   const [code, setCode] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+
+  const [resendLoading, setResendLoading] = useState(false);
+  const [resendMessage, setResendMessage] = useState("");
+  const [resendError, setResendError] = useState("");
+  const [cooldown, setCooldown] = useState(RESEND_COOLDOWN_SECONDS);
+  const [cooldownStarted, setCooldownStarted] = useState(false);
+
+  useEffect(() => {
+    if (!cooldownStarted) return;
+
+    if (cooldown <= 0) {
+      return;
+    }
+
+    const timer = window.setInterval(() => {
+      setCooldown((prev) => {
+        if (prev <= 1) {
+          window.clearInterval(timer);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => window.clearInterval(timer);
+  }, [cooldown, cooldownStarted]);
+
+  const startResendCooldown = () => {
+    setCooldown(RESEND_COOLDOWN_SECONDS);
+    setCooldownStarted(true);
+  };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -45,16 +76,22 @@ export default function VerifyEmailPage() {
     try {
       setLoading(true);
 
-      const result = await authService.verifyEmail({
+      await authService.verifyEmail({
         email,
         code: code.trim(),
       });
 
-      setSuccess(result.message);
+      setSuccess(t("auth.verifyEmail.successMessage"));
 
-      setTimeout(() => {
-        navigate("/login");
-      }, 1800);
+      window.setTimeout(() => {
+        navigate("/login", {
+          replace: true,
+          state: {
+            verifiedEmail: email,
+            emailVerified: true,
+          },
+        });
+      }, 900);
     } catch (err) {
       setError(
         err instanceof Error
@@ -66,6 +103,38 @@ export default function VerifyEmailPage() {
     }
   };
 
+  const handleResend = async () => {
+    setResendError("");
+    setResendMessage("");
+
+    if (!email) {
+      setResendError(t("auth.verifyEmail.errors.missingEmail"));
+      return;
+    }
+
+    try {
+      setResendLoading(true);
+
+      await authService.resendVerificationEmail({ email });
+
+      setResendMessage(t("auth.verifyEmail.resendSuccess"));
+      startResendCooldown();
+    } catch (err) {
+      setResendError(
+        err instanceof Error
+          ? err.message
+          : t("auth.verifyEmail.errors.resendUnknown")
+      );
+    } finally {
+      setResendLoading(false);
+    }
+  };
+
+  const canResend =
+    authService.resendVerificationEmail !== undefined &&
+    !resendLoading &&
+    cooldown <= 0;
+
   return (
     <section className="verify-page">
       <div className="verify-card">
@@ -74,9 +143,7 @@ export default function VerifyEmailPage() {
 
           <h1>{t("auth.verifyEmail.title")}</h1>
 
-          <p className="verify-subtitle">
-            {t("auth.verifyEmail.subtitle")}
-          </p>
+          <p className="verify-subtitle">{t("auth.verifyEmail.subtitle")}</p>
 
           <div className="verify-email-box">
             {email || t("auth.verifyEmail.emailNotFound")}
@@ -85,6 +152,12 @@ export default function VerifyEmailPage() {
           {error && <div className="verify-error">{error}</div>}
 
           {success && <div className="verify-success">{success}</div>}
+
+          {resendError && <div className="verify-error">{resendError}</div>}
+
+          {resendMessage && (
+            <div className="verify-success">{resendMessage}</div>
+          )}
 
           <form onSubmit={handleSubmit} className="verify-form">
             <input
@@ -99,17 +172,37 @@ export default function VerifyEmailPage() {
               inputMode="numeric"
             />
 
-            <button
-              type="submit"
-              className="verify-button"
-              disabled={loading}
-            >
-              {loading ? t("auth.verifyEmail.loading") : t("auth.verifyEmail.submit")}
+            <button type="submit" className="verify-button" disabled={loading}>
+              {loading
+                ? t("auth.verifyEmail.loading")
+                : t("auth.verifyEmail.submit")}
             </button>
           </form>
 
+          {authService.resendVerificationEmail !== undefined && (
+            <div className="verify-resend">
+              <p className="verify-resend-text">
+                {t("auth.verifyEmail.resendHint")}
+              </p>
+
+              <button
+                type="button"
+                className="verify-resend-btn"
+                onClick={handleResend}
+                disabled={!canResend}
+              >
+                {resendLoading
+                  ? t("auth.verifyEmail.resendLoading")
+                  : cooldown > 0
+                    ? t("auth.verifyEmail.resendCooldown", { seconds: String(cooldown) })
+                    : t("auth.verifyEmail.resendAction")}
+              </button>
+            </div>
+          )}
+
           <p className="verify-footer">
-            {t("auth.verifyEmail.alreadyConfirmed")} <Link to="/login">{t("auth.common.loginNav")}</Link>
+            {t("auth.verifyEmail.alreadyConfirmed")}{" "}
+            <Link to="/login">{t("auth.common.loginNav")}</Link>
           </p>
         </div>
       </div>

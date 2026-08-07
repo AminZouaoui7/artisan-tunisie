@@ -19,6 +19,10 @@ export type VerifyEmailDto = {
   code: string;
 };
 
+export type ResendVerificationEmailDto = {
+  email: string;
+};
+
 export type LoginDto = {
   email: string;
   password: string;
@@ -50,6 +54,50 @@ export type ChangePasswordConfirmDto = {
   code: string;
 };
 
+export type AuthErrorPayload = {
+  message?: string;
+  code?: string;
+  status?: string;
+  errorCode?: string;
+};
+
+export class AuthError extends Error {
+  payload?: AuthErrorPayload;
+
+  constructor(message: string, payload?: AuthErrorPayload) {
+    super(message);
+    this.name = "AuthError";
+    this.payload = payload;
+  }
+}
+
+function normalizeAuthErrorCode(payload?: AuthErrorPayload | null): string | null {
+  if (!payload) return null;
+
+  const codes = [
+    payload.code,
+    payload.status,
+    payload.errorCode,
+    payload.message,
+  ];
+
+  for (const raw of codes) {
+    if (!raw) continue;
+
+    const normalized = String(raw).trim().toUpperCase();
+
+    if (normalized.includes("EMAIL_NOT_VERIFIED")) return "EMAIL_NOT_VERIFIED";
+    if (normalized.includes("EMAILNOTVERIFIED")) return "EMAIL_NOT_VERIFIED";
+    if (normalized.includes("EMAIL_NON_VERIFIE")) return "EMAIL_NOT_VERIFIED";
+    if (normalized.includes("CONFIRMER_VOTRE_EMAIL")) return "EMAIL_NOT_VERIFIED";
+    if (normalized.includes("VOTRE EMAIL") && normalized.includes("CONFIRMER")) {
+      return "EMAIL_NOT_VERIFIED";
+    }
+  }
+
+  return null;
+}
+
 async function request<T>(
   url: string,
   options?: RequestInit
@@ -63,9 +111,25 @@ async function request<T>(
   });
 
   if (!response.ok) {
-    const data = await response.json().catch(() => null);
+    const data = (await response
+      .json()
+      .catch(() => null)) as AuthErrorPayload | null;
 
-    throw new Error(data?.message || "Une erreur est survenue.");
+    const message =
+      (data && typeof data.message === "string" && data.message) ||
+      "Une erreur est survenue.";
+
+    const code = normalizeAuthErrorCode(data);
+
+    if (code) {
+      const error = new AuthError(message, {
+        ...(data || {}),
+        code,
+      });
+      throw error;
+    }
+
+    throw new Error(message);
   }
 
   return response.json();
@@ -80,6 +144,12 @@ export const authService = {
 
   verifyEmail: (data: VerifyEmailDto) =>
     request<{ message: string }>("/api/auth/verify-email", {
+      method: "POST",
+      body: JSON.stringify(data),
+    }),
+
+  resendVerificationEmail: (data: ResendVerificationEmailDto) =>
+    request<{ message: string }>("/api/auth/verify-email/resend", {
       method: "POST",
       body: JSON.stringify(data),
     }),
@@ -113,28 +183,22 @@ export const authService = {
     }),
 
   requestChangePasswordCode: (token: string) =>
-    request<{ message: string }>(
-      "/api/auth/change-password/request-code",
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    ),
+    request<{ message: string }>("/api/auth/change-password/request-code", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }),
 
   confirmChangePassword: (
     token: string,
     data: ChangePasswordConfirmDto
   ) =>
-    request<{ message: string }>(
-      "/api/auth/change-password/confirm",
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(data),
-      }
-    ),
+    request<{ message: string }>("/api/auth/change-password/confirm", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(data),
+    }),
 };
