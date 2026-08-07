@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { NavLink, Outlet } from "react-router-dom";
 
 import {
@@ -6,35 +7,71 @@ import {
   LogOut,
   ShoppingBag,
   CalendarDays,
-  MessageSquareQuote,
   LayoutDashboard,
   Settings,
 } from "lucide-react";
 
 import { useAuth } from "../context/useAuth";
 import { useI18n } from "../i18n/i18n";
+import {
+  getStoredUserLocation,
+  type UserLocationDto,
+} from "../services/apiClient";
 import "../styles/AccountPage.css";
-
-function isTunisiaClient(user: any) {
-  const countryValue = (
-    user?.country ||
-    user?.countryCode ||
-    user?.detectedCountry ||
-    user?.location ||
-    ""
-  )
-    .toString()
-    .trim()
-    .toLowerCase();
-
-  return ["tn", "tunisia", "tunisie", "تونس"].includes(countryValue);
-}
 
 export default function AccountPage() {
   const { t } = useI18n();
   const { user, logout } = useAuth();
 
-  const isTunisia = isTunisiaClient(user);
+  const [visitorLocation, setVisitorLocation] = useState<UserLocationDto>(
+    () => getStoredUserLocation()
+  );
+  const [locationReady, setLocationReady] = useState<boolean>(() => {
+    const initial = getStoredUserLocation();
+    return Boolean(initial.countryCode);
+  });
+
+  useEffect(() => {
+    const refreshFromStorage = () => {
+      const next = getStoredUserLocation();
+      setVisitorLocation(next);
+      if (next.countryCode) {
+        setLocationReady(true);
+      }
+    };
+
+    const handleLocationChanged = () => refreshFromStorage();
+    window.addEventListener("artisan:location-changed", handleLocationChanged);
+
+    const initial = getStoredUserLocation();
+    if (initial.countryCode) {
+      setVisitorLocation(initial);
+      setLocationReady(true);
+    } else {
+      let attempts = 0;
+      const intervalId = window.setInterval(() => {
+        attempts += 1;
+        const current = getStoredUserLocation();
+        if (current.countryCode) {
+          setVisitorLocation(current);
+          setLocationReady(true);
+          window.clearInterval(intervalId);
+        } else if (attempts >= 40) {
+          window.clearInterval(intervalId);
+          setLocationReady(true);
+        }
+      }, 50);
+    }
+
+    return () => {
+      window.removeEventListener(
+        "artisan:location-changed",
+        handleLocationChanged
+      );
+    };
+  }, []);
+
+  const isTunisia = visitorLocation.isTunisia === true;
 
   return (
     <section className="account-page">
@@ -62,7 +99,7 @@ export default function AccountPage() {
               {t("account.nav.dashboard")}
             </NavLink>
 
-            {!isTunisia && (
+            {locationReady && !isTunisia && (
               <NavLink to="/account/orders">
                 <ShoppingBag size={15} />
                 {t("account.nav.orders")}
@@ -73,13 +110,6 @@ export default function AccountPage() {
               <CalendarDays size={15} />
               {t("account.nav.reservations")}
             </NavLink>
-
-            {isTunisia && (
-              <NavLink to="/account/price-requests">
-                <MessageSquareQuote size={15} />
-                {t("account.nav.priceRequests")}
-              </NavLink>
-            )}
 
             <NavLink to="/account/settings">
               <Settings size={15} />

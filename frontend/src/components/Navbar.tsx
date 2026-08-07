@@ -271,14 +271,16 @@ export default function Navbar() {
                       {t("account.reservations.title")}
                     </Link>
 
-                    <Link
-                      to="/account/orders"
-                      className="nb__account-item"
-                      onClick={() => setAccountOpen(false)}
-                    >
-                      <ShoppingBag size={16} />
-                      {t("account.ordersTitle")}
-                    </Link>
+                    {canUseCart && (
+                      <Link
+                        to="/account/orders"
+                        className="nb__account-item"
+                        onClick={() => setAccountOpen(false)}
+                      >
+                        <ShoppingBag size={16} />
+                        {t("account.ordersTitle")}
+                      </Link>
+                    )}
 
                     <button
                       type="button"
@@ -386,16 +388,18 @@ export default function Navbar() {
                 {t("account.reservations.title")}
               </NavLink>
 
-              <NavLink
-                to="/account/orders"
-                className="nb__drawer-link"
-                onClick={() => setMenuOpen(false)}
-              >
-                <span className="nb__drawer-num">
-                  {canUseCart ? "10" : "09"}
-                </span>
-                {t("account.ordersTitle")}
-              </NavLink>
+              {canUseCart && (
+                <NavLink
+                  to="/account/orders"
+                  className="nb__drawer-link"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  <span className="nb__drawer-num">
+                    {canUseCart ? "10" : "09"}
+                  </span>
+                  {t("account.ordersTitle")}
+                </NavLink>
+              )}
 
               <button
                 type="button"

@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { Navigate } from "react-router-dom";
 import {
   Eye,
   CalendarDays,
@@ -13,7 +14,11 @@ import {
 
 import { useCurrency } from "../context/CurrencyContext";
 import { getMyOrders, type CustomerOrder } from "../services/orderService";
-import { buildAssetUrl } from "../services/apiClient";
+import {
+  buildAssetUrl,
+  getStoredUserLocation,
+  type UserLocationDto,
+} from "../services/apiClient";
 import { useI18n } from "../i18n/i18n";
 import "../styles/AccountOrdersPage.css";
 
@@ -104,6 +109,50 @@ export default function AccountOrdersPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  const [visitorLocation, setVisitorLocation] = useState<UserLocationDto>(
+    () => getStoredUserLocation()
+  );
+  const [locationReady, setLocationReady] = useState<boolean>(() => {
+    const initial = getStoredUserLocation();
+    return Boolean(initial.countryCode);
+  });
+
+  useEffect(() => {
+    const refreshFromStorage = () => {
+      const next = getStoredUserLocation();
+      setVisitorLocation(next);
+      if (next.countryCode) {
+        setLocationReady(true);
+      }
+    };
+
+    window.addEventListener("artisan:location-changed", refreshFromStorage);
+
+    const initial = getStoredUserLocation();
+    if (initial.countryCode) {
+      setVisitorLocation(initial);
+      setLocationReady(true);
+    } else {
+      let attempts = 0;
+      const intervalId = window.setInterval(() => {
+        attempts += 1;
+        const current = getStoredUserLocation();
+        if (current.countryCode) {
+          setVisitorLocation(current);
+          setLocationReady(true);
+          window.clearInterval(intervalId);
+        } else if (attempts >= 40) {
+          window.clearInterval(intervalId);
+          setLocationReady(true);
+        }
+      }, 50);
+    }
+
+    return () => {
+      window.removeEventListener("artisan:location-changed", refreshFromStorage);
+    };
+  }, []);
+
   const steps = useMemo(
     () => [
       {
@@ -135,6 +184,9 @@ export default function AccountOrdersPage() {
   );
 
   useEffect(() => {
+    if (!locationReady) return;
+    if (visitorLocation.isTunisia) return;
+
     async function loadOrders() {
       try {
         setLoading(true);
@@ -155,7 +207,21 @@ export default function AccountOrdersPage() {
     }
 
     loadOrders();
-  }, []);
+  }, [locationReady, visitorLocation.isTunisia, t]);
+
+  if (!locationReady) {
+    return (
+      <div className="account-orders-card">
+        <h3>{t("account.orders.title")}</h3>
+        <div className="account-orders-divider" />
+        <p className="account-orders-muted">{t("common.loading")}</p>
+      </div>
+    );
+  }
+
+  if (visitorLocation.isTunisia) {
+    return <Navigate to="/account" replace />;
+  }
 
   if (loading) {
     return (
