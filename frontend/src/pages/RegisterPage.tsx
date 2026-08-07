@@ -3,22 +3,45 @@ import { useEffect, useMemo, useState, type ChangeEvent, type FormEvent } from "
 import { Link, useNavigate } from "react-router-dom";
 import { useGoogleLogin } from "@react-oauth/google";
 import {
-  usePhoneInput,
   FlagImage,
   parseCountry,
   defaultCountries,
 } from "react-international-phone";
 import "react-international-phone/style.css";
+import {
+  parsePhoneNumberFromString,
+  type CountryCode,
+} from "libphonenumber-js";
 
 import { authService } from "../services/authService";
 import { useAuth } from "../context/useAuth";
 import { useI18n } from "../i18n/i18n";
 import "../styles/RegisterPage.css";
 
-const FRENCH_PHONE_HINT = "6 12 34 56 78";
-const TUNISIAN_PHONE_HINT = "22 123 456";
-const ALLOWED_ISO2 = ["tn", "fr", "dz", "ma", "it", "de", "gb", "us"];
-const PHONE_REGEX = /^[0-9\s().-]{6,18}$/;
+const ALLOWED_ISO2 = [
+  "tn",
+  "fr",
+  "be",
+  "dz",
+  "ma",
+  "it",
+  "de",
+  "gb",
+  "us",
+] as const;
+type AllowedIso2 = (typeof ALLOWED_ISO2)[number];
+
+const NATIONAL_HINTS: Record<AllowedIso2, string> = {
+  tn: "22 123 456",
+  fr: "6 12 34 56 78",
+  be: "470 12 34 56",
+  dz: "551 23 45 67",
+  ma: "6 12 34 56 78",
+  it: "333 123 4567",
+  de: "1512 1234567",
+  gb: "7911 123456",
+  us: "(201) 555-0123",
+};
 
 export default function RegisterPage() {
   const { t } = useI18n();
@@ -35,6 +58,8 @@ export default function RegisterPage() {
     confirmPassword: "",
   });
 
+  const [selectedCountryIso2, setSelectedCountryIso2] = useState<AllowedIso2>("tn");
+  const [nationalPhoneDisplay, setNationalPhoneDisplay] = useState("");
   const [phoneDropdownOpen, setPhoneDropdownOpen] = useState(false);
   const [phoneFocused, setPhoneFocused] = useState(false);
   const [phoneError, setPhoneError] = useState("");
@@ -42,45 +67,110 @@ export default function RegisterPage() {
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
 
-  const phoneCountries = useMemo(
-    () =>
-      defaultCountries.filter((country) =>
-        ALLOWED_ISO2.includes(parseCountry(country).iso2)
-      ),
-    []
-  );
+  const phoneCountries = useMemo(() => {
+    const list = defaultCountries.filter((c) =>
+      ALLOWED_ISO2.includes(parseCountry(c).iso2 as AllowedIso2)
+    );
+    return list;
+  }, []);
 
-  const { inputValue, handlePhoneValueChange, inputRef, country, setCountry } =
-    usePhoneInput({
-      defaultCountry: "tn",
-      value: form.phone,
-      countries: phoneCountries,
-      onChange: (data) => {
-        setForm((prev) => ({ ...prev, phone: data.phone || "" }));
-      },
-    });
+  const selectedCountry = useMemo(() => {
+    const found = phoneCountries.find(
+      (c) => parseCountry(c).iso2 === selectedCountryIso2
+    );
+    return found ? parseCountry(found) : null;
+  }, [phoneCountries, selectedCountryIso2]);
 
   const phoneHint = useMemo(
-    () =>
-      country.iso2 === "fr"
-        ? FRENCH_PHONE_HINT
-        : country.iso2 === "tn"
-          ? TUNISIAN_PHONE_HINT
-          : "",
-    [country.iso2]
+    () => NATIONAL_HINTS[selectedCountryIso2] ?? "",
+    [selectedCountryIso2]
   );
 
+  const updatePhoneFromNational = (
+    nationalRaw: string,
+    iso2: AllowedIso2,
+    reportError = false
+  ) => {
+    const digitsOnly = nationalRaw.replace(/\D/g, "");
+
+    if (!digitsOnly) {
+      setForm((prev) => ({ ...prev, phone: "" }));
+      if (reportError) setPhoneError("");
+      return true;
+    }
+
+    try {
+      const parsed = parsePhoneNumberFromString(
+        nationalRaw,
+        iso2.toUpperCase() as CountryCode
+      );
+
+      if (!parsed || !parsed.isValid()) {
+        if (reportError) setPhoneError(t("auth.register.errors.invalidPhone"));
+        setForm((prev) => ({ ...prev, phone: "" }));
+        return false;
+      }
+
+      const e164 = parsed.number;
+      setForm((prev) => ({ ...prev, phone: e164 }));
+      if (reportError) setPhoneError("");
+      return true;
+    } catch {
+      if (reportError) setPhoneError(t("auth.register.errors.invalidPhone"));
+      setForm((prev) => ({ ...prev, phone: "" }));
+      return false;
+    }
+  };
+
+  const formatNationalDisplay = (nationalRaw: string, iso2: AllowedIso2) => {
+    const digitsOnly = nationalRaw.replace(/\D/g, "");
+    if (!digitsOnly) return "";
+
+    try {
+      const parsed = parsePhoneNumberFromString(
+        digitsOnly,
+        iso2.toUpperCase() as CountryCode
+      );
+      if (parsed && parsed.isPossible()) {
+        return parsed.formatNational();
+      }
+      return nationalRaw;
+    } catch {
+      return nationalRaw;
+    }
+  };
+
   useEffect(() => {
-    if (!form.phone) {
+    if (!nationalPhoneDisplay) {
       setPhoneError("");
       return;
     }
 
-    const digitsOnly = form.phone.replace(/\D/g, "");
-    const valid =
-      PHONE_REGEX.test(form.phone) && digitsOnly.length >= 6 && digitsOnly.length <= 15;
-    setPhoneError(valid ? "" : t("auth.register.errors.invalidPhone"));
-  }, [form.phone, t]);
+    updatePhoneFromNational(nationalPhoneDisplay, selectedCountryIso2, true);
+  }, [nationalPhoneDisplay, selectedCountryIso2]);
+
+  const handleNationalPhoneChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const raw = e.target.value;
+    setNationalPhoneDisplay(raw);
+  };
+
+  const handleNationalPhoneBlur = () => {
+    const formatted = formatNationalDisplay(nationalPhoneDisplay, selectedCountryIso2);
+    if (formatted !== nationalPhoneDisplay) {
+      setNationalPhoneDisplay(formatted);
+    }
+  };
+
+  const handleCountryChange = (iso2: AllowedIso2) => {
+    setSelectedCountryIso2(iso2);
+    setPhoneDropdownOpen(false);
+
+    if (nationalPhoneDisplay) {
+      updatePhoneFromNational(nationalPhoneDisplay, iso2, true);
+    } else {
+      setPhoneError("");
+    }
+  };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setForm((prev) => ({
@@ -147,13 +237,27 @@ export default function RegisterPage() {
       return;
     }
 
-    if (form.phone) {
-      const digitsOnly = form.phone.replace(/\D/g, "");
-      const valid =
-        PHONE_REGEX.test(form.phone) &&
-        digitsOnly.length >= 6 &&
-        digitsOnly.length <= 15;
-      if (!valid) {
+    let normalizedPhone: string | undefined = undefined;
+    if (nationalPhoneDisplay.trim()) {
+      const digitsOnly = nationalPhoneDisplay.replace(/\D/g, "");
+      if (!digitsOnly) {
+        setPhoneError(t("auth.register.errors.invalidPhone"));
+        return;
+      }
+
+      try {
+        const parsed = parsePhoneNumberFromString(
+          nationalPhoneDisplay,
+          selectedCountryIso2.toUpperCase() as CountryCode
+        );
+
+        if (!parsed || !parsed.isValid()) {
+          setPhoneError(t("auth.register.errors.invalidPhone"));
+          return;
+        }
+
+        normalizedPhone = parsed.number;
+      } catch {
         setPhoneError(t("auth.register.errors.invalidPhone"));
         return;
       }
@@ -173,13 +277,12 @@ export default function RegisterPage() {
       setLoading(true);
 
       const email = form.email.trim().toLowerCase();
-      const phone = form.phone || undefined;
 
       await authService.register({
         firstName: form.firstName.trim(),
         lastName: form.lastName.trim(),
         email,
-        phone,
+        phone: normalizedPhone,
         password: form.password,
       });
 
@@ -330,8 +433,8 @@ export default function RegisterPage() {
                         setPhoneDropdownOpen((prev) => !prev)
                       }
                     >
-                      <FlagImage iso2={country.iso2} size="24px" />
-                      <span>+{country.dialCode}</span>
+                      <FlagImage iso2={selectedCountryIso2} size="24px" />
+                      <span>+{selectedCountry?.dialCode ?? "216"}</span>
                       <span
                         style={{
                           fontSize: "10px",
@@ -344,13 +447,16 @@ export default function RegisterPage() {
                     </button>
 
                     <input
-                      ref={inputRef}
                       className="register-phone-input"
-                      value={inputValue}
-                      onChange={handlePhoneValueChange}
+                      value={nationalPhoneDisplay}
+                      onChange={handleNationalPhoneChange}
                       onFocus={() => setPhoneFocused(true)}
-                      onBlur={() => setPhoneFocused(false)}
+                      onBlur={() => {
+                        setPhoneFocused(false);
+                        handleNationalPhoneBlur();
+                      }}
                       placeholder={phoneHint || " "}
+                      autoComplete="tel-national"
                     />
 
                     <div className="react-international-phone__country-list-box">
@@ -373,10 +479,9 @@ export default function RegisterPage() {
                             return (
                               <li
                                 key={p.iso2}
-                                onClick={() => {
-                                  setCountry(p.iso2);
-                                  setPhoneDropdownOpen(false);
-                                }}
+                                onClick={() =>
+                                  handleCountryChange(p.iso2 as AllowedIso2)
+                                }
                                 style={{
                                   display: "flex",
                                   alignItems: "center",
