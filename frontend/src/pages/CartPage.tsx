@@ -5,12 +5,10 @@ import {
   Trash2,
   ShoppingBag,
   ArrowRight,
-  ShieldCheck,
-  Truck,
   Sparkles,
-  PackageCheck,
 } from "lucide-react";
 
+import OrderTrustStrip from "../components/OrderTrustStrip";
 import { useCurrency } from "../context/CurrencyContext";
 import { useCart } from "../context/useCart";
 import { useI18n } from "../i18n/i18n";
@@ -81,6 +79,8 @@ export default function CartPage() {
           </div>
         </div>
       </section>
+
+      <OrderTrustStrip />
 
       <section className="cart-layout">
         <div className="cart-card cart-products-card">
@@ -187,22 +187,6 @@ export default function CartPage() {
             {t("cart.checkout")}
           </button>
 
-          <div className="cart-trust-list">
-            <div>
-              <ShieldCheck size={17} />
-              <span>{t("cart.trust.secureOrder")}</span>
-            </div>
-
-            <div>
-              <PackageCheck size={17} />
-              <span>{t("cart.trust.reservedAfterValidation")}</span>
-            </div>
-
-            <div>
-              <Truck size={17} />
-              <span>{t("cart.trust.internationalShipping")}</span>
-            </div>
-          </div>
         </aside>
       </section>
     </main>

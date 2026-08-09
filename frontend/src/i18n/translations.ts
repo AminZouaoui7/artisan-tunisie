@@ -870,6 +870,27 @@ export const translations: Record<Language, Record<string, unknown>> = {
         internationalShipping: "Livraison internationale possible",
       },
     },
+    orderTrust: {
+      ariaLabel: "Nos garanties pour votre commande",
+      kicker: "Achetez en confiance",
+      title: "Votre commande, bien accompagnée",
+      secure: {
+        title: "Commande 100 % sécurisée",
+        description: "Vos informations restent protégées à chaque étape.",
+      },
+      validation: {
+        title: "Validation avant paiement",
+        description: "Aucun règlement avant la vérification de votre commande.",
+      },
+      delivery: {
+        title: "Livraison internationale suivie",
+        description: "Un transport adapté à votre pays et à votre pièce.",
+      },
+      support: {
+        title: "Accompagnement personnalisé",
+        description: "Notre équipe vous répond par e-mail et WhatsApp.",
+      },
+    },
     checkout: {
       emptyTitle: "Votre panier est vide",
       emptyDescription: "Vous ne pouvez pas passer de commande sans articles.",
@@ -2112,6 +2133,27 @@ export const translations: Record<Language, Record<string, unknown>> = {
         secureOrder: "Secure order",
         reservedAfterValidation: "Reserved after validation",
         internationalShipping: "International shipping available",
+      },
+    },
+    orderTrust: {
+      ariaLabel: "Our order guarantees",
+      kicker: "Shop with confidence",
+      title: "Support at every step",
+      secure: {
+        title: "100% secure order",
+        description: "Your information stays protected at every step.",
+      },
+      validation: {
+        title: "Validation before payment",
+        description: "No payment before your order has been reviewed.",
+      },
+      delivery: {
+        title: "Tracked international delivery",
+        description: "Shipping tailored to your country and your piece.",
+      },
+      support: {
+        title: "Personal assistance",
+        description: "Our team is available by email and WhatsApp.",
       },
     },
     checkout: {

@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 
 import ActionSuccess from "../components/ActionSuccess";
+import OrderTrustStrip from "../components/OrderTrustStrip";
 import { useCurrency } from "../context/CurrencyContext";
 import { useCart } from "../context/useCart";
 import { useAuth } from "../context/AuthContext";
@@ -381,6 +382,8 @@ export default function CheckoutPage() {
           </span>
         </div>
       </section>
+
+      <OrderTrustStrip />
 
       <div className="checkout-layout">
         <div className="checkout-main">
