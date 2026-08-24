@@ -30,6 +30,8 @@ export default function Navbar() {
   );
 
   const canUseCart = isAuthenticated && !visitorLocation.isTunisia;
+  const canChooseCurrency =
+    Boolean(visitorLocation.countryCode) && !visitorLocation.isTunisia;
 
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -178,9 +180,11 @@ export default function Navbar() {
           </nav>
 
           <div className="nb__right">
-            <div className="nb__currency">
-              <CurrencySelector />
-            </div>
+            {canChooseCurrency && (
+              <div className="nb__currency">
+                <CurrencySelector />
+              </div>
+            )}
 
             {canUseCart && (
               <Link
@@ -414,19 +418,21 @@ export default function Navbar() {
 
         <div className="nb__drawer-foot">
           <div className="nb-mobile-switches">
-            <div className="nb-mobile-currency">
-              {(["EUR", "USD"] as const).map((item) => (
-                <button
-                  key={item}
-                  type="button"
-                  className={currency === item ? "active" : ""}
-                  onClick={() => setCurrency(item)}
-                  aria-pressed={currency === item}
-                >
-                  {item === "EUR" ? "EUR €" : "USD $"}
-                </button>
-              ))}
-            </div>
+            {canChooseCurrency && (
+              <div className="nb-mobile-currency">
+                {(["EUR", "USD"] as const).map((item) => (
+                  <button
+                    key={item}
+                    type="button"
+                    className={currency === item ? "active" : ""}
+                    onClick={() => setCurrency(item)}
+                    aria-pressed={currency === item}
+                  >
+                    {item === "EUR" ? "EUR €" : "USD $"}
+                  </button>
+                ))}
+              </div>
+            )}
 
             <div className="nb-mobile-lang">
               {(["FR", "EN"] as const).map((l) => (
