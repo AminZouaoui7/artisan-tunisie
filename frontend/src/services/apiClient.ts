@@ -1,9 +1,18 @@
 const DEFAULT_API_URL = "https://artisanmedinabackend.onrender.com/api";
 
-export const API_URL =
+export const REMOTE_API_URL =
   import.meta.env.VITE_API_URL?.trim().replace(/\/+$/, "") || DEFAULT_API_URL;
 
-export const API_ORIGIN = API_URL.replace(/\/api$/i, "");
+// Browser requests go through the shop domain. This avoids mobile providers
+// having to reach onrender.com directly and also keeps CORS out of checkout.
+// SSR/prerender still uses the absolute backend URL.
+export const API_URL =
+  typeof window === "undefined"
+    ? REMOTE_API_URL
+    : import.meta.env.VITE_BROWSER_API_URL?.trim().replace(/\/+$/, "") ||
+      "/api/backend";
+
+export const API_ORIGIN = REMOTE_API_URL.replace(/\/api$/i, "");
 
 const ACCESS_TOKEN_KEY = "artisan_access_token";
 const REFRESH_TOKEN_KEY = "artisan_refresh_token";

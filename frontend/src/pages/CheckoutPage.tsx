@@ -323,7 +323,17 @@ export default function CheckoutPage() {
         message: data?.message,
       });
     } catch (err) {
-      setError(err instanceof Error ? err.message : t("common.unknownError"));
+      const isNetworkError =
+        err instanceof TypeError ||
+        (err instanceof Error && /load failed|failed to fetch/i.test(err.message));
+
+      setError(
+        isNetworkError
+          ? t("checkout.networkError")
+          : err instanceof Error
+            ? err.message
+            : t("common.unknownError")
+      );
     } finally {
       setLoading(false);
     }

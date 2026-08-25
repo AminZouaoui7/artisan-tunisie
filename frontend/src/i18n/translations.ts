@@ -1007,6 +1007,8 @@ export const translations: Record<Language, Record<string, unknown>> = {
         addressLine1: "L’adresse ligne 1 doit être plus précise.",
       },
       orderCreateError: "Erreur lors de la création de commande.",
+      networkError:
+        "Impossible de joindre le service de commande. Vérifiez votre connexion puis réessayez.",
     },
     account: {
       kicker: "Espace Membre",
@@ -2271,6 +2273,8 @@ export const translations: Record<Language, Record<string, unknown>> = {
         addressLine1: "Address line 1 must be more precise.",
       },
       orderCreateError: "Failed to create the order.",
+      networkError:
+        "Unable to reach the ordering service. Check your connection and try again.",
     },
     account: {
       kicker: "Member Area",
