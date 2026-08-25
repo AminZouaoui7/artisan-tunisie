@@ -52,9 +52,7 @@ export function CurrencyProvider({ children }: { children: ReactNode }) {
       try {
         setLoadingRate(true);
 
-        const response = await fetch(
-          "https://api.frankfurter.app/latest?from=EUR&to=USD"
-        );
+        const response = await fetch("/api/exchange-rate");
 
         if (!response.ok) {
           throw new Error("Unable to load EUR/USD rate.");

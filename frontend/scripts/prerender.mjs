@@ -1,6 +1,7 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
+import { getBackendApiUrl } from "../api-config.mjs";
 
 const scriptDirectory = path.dirname(fileURLToPath(import.meta.url));
 const projectDirectory = path.resolve(scriptDirectory, "..");
@@ -8,9 +9,7 @@ const distDirectory = path.resolve(projectDirectory, "dist");
 const serverEntry = path.resolve(projectDirectory, "dist-ssr", "entry-server.js");
 const productOutputDirectory = path.join(distDirectory, "products");
 const siteUrl = "https://www.artisansdelamedina.com";
-const productApiUrl =
-  process.env.VITE_API_URL ||
-  "https://artisanmedinabackend.onrender.com/api";
+const productApiUrl = getBackendApiUrl(process.env.VITE_API_URL);
 const defaultSocialImage = `${siteUrl}/og-artisanat-tunisie.png`;
 
 if (!distDirectory.startsWith(`${projectDirectory}${path.sep}`)) {

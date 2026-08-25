@@ -102,7 +102,7 @@ async function request<T>(
   url: string,
   options?: RequestInit
 ): Promise<T> {
-  const response = await apiFetch(url.replace("/api", ""), {
+  const response = await apiFetch(url, {
     headers: {
       "Content-Type": "application/json",
       ...(options?.headers || {}),
@@ -137,37 +137,37 @@ async function request<T>(
 
 export const authService = {
   register: (data: RegisterDto) =>
-    request<RegisterResponse>("/api/auth/register", {
+    request<RegisterResponse>("/auth/register", {
       method: "POST",
       body: JSON.stringify(data),
     }),
 
   verifyEmail: (data: VerifyEmailDto) =>
-    request<{ message: string }>("/api/auth/verify-email", {
+    request<{ message: string }>("/auth/verify-email", {
       method: "POST",
       body: JSON.stringify(data),
     }),
 
   resendVerificationEmail: (data: ResendVerificationEmailDto) =>
-    request<{ message: string }>("/api/auth/verify-email/resend", {
+    request<{ message: string }>("/auth/verify-email/resend", {
       method: "POST",
       body: JSON.stringify(data),
     }),
 
   login: (data: LoginDto) =>
-    request<AuthResponse>("/api/auth/login", {
+    request<AuthResponse>("/auth/login", {
       method: "POST",
       body: JSON.stringify(data),
     }),
 
   googleAuth: (accessToken: string) =>
-    request<AuthResponse>("/api/auth/google", {
+    request<AuthResponse>("/auth/google", {
       method: "POST",
       body: JSON.stringify({ accessToken }),
     }),
 
   me: (token: string) =>
-    request<CustomerProfile>("/api/auth/me", {
+    request<CustomerProfile>("/auth/me", {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -175,7 +175,7 @@ export const authService = {
     }),
 
   logout: (token: string) =>
-    request<{ message: string }>("/api/auth/logout", {
+    request<{ message: string }>("/auth/logout", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -183,7 +183,7 @@ export const authService = {
     }),
 
   requestChangePasswordCode: (token: string) =>
-    request<{ message: string }>("/api/auth/change-password/request-code", {
+    request<{ message: string }>("/auth/change-password/request-code", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -194,7 +194,7 @@ export const authService = {
     token: string,
     data: ChangePasswordConfirmDto
   ) =>
-    request<{ message: string }>("/api/auth/change-password/confirm", {
+    request<{ message: string }>("/auth/change-password/confirm", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,

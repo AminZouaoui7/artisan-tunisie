@@ -1,8 +1,8 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
+import { getBackendApiUrl } from "../api-config.mjs";
 
 const SITE_URL = "https://www.artisansdelamedina.com";
-const API_URL =
-  process.env.VITE_API_URL || "https://artisanmedinabackend.onrender.com/api";
+const API_URL = getBackendApiUrl(process.env.VITE_API_URL);
 
 const STATIC_ROUTES = [
   { path: "", lastModified: "2026-07-29" },
