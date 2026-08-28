@@ -304,25 +304,39 @@ export default function CheckoutPage() {
         throw new Error(data?.message || t("checkout.orderCreateError"));
       }
 
+      // The order now exists on the backend: nothing below this point should
+      // be able to make the user think the order failed, even if it throws.
       const orderId = data?.id ? String(data.id) : undefined;
-      const analyticsTransactionId = String(
-        data?.id ??
-          data?.orderId ??
-          data?.reference ??
-          window.crypto.randomUUID()
-      );
+      const analyticsTransactionId =
+        data?.id != null
+          ? String(data.id)
+          : data?.orderId != null
+            ? String(data.orderId)
+            : data?.reference != null
+              ? String(data.reference)
+              : `local-${Date.now()}-${Math.random().toString(36).slice(2)}`;
 
-      trackPurchase({
-        transactionId: analyticsTransactionId,
-        products: items,
-        value: cartTotal,
-      });
+      try {
+        trackPurchase({
+          transactionId: analyticsTransactionId,
+          products: items,
+          value: cartTotal,
+        });
+      } catch (analyticsError) {
+        console.error(
+          "Analytics tracking failed after a successful order:",
+          analyticsError
+        );
+      }
+
       clearCart();
       setOrderSuccess({
         orderId,
         message: data?.message,
       });
     } catch (err) {
+      console.error("Checkout order submission failed:", err);
+
       const isNetworkError =
         err instanceof TypeError ||
         (err instanceof Error && /load failed|failed to fetch/i.test(err.message));
