@@ -298,10 +298,17 @@ export default function CheckoutPage() {
         body: JSON.stringify(payload),
       });
 
-      const data = await response.json();
+      let data: Record<string, unknown> | null = null;
+      try {
+        data = await response.json();
+      } catch {
+        data = null;
+      }
 
       if (!response.ok) {
-        throw new Error(data?.message || t("checkout.orderCreateError"));
+        throw new Error(
+          (data?.message as string | undefined) || t("checkout.orderCreateError")
+        );
       }
 
       // The order now exists on the backend: nothing below this point should
@@ -332,7 +339,7 @@ export default function CheckoutPage() {
       clearCart();
       setOrderSuccess({
         orderId,
-        message: data?.message,
+        message: data?.message as string | undefined,
       });
     } catch (err) {
       console.error("Checkout order submission failed:", err);
